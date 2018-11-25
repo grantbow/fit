@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestGetRootDirWithEnvironmentVariable(t *testing.T) {
+func TestGetRootDirWithGoodEnvironmentVariable(t *testing.T) {
 	var gdir string
 	gdir, err := ioutil.TempDir("", "rootdirbug")
 	if err == nil {
@@ -20,13 +20,43 @@ func TestGetRootDirWithEnvironmentVariable(t *testing.T) {
 		return
 	}
 	os.Mkdir("issues", 0755)
-	os.Setenv("PMIT", "/tmp/abc")
+	// PMIT exists and overrides wd
+	os.Mkdir("../pmit", 0755)
+	defer os.RemoveAll(gdir + "../pmit")
+	os.Mkdir("../pmit/issues", 0755)
+	os.Setenv("PMIT", gdir+"../pmit")
 	defer os.Unsetenv("PMIT")
 	dir := GetRootDir()
-	if dir != Directory("/tmp/abc") {
+	if dir != Directory(gdir+"../pmit/") {
 		t.Error("Did not get proper directory according to environment variable")
 	}
 }
+
+func TestGetMissingRootDirWithEnvironmentVariable(t *testing.T) {
+	var gdir string
+	gdir, err := ioutil.TempDir("", "rootdirbug")
+	if err == nil {
+		os.Chdir(gdir)
+		// Hack to get around the fact that /tmp is a symlink on
+		// OS X, and it causes the directory checks to fail..
+		gdir, _ = os.Getwd()
+		defer os.RemoveAll(gdir)
+	} else {
+		t.Error("Failed creating temporary directory")
+		return
+	}
+	// PMIT/issues missing so doesn't override wd
+	os.Mkdir("../pmit", 0755)
+	defer os.RemoveAll(gdir + "../pmit")
+	//os.Mkdir("../pmit/issues", 0755)
+	os.Setenv("PMIT", gdir+"../pmit")
+	defer os.Unsetenv("PMIT")
+	dir := GetRootDir()
+	if dir != Directory(gdir) {
+		t.Error("Did not get proper directory according to environment variable")
+	}
+}
+
 func TestGetRootDirFromDirectoryTree(t *testing.T) {
 	var gdir string
 	gdir, err := ioutil.TempDir("", "rootdirbug")
@@ -82,14 +112,8 @@ func TestNoRoot(t *testing.T) {
 
 }
 
-func TestGetIssuesDir(t *testing.T) {
-	os.Setenv("PMIT", "/tmp/abc")
-	defer os.Unsetenv("PMIT")
-	dir := GetIssuesDir()
-	if dir != "/tmp/abc/issues/" {
-		t.Error("Did not get correct issues directory")
-	}
-}
+// TestGetIssuesDir was deprecated
+
 func TestGetNoIssuesDir(t *testing.T) {
 	var gdir string
 	gdir, err := ioutil.TempDir("", "rootdirbug")

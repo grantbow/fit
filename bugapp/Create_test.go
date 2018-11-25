@@ -115,3 +115,34 @@ func TestCreateNoEditor(t *testing.T) {
 		t.Error("Expected empty file for Test bug")
 	}
 }
+
+/* currently hangs spawning editor
+
+// this test will not spawn editor
+func TestCreateNoIssuesDir(t *testing.T) {
+	dir, err := ioutil.TempDir("", "createtest")
+	if err != nil {
+		t.Error("Could not create temporary dir for test")
+		return
+	}
+	os.Chdir(dir)
+	// This is what we are testing for
+	//os.MkdirAll("issues", 0700)
+	//defer os.RemoveAll(dir)
+	err = os.Setenv("PMIT", string(dir))
+	if err != nil {
+		t.Error("Could not set environment variable: " + err.Error())
+		return
+	}
+
+	stdout, stderr := captureOutput(func() {
+		Create(ArgumentList{"Test", "bug"}) // fire editor without -n
+	}, t)
+	_ = stderr
+	_ = stdout
+	// stderr is expected from log.Fatal(err)
+	//if stdout != "" {
+	//	t.Error("Unexpected output on STDOUT for Test-bug")
+	//}
+}
+*/

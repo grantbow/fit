@@ -10,7 +10,12 @@ import (
 func GetRootDir() Directory {
 	dir := os.Getenv("PMIT")
 	if dir != "" {
-		return Directory(dir)
+		// that PMIT dir exists is a bad assumption
+		if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
+			return Directory(dir)
+		} else {
+			return ""
+		}
 	}
 
 	wd, _ := os.Getwd()
