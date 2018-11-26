@@ -19,7 +19,14 @@ type Bug struct {
 
 type Tag string
 
+type Comment string
+
 func TitleToDir(title string) Directory {
+	// replace non-matching valid characters with _
+	// for user entered strings
+	re := regexp.MustCompile("[^a-zA-Z0-9_ -]+")
+	s := re.ReplaceAllString(title, "_")
+
 	replaceWhitespaceWithUnderscore := func(match string) string {
 		return strings.Replace(match, " ", "_", -1)
 	}
@@ -32,21 +39,23 @@ func TitleToDir(title string) Directory {
 
 	// Replace sequences of dashes with 1 more dash,
 	// as long as there's no whitespace around them
-	re := regexp.MustCompile("([\\s]*)(-+)([\\s]*)")
-	s := re.ReplaceAllStringFunc(title, replaceDashWithMore)
+	re = regexp.MustCompile("([\\s]*)([-]+)([\\s]*)")
+	s = re.ReplaceAllStringFunc(s, replaceDashWithMore)
 	// If there are dashes with whitespace around them,
 	// replace the whitespace with underscores
 	// This is a two step process, because the whitespace
 	// can independently be on either side, so it's difficult
 	// to do with 1 regex..
-	re = regexp.MustCompile("([\\s]+)(-+)")
+	re = regexp.MustCompile("([\\s]+)([-]+)")
 	s = re.ReplaceAllStringFunc(s, replaceWhitespaceWithUnderscore)
-	re = regexp.MustCompile("(-+)([\\s]+)")
+	re = regexp.MustCompile("([-]+)([\\s]+)")
 	s = re.ReplaceAllStringFunc(s, replaceWhitespaceWithUnderscore)
 
 	s = strings.Replace(s, " ", "-", -1)
-	s = strings.Replace(s, "/", " ", -1)
 	return Directory(s)
+}
+func ShortTitleToDir(title string) Directory {
+	return TitleToDir(title[:25])
 }
 func (b Bug) GetDirectory() Directory {
 	return b.Dir
@@ -96,20 +105,20 @@ func (b Bug) Description() string {
 
 	if err != nil {
 		if err == NoDescriptionError {
-			return "No description provided."
+			return "No description provided.\n"
 		}
 		panic("Unhandled error" + err.Error())
 	}
 
 	if string(value) == "" {
-		return "No description provided."
+		return "No description provided.\n"
 	}
 	return string(value)
 }
 func (b Bug) SetDescription(val string) error {
 	dir := b.GetDirectory()
 
-	return ioutil.WriteFile(string(dir)+"/Description", []byte(val), 0644)
+	return ioutil.WriteFile(string(dir)+"/Description", []byte(val+"\n"), 0644)
 }
 func (b *Bug) RemoveTag(tag Tag) {
 	if dir := b.GetDirectory(); dir != "" {
@@ -124,6 +133,21 @@ func (b *Bug) TagBug(tag Tag) {
 		ioutil.WriteFile(string(dir)+"/tags/"+string(tag), []byte(""), 0644)
 	} else {
 		fmt.Printf("Error tagging bug: %s", tag)
+	}
+}
+func (b *Bug) RemoveComment(comment Comment) {
+	if dir := b.GetDirectory(); dir != "" {
+		os.Remove(string(dir) + "/comment-" + string(ShortTitleToDir(string(comment))))
+	} else {
+		fmt.Printf("Error removing comment: %s", comment)
+	}
+}
+func (b *Bug) CommentBug(comment Comment) {
+	if dir := b.GetDirectory(); dir != "" {
+		os.Mkdir(string(dir)+"/", 0755)
+		ioutil.WriteFile(string(dir)+"/comment-"+string(ShortTitleToDir(string(comment))), []byte(string(comment)+"\n"), 0644)
+	} else {
+		fmt.Printf("Error commenting bug: %s", comment)
 	}
 }
 func (b Bug) ViewBug() {
