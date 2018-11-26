@@ -1,11 +1,11 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"github.com/driusan/bug/bugs"
 	"github.com/google/go-github/github"
 	"os"
+	"context"
 )
 
 func FetchIssues(owner string, repo string, opt *github.IssueListByRepoOptions) ([]*github.Issue, *github.Response, error) {
