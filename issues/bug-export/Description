@@ -1,0 +1,6 @@
+bug-import works great.
+
+An analogous bug-export command or extending the import with options 
+to export bugs from git to a github issue would help keep things synchronized
+between code developers and code users.
+
