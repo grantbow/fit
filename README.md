@@ -20,7 +20,10 @@ subdirectory per issue. bug provides a tool to maintain the nearest
 to commit (or remove) the issues from source control.
 
 An optional config file next to the issues directory named .bug.yml may
-specify options like a file to use as a default Description text.
+specify options. Current options include:
+    * PMIT location of issues directory
+    * file to use as a default Description text.
+    * import xml dump
 
 This differs from other distributed bug tracking tools, (which usually 
 store a database in a hidden directory) in that you can still easily 
