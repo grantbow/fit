@@ -8,12 +8,13 @@ import (
 )
 
 type Config struct{
-	Dir                    Directory
-	DefaultDescriptionFile string
+	Dir                    Directory // location of .bug_yml
 	PMIT                   string
+	DefaultDescriptionFile string
+	ImportXmlDump          bool
 }
 
-var NoConfigError = errors.New("No config provided")
+var NoConfigError = errors.New("No .bug_yml provided")
 
 /*
 func (c *Config) GetDirectory() Directory {
