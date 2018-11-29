@@ -71,7 +71,7 @@ func TestDetectHg(t *testing.T) {
 		t.Error("Failed creating temporary directory for detect")
 		return
 	}
-	// Fake a git repo
+	// Fake an hg repo
 	os.Mkdir(".hg", 0755)
 
 	options := make(map[string]bool)
@@ -80,7 +80,7 @@ func TestDetectHg(t *testing.T) {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
 	if dir != bugs.Directory(gdir+"/.hg") {
-		t.Error("Unexpected directory found when trying to detect git repo" + dir)
+		t.Error("Unexpected directory found when trying to detect hg repo" + dir)
 	}
 	switch handler.(type) {
 	case HgManager:
@@ -98,7 +98,7 @@ func TestDetectHg(t *testing.T) {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
 	if dir != bugs.Directory(gdir+"/.hg") {
-		t.Error("Unexpected directory found when trying to detect git repo" + dir)
+		t.Error("Unexpected directory found when trying to detect hg repo" + dir)
 	}
 	switch handler.(type) {
 	case HgManager:

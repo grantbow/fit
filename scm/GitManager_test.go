@@ -1,6 +1,7 @@
 package scm
 
 import (
+	"flag"
 	"fmt"
 	"github.com/driusan/bug/bugs"
 	"io/ioutil"
@@ -90,6 +91,16 @@ func (t *GitTester) Setup() error {
 
 	return nil
 }
+var git bool
+func init() {
+	flag.BoolVar(&git, "git", true, "git presence")
+    flag.Parse()
+	_, err := runCmd("git")
+	if err != nil {
+		git = false
+	}
+}
+
 func (t GitTester) TearDown() {
 	os.RemoveAll(t.workdir)
 }
@@ -112,6 +123,9 @@ func (m GitTester) GetManager() SCMHandler {
 }
 
 func TestGitBugRenameCommits(t *testing.T) {
+	if git == false {
+        t.Skip("git executable not found")
+	}
 	gm := GitTester{}
 	gm.handler = GitManager{}
 
@@ -130,7 +144,10 @@ rename to issues/Renamed-bug/Description
 	runtestRenameCommitsHelper(&gm, t, expectedDiffs)
 }
 
-func TestGitFilesOutsideOfBugNotCommited(t *testing.T) {
+func TestGitFilesOrtsideOfBugNotCommited(t *testing.T) {
+	if git == false {
+        t.Skip("git executable not found")
+	}
 	gm := GitTester{}
 	gm.handler = GitManager{}
 	runtestCommitDirtyTree(&gm, t)
@@ -145,6 +162,9 @@ func TestGitManagerGetType(t *testing.T) {
 }
 
 func TestGitManagerPurge(t *testing.T) {
+	if git == false {
+        t.Skip("git executable not found")
+	}
 	gm := GitTester{}
 	gm.handler = GitManager{}
 	runtestPurgeFiles(&gm, t)
@@ -153,6 +173,9 @@ func TestGitManagerPurge(t *testing.T) {
 func TestGitManagerAutoclosingGitHub(t *testing.T) {
 	// This test is specific to gitmanager, since GitHub
 	// only supports git..
+	if git == false {
+        t.Skip("git executable not found")
+	}
 	tester := GitTester{}
 	tester.handler = GitManager{Autoclose: true}
 
