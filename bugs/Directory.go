@@ -7,10 +7,9 @@ import (
 	"time"
 )
 
-func GetRootDir() Directory {
-	dir := os.Getenv("PMIT")
-	if dir != "" {
-		return Directory(dir)
+func GetRootDir(config Config) Directory {
+	if config.PMIT != "" {
+		return Directory(config.PMIT)
 	}
 
 	wd, _ := os.Getwd()
@@ -32,12 +31,12 @@ func GetRootDir() Directory {
 	return ""
 }
 
-func GetIssuesDir() Directory {
-	root := GetRootDir()
+func GetIssuesDir(config Config) Directory {
+	root := GetRootDir(config)
 	if root == "" {
 		return root
 	}
-	return GetRootDir() + "/issues/"
+	return root + "/issues/"
 }
 
 type Directory string
