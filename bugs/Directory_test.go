@@ -19,14 +19,15 @@ func TestGetRootDirWithEnvironmentVariable(t *testing.T) {
 		t.Error("Failed creating temporary directory")
 		return
 	}
-	os.Mkdir("issues", 0755)
-	expected := "/tmp/abc"
-	os.Setenv("PMIT", expected)
+	err = os.MkdirAll("abc/issues", 0755)
+	//os.Mkdir("issues", 0755)
+	expected := Directory(gdir+"/abc")
+	os.Setenv("PMIT", string(expected))
 	config := Config{}
 	defer os.Unsetenv("PMIT")
-	dir := config.Dir
-	if dir != Directory(expected) {
-		t.Errorf("Expected directory %s from environment variable, got %s", expected, dir )
+	dir := GetRootDir(config)
+	if dir != expected {
+		t.Errorf("Expected directory %s from environment variable, got %s", expected, string(dir))
 	}
 }
 func TestGetRootDirFromDirectoryTree(t *testing.T) {
