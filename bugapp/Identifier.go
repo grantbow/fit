@@ -12,13 +12,13 @@ func generateID(val string) string {
 	hash := sha1.Sum([]byte(val))
 	return fmt.Sprintf("b%x", hash)[0:5]
 }
-func Identifier(args ArgumentList) {
+func Identifier(args ArgumentList, config bugs.Config) {
 	if len(args) < 1 {
 		fmt.Printf("Usage: %s identifier BugID [value]\n", os.Args[0])
 		return
 	}
 
-	b, err := bugs.LoadBugByHeuristic(args[0])
+	b, err := bugs.LoadBugByHeuristic(args[0], config)
 	if err != nil {
 		fmt.Printf("Invalid BugID: %s\n", err.Error())
 		return

@@ -7,13 +7,13 @@ import (
 	"strings"
 )
 
-func Relabel(Args ArgumentList) {
+func Relabel(Args ArgumentList, config bugs.Config) {
 	if len(Args) < 2 {
 		fmt.Printf("Usage: %s relabel BugID New Title\n", os.Args[0])
 		return
 	}
 
-	b, err := bugs.LoadBugByHeuristic(Args[0])
+	b, err := bugs.LoadBugByHeuristic(Args[0], config)
 
 	if err != nil {
 		fmt.Printf("Could not load bug: %s\n", err.Error())
@@ -21,7 +21,7 @@ func Relabel(Args ArgumentList) {
 	}
 
 	currentDir := b.GetDirectory()
-	newDir := bugs.GetIssuesDir() + bugs.TitleToDir(strings.Join(Args[1:], " "))
+	newDir := bugs.GetIssuesDir(config) + bugs.TitleToDir(strings.Join(Args[1:], " "))
 	fmt.Printf("Moving %s to %s\n", currentDir, newDir)
 	err = os.Rename(string(currentDir), string(newDir))
 	if err != nil {

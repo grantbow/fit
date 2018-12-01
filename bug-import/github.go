@@ -8,9 +8,9 @@ import (
 	"context"
 )
 
-func githubImport(user, repo string) {
+func githubImport(user, repo string, config bugs.Config) {
 	client := github.NewClient(nil)
-	issueDir := bugs.GetIssuesDir()
+	issueDir := bugs.GetIssuesDir(config)
 	opt := &github.IssueListByRepoOptions{
 		ListOptions: github.ListOptions{PerPage: 100},
 	}

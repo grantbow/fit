@@ -2,22 +2,24 @@ package main
 
 import (
 	"fmt"
+	"github.com/driusan/bug/bugs"
 	"os"
 	"strings"
 )
 
 func main() {
 	args := ArgumentList(os.Args)
+	config := bugs.Config{}
 	if githubRepo := args.GetArgument("--github", ""); githubRepo != "" {
 		if strings.Count(githubRepo, "/") != 1 {
 			fmt.Fprintf(os.Stderr, "Invalid GitHub repo: %s\n", githubRepo)
 			os.Exit(2)
 		}
 		pieces := strings.Split(githubRepo, "/")
-		githubImport(pieces[0], pieces[1])
+		githubImport(pieces[0], pieces[1], config)
 
 	} else if args.GetArgument("--be", "") != "" {
-		beImport()
+		beImport(config)
 	} else {
 		if strings.Count(githubRepo, "/") != 1 {
 			fmt.Fprintf(os.Stderr, "Usage: %s --github user/repo\n", os.Args[0])

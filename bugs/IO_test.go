@@ -41,7 +41,8 @@ func TestBugWrite(t *testing.T) {
 }
 
 func ExampleBugWriter() {
-	if b, err := New("Bug Title"); err != nil {
+	config := Config{}
+	if b, err := New("Bug Title", config); err != nil {
 		fmt.Fprintf(b, "This is a bug report.\n")
 		fmt.Fprintf(b, "The bug will be created as necessary.\n")
 	}

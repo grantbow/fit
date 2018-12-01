@@ -256,8 +256,8 @@ func (b Bug) SetIdentifier(newValue string) error {
 	return b.setField("Identifier", newValue)
 }
 
-func New(title string) (*Bug, error) {
-	expectedDir := GetIssuesDir() + TitleToDir(title)
+func New(title string, config Config) (*Bug, error) {
+	expectedDir := GetIssuesDir(config) + TitleToDir(title)
 	err := os.Mkdir(string(expectedDir), 0755)
 	if err != nil {
 		return nil, err
