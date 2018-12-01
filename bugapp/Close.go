@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func Close(args ArgumentList) {
+func Close(args ArgumentList, config bugs.Config) {
 	// No parameters, print a list of all bugs
 	if len(args) == 0 {
 		fmt.Fprintf(os.Stderr, "Usage: %s close BugID\n\nMust provide an BugID to close as parameter\n", os.Args[0])
@@ -17,7 +17,7 @@ func Close(args ArgumentList) {
 	// of those issues
 	var bugsToClose []string
 	for _, bugID := range args {
-		if bug, err := bugs.LoadBugByHeuristic(bugID); err == nil {
+		if bug, err := bugs.LoadBugByHeuristic(bugID, config); err == nil {
 			dir := bug.GetDirectory()
 			bugsToClose = append(bugsToClose, string(dir))
 		} else {
