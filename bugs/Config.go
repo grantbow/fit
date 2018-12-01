@@ -3,16 +3,17 @@ package bugs
 import (
 	"errors"
 	//"fmt"
-    "github.com/ghodss/yaml"
+	"github.com/ghodss/yaml"
 	"io/ioutil"
 	"os"
 )
 
 type Config struct {
-	Dir                    Directory // location of .bug.yml
-	PMIT                   string
-	DefaultDescriptionFile string
-	ImportXmlDump          bool
+	Dir                    Directory // location of root dir and .bug.yml
+	PMIT                   string    // overrides auto-find root dir
+	                                 // overridden by PMIT environment variable
+	DefaultDescriptionFile string    // new bug Description text template
+	ImportXmlDump          bool      // saves raw json files of import
 }
 
 var NoConfigError = errors.New("No .bug.yml provided")

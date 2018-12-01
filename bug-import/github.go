@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/driusan/bug/bugs"
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/github" // handles json
 	"os"
 	"context"
 )
