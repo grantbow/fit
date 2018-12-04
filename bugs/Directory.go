@@ -10,7 +10,7 @@ import (
 func GetRootDir(config Config) Directory {
 	dir := os.Getenv("PMIT")
 	if dir != "" {
-		config.PMIT = dir
+		config.BugDir = dir
 		return Directory(dir)
 		// environment variable overrides # TODO: os.Stat, better error behavior
 	}
