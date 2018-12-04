@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func Edit(args ArgumentList) {
+func Edit(args ArgumentList, config bugs.Config) {
 
 	var file, bugID string
 	switch len(args) {
@@ -32,7 +32,7 @@ func Edit(args ArgumentList) {
 			file = args[0]
 		}
 
-		b, err := bugs.LoadBugByHeuristic(bugID)
+		b, err := bugs.LoadBugByHeuristic(bugID, config)
 		if err != nil {
 			fmt.Printf("Invalid BugID %s\n", bugID)
 			return

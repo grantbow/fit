@@ -8,13 +8,13 @@ import (
 )
 
 func fieldHandler(command string, args ArgumentList,
-	setCallback func(bugs.Bug, string) error, retrieveCallback func(bugs.Bug) string) {
+	setCallback func(bugs.Bug, string) error, retrieveCallback func(bugs.Bug) string, config bugs.Config) {
 	if len(args) < 1 {
 		fmt.Printf("Usage: %s %s BugID [set %s]\n", os.Args[0], command, command)
 		return
 	}
 
-	b, err := bugs.LoadBugByHeuristic(args[0])
+	b, err := bugs.LoadBugByHeuristic(args[0], config)
 	if err != nil {
 		fmt.Printf("Invalid BugID: %s\n", err.Error())
 		return
@@ -34,6 +34,6 @@ func fieldHandler(command string, args ArgumentList,
 		}
 	}
 }
-func Priority(args ArgumentList) {
-	fieldHandler("priority", args, bugs.Bug.SetPriority, bugs.Bug.Priority)
+func Priority(args ArgumentList, config bugs.Config) {
+	fieldHandler("priority", args, bugs.Bug.SetPriority, bugs.Bug.Priority, config)
 }

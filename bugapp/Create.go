@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func Create(Args ArgumentList) {
+func Create(Args ArgumentList, config bugs.Config) {
 	if len(Args) < 1 || (len(Args) < 2 && Args[0] == "-n") {
 		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] Bug Description\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "\nNo Bug Description provided.\n")
@@ -54,7 +54,7 @@ func Create(Args ArgumentList) {
 	}
 	var bug bugs.Bug
 	bug = bugs.Bug{
-		Dir: bugs.GetIssuesDir() + bugs.TitleToDir(strings.Join(Args, " ")),
+		Dir: bugs.GetIssuesDir(config) + bugs.TitleToDir(strings.Join(Args, " ")),
 	}
 
 	dir := bug.GetDirectory()

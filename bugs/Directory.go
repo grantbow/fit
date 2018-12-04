@@ -7,10 +7,12 @@ import (
 	"time"
 )
 
-func GetRootDir() Directory {
+func GetRootDir(config Config) Directory {
 	dir := os.Getenv("PMIT")
 	if dir != "" {
+		config.BugDir = dir
 		return Directory(dir)
+		// environment variable overrides # TODO: os.Stat, better error behavior
 	}
 
 	wd, _ := os.Getwd()
@@ -29,15 +31,32 @@ func GetRootDir() Directory {
 			return Directory(dir)
 		}
 	}
-	return ""
+	return "" // out of luck
 }
 
-func GetIssuesDir() Directory {
-	root := GetRootDir()
+func GetIssuesDir(config Config) Directory {
+	root := GetRootDir(config)
 	if root == "" {
 		return root
 	}
-	return GetRootDir() + "/issues/"
+	return Directory(root + "/issues/") // TODO: remove trailing /
+	/* then edit these $ grep -ils getissuesdir ...
+	bug-import/be.go
+	bug-import/github.go
+	bugapp/Commit.go
+	bugapp/Create.go
+	bugapp/Env.go
+	bugapp/Find.go
+	bugapp/List.go
+	bugapp/Purge.go
+	bugapp/Pwd.go
+	bugapp/Relabel.go
+	bugs/Bug.go
+	bugs/Bug_test.go
+	bugs/Directory.go
+	bugs/Directory_test.go
+	bugs/Find.go
+	*/
 }
 
 type Directory string

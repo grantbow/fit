@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-func getAllTags() []string {
-	bugs := bugs.GetAllBugs()
+func getAllTags(config bugs.Config) []string {
+	bugs := bugs.GetAllBugs(config)
 
 	// Put all the tags in a map, then iterate over
 	// the keys so that only unique tags are included
@@ -25,11 +25,11 @@ func getAllTags() []string {
 	}
 	return keys
 }
-func Tag(Args ArgumentList) {
+func Tag(Args ArgumentList, config bugs.Config) {
 	if len(Args) < 2 {
 		fmt.Printf("Usage: %s tag [--rm] BugID tagname [more tagnames]\n", os.Args[0])
 		fmt.Printf("\nBoth issue number and tagname to set are required.\n")
-		fmt.Printf("\nCurrently used tags in entire tree: %s\n", strings.Join(getAllTags(), ", "))
+		fmt.Printf("\nCurrently used tags in entire tree: %s\n", strings.Join(getAllTags(config), ", "))
 		return
 	}
 	var removeTags bool = false
@@ -38,7 +38,7 @@ func Tag(Args ArgumentList) {
 		Args = Args[1:]
 	}
 
-	b, err := bugs.LoadBugByHeuristic(Args[0])
+	b, err := bugs.LoadBugByHeuristic(Args[0], config)
 
 	if err != nil {
 		fmt.Printf("Could not load bug: %s\n", err.Error())

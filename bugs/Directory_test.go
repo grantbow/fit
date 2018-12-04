@@ -19,16 +19,20 @@ func TestGetRootDirWithEnvironmentVariable(t *testing.T) {
 		t.Error("Failed creating temporary directory")
 		return
 	}
-	os.Mkdir("issues", 0755)
-	os.Setenv("PMIT", "/tmp/abc")
+	err = os.MkdirAll("abc/issues", 0755)
+	//os.Mkdir("issues", 0755)
+	expected := Directory(gdir+"/abc")
+	os.Setenv("PMIT", string(expected))
+	config := Config{}
 	defer os.Unsetenv("PMIT")
-	dir := GetRootDir()
-	if dir != Directory("/tmp/abc") {
-		t.Error("Did not get proper directory according to environment variable")
+	dir := GetRootDir(config)
+	if dir != expected {
+		t.Errorf("Expected directory %s from environment variable, got %s", expected, string(dir))
 	}
 }
 func TestGetRootDirFromDirectoryTree(t *testing.T) {
 	var gdir string
+	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
 	if err == nil {
 		os.Chdir(gdir)
@@ -43,7 +47,7 @@ func TestGetRootDirFromDirectoryTree(t *testing.T) {
 	}
 	// Make sure we get the right directory from the top level
 	os.Mkdir("issues", 0755)
-	dir := GetRootDir()
+	dir := GetRootDir(config)
 	if dir != Directory(gdir) {
 		t.Error("Did not get proper directory according to walking the tree:" + dir)
 	}
@@ -56,7 +60,7 @@ func TestGetRootDirFromDirectoryTree(t *testing.T) {
 	if err != nil {
 		t.Error("Could not change directory for testing")
 	}
-	dir = GetRootDir()
+	dir = GetRootDir(config)
 	if dir != Directory(gdir) {
 		t.Error("Did not get proper directory according to walking the tree:" + dir)
 	}
@@ -64,6 +68,7 @@ func TestGetRootDirFromDirectoryTree(t *testing.T) {
 
 func TestNoRoot(t *testing.T) {
 	var gdir string
+	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
 	if err == nil {
 		os.Chdir(gdir)
@@ -76,22 +81,26 @@ func TestNoRoot(t *testing.T) {
 		return
 	}
 	// Don't create an issues directory. Just try and get the directory
-	if dir := GetRootDir(); dir != "" {
+	if dir := GetRootDir(config); dir != "" {
 		t.Error("Found unexpected issues directory." + string(dir))
 	}
 
 }
 
 func TestGetIssuesDir(t *testing.T) {
-	os.Setenv("PMIT", "/tmp/abc")
+	base := "/tmp/abc"
+	expected := base + "/issues/"
+	os.Setenv("PMIT", base)
+	config := Config{}
 	defer os.Unsetenv("PMIT")
-	dir := GetIssuesDir()
-	if dir != "/tmp/abc/issues/" {
-		t.Error("Did not get correct issues directory")
+	dir := GetIssuesDir(config)
+	if dir != Directory(expected) {
+		t.Errorf("Expected issues directory %s from environment variable, got %s", expected, dir )
 	}
 }
 func TestGetNoIssuesDir(t *testing.T) {
 	var gdir string
+	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
 	if err == nil {
 		os.Chdir(gdir)
@@ -104,7 +113,7 @@ func TestGetNoIssuesDir(t *testing.T) {
 		return
 	}
 	// Don't create an issues directory. Just try and get the directory
-	if dir := GetIssuesDir(); dir != "" {
+	if dir := GetIssuesDir(config); dir != "" {
 		t.Error("Found unexpected issues directory." + string(dir))
 	}
 

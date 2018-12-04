@@ -2,6 +2,7 @@ package bugapp
 
 import (
 	"fmt"
+	"github.com/driusan/bug/bugs"
 	//	"io"
 	"io/ioutil"
 	"os"
@@ -12,9 +13,9 @@ import (
 // a usage line gets printed to Stderr when
 // no parameters are specified
 func TestCloseHelpOutput(t *testing.T) {
-
+	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Close(ArgumentList{})
+		Close(ArgumentList{}, config)
 	}, t)
 
 	if stdout != "" {
@@ -28,6 +29,7 @@ func TestCloseHelpOutput(t *testing.T) {
 
 // Test closing a bug given it's directory index
 func TestCloseByIndex(t *testing.T) {
+	config := bugs.Config{}
 	dir, err := ioutil.TempDir("", "closetest")
 	defer os.RemoveAll(dir)
 	if err != nil {
@@ -55,7 +57,7 @@ func TestCloseByIndex(t *testing.T) {
 		return
 	}
 	stdout, stderr := captureOutput(func() {
-		Close(ArgumentList{"TestBug"})
+		Close(ArgumentList{"TestBug"}, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected output on STDERR for Test-bug")
@@ -76,6 +78,7 @@ func TestCloseByIndex(t *testing.T) {
 }
 
 func TestCloseBugByIdentifier(t *testing.T) {
+	config := bugs.Config{}
 	dir, err := ioutil.TempDir("", "close")
 	if err != nil {
 		t.Error("Could not create temporary dir for test")
@@ -101,7 +104,7 @@ func TestCloseBugByIdentifier(t *testing.T) {
 		return
 	}
 	stdout, stderr := captureOutput(func() {
-		Close(ArgumentList{"1"})
+		Close(ArgumentList{"1"}, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected output on STDERR for Test-bug")
@@ -122,6 +125,7 @@ func TestCloseBugByIdentifier(t *testing.T) {
 }
 
 func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
+	config := bugs.Config{}
 	dir, err := ioutil.TempDir("", "closetest")
 	defer os.RemoveAll(dir)
 	if err != nil {
@@ -142,7 +146,7 @@ func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
 		t.Error("Unexpected number of issues in issues dir after creating multiple issues\n")
 	}
 	_, stderr := captureOutput(func() {
-		Close(ArgumentList{"1", "3"})
+		Close(ArgumentList{"1", "3"}, config)
 	}, t)
 	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
 	if err != nil {
@@ -159,6 +163,7 @@ func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
 }
 
 func TestCloseMultipleIndexesAtOnce(t *testing.T) {
+	config := bugs.Config{}
 	dir, err := ioutil.TempDir("", "closetest")
 	defer os.RemoveAll(dir)
 	if err != nil {
@@ -179,7 +184,7 @@ func TestCloseMultipleIndexesAtOnce(t *testing.T) {
 		t.Error("Unexpected number of issues in issues dir after creating multiple issues\n")
 	}
 	_, _ = captureOutput(func() {
-		Close(ArgumentList{"1", "2"})
+		Close(ArgumentList{"1", "2"}, config)
 	}, t)
 	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
 	if err != nil {
