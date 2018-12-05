@@ -4,16 +4,25 @@ import (
 	"fmt"
 	"github.com/driusan/bug/bugs"
 	"github.com/google/go-github/github" // handles json
+	"io/ioutil"
+	"encoding/json"
 	"os"
 	"context"
 )
 
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
 func githubImport(user, repo string, config bugs.Config) {
 	client := github.NewClient(nil)
-	issueDir := bugs.GetIssuesDir(config)
+	i := 0
 	opt := &github.IssueListByRepoOptions{
 		ListOptions: github.ListOptions{PerPage: 100},
 	}
+	// https://api.github.com/repos/<user>/<repo>/issues
 	issues, resp, err := client.Issues.ListByRepo(context.Background(), user, repo, opt)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -21,9 +30,12 @@ func githubImport(user, repo string, config bugs.Config) {
 	}
 
 	for lastPage := false; lastPage != true; {
+		i = 0
 		for _, issue := range issues {
+			i += 1
+			// issues includes pull requests, so skip each pull request
 			if issue.PullRequestLinks == nil {
-				b := bugs.Bug{Dir: issueDir + bugs.TitleToDir(*issue.Title)}
+				b := bugs.Bug{Dir: bugs.Directory(config.BugDir+"issues/" + string(bugs.TitleToDir(*issue.Title)))}
 				if dir := b.GetDirectory(); dir != "" {
 					os.Mkdir(string(dir), 0755)
 				}
@@ -32,6 +44,12 @@ func githubImport(user, repo string, config bugs.Config) {
 				}
 				if issue.Milestone != nil {
 					b.SetMilestone(*issue.Milestone.Title)
+				}
+				if config.ImportXmlDump == true {
+					// b.SetXml()
+					xml, _ := json.MarshalIndent(issue, "", "    ")
+					err = ioutil.WriteFile(string(b.GetDirectory())+"/issue.xml",append(xml,'\n'),0644)
+					check(err)
 				}
 				// Don't set a bug identifier, but put an empty line and
 				// then a GitHub identifier, so that bug commit can include
