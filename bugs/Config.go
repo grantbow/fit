@@ -5,7 +5,7 @@ import (
 	//"fmt"
 	"github.com/ghodss/yaml"
 	"io/ioutil"
-	"os"
+	//"os"
 )
 
 type Config struct {

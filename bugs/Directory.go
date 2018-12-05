@@ -11,6 +11,7 @@ func GetRootDir(config Config) Directory {
 	dir := os.Getenv("PMIT")
 	if dir != "" {
 		config.BugDir = dir
+		os.Chdir(dir)
 		return Directory(dir)
 		// environment variable overrides # TODO: os.Stat, better error behavior
 	}
@@ -18,6 +19,8 @@ func GetRootDir(config Config) Directory {
 	wd, _ := os.Getwd()
 
 	if dirinfo, err := os.Stat(wd + "/issues"); err == nil && dirinfo.IsDir() {
+		config.BugDir = dir
+		//os.Chdir(dir) // already there
 		return Directory(wd)
 	}
 
@@ -28,6 +31,8 @@ func GetRootDir(config Config) Directory {
 	for i := len(pieces); i > 0; i -= 1 {
 		dir := strings.Join(pieces[0:i], "/")
 		if dirinfo, err := os.Stat(dir + "/issues"); err == nil && dirinfo.IsDir() {
+			config.BugDir = dir
+			os.Chdir(dir)
 			return Directory(dir)
 		}
 	}

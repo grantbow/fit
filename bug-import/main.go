@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/driusan/bug/bugs"
+	"github.com/ghodss/yaml"
+	"io/ioutil"
 	"os"
 	"strings"
 )
@@ -10,6 +12,26 @@ import (
 func main() {
 	args := ArgumentList(os.Args)
 	config := bugs.Config{}
+	temp := bugs.Config{}
+	bugs.GetIssuesDir(config)
+	bug_yml := ".bug.yml"
+	//fmt.Fprint(os.Stdout, bug_yml)
+	if fileinfo, err := os.Stat(bug_yml); err == nil && fileinfo.Mode().IsRegular() {
+		dat, _ := ioutil.ReadFile(bug_yml)
+		//fmt.Fprint(os.Stdout, dat)
+		err := yaml.Unmarshal(dat, &temp); if err == nil {
+			//fmt.Fprint(os.Stdout, config)
+			//fmt.Fprint(os.Stdout, temp)
+			//os.Exit(0)
+			//config = temp // overwrites
+			if temp.ImportXmlDump {
+				config.ImportXmlDump = true
+			}
+			if temp.DefaultDescriptionFile != "" {
+				config.DefaultDescriptionFile = temp.DefaultDescriptionFile
+			}
+		}
+	}
 	if githubRepo := args.GetArgument("--github", ""); githubRepo != "" {
 		if strings.Count(githubRepo, "/") != 1 {
 			fmt.Fprintf(os.Stderr, "Invalid GitHub repo: %s\n", githubRepo)
