@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/driusan/bug/bugapp"
 	"github.com/driusan/bug/bugs"
+	"github.com/ghodss/yaml"
+	"io/ioutil"
 	"os"
 )
 
@@ -25,6 +27,21 @@ func main() {
 	}
 
 	config := bugs.Config{}
+	temp := bugs.Config{}
+	bugs.GetIssuesDir(config)
+	bug_yml := ".bug.yml"
+	if fileinfo, err := os.Stat(bug_yml); err == nil && fileinfo.Mode().IsRegular() {
+		dat, _ := ioutil.ReadFile(bug_yml)
+		err := yaml.Unmarshal(dat, &temp); if err == nil {
+			if temp.ImportXmlDump {
+				config.ImportXmlDump = true
+			}
+			if temp.DefaultDescriptionFile != "" {
+				config.DefaultDescriptionFile = temp.DefaultDescriptionFile
+			}
+		}
+	}
+
 	//config := new(Config {
 	//	Dir: nil,
 	//	PMIT: nil,
@@ -38,7 +55,6 @@ func main() {
 		fmt.Println("(If you just started new repo, you probably want to create directory named `issues`).")
 		fmt.Printf("Aborting.\n")
 		os.Exit(2)
-
 	}
 
 	if len(os.Args) > 1 {
