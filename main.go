@@ -33,6 +33,7 @@ func main() {
 	if fileinfo, err := os.Stat(bug_yml); err == nil && fileinfo.Mode().IsRegular() {
 		dat, _ := ioutil.ReadFile(bug_yml)
 		err := yaml.Unmarshal(dat, &temp); if err == nil {
+			//fmt.Fprint(os.Stdout, temp)
 			if temp.ImportXmlDump {
 				config.ImportXmlDump = true
 			}

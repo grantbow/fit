@@ -10,6 +10,19 @@ import (
 	"strings"
 )
 
+func filecp(sourceFile string, destinationFile string) {
+	// https://opensource.com/article/18/6/copying-files-go
+    input, err := ioutil.ReadFile(sourceFile); if err != nil {
+            fmt.Println(err)
+            return
+    }
+    err = ioutil.WriteFile(destinationFile, input, 0644); if err != nil {
+            fmt.Println("Error creating", destinationFile)
+            fmt.Println(err)
+            return
+    }
+}
+
 func Create(Args ArgumentList, config bugs.Config) {
 	if len(Args) < 1 || (len(Args) < 2 && Args[0] == "-n") {
 		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] Bug Description\n", os.Args[0])
@@ -66,12 +79,19 @@ func Create(Args ArgumentList, config bugs.Config) {
 		fmt.Fprintf(os.Stderr, "\n%s error: mkdir\n", os.Args[0])
 		log.Fatal(err)
 	}
-
+	DescriptionFile := string(dir)+"/Description"
 	if noDesc {
 		txt := []byte("")
-		ioutil.WriteFile(string(dir)+"/Description", txt, 0644)
+		if config.DefaultDescriptionFile != "" {
+			filecp(config.DefaultDescriptionFile, DescriptionFile)
+		} else {
+			ioutil.WriteFile(DescriptionFile, txt, 0644)
+		}
 	} else {
-		cmd := exec.Command(getEditor(), string(dir)+"/Description")
+		if config.DefaultDescriptionFile != "" {
+			filecp(config.DefaultDescriptionFile, DescriptionFile)
+		}
+		cmd := exec.Command(getEditor(), DescriptionFile)
 
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
