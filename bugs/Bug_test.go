@@ -13,6 +13,7 @@ type tester struct {
 }
 
 func (t *tester) Setup() {
+	config := Config{}
 	gdir, err := ioutil.TempDir("", "issuetest")
 	if err == nil {
 		os.Chdir(gdir)
@@ -26,7 +27,7 @@ func (t *tester) Setup() {
 	}
 	// Make sure we get the right directory from the top level
 	os.Mkdir("issues", 0755)
-	b, err := New("Test Bug")
+	b, err := New("Test Bug", config)
 	if err != nil {
 		panic("Unexpected error creating Test Bug")
 	}
@@ -59,6 +60,7 @@ func TestTitleToDirectory(t *testing.T) {
 
 func TestNewBug(t *testing.T) {
 	var gdir string
+	config := Config{}
 	gdir, err := ioutil.TempDir("", "newbug")
 	if err == nil {
 		os.Chdir(gdir)
@@ -71,11 +73,11 @@ func TestNewBug(t *testing.T) {
 		return
 	}
 	os.Mkdir("issues", 0755)
-	b, err := New("I am a test")
+	b, err := New("I am a test", config)
 	if err != nil || b == nil {
 		t.Error("Unexpected error when creating New bug" + err.Error())
 	}
-	if b.Dir != GetIssuesDir()+TitleToDir("I am a test") {
+	if b.Dir != GetIssuesDir(config)+TitleToDir("I am a test") {
 		t.Error("Unexpected directory when creating New bug")
 	}
 }

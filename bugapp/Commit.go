@@ -6,7 +6,7 @@ import (
 	"github.com/driusan/bug/scm"
 )
 
-func Commit(args ArgumentList) {
+func Commit(args ArgumentList, config bugs.Config) {
 	options := make(map[string]bool)
 	if !args.HasArgument("--no-autoclose") {
 		options["autoclose"] = true
@@ -21,7 +21,7 @@ func Commit(args ArgumentList) {
 		return
 	}
 
-	err = scm.Commit(bugs.GetIssuesDir(), "Added or removed issues with the tool \"bug\"")
+	err = scm.Commit(bugs.GetIssuesDir(config), "Added or removed issues with the tool \"bug\"")
 
 	if err != nil {
 		fmt.Printf("Could not commit: %s\n", err.Error())
