@@ -29,7 +29,6 @@ func check(e error) {
 }
 
 func githubImport(user, repo string, config bugs.Config) {
-	client := github.NewClient(nil)
 	i := 0
 	opt := &github.IssueListByRepoOptions{
 		ListOptions: github.ListOptions{PerPage: 100},
@@ -78,6 +77,14 @@ func githubImport(user, repo string, config bugs.Config) {
 					}
 					for _, l := range comments {
 						b.CommentBug(bugs.Comment(*l.Body))
+						if config.ImportXmlDump == true {
+							// b.SetXml()
+							xml, _ := json.MarshalIndent(l, "", "    ")
+							err = ioutil.WriteFile(string(b.GetDirectory())+"/comment-"+
+								string(bugs.ShortTitleToDir(string(*l.Body)))+
+								".xml",append(xml,'\n'),0644)
+							check(err)
+						}
 					}
 				}
 				fmt.Printf("Importing %s\n", *issue.Title)

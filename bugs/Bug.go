@@ -55,7 +55,7 @@ func TitleToDir(title string) Directory {
 	return Directory(s)
 }
 func ShortTitleToDir(title string) Directory {
-	return TitleToDir(title[:25])
+	return TitleToDir(title[:25]) // TODO: remove leading or trailing _ or -
 }
 func (b Bug) GetDirectory() Directory {
 	return b.Dir
