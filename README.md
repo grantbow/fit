@@ -10,7 +10,7 @@ Bug is an implementation of a distributed issue tracker using
 git (or hg) to manage issues on the filesystem following [poor man's
 issue tracker](https://github.com/driusan/PoormanIssueTracker) conventions.
 
-Bug can be aliased as a git subcommand `bug` or `issue`. 
+Bug can be aliased as a git subcommand `bug` or `issue`.
 
 The goal is to use the filesystem in a human readable way, similar to
 how an organized person without any bug tracking software might, 
