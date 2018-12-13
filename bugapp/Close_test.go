@@ -54,7 +54,19 @@ func TestCloseByIndex(t *testing.T) {
 		t.Error("Could not read issues directory")
 		return
 	}
+	// check error
 	stdout, stderr := captureOutput(func() {
+		Close(ArgumentList{"FooBug"})
+	}, t)
+	if stderr != "Could not close bug FooBug: Could not find bug FooBug\n" {
+		t.Error("Unexpected output on STDERR for Foo-bug")
+		fmt.Printf("Got %s\nExpected %s\n", stderr, "Could not close bug FooBug: Could not find bug FooBug")
+	}
+	if stdout != "" {
+		t.Error("Unexpected output on STDOUT for Foo-bug")
+	}
+	// now success
+	stdout, stderr = captureOutput(func() {
 		Close(ArgumentList{"TestBug"})
 	}, t)
 	if stderr != "" {
