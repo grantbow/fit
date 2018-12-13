@@ -1,11 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/driusan/bug/bugs"
 	"github.com/google/go-github/github"
 	"os"
-	"context"
 )
 
 func githubImport(user, repo string) {
@@ -23,7 +23,7 @@ func githubImport(user, repo string) {
 	for lastPage := false; lastPage != true; {
 		for _, issue := range issues {
 			if issue.PullRequestLinks == nil {
-				b := bugs.Bug{Dir: issueDir + bugs.TitleToDir(*issue.Title)}
+				b := bugs.Bug{Dir: issueDir + bugs.TitleToDir(fmt.Sprintf("%s%s%v", *issue.Title, "-", *issue.Number))}
 				if dir := b.GetDirectory(); dir != "" {
 					os.Mkdir(string(dir), 0755)
 				}
