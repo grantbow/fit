@@ -21,8 +21,12 @@ to commit (or remove) the issues from source control.
 
 An optional config file next to the issues directory named .bug.yml may
 specify options. Current options include:
-    * DefaultDescriptionFile: bug create template
-    * ImportXmlDump: true or false, saves raw xml as a file
+    * DefaultDescriptionFile: string,
+          create bug template file name
+    * ImportXmlDump: true or false, 
+          saves raw xml as a file
+    * ImportCommentsTogether: true or false,
+          commments save to one file or many files
 
 This differs from other distributed bug tracking tools, (which usually 
 store a database in a hidden directory) in that you can still easily 

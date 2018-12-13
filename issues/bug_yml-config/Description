@@ -4,4 +4,5 @@ environment variable.
 
 1. DefaultDescriptionFile string `json:"DefaultDescriptionFile"`
 2. ImportXmlDump          bool   `json:"ImportXmlDump"`
+3. ImportCommentsTogether bool   `json:"ImportCommentsTogether`
 

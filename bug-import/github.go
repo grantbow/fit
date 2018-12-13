@@ -69,6 +69,7 @@ func githubImport(user, repo string, config bugs.Config) {
 				for _, l := range issue.Labels {
 					b.TagBug(bugs.Tag(*l.Name))
 				}
+				j := 1
 				if *issue.Comments > 0 {
 					comments, _, err := FetchIssueComments(user, repo, *issue.Number, nil)
 					if err != nil {
@@ -76,15 +77,23 @@ func githubImport(user, repo string, config bugs.Config) {
 						return
 					}
 					for _, l := range comments {
-						b.CommentBug(bugs.Comment(*l.Body))
+						xml, err := json.MarshalIndent(l, "", "    ")
+						check(err)
+						x := bugs.Comment{ 
+							Author: *l.User.Login,
+							Time: *l.CreatedAt,
+							Body: *l.Body,
+							Order: j,
+							Xml: xml }
+						b.CommentBug(x, config)
 						if config.ImportXmlDump == true {
 							// b.SetXml()
-							xml, _ := json.MarshalIndent(l, "", "    ")
 							err = ioutil.WriteFile(string(b.GetDirectory())+"/comment-"+
-								string(bugs.ShortTitleToDir(string(*l.Body)))+
+								string(bugs.ShortTitleToDir(string(*l.Body)))+"-"+string(j)+
 								".xml",append(xml,'\n'),0644)
 							check(err)
 						}
+						j += 1
 					}
 				}
 				fmt.Printf("Importing %s\n", *issue.Title)

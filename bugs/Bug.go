@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 
 var NoDescriptionError = errors.New("No description provided")
@@ -19,7 +20,13 @@ type Bug struct {
 
 type Tag string
 
-type Comment string
+type Comment struct {
+	Author   string
+	Time     time.Time
+	Body     string
+	Order    int
+	Xml      []byte
+}
 
 func TitleToDir(title string) Directory {
 	// replace non-matching valid characters with _
@@ -137,17 +144,27 @@ func (b *Bug) TagBug(tag Tag) {
 }
 func (b *Bug) RemoveComment(comment Comment) {
 	if dir := b.GetDirectory(); dir != "" {
-		os.Remove(string(dir) + "/comment-" + string(ShortTitleToDir(string(comment))))
+		os.Remove(string(dir) + "/comment-" + string(ShortTitleToDir(string(comment.Body))))
 	} else {
-		fmt.Printf("Error removing comment: %s", comment)
+		fmt.Printf("Error removing comment: %s", comment.Body)
 	}
 }
-func (b *Bug) CommentBug(comment Comment) {
+func (b *Bug) CommentBug(comment Comment, config Config) {
 	if dir := b.GetDirectory(); dir != "" {
-		os.Mkdir(string(dir)+"/", 0755)
-		ioutil.WriteFile(string(dir)+"/comment-"+string(ShortTitleToDir(string(comment))), []byte(string(comment)+"\n"), 0644)
+		//os.Mkdir(string(dir)+"/", 0755)
+		commenttext := []byte(comment.Body+"\n")
+		if config.ImportCommentsTogether { // not efficient but ok for now
+			data, err := ioutil.ReadFile(string(dir)+"/comments")
+			check(err)
+			commentappend := []byte(fmt.Sprintf("%s%s%s",data, "\n", commenttext))
+			werr := ioutil.WriteFile(string(dir)+"/comments", commentappend, 0644)
+			check(werr)
+		} else {
+			werr := ioutil.WriteFile(string(dir)+"/comment-"+string(ShortTitleToDir(string(comment.Body))), commenttext, 0644)
+			check(werr)
+		}
 	} else {
-		fmt.Printf("Error commenting bug: %s", comment)
+		fmt.Printf("Error commenting bug: %s", comment.Body)
 	}
 }
 func (b Bug) ViewBug() {
