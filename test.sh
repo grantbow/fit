@@ -12,9 +12,9 @@ for d in $(find ./* -maxdepth 10 -type d); do
         echo "testing in $d"
         cd $d
         go test -v -coverprofile=profile.out -covermode=atomic
-        if [ -f ../profile.out ]; then
-            cat ../profile.out >> ../coverage.txt
-            rm ../profile.out
+        if [ -f profile.out ]; then
+            cat profile.out >> ../coverage.txt
+            rm profile.out
         fi
         cd ..
     fi
