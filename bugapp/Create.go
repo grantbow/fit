@@ -52,7 +52,7 @@ func Create(Args ArgumentList) {
 		fmt.Fprintf(os.Stderr, "\nNo Bug Description provided.\n")
 		return
 	}
-	var bug bugs.Bug
+	var bug bugs.Bug // redundant now?
 	bug = bugs.Bug{
 		Dir: bugs.GetIssuesDir() + bugs.TitleToDir(strings.Join(Args, " ")),
 	}

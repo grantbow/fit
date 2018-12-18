@@ -24,7 +24,7 @@ func TestEnvGit(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Fake an Issues Directory
-	os.Mkdir(".git", 0755)
+	os.Mkdir("Issues", 0755)
 
 	stdout, stderr := captureOutput(func() {
 		Env()
@@ -32,7 +32,7 @@ func TestEnvGit(t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-	expected := fmt.Sprintf("Settings used by this command:\n\nEditor:.*\nIssues Directory:.*\n\nSCM Type:.*\ngit Directory:.*\n")
+	expected := "Settings used by this command:\n\nEditor:.*\nIssues Directory:.*\n\nSCM Type:.*\ngit Directory:.*\n"
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
 	if ! matched {

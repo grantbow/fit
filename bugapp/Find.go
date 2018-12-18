@@ -47,7 +47,7 @@ func find(findType string, findValues []string) {
 
 func Find(args ArgumentList) {
 	if len(args) < 2 {
-		fmt.Printf("Usage: %s find {tag, status, priority, milestone} value1 [value2 ...]\n", os.Args[0])
+		fmt.Printf("Usage: %s find {tags, status, priority, milestone} value1 [value2 ...]\n", os.Args[0])
 		return
 	}
 	switch args[0] {
@@ -60,7 +60,7 @@ func Find(args ArgumentList) {
 	case "milestone":
 		find(args[0], args[1:])
 	default:
-		fmt.Printf("Unknown command: %s %s %s\n", os.Args[0], os.Args[1], os.Args[2])
+		fmt.Printf("Unknown command: %v\n", args)
 		return
 	}
 }
