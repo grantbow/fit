@@ -24,14 +24,6 @@ type Config struct {
 
 var NoConfigError = errors.New("No .bug.yml provided")
 
-func check(e error) () {
-	if e != nil {
-	//	fmt.Fprintf(os.Stderr, "err: %s", err.Error())
-	//	return NoConfigError
-		panic (e)
-	}
-}
-
 func (c *Config) Read() (err error) {
 	dat, err := ioutil.ReadFile(string(c.BugDir)+"/.bug.yml")
 	check(err)

@@ -29,7 +29,6 @@ func FetchIssueComments(owner string, repo string, comment int, opt *github.Issu
 }
 
 func githubImport(user, repo string, config bugs.Config) {
-	client := github.NewClient(nil)
 	i := 0
 	opt := &github.IssueListByRepoOptions{
 		ListOptions: github.ListOptions{PerPage: 100},
@@ -49,7 +48,7 @@ func githubImport(user, repo string, config bugs.Config) {
 			if issue.PullRequestLinks == nil {
 				// add issue.Number to title
 				//b := bugs.Bug{Dir: bugs.Directory(config.BugDir+"issues/" + string(bugs.TitleToDir(*issue.Title)))}
-				b := bugs.Bug{Dir: issueDir + bugs.TitleToDir(fmt.Sprintf("%s%s%v", *issue.Title, "-", *issue.Number))}
+				b := bugs.Bug{Dir: bugs.Directory(config.BugDir+"issues/" + string(bugs.TitleToDir(fmt.Sprintf("%s%s%v", *issue.Title, "-", *issue.Number))))}
 				if dir := b.GetDirectory(); dir != "" {
 					os.Mkdir(string(dir), 0755)
 				}
