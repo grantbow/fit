@@ -10,10 +10,15 @@ import (
 func GetRootDir(config Config) Directory {
 	dir := os.Getenv("PMIT")
 	if dir != "" {
-		config.BugDir = dir
-		os.Chdir(dir)
-		return Directory(dir)
-		// environment variable overrides # TODO: os.Stat, better error behavior
+		// that PMIT dir exists is a bad assumption
+		if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
+			config.BugDir = dir
+			os.Chdir(dir)
+			return Directory(dir)
+			// better to start looking rather than
+		    //} else {
+		    //	return ""
+		}
 	}
 
 	wd, _ := os.Getwd()

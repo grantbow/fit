@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestGetRootDirWithEnvironmentVariable(t *testing.T) {
+func TestGetRootDirWithGoodEnvironmentVariable(t *testing.T) {
 	var gdir string
 	gdir, err := ioutil.TempDir("", "rootdirbug")
 	if err == nil {
@@ -23,13 +23,40 @@ func TestGetRootDirWithEnvironmentVariable(t *testing.T) {
 	//os.Mkdir("issues", 0755)
 	expected := Directory(gdir+"/abc")
 	os.Setenv("PMIT", string(expected))
-	config := Config{}
 	defer os.Unsetenv("PMIT")
+	// PMIT exists and overrides wd
+	config := Config{}
 	dir := GetRootDir(config)
 	if dir != expected {
 		t.Errorf("Expected directory %s from environment variable, got %s", expected, string(dir))
 	}
 }
+
+func TestGetMissingRootDirWithEnvironmentVariable(t *testing.T) {
+	var gdir string
+	gdir, err := ioutil.TempDir("", "rootdirbug")
+	if err == nil {
+		os.Chdir(gdir)
+		// Hack to get around the fact that /tmp is a symlink on
+		// OS X, and it causes the directory checks to fail..
+		gdir, _ = os.Getwd()
+		defer os.RemoveAll(gdir)
+	} else {
+		t.Error("Failed creating temporary directory")
+		return
+	}
+	// PMIT/issues missing so doesn't override wd
+	os.Mkdir("../pmit", 0755)
+	defer os.RemoveAll(gdir + "../pmit")
+	//os.Mkdir("../pmit/issues", 0755)
+	os.Setenv("PMIT", gdir+"../pmit")
+	defer os.Unsetenv("PMIT")
+	dir := GetRootDir()
+	if dir != Directory(gdir) {
+		t.Error("Did not get proper directory according to environment variable")
+	}
+}
+
 func TestGetRootDirFromDirectoryTree(t *testing.T) {
 	var gdir string
 	config := Config{}
@@ -87,17 +114,8 @@ func TestNoRoot(t *testing.T) {
 
 }
 
-func TestGetIssuesDir(t *testing.T) {
-	base := "/tmp/abc"
-	expected := base + "/issues/"
-	os.Setenv("PMIT", base)
-	config := Config{}
-	defer os.Unsetenv("PMIT")
-	dir := GetIssuesDir(config)
-	if dir != Directory(expected) {
-		t.Errorf("Expected issues directory %s from environment variable, got %s", expected, dir )
-	}
-}
+// TestGetIssuesDir was deprecated
+
 func TestGetNoIssuesDir(t *testing.T) {
 	var gdir string
 	config := Config{}
