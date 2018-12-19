@@ -1,0 +1,29 @@
+When I uninstalled hg
+I ran go test in the scm directory.
+I got two failed HG tests,
+the second one with a panic.
+
+No new issues commited
+Removing issues/Test-purge-bug/
+--- FAIL: TestHgBugRenameCommits (0.00s)
+    TestHelpers_test.go:79: Could not initialize repo
+--- FAIL: TestHgFilesOutsideOfBugNotCommited (0.00s)
+panic: Something went wrong trying to initialize git:exec: "hg": executable file not found in $PATH [recovered]
+	panic: Something went wrong trying to initialize git:exec: "hg": executable file not found in $PATH
+
+goroutine 37 [running]:
+testing.tRunner.func1(0xc0a0500)
+	/data/data/com.termux/files/usr/lib/go/src/testing/testing.go:792 +0x320
+panic(0xb564fb8, 0xc076848)
+	/data/data/com.termux/files/usr/lib/go/src/runtime/panic.go:513 +0x1a0
+github.com/<user>/bug/scm.runtestCommitDirtyTree(0xb583d70, 0xc088590, 0xc0a0500)
+	/data/data/com.termux/files/home/go/src/github.com/<user>/bug/scm/TestHelpers_test.go:109 +0x5c8
+github.com/<user>/bug/scm.TestHgFilesOutsideOfBugNotCommited(0xc0a0500)
+	/data/data/com.termux/files/home/go/src/github.com/<user>/bug/scm/HgManager_test.go:128 +0x6c
+testing.tRunner(0xc0a0500, 0xb582884)
+	/data/data/com.termux/files/usr/lib/go/src/testing/testing.go:827 +0xb8
+created by testing.(*T).Run
+	/data/data/com.termux/files/usr/lib/go/src/testing/testing.go:878 +0x2dc
+exit status 2
+FAIL	github.com/<user>/bug/scm	1.341s
+
