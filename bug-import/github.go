@@ -1,13 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/driusan/bug/bugs"
 	"github.com/google/go-github/github" // handles json
 	"io/ioutil"
 	"encoding/json"
 	"os"
-	"context"
 )
 
 func check(e error) {
@@ -35,7 +35,9 @@ func githubImport(user, repo string, config bugs.Config) {
 			i += 1
 			// issues includes pull requests, so skip each pull request
 			if issue.PullRequestLinks == nil {
-				b := bugs.Bug{Dir: bugs.Directory(config.BugDir+"issues/" + string(bugs.TitleToDir(*issue.Title)))}
+				// add issue.Number to title
+				//b := bugs.Bug{Dir: bugs.Directory(config.BugDir+"issues/" + string(bugs.TitleToDir(*issue.Title)))}
+				b := bugs.Bug{Dir: issueDir + bugs.TitleToDir(fmt.Sprintf("%s%s%v", *issue.Title, "-", *issue.Number))}
 				if dir := b.GetDirectory(); dir != "" {
 					os.Mkdir(string(dir), 0755)
 				}
