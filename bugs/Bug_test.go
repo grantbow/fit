@@ -52,6 +52,10 @@ func TestTitleToDirectory(t *testing.T) {
 	assertDirectory("Test--TripleDash", "Test---TripleDash")
 	assertDirectory("Test --WithSpace", "Test_--WithSpace")
 	assertDirectory("Test - What", "Test_-_What")
+	assertDirectory("Test : What", "Test-_-What")
+	assertDirectory("Test ? What", "Test-_-What")
+	assertDirectory("Test / What", "Test-_-What")
+	assertDirectory("Test . What", "Test-_-What")
 }
 
 func TestNewBug(t *testing.T) {
@@ -91,7 +95,7 @@ func TestSetDescription(t *testing.T) {
 		t.Error("Could not read Description file")
 	}
 
-	if string(val) != "Hello, I am a bug." {
+	if string(val) != "Hello, I am a bug.\n" {
 		t.Error("Unexpected description after SetDescription")
 	}
 }
@@ -106,7 +110,7 @@ func TestDescription(t *testing.T) {
 	desc := "I am yet another bug.\nWith Two Lines."
 	b.SetDescription(desc)
 
-	if b.Description() != desc {
+	if b.Description() != desc+"\n" {
 		t.Error("Unexpected result from bug.Description()")
 	}
 }

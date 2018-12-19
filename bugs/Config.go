@@ -18,6 +18,8 @@ type Config struct {
 	DefaultDescriptionFile string `json:"DefaultDescriptionFile"`
 	// saves raw json files of import
 	ImportXmlDump          bool   `json:"ImportXmlDump"`
+	// import comments together or separate files
+	ImportCommentsTogether  bool   `json:"ImportCommentsTogether"`
 }
 
 var NoConfigError = errors.New("No .bug.yml provided")

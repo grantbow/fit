@@ -16,6 +16,18 @@ func check(e error) {
 	}
 }
 
+func FetchIssues(owner string, repo string, opt *github.IssueListByRepoOptions) ([]*github.Issue, *github.Response, error) {
+	client := github.NewClient(nil)
+	issues, response, err := client.Issues.ListByRepo(context.Background(), owner, repo, opt)
+	return issues, response, err
+}
+
+func FetchIssueComments(owner string, repo string, comment int, opt *github.IssueListCommentsOptions) ([]*github.IssueComment, *github.Response, error) {
+	client := github.NewClient(nil)
+	comments, response, err := client.Issues.ListComments(context.Background(), owner, repo, comment, opt)
+	return comments, response, err
+}
+
 func githubImport(user, repo string, config bugs.Config) {
 	client := github.NewClient(nil)
 	i := 0
@@ -23,7 +35,7 @@ func githubImport(user, repo string, config bugs.Config) {
 		ListOptions: github.ListOptions{PerPage: 100},
 	}
 	// https://api.github.com/repos/<user>/<repo>/issues
-	issues, resp, err := client.Issues.ListByRepo(context.Background(), user, repo, opt)
+	issues, resp, err := FetchIssues(user, repo, opt)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
@@ -60,6 +72,33 @@ func githubImport(user, repo string, config bugs.Config) {
 				for _, l := range issue.Labels {
 					b.TagBug(bugs.Tag(*l.Name))
 				}
+				j := 1
+				if *issue.Comments > 0 {
+					comments, _, err := FetchIssueComments(user, repo, *issue.Number, nil)
+					if err != nil {
+						fmt.Fprintln(os.Stderr, err)
+						return
+					}
+					for _, l := range comments {
+						xml, err := json.MarshalIndent(l, "", "    ")
+						check(err)
+						x := bugs.Comment{ 
+							Author: *l.User.Login,
+							Time: *l.CreatedAt,
+							Body: *l.Body,
+							Order: j,
+							Xml: xml }
+						b.CommentBug(x, config)
+						if config.ImportXmlDump == true {
+							// b.SetXml()
+							err = ioutil.WriteFile(string(b.GetDirectory())+"/comment-"+
+								string(bugs.ShortTitleToDir(string(*l.Body)))+"-"+string(j)+
+								".xml",append(xml,'\n'),0644)
+							check(err)
+						}
+						j += 1
+					}
+				}
 				fmt.Printf("Importing %s\n", *issue.Title)
 			}
 		}
@@ -67,7 +106,7 @@ func githubImport(user, repo string, config bugs.Config) {
 			lastPage = true
 		} else {
 			opt.ListOptions.Page = resp.NextPage
-			issues, resp, err = client.Issues.ListByRepo(context.Background(), user, repo, opt)
+			issues, resp, err = FetchIssues(user, repo, opt)
 		}
 	}
 }
