@@ -65,7 +65,7 @@ func TestIdGenerate(t *testing.T) {
 		return
 	}
 
-	// bug "id bug"
+	// bug
 	_, _ = captureOutput(func() {
 		Create(ArgumentList{"-n", "no_id_bug"})
 	}, t)

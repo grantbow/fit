@@ -59,17 +59,17 @@ func TestFindSubcommands(t *testing.T) {
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
 	os.Mkdir("issues", 0755)
+	err = os.Setenv("PMIT", gdir)
+	if err != nil {
+		t.Error("Could not set environment variable: " + err.Error())
+		return
+	}
 
 	runfind(ArgumentList {"tags", "matchstring"}, "", t)
 	runfind(ArgumentList {"status", "matchstring"}, "", t)
 	runfind(ArgumentList {"priority", "matchstring"}, "", t)
 	runfind(ArgumentList {"milestone", "matchstring"}, "", t)
 
-	err = os.Setenv("PMIT", gdir)
-	if err != nil {
-		t.Error("Could not set environment variable: " + err.Error())
-		return
-	}
 	// bug "id bug"
 	_, _ = captureOutput(func() {
 		Create(ArgumentList{"-n", "no_id_bug","--tag","foo"})
