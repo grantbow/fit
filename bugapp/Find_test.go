@@ -2,6 +2,7 @@ package bugapp
 
 import (
 	"fmt"
+	"github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -12,8 +13,9 @@ import (
 //	// find(string, []string)
 //}
 func runfind(args ArgumentList, expected string, t *testing.T) {
+	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Find(args)
+		Find(args, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
@@ -43,6 +45,7 @@ func TestFindSubcommandUnknownGTOne(t *testing.T) {
 	runfind(ArgumentList {"unk_sub", "not_found", "more"}, "Unknown command: .*\n", t)
 }
 func TestFindSubcommands(t *testing.T) {
+	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "findgit")
 	if err == nil {
@@ -72,7 +75,7 @@ func TestFindSubcommands(t *testing.T) {
 
 	// bug "id bug"
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_id_bug","--tag","foo"})
+		Create(ArgumentList{"-n", "no_id_bug","--tag","foo"}, config)
 	}, t)
 	runfind(ArgumentList{"tags", "foo"}, "Issue 1: no_id_bug \\(foo\\)\n", t)
 	runfind(ArgumentList {"tags", "matchstring"}, "", t) // still not found

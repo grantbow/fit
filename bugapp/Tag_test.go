@@ -9,12 +9,13 @@ import (
 	"testing"
 )
 
-// Priority and Status are treated specially in runfind
+//func getAllTags() []string {
+//func Tag(Args ArgumentList) {
 
-func runpriority(args ArgumentList, expected string, t *testing.T) {
+func runtag(args ArgumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Priority(args, config)
+		Tag(args, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
@@ -26,15 +27,15 @@ func runpriority(args ArgumentList, expected string, t *testing.T) {
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
 	if ! matched {
-		t.Error("Unexpected output on STDOUT for bugapp/Priority_test")
+		t.Error("Unexpected output on STDOUT for bugapp/Tag_test")
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
 }
 
-func TestPriority(t *testing.T) {
+func TestTag(t *testing.T) {
 	config := bugs.Config{}
 	var gdir string
-	gdir, err := ioutil.TempDir("", "prioritygit")
+	gdir, err := ioutil.TempDir("", "taggit")
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -57,28 +58,32 @@ func TestPriority(t *testing.T) {
 	}
 	// bug
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_pri_bug"}, config)
+		Create(ArgumentList{"-n", "no_tag_bug"}, config)
 	}, t)
 	// before
-	runfind(ArgumentList{"priority", "foo"}, "", t)
+	runfind(ArgumentList{"tags", "foo"}, "", t) // find uses tags but tag uses tag
 	// add
-	runpriority(ArgumentList{"1", "foo"}, "", t) // no cmd as argument
+	runtag(ArgumentList{"1", "foo"}, "", t) // no cmd as argument
 	// force it to test when runmiles doesn't work
 	//val := []byte("foo\n")
-	//fmt.Println(ioutil.WriteFile(string(gdir)+"/issues/no_pri_bug/Priority", []byte(val), 0644))
+	//fmt.Println(ioutil.WriteFile(string(gdir)+"/issues/no_tag_bug/Tag", []byte(val), 0644))
 	// check
-	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s/issues/no_pri_bug", gdir))
+	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s/issues/no_tag_bug/tags", gdir))
 	//fmt.Printf("readdir len %#v\n", len(bugDir))
 	//fmt.Printf("readdir %#v\n", bugDir[0])
 	//fmt.Printf("readdir %#v\n", bugDir[1])
 	// after
-	runfind(ArgumentList{"priority", "foo"}, "Issue 1: no_pri_bug \\(Priority: foo\\)\n", t)
-	file, err := ioutil.ReadFile(fmt.Sprintf("%s/issues/no_pri_bug/Priority", gdir))
+	runfind(ArgumentList{"tags", "foo"}, "Issue 1: no_tag_bug \\(foo\\)\n", t) // boolean flags not tags
+	_ , err = ioutil.ReadFile(fmt.Sprintf("%s/issues/no_tag_bug/tags/foo", gdir)) // file is empty
 	if err != nil {
-		t.Error("Could not load Priority file" + err.Error())
+		t.Error("Could not load tags/foo file" + err.Error())
 	}
-	if len(file) == 0 {
-		t.Error("Expected a Priority file")
+	// tags can have more than one
+	runtag(ArgumentList{"1", "bar"}, "", t) // no cmd as argument
+	runfind(ArgumentList{"tags", "foo"}, "Issue 1: no_tag_bug \\(bar, foo\\)\n", t) // boolean flags not tags
+	_ , err = ioutil.ReadFile(fmt.Sprintf("%s/issues/no_tag_bug/tags/bar", gdir)) // file is empty
+	if err != nil {
+		t.Error("Could not load tags/bar file" + err.Error())
 	}
 }
 

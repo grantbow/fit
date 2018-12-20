@@ -2,6 +2,7 @@ package bugapp
 
 import (
 	"fmt"
+	"github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -9,8 +10,9 @@ import (
 )
 
 func runmiles(args ArgumentList, expected string, t *testing.T) {
+	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Milestone(args)
+		Milestone(args, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
@@ -28,6 +30,7 @@ func runmiles(args ArgumentList, expected string, t *testing.T) {
 }
 
 func TestMilestone(t *testing.T) {
+	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "milestonegit")
 	if err == nil {
@@ -52,7 +55,7 @@ func TestMilestone(t *testing.T) {
 	}
 	// bug
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_miles_bug"})
+		Create(ArgumentList{"-n", "no_miles_bug"}, config)
 	}, t)
 	// before
 	runfind(ArgumentList{"milestone", "foo"}, "", t)

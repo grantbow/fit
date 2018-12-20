@@ -2,6 +2,7 @@ package bugapp
 
 import (
 	"fmt"
+	"github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -9,6 +10,7 @@ import (
 )
 
 func TestEnvGit(t *testing.T) {
+	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "envgit")
 	if err == nil {
@@ -27,7 +29,7 @@ func TestEnvGit(t *testing.T) {
 	os.Mkdir("Issues", 0755)
 
 	stdout, stderr := captureOutput(func() {
-		Env()
+		Env(config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)

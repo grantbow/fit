@@ -2,6 +2,7 @@ package bugapp
 
 import (
 	"fmt"
+	"github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -11,8 +12,9 @@ import (
 // Priority and Status find printed differently
 
 func runstatus(args ArgumentList, expected string, t *testing.T) {
+	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Status(args)
+		Status(args, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
@@ -30,6 +32,7 @@ func runstatus(args ArgumentList, expected string, t *testing.T) {
 }
 
 func TestStatus(t *testing.T) {
+	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "statusgit")
 	if err == nil {
@@ -54,7 +57,7 @@ func TestStatus(t *testing.T) {
 	}
 	// bug
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_status_bug"})
+		Create(ArgumentList{"-n", "no_status_bug"}, config)
 	}, t)
 	// before
 	runfind(ArgumentList{"status", "foo"}, "", t)

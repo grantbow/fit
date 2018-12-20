@@ -6,11 +6,11 @@ import (
 	"github.com/driusan/bug/scm"
 )
 
-func Env() {
+func Env(config bugs.Config) {
 	scm, scmdir, scmerr := scm.DetectSCM(make(map[string]bool))
 	fmt.Printf("Settings used by this command:\n")
 	fmt.Printf("\nEditor: %s", getEditor())
-	fmt.Printf("\nIssues Directory: %s", bugs.GetIssuesDir())
+	fmt.Printf("\nIssues Directory: %s", bugs.GetIssuesDir(config))
 
 	if scmerr == nil {
 		fmt.Printf("\n\nSCM Type:\t%s", scm.GetSCMType())

@@ -10,12 +10,23 @@ Bug is an implementation of a distributed issue tracker using
 git (or hg) to manage issues on the filesystem following [poor man's
 issue tracker](https://github.com/driusan/PoormanIssueTracker) conventions.
 
+Bug can be aliased as a git subcommand `bug` or `issue`.
+
 The goal is to use the filesystem in a human readable way, similar to
 how an organized person without any bug tracking software might, 
 by keeping track of bugs in an `issues/` directory, one (descriptive)
 subdirectory per issue. bug provides a tool to maintain the nearest 
 `issues/` directory to your current working directory and provides hooks 
 to commit (or remove) the issues from source control.
+
+An optional config file next to the issues directory named .bug.yml may
+specify options. Current options include:
+    * DefaultDescriptionFile: string,
+          create bug template file name
+    * ImportXmlDump: true or false, 
+          saves raw xml as a file
+    * ImportCommentsTogether: true or false,
+          commments save to one file or many files
 
 This differs from other distributed bug tracking tools, (which usually 
 store a database in a hidden directory) in that you can still easily 

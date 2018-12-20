@@ -2,6 +2,7 @@ package bugapp
 
 import (
 	"fmt"
+	"github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -9,8 +10,9 @@ import (
 )
 
 func runlist(args ArgumentList, expected string, t *testing.T) {
+	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		List(args)
+		List(args, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
@@ -28,6 +30,7 @@ func runlist(args ArgumentList, expected string, t *testing.T) {
 }
 
 func TestList(t *testing.T) {
+	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "listgit")
 	if err == nil {
@@ -55,7 +58,7 @@ func TestList(t *testing.T) {
 	runlist(ArgumentList{""}, "", t)
 	// bug
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_list_bug"})
+		Create(ArgumentList{"-n", "no_list_bug"}, config)
 	}, t)
 	// after
 	//fmt.Println("after")

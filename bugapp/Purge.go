@@ -6,7 +6,7 @@ import (
 	"github.com/driusan/bug/scm"
 )
 
-func Purge() {
+func Purge(config bugs.Config) {
 	scm, _, err := scm.DetectSCM(make(map[string]bool))
 
 	if err != nil {
@@ -14,7 +14,7 @@ func Purge() {
 		return
 	}
 
-	err = scm.Purge(bugs.GetIssuesDir())
+	err = scm.Purge(bugs.GetIssuesDir(config))
 	if err != nil {
 		fmt.Printf("Error: %s\n", err.Error())
 		return

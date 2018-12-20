@@ -2,6 +2,7 @@ package bugapp
 
 import (
 	"fmt"
+	"github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -18,8 +19,9 @@ func rungenid(t *testing.T, expected string, input string) {
 	}
 }
 func runid(t *testing.T, expected string, args ArgumentList) {
+	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Identifier(args)
+		Identifier(args, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
@@ -45,6 +47,7 @@ func TestIdInvalid(t *testing.T) {
 	runid(t, "Invalid BugID: Could not find bug test\n", ArgumentList{"test"})
 }
 func TestIdGenerate(t *testing.T) {
+	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "idgit")
 	if err == nil {
@@ -67,7 +70,7 @@ func TestIdGenerate(t *testing.T) {
 
 	// bug
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_id_bug"})
+		Create(ArgumentList{"-n", "no_id_bug"}, config)
 	}, t)
 	runid(t, "Identifier not defined\n", ArgumentList{"1"})
 

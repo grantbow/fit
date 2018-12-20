@@ -1,4 +1,4 @@
-package main
+package bugapp
 
 import (
 	"encoding/json"
@@ -139,7 +139,7 @@ func (a fileSorter) Swap(i, j int) {
 	a[i], a[j] = a[j], a[i]
 }
 
-func beImport() {
+func beImport(config bugs.Config) {
 	wd, err := os.Getwd()
 	if dir := walkAndSearch(wd, []string{".be"}); err != nil || dir == nil {
 		fmt.Fprintf(os.Stderr, "Could not find any Bugs Everywhere repository relative to current path.\n")
@@ -152,7 +152,7 @@ func beImport() {
 			os.Exit(4)
 		}
 
-		issuesDir := bugs.GetIssuesDir()
+		issuesDir := bugs.GetIssuesDir(config)
 		lastIdentifier := ""
 		nextIdentifier := ""
 		for idx, file := range files {

@@ -2,6 +2,7 @@ package bugapp
 
 import (
 	"fmt"
+	"github.com/driusan/bug/bugs"
 	//	"io"
 	"io/ioutil"
 	"os"
@@ -45,9 +46,9 @@ func captureOutput(f func(), t *testing.T) (string, string) {
 // a usage line gets printed to Stderr when
 // no parameters are specified
 func TestCreateHelpOutput(t *testing.T) {
-
+	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Create(ArgumentList{})
+		Create(ArgumentList{}, config)
 	}, t)
 
 	if stdout != "" {
@@ -63,6 +64,7 @@ func TestCreateHelpOutput(t *testing.T) {
 // argument. We can't try it without -n, since it means
 // an editor will be spawned..
 func TestCreateNoEditor(t *testing.T) {
+	config := bugs.Config{}
 	dir, err := ioutil.TempDir("", "createtest")
 	if err != nil {
 		t.Error("Could not create temporary dir for test")
@@ -81,7 +83,7 @@ func TestCreateNoEditor(t *testing.T) {
 	}
 
 	stdout, stderr := captureOutput(func() {
-		Create(ArgumentList{"-n", "Test", "bug"})
+		Create(ArgumentList{"-n", "Test", "bug"}, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected output on STDERR for Test-bug")
@@ -115,3 +117,34 @@ func TestCreateNoEditor(t *testing.T) {
 		t.Error("Expected empty file for Test bug")
 	}
 }
+
+/* currently hangs spawning editor
+
+// this test will not spawn editor
+func TestCreateNoIssuesDir(t *testing.T) {
+	dir, err := ioutil.TempDir("", "createtest")
+	if err != nil {
+		t.Error("Could not create temporary dir for test")
+		return
+	}
+	os.Chdir(dir)
+	// This is what we are testing for
+	//os.MkdirAll("issues", 0700)
+	//defer os.RemoveAll(dir)
+	err = os.Setenv("PMIT", string(dir))
+	if err != nil {
+		t.Error("Could not set environment variable: " + err.Error())
+		return
+	}
+
+	stdout, stderr := captureOutput(func() {
+		Create(ArgumentList{"Test", "bug"}) // fire editor without -n
+	}, t)
+	_ = stderr
+	_ = stdout
+	// stderr is expected from log.Fatal(err)
+	//if stdout != "" {
+	//	t.Error("Unexpected output on STDOUT for Test-bug")
+	//}
+}
+*/

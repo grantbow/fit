@@ -44,19 +44,19 @@ func (a BugListByMilestone) Less(i, j int) bool {
 	return iMS < jMS
 }
 
-func Roadmap(args ArgumentList) {
+func Roadmap(args ArgumentList, config bugs.Config) {
 	var bgs []bugs.Bug
 
 	if args.HasArgument("--filter") {
 		tags := strings.Split(args.GetArgument("--filter", ""), ",")
 		fmt.Printf("%s", tags)
-		bgs = bugs.FindBugsByTag(tags)
+		bgs = bugs.FindBugsByTag(tags, config)
 	} else {
-		bgs = bugs.GetAllBugs()
+		bgs = bugs.GetAllBugs(config)
 	}
 	sort.Sort(BugListByMilestone(bgs))
 
-	fmt.Printf("# Roadmap for %s\n", bugs.GetRootDir().GetShortName().ToTitle())
+	fmt.Printf("# Roadmap for %s\n", bugs.GetRootDir(config).GetShortName().ToTitle())
 	milestone := ""
 	for i := len(bgs) - 1; i >= 0; i -= 1 {
 		b := bgs[i]

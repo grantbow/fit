@@ -7,13 +7,14 @@ import (
 	"os"
 )
 
-func find(findType string, findValues []string) {
-	issues, _ := ioutil.ReadDir(string(bugs.GetIssuesDir()))
+func find(findType string, findValues []string, config bugs.Config) {
+	issuesroot := bugs.GetIssuesDir(config)
+	issues, _ := ioutil.ReadDir(string(issuesroot))
 	for idx, issue := range issues {
 		if issue.IsDir() != true {
 			continue
 		}
-		var dir bugs.Directory = bugs.GetIssuesDir() + bugs.Directory(issue.Name())
+		var dir bugs.Directory = issuesroot + bugs.Directory(issue.Name())
 		b := bugs.Bug{Dir: dir}
 		name := getBugName(b, idx)
 		var values []string
@@ -45,7 +46,7 @@ func find(findType string, findValues []string) {
 	}
 }
 
-func Find(args ArgumentList) {
+func Find(args ArgumentList, config bugs.Config) {
 	if len(args) < 2 {
 		fmt.Printf("Usage: %s find {tags, status, priority, milestone} value1 [value2 ...]\n", os.Args[0])
 		return
@@ -58,7 +59,7 @@ func Find(args ArgumentList) {
 	case "priority":
 		fallthrough
 	case "milestone":
-		find(args[0], args[1:])
+		find(args[0], args[1:], config)
 	default:
 		fmt.Printf("Unknown command: %v\n", args)
 		return

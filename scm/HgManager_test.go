@@ -1,8 +1,10 @@
 package scm
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 	"testing"
@@ -79,10 +81,21 @@ func (c *HgTester) Setup() error {
 
 	_, err := runCmd("hg", "init")
 	if err != nil {
-		return err
+		//c.Fail()
+		log.Fatal(err)
 	}
 	c.handler = HgManager{}
 	return nil
+}
+
+var hg bool
+func init() {
+	flag.BoolVar(&hg, "hg", true, "Mercurial (hg) presence")
+    flag.Parse()
+	_, err := runCmd("hg")
+	if err != nil {
+		hg = false
+	}
 }
 
 func (c HgTester) TearDown() {
@@ -108,6 +121,9 @@ func (m HgTester) GetManager() SCMHandler {
 }
 
 func TestHgBugRenameCommits(t *testing.T) {
+	if hg == false {
+        t.Skip("hg executable not found")
+	}
 	tester := HgTester{}
 
 	expectedDiffs := []string{
@@ -123,6 +139,9 @@ deleted file mode 100644
 	runtestRenameCommitsHelper(&tester, t, expectedDiffs)
 }
 func TestHgFilesOutsideOfBugNotCommited(t *testing.T) {
+	if hg == false {
+        t.Skip("hg executable not found")
+	}
 	tester := HgTester{}
 	tester.handler = HgManager{}
 	runtestCommitDirtyTree(&tester, t)

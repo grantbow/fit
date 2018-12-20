@@ -14,10 +14,10 @@ func getBugName(b bugs.Bug, idx int) string {
 		return fmt.Sprintf("Issue %d", idx+1)
 	}
 }
-func listTags(files []os.FileInfo, args ArgumentList) {
+func listTags(files []os.FileInfo, args ArgumentList, config bugs.Config) {
 	b := bugs.Bug{}
 	for idx, _ := range files {
-		b.LoadBug(bugs.Directory(bugs.GetIssuesDir() + bugs.Directory(files[idx].Name())))
+		b.LoadBug(bugs.Directory(bugs.GetIssuesDir(config) + bugs.Directory(files[idx].Name())))
 
 		for _, tag := range args {
 			if b.HasTag(bugs.Tag(tag)) {
@@ -26,8 +26,9 @@ func listTags(files []os.FileInfo, args ArgumentList) {
 		}
 	}
 }
-func List(args ArgumentList) {
-	issues, _ := ioutil.ReadDir(string(bugs.GetIssuesDir()))
+func List(args ArgumentList, config bugs.Config) {
+	issuesroot := bugs.GetIssuesDir(config)
+	issues, _ := ioutil.ReadDir(string(issuesroot))
 
 	var wantTags bool = false
 	if args.HasArgument("--tags") {
@@ -41,7 +42,7 @@ func List(args ArgumentList) {
 			if issue.IsDir() != true {
 				continue
 			}
-			var dir bugs.Directory = bugs.GetIssuesDir() + bugs.Directory(issue.Name())
+			var dir bugs.Directory = issuesroot + bugs.Directory(issue.Name())
 			b := bugs.Bug{Dir: dir}
 			name := getBugName(b, idx)
 			if wantTags == false {
@@ -59,15 +60,15 @@ func List(args ArgumentList) {
 	// provided a tagname instead of a BugID. If they
 	// did, then list bugs matching that tag instead
 	// of full descriptions
-	tags := getAllTags()
+	tags := getAllTags(config)
 	// There were parameters, so show the full description of each
 	// of those issues
 	for i, length := 0, len(args); i < length; i += 1 {
-		b, err := bugs.LoadBugByHeuristic(args[i])
+		b, err := bugs.LoadBugByHeuristic(args[i], config)
 		if err != nil {
 			for _, tagname := range tags {
 				if tagname == args[i] {
-					listTags(issues, args)
+					listTags(issues, args, config)
 					return
 				}
 			}

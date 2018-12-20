@@ -7,15 +7,25 @@ import (
 	"time"
 )
 
-func GetRootDir() Directory {
+func GetRootDir(config Config) Directory {
 	dir := os.Getenv("PMIT")
 	if dir != "" {
-		return Directory(dir)
+		// that PMIT dir exists is a bad assumption
+		if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
+			config.BugDir = dir
+			os.Chdir(dir)
+			return Directory(dir)
+			// better to start looking rather than
+		    //} else {
+		    //	return ""
+		}
 	}
 
 	wd, _ := os.Getwd()
 
 	if dirinfo, err := os.Stat(wd + "/issues"); err == nil && dirinfo.IsDir() {
+		config.BugDir = dir
+		//os.Chdir(dir) // already there
 		return Directory(wd)
 	}
 
@@ -26,18 +36,37 @@ func GetRootDir() Directory {
 	for i := len(pieces); i > 0; i -= 1 {
 		dir := strings.Join(pieces[0:i], "/")
 		if dirinfo, err := os.Stat(dir + "/issues"); err == nil && dirinfo.IsDir() {
+			config.BugDir = dir
+			os.Chdir(dir)
 			return Directory(dir)
 		}
 	}
-	return ""
+	return "" // out of luck
 }
 
-func GetIssuesDir() Directory {
-	root := GetRootDir()
+func GetIssuesDir(config Config) Directory {
+	root := GetRootDir(config)
 	if root == "" {
 		return root
 	}
-	return GetRootDir() + "/issues/"
+	return Directory(root + "/issues/") // TODO: remove trailing /
+	/* then edit these $ grep -ils getissuesdir ...
+	bug-import/be.go
+	bug-import/github.go
+	bugapp/Commit.go
+	bugapp/Create.go
+	bugapp/Env.go
+	bugapp/Find.go
+	bugapp/List.go
+	bugapp/Purge.go
+	bugapp/Pwd.go
+	bugapp/Relabel.go
+	bugs/Bug.go
+	bugs/Bug_test.go
+	bugs/Directory.go
+	bugs/Directory_test.go
+	bugs/Find.go
+	*/
 }
 
 type Directory string
