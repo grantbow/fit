@@ -1,6 +1,4 @@
-module bug
-
-//require github.com/driusan/bug v0.0.0
+module main
 
 replace github.com/driusan/bug => ../../grantbow/bug // fork
 
@@ -16,4 +14,4 @@ require github.com/driusan/bug/scm v0.0.0
 
 replace github.com/driusan/bug/scm => ../../grantbow/bug/scm // fork
 
-//require github.com/google/go-github v17.0.0+incompatible
+require github.com/ghodss/yaml v1.0.0

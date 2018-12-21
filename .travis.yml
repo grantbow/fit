@@ -3,20 +3,23 @@ dist: xenial
 os:
     - linux
     - osx
+env:
+    global:
+      - GO111MODULE=on
 go:
-    - 1.9
+    - 1.11
 addons:
     apt:
         packages:
             - git
+            - mercurial
     
-
 before_install:
     - git config -l
     - git --version
     - hg --version
 
 script:
-    - bash test.sh
+    - env GO111MODULE=on bash test.sh
 after_success:
     - bash <(curl -s https://codecov.io/bash) || echo "Codecov coverage report upload error"
