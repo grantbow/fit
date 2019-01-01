@@ -27,7 +27,7 @@ func main() {
 	config := bugs.Config{}
 	bugs.GetIssuesDir(config) // bugs/Directory.go
 	bug_yml := ".bug.yml"
-	err := bugs.ConfigRead(bug_yml, &config)
+	bugs.ConfigRead(bug_yml, &config)
 
 	if skipRootCheck == false && bugs.GetRootDir(config) == "" {
 		fmt.Printf("Could not find issues directory.\n")
