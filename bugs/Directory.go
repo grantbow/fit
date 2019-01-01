@@ -16,15 +16,15 @@ func GetRootDir(config Config) Directory {
 			os.Chdir(dir)
 			return Directory(dir)
 			// better to start looking rather than
-		    //} else {
-		    //	return ""
+			//} else {
+			//	return ""
 		}
 	}
 
 	wd, _ := os.Getwd()
 
 	if dirinfo, err := os.Stat(wd + "/issues"); err == nil && dirinfo.IsDir() {
-		config.BugDir = dir
+		config.BugDir = string(wd)
 		//os.Chdir(dir) // already there
 		return Directory(wd)
 	}

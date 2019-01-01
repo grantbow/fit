@@ -21,7 +21,7 @@ func (t *tester) Setup() {
 		os.Unsetenv("PMIT")
 		// Hack to get around the fact that /tmp is a symlink on
 		// OS X, and it causes the directory checks to fail..
-		gdir, _ = os.Getwd()
+		//gdir, _ = os.Getwd() // gdir not used later
 	} else {
 		panic("Failed creating temporary directory")
 	}

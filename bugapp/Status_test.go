@@ -19,13 +19,9 @@ func runstatus(args ArgumentList, expected string, t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-
-	if stderr != "" {
-		t.Error("Unexpected error: " + stderr)
-	}
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
-	if ! matched {
+	if !matched {
 		t.Error("Unexpected output on STDOUT for bugapp/Status_test")
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
@@ -81,4 +77,3 @@ func TestStatus(t *testing.T) {
 		t.Error("Expected a Status file")
 	}
 }
-

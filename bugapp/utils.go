@@ -1,5 +1,15 @@
 package bugapp
 
+import (
+	"fmt"
+	"github.com/driusan/bug/bugs"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+)
+
 type ArgumentList []string
 
 func (args ArgumentList) HasArgument(arg string) bool {
@@ -63,8 +73,97 @@ func (args ArgumentList) GetAndRemoveArguments(argnames []string) (ArgumentList,
 
 func check(e error) {
 	if e != nil {
-	//	fmt.Fprintf(os.Stderr, "err: %s", err.Error())
-	//	return NoConfigError
+		//	fmt.Fprintf(os.Stderr, "err: %s", err.Error())
+		//	return NoConfigError
 		panic(e)
 	}
+}
+
+func captureOutput(f func(), t *testing.T) (string, string) {
+	// Capture STDOUT with a pipe
+	stdout := os.Stdout
+	stderr := os.Stderr
+	so, op, _ := os.Pipe() //outpipe
+	oe, ep, _ := os.Pipe() //errpipe
+	defer func(stdout, stderr *os.File) {
+		os.Stdout = stdout
+		os.Stderr = stderr
+	}(stdout, stderr)
+
+	os.Stdout = op
+	os.Stderr = ep
+
+	f()
+
+	os.Stdout = stdout
+	os.Stderr = stderr
+
+	op.Close()
+	ep.Close()
+
+	errOutput, err := ioutil.ReadAll(oe)
+	if err != nil {
+		t.Error("Could not get output from stderr")
+	}
+	stdOutput, err := ioutil.ReadAll(so)
+	if err != nil {
+		t.Error("Could not get output from stdout")
+	}
+	return string(stdOutput), string(errOutput)
+}
+
+// fieldHandler is used for Priority, Milestone and Status
+func fieldHandler(command string, args ArgumentList,
+	setCallback func(bugs.Bug, string) error, retrieveCallback func(bugs.Bug) string, config bugs.Config) {
+	if len(args) < 1 {
+		fmt.Printf("Usage: %s %s BugID [set %s]\n", os.Args[0], command, command)
+		return
+	}
+
+	b, err := bugs.LoadBugByHeuristic(args[0], config)
+	if err != nil {
+		fmt.Printf("Invalid BugID: %s\n", err.Error())
+		return
+	}
+	if len(args) > 1 {
+		newValue := strings.Join(args[1:], " ")
+		err := setCallback(*b, newValue)
+		if err != nil {
+			fmt.Printf("Error setting %s: %s", command, err.Error())
+		}
+	} else {
+		val := retrieveCallback(*b)
+		if val == "" {
+			fmt.Printf("%s not defined\n", command)
+		} else {
+			fmt.Printf("%s\n", val)
+		}
+	}
+}
+
+func dirDump(dir string) string {
+	a := []string{}
+	err := filepath.Walk(dir,
+		func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			a = append(a, fmt.Sprintf("%v", path))
+			return nil
+		})
+	if err != nil {
+		fmt.Printf("dirDump error %s", err.Error())
+	}
+	//for _, file := range files {
+	//	a = append(a, fmt.Sprintf("%v", file))
+	//}
+	return strings.Join(a, ",\n")
+}
+
+func dirDumpFI(files []os.FileInfo) string {
+	a := []string{}
+	for _, file := range files {
+		a = append(a, fmt.Sprintf("%v", file))
+	}
+	return strings.Join(a, ",\n")
 }

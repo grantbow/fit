@@ -15,21 +15,16 @@ func runhelp(t *testing.T, expected string, args ...string) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-
-	if stderr != "" {
-		t.Error("Unexpected error: " + stderr)
-	}
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
-	if ! matched {
+	if !matched {
 		t.Errorf("Unexpected output on STDOUT for bugapp/Find_test %v", args)
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
 }
 
-
 func TestHelpNilArg(t *testing.T) {
-	runhelp(t, "Usage:.*", )
+	runhelp(t, "Usage:.*")
 }
 func TestHelpEmptyArg(t *testing.T) {
 	runhelp(t, "Usage:.*", "")
@@ -63,4 +58,3 @@ func TestHelpValidArg(t *testing.T) {
 func TestHelpValidArgs(t *testing.T) {
 	runhelp(t, "Usage:.*", "create", "list")
 }
-

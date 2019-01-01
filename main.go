@@ -27,30 +27,9 @@ func main() {
 	}
 
 	config := bugs.Config{}
-	temp := bugs.Config{}
-	bugs.GetIssuesDir(config)
+	bugs.GetIssuesDir(config) // bugs/Directory.go
 	bug_yml := ".bug.yml"
-	//fmt.Fprint(os.Stdout, bug_yml)
-	if fileinfo, err := os.Stat(bug_yml); err == nil && fileinfo.Mode().IsRegular() {
-		dat, _ := ioutil.ReadFile(bug_yml)
-		//fmt.Fprint(os.Stdout, dat)
-		err := yaml.Unmarshal(dat, &temp); if err == nil {
-			//fmt.Fprint(os.Stdout, temp)
-			if temp.ImportXmlDump {
-				config.ImportXmlDump = true
-			}
-			if temp.DefaultDescriptionFile != "" {
-				config.DefaultDescriptionFile = temp.DefaultDescriptionFile
-			}
-		}
-	}
-
-	//config := new(Config {
-	//	Dir: nil,
-	//	PMIT: nil,
-	//	DefaultDescriptionFile: nil,
-	//	ImportXmlDump: false
-	//})
+	err := bugs.ConfigRead(bug_yml, &config)
 
 	if skipRootCheck == false && bugs.GetRootDir(config) == "" {
 		fmt.Printf("Could not find issues directory.\n")

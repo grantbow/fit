@@ -7,12 +7,13 @@ import (
 )
 
 var bugargtests = []struct {
-	input string
+	input  string
 	output string
 }{
 	{"bug", `^Usage:`},
 	{"bug --help", `^Usage:`},
 }
+
 func TestBugArgParser(t *testing.T) {
 	//log.Print("PATH " + os.Getenv("PATH"))
 	for _, tt := range bugargtests {
@@ -25,7 +26,7 @@ func TestBugArgParser(t *testing.T) {
 		if ferr != nil {
 			t.Error("Usage output: " + ferr.Error())
 		} else if !found {
-			t.Errorf("Unexpected usage, got %q, want to match %q", tt.input, tt.output )
+			t.Errorf("Unexpected usage, got %q, want to match %q", tt.input, tt.output)
 		}
 	}
 }

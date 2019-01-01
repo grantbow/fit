@@ -17,13 +17,9 @@ func runmiles(args ArgumentList, expected string, t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-
-	if stderr != "" {
-		t.Error("Unexpected error: " + stderr)
-	}
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
-	if ! matched {
+	if !matched {
 		t.Error("Unexpected output on STDOUT for bugapp/Milestone_test")
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
@@ -79,4 +75,3 @@ func TestMilestone(t *testing.T) {
 	}
 	runfind(ArgumentList{"milestone", "foo"}, "Issue 1: no_miles_bug\n", t)
 }
-

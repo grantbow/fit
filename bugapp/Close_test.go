@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-// Captures stdout and stderr to ensure that
+// ensure that
 // a usage line gets printed to Stderr when
 // no parameters are specified
 func TestCloseHelpOutput(t *testing.T) {

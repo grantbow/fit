@@ -91,10 +91,12 @@ func (t *GitTester) Setup() error {
 
 	return nil
 }
+
 var git bool
+
 func init() {
 	flag.BoolVar(&git, "git", true, "git presence")
-    flag.Parse()
+	flag.Parse()
 	_, err := runCmd("git")
 	if err != nil {
 		git = false
@@ -124,7 +126,7 @@ func (m GitTester) GetManager() SCMHandler {
 
 func TestGitBugRenameCommits(t *testing.T) {
 	if git == false {
-        t.Skip("git executable not found")
+		t.Skip("git executable not found")
 	}
 	gm := GitTester{}
 	gm.handler = GitManager{}
@@ -146,7 +148,7 @@ rename to issues/Renamed-bug/Description
 
 func TestGitFilesOrtsideOfBugNotCommited(t *testing.T) {
 	if git == false {
-        t.Skip("git executable not found")
+		t.Skip("git executable not found")
 	}
 	gm := GitTester{}
 	gm.handler = GitManager{}
@@ -163,7 +165,7 @@ func TestGitManagerGetType(t *testing.T) {
 
 func TestGitManagerPurge(t *testing.T) {
 	if git == false {
-        t.Skip("git executable not found")
+		t.Skip("git executable not found")
 	}
 	gm := GitTester{}
 	gm.handler = GitManager{}
@@ -174,7 +176,7 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 	// This test is specific to gitmanager, since GitHub
 	// only supports git..
 	if git == false {
-        t.Skip("git executable not found")
+		t.Skip("git executable not found")
 	}
 	tester := GitTester{}
 	tester.handler = GitManager{Autoclose: true}

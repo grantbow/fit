@@ -20,13 +20,9 @@ func runtag(args ArgumentList, expected string, t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-
-	if stderr != "" {
-		t.Error("Unexpected error: " + stderr)
-	}
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
-	if ! matched {
+	if !matched {
 		t.Error("Unexpected output on STDOUT for bugapp/Tag_test")
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
@@ -73,17 +69,16 @@ func TestTag(t *testing.T) {
 	//fmt.Printf("readdir %#v\n", bugDir[0])
 	//fmt.Printf("readdir %#v\n", bugDir[1])
 	// after
-	runfind(ArgumentList{"tags", "foo"}, "Issue 1: no_tag_bug \\(foo\\)\n", t) // boolean flags not tags
-	_ , err = ioutil.ReadFile(fmt.Sprintf("%s/issues/no_tag_bug/tags/foo", gdir)) // file is empty
+	runfind(ArgumentList{"tags", "foo"}, "Issue 1: no_tag_bug \\(foo\\)\n", t)   // boolean flags not tags
+	_, err = ioutil.ReadFile(fmt.Sprintf("%s/issues/no_tag_bug/tags/foo", gdir)) // file is empty
 	if err != nil {
 		t.Error("Could not load tags/foo file" + err.Error())
 	}
 	// tags can have more than one
-	runtag(ArgumentList{"1", "bar"}, "", t) // no cmd as argument
+	runtag(ArgumentList{"1", "bar"}, "", t)                                         // no cmd as argument
 	runfind(ArgumentList{"tags", "foo"}, "Issue 1: no_tag_bug \\(bar, foo\\)\n", t) // boolean flags not tags
-	_ , err = ioutil.ReadFile(fmt.Sprintf("%s/issues/no_tag_bug/tags/bar", gdir)) // file is empty
+	_, err = ioutil.ReadFile(fmt.Sprintf("%s/issues/no_tag_bug/tags/bar", gdir))    // file is empty
 	if err != nil {
 		t.Error("Could not load tags/bar file" + err.Error())
 	}
 }
-

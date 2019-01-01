@@ -1,29 +1,59 @@
 package bugs
 
 import (
-//	"testing"
+	"io/ioutil"
+	"testing"
 )
 
-//type tester struct {
-//	dir string
-//	config *Config
-//}
-
-/*
-func (t *tester) Setup() {
-}
-func (t *tester) Teardown() {
-}
-
-func TestRead(t *testing.T) {
-}
-
-func TestDir(t *testing.T) {
+func doconfigteststring(t *testing.T, rootDir string, bugymlfile string, config *Config, configstr *string, expected string) {
+	// write
+	err := ioutil.WriteFile(string(rootDir)+"/.bug.yml", []byte(bugymlfile), 0644)
+	if err != nil {
+		t.Error(err)
+	}
+	// read and stored correctly
+	err = ConfigRead(".bug.yml", config)
+	if *configstr != expected {
+		t.Errorf("DefaultDescriptionFile expected: %v\nGot: %v\n", expected, config.DefaultDescriptionFile)
+	}
 }
 
-func TestDefaultDescriptionFile(t *testing.T) {
+func doconfigtestbool(t *testing.T, rootDir string, bugymlfile string, config *Config, configbool *bool, expected bool) {
+	// write
+	err := ioutil.WriteFile(string(rootDir)+"/.bug.yml", []byte(bugymlfile), 0644)
+	if err != nil {
+		t.Error(err)
+	}
+	// read and stored correctly
+	err = ConfigRead(".bug.yml", config)
+	if *configbool != expected {
+		t.Errorf("DefaultDescriptionFile expected: %v\nGot: %v\n", expected, config.DefaultDescriptionFile)
+	}
 }
 
-func TestPMIT(t *testing.T) {
+func TestConfigRead(t *testing.T) {
+	//tests: func ConfigRead(bug_yml string, c *Config) (err error) {
+	config := Config{}
+	test := tester{} // from Bug_test.go
+	test.Setup()
+	defer test.Teardown()
+	rootDir := GetRootDir(config)
+
+	doconfigteststring(t, string(rootDir),
+		"DefaultDescriptionFile: issues/bug-template.txt\n",
+		&config,
+		&config.DefaultDescriptionFile,
+		"issues/bug-template.txt")
+	config = Config{}
+	doconfigtestbool(t, string(rootDir),
+		"ImportXmlDump: true\n",
+		&config,
+		&config.ImportXmlDump,
+		true)
+	config = Config{}
+	doconfigtestbool(t, string(rootDir),
+		"ImportCommentsTogether: false\n",
+		&config,
+		&config.ImportCommentsTogether,
+		false)
 }
-*/

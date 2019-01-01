@@ -20,29 +20,24 @@ func runfind(args ArgumentList, expected string, t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-
-	if stderr != "" {
-		t.Error("Unexpected error: " + stderr)
-	}
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
-	if ! matched {
+	if !matched {
 		t.Error("Unexpected output on STDOUT for bugapp/Find_test")
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
 }
 
-
 func TestFindUsage(t *testing.T) {
-	args := ArgumentList {"any"} // < 2
+	args := ArgumentList{"any"} // < 2
 	expected := "Usage: .* find \\{tags, status, priority, milestone\\} value1 \\[value2 ...\\]\n"
 	runfind(args, expected, t)
 }
 func TestFindSubcommandUnknown(t *testing.T) {
-	runfind(ArgumentList {"unk_sub", "matchstring"}, "Unknown command:.*\n", t)
+	runfind(ArgumentList{"unk_sub", "matchstring"}, "Unknown command:.*\n", t)
 }
 func TestFindSubcommandUnknownGTOne(t *testing.T) {
-	runfind(ArgumentList {"unk_sub", "not_found", "more"}, "Unknown command: .*\n", t)
+	runfind(ArgumentList{"unk_sub", "not_found", "more"}, "Unknown command: .*\n", t)
 }
 func TestFindSubcommands(t *testing.T) {
 	config := bugs.Config{}
@@ -68,16 +63,15 @@ func TestFindSubcommands(t *testing.T) {
 		return
 	}
 
-	runfind(ArgumentList {"tags", "matchstring"}, "", t)
-	runfind(ArgumentList {"status", "matchstring"}, "", t)
-	runfind(ArgumentList {"priority", "matchstring"}, "", t)
-	runfind(ArgumentList {"milestone", "matchstring"}, "", t)
+	runfind(ArgumentList{"tags", "matchstring"}, "", t)
+	runfind(ArgumentList{"status", "matchstring"}, "", t)
+	runfind(ArgumentList{"priority", "matchstring"}, "", t)
+	runfind(ArgumentList{"milestone", "matchstring"}, "", t)
 
 	// bug "id bug"
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_id_bug","--tag","foo"}, config)
+		Create(ArgumentList{"-n", "no_id_bug", "--tag", "foo"}, config)
 	}, t)
 	runfind(ArgumentList{"tags", "foo"}, "Issue 1: no_id_bug \\(foo\\)\n", t)
-	runfind(ArgumentList {"tags", "matchstring"}, "", t) // still not found
+	runfind(ArgumentList{"tags", "matchstring"}, "", t) // still not found
 }
-

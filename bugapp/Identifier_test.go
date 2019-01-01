@@ -13,7 +13,7 @@ func rungenid(t *testing.T, expected string, input string) {
 	out := generateID(input)
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(out)
-	if ! matched {
+	if !matched {
 		t.Error("Unexpected output bugapp/Identifier_test")
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, out)
 	}
@@ -26,13 +26,9 @@ func runid(t *testing.T, expected string, args ArgumentList) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-
-	if stderr != "" {
-		t.Error("Unexpected error: " + stderr)
-	}
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
-	if ! matched {
+	if !matched {
 		t.Error("Unexpected output on STDOUT for bugapp/Identifier_test")
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
@@ -83,4 +79,3 @@ func TestIdGenerate(t *testing.T) {
 		t.Error("Expected an Identifier file")
 	}
 }
-

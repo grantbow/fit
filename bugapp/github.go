@@ -100,6 +100,7 @@ func githubImport(user, repo string, config bugs.Config) {
 		} else {
 			opt.ListOptions.Page = resp.NextPage
 			issues, resp, err = FetchIssues(user, repo, opt)
+			check(err)
 		}
 	}
 }

@@ -44,7 +44,7 @@ func Edit(args ArgumentList, config bugs.Config) {
 		case "Milestone", "Status", "Priority", "Identifier":
 			file = title
 		}
-		fmt.Printf("Launching in %s/%s", dir, file)
+		fmt.Printf("Editing %s/%s\n", dir, file)
 		cmd := exec.Command(getEditor(), string(dir)+"/"+file)
 
 		cmd.Stdin = os.Stdin

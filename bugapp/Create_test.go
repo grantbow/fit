@@ -9,39 +9,6 @@ import (
 	"testing"
 )
 
-func captureOutput(f func(), t *testing.T) (string, string) {
-	// Capture STDOUT with a pipe
-	stdout := os.Stdout
-	stderr := os.Stderr
-	so, op, _ := os.Pipe() //outpipe
-	oe, ep, _ := os.Pipe() //errpipe
-	defer func(stdout, stderr *os.File) {
-		os.Stdout = stdout
-		os.Stderr = stderr
-	}(stdout, stderr)
-
-	os.Stdout = op
-	os.Stderr = ep
-
-	f()
-
-	os.Stdout = stdout
-	os.Stderr = stderr
-
-	op.Close()
-	ep.Close()
-
-	errOutput, err := ioutil.ReadAll(oe)
-	if err != nil {
-		t.Error("Could not get output from stderr")
-	}
-	stdOutput, err := ioutil.ReadAll(so)
-	if err != nil {
-		t.Error("Could not get output from stdout")
-	}
-	return string(stdOutput), string(errOutput)
-}
-
 // Captures stdout and stderr to ensure that
 // a usage line gets printed to Stderr when
 // no parameters are specified

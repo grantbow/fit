@@ -28,4 +28,3 @@ func TestVersionOutput(t *testing.T) {
 		t.Error("Unexpected output on stdout.")
 	}
 }
-

@@ -89,9 +89,10 @@ func (c *HgTester) Setup() error {
 }
 
 var hg bool
+
 func init() {
 	flag.BoolVar(&hg, "hg", true, "Mercurial (hg) presence")
-    flag.Parse()
+	flag.Parse()
 	_, err := runCmd("hg")
 	if err != nil {
 		hg = false
@@ -122,7 +123,7 @@ func (m HgTester) GetManager() SCMHandler {
 
 func TestHgBugRenameCommits(t *testing.T) {
 	if hg == false {
-        t.Skip("hg executable not found")
+		t.Skip("hg executable not found")
 	}
 	tester := HgTester{}
 
@@ -140,7 +141,7 @@ deleted file mode 100644
 }
 func TestHgFilesOutsideOfBugNotCommited(t *testing.T) {
 	if hg == false {
-        t.Skip("hg executable not found")
+		t.Skip("hg executable not found")
 	}
 	tester := HgTester{}
 	tester.handler = HgManager{}

@@ -37,9 +37,8 @@ func TestEnvGit(t *testing.T) {
 	expected := "Settings used by this command:\n\nEditor:.*\nIssues Directory:.*\n\nSCM Type:.*\ngit Directory:.*\n"
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
-	if ! matched {
+	if !matched {
 		t.Error("Unexpected output on STDOUT for bugapp/Env_test")
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
 }
-

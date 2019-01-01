@@ -16,12 +16,16 @@ func TestGetRootDirWithGoodEnvironmentVariable(t *testing.T) {
 		gdir, _ = os.Getwd()
 		defer os.RemoveAll(gdir)
 	} else {
-		t.Error("Failed creating temporary directory")
+		t.Error("Failed creating TempDir")
 		return
 	}
 	err = os.MkdirAll("abc/issues", 0755)
+	if err != nil {
+		t.Error("Failed creating abc/issues")
+		return
+	}
 	//os.Mkdir("issues", 0755)
-	expected := Directory(gdir+"/abc")
+	expected := Directory(gdir + "/abc")
 	os.Setenv("PMIT", string(expected))
 	defer os.Unsetenv("PMIT")
 	// PMIT exists and overrides wd

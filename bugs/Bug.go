@@ -21,11 +21,11 @@ type Bug struct {
 type Tag string
 
 type Comment struct {
-	Author   string
-	Time     time.Time
-	Body     string
-	Order    int
-	Xml      []byte
+	Author string
+	Time   time.Time
+	Body   string
+	Order  int
+	Xml    []byte
 }
 
 func TitleToDir(title string) Directory {
@@ -70,7 +70,6 @@ func (b Bug) GetDirectory() Directory {
 
 func (b *Bug) LoadBug(dir Directory) {
 	b.Dir = dir
-
 }
 
 func (b Bug) Title(options string) string {
@@ -152,11 +151,11 @@ func (b *Bug) RemoveComment(comment Comment) {
 func (b *Bug) CommentBug(comment Comment, config Config) {
 	if dir := b.GetDirectory(); dir != "" {
 		//os.Mkdir(string(dir)+"/", 0755)
-		commenttext := []byte(comment.Body+"\n")
+		commenttext := []byte(comment.Body + "\n")
 		if config.ImportCommentsTogether { // not efficient but ok for now
-			data, err := ioutil.ReadFile(string(dir)+"/comments")
+			data, err := ioutil.ReadFile(string(dir) + "/comments")
 			check(err)
-			commentappend := []byte(fmt.Sprintf("%s%s%s",data, "\n", commenttext))
+			commentappend := []byte(fmt.Sprintf("%s%s%s", data, "\n", commenttext))
 			werr := ioutil.WriteFile(string(dir)+"/comments", commentappend, 0644)
 			check(werr)
 		} else {

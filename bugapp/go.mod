@@ -2,7 +2,7 @@ module bugapp
 
 replace github.com/driusan/bug/bugapp => ../../../grantbow/bug/bugapp // fork
 
-require github.com/driusan/bug v0.0.0
+require github.com/driusan/bug v0.3.1
 
 replace github.com/driusan/bug => ../../../grantbow/bug // fork
 
