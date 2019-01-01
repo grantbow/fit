@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"github.com/driusan/bug/bugapp"
 	"github.com/driusan/bug/bugs"
-	"github.com/ghodss/yaml"
-	"io/ioutil"
 	"os"
 )
 
