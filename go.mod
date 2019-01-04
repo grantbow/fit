@@ -1,6 +1,6 @@
-module main
+module github.com/grantbow/bug/main // fork
 
-replace github.com/driusan/bug => ../../grantbow/bug // fork
+// for go.mod fork https://github.com/golang/go/issues/28514
 
 require github.com/driusan/bug/bugapp v0.0.0
 
@@ -14,4 +14,7 @@ require github.com/driusan/bug/scm v0.0.0
 
 replace github.com/driusan/bug/scm => ../../grantbow/bug/scm // fork
 
-require github.com/ghodss/yaml v1.0.0
+require (
+	github.com/ghodss/yaml v1.0.0
+	gopkg.in/yaml.v2 v2.2.2 // indirect
+)

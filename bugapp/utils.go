@@ -167,3 +167,20 @@ func dirDumpFI(files []os.FileInfo) string {
 	}
 	return strings.Join(a, ",\n")
 }
+
+func SkipRootCheck(args *[]string) bool {
+	ret := false
+	switch len(*args) {
+	case 0, 1:
+		ret = true
+	case 2:
+		if (*args)[1] == "help" {
+			ret = true
+		}
+	case 3:
+		if (*args)[2] == "--help" {
+			ret = true
+		}
+	}
+	return ret
+}

@@ -23,13 +23,13 @@ func runcommit(expected string, t *testing.T) {
 		t.Error("Unexpected output on STDOUT")
 		fmt.Printf("Expected: %s\nGot %s\n", "", stdout)
 	}
-	stdoutnew, errnew := exec.Command("git", "log",).Output()
+	stdoutnew, errnew := exec.Command("git", "log").Output()
 	if errnew != nil {
 		log.Fatal(errnew)
 	}
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(string(stdoutnew))
-	if  ! matched {
+	if !matched {
 		t.Error("Unexpected output on STDOUT for bugapp/Commit_test")
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdoutnew)
 	}
@@ -53,7 +53,8 @@ func TestCommit(t *testing.T) {
 		return
 	}
 	cmd := exec.Command("git", "init", "-q")
-	err = cmd.Run() ; if err != nil {
+	err = cmd.Run()
+	if err != nil {
 		log.Fatal(err)
 	}
 	// create
@@ -65,7 +66,7 @@ func TestCommit(t *testing.T) {
 	expected = "bug. Update issue .Test."
 	runcommit(expected, t)
 	// close
-	os.RemoveAll(dir+"/issues/Test")
+	os.RemoveAll(dir + "/issues/Test")
 	expected = "bug. Close issue .Test."
 	runcommit(expected, t)
 }

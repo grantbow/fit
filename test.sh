@@ -9,13 +9,14 @@ echo "" > coverage.txt
 export GO111MODULE=on # for forks
 
 echo "testing main"
-go test -v -coverprofile=profile.out -covermode=atomic main_test.go
+#go build
+go test -v -coverprofile=profile.out -covermode=atomic
 if [ -f profile.out ]; then
     cat profile.out >> ./coverage.txt
     rm profile.out
 fi
 
-for d in $(find ./* -maxdepth 10 -type d); do
+for d in $(find ./* -maxdepth 0 -type d); do
     if ls $d/*.go &> /dev/null; then
         echo "testing in $d"
         cd $d
