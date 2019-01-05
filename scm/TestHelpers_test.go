@@ -121,20 +121,20 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		return
 	}
 	tester.AssertStagingIndex(t, []FileStatus{
-		FileStatus{"donotcommit.txt", "?", "?"},
+		{"donotcommit.txt", "?", "?"},
 	})
 
 	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
 	tester.AssertStagingIndex(t, []FileStatus{
-		FileStatus{"donotcommit.txt", "?", "?"},
+		{"donotcommit.txt", "?", "?"},
 	})
 	tester.StageFile("donotcommit.txt")
 	tester.AssertStagingIndex(t, []FileStatus{
-		FileStatus{"donotcommit.txt", "A", " "},
+		{"donotcommit.txt", "A", " "},
 	})
 	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
 	tester.AssertStagingIndex(t, []FileStatus{
-		FileStatus{"donotcommit.txt", "A", " "},
+		{"donotcommit.txt", "A", " "},
 	})
 }
 
