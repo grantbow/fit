@@ -1,7 +1,7 @@
 package bugs
 
 import (
-	"fmt"
+	_ "fmt"
 	"io/ioutil"
 	"os"
 	"testing"
