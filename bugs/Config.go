@@ -24,10 +24,10 @@ type Config struct {
 
 var NoConfigError = errors.New("No .bug.yml provided")
 
-func ConfigRead(bug_yml string, c *Config) (err error) {
+func ConfigRead(bugYml string, c *Config) (err error) {
 	temp := Config{}
-	if fileinfo, err := os.Stat(bug_yml); err == nil && fileinfo.Mode().IsRegular() {
-		dat, _ := ioutil.ReadFile(bug_yml)
+	if fileinfo, err := os.Stat(bugYml); err == nil && fileinfo.Mode().IsRegular() {
+		dat, _ := ioutil.ReadFile(bugYml)
 		//fmt.Fprint(os.Stdout, dat)
 		err := yaml.Unmarshal(dat, &temp)
 		check(err)

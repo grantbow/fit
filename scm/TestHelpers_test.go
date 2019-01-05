@@ -49,7 +49,7 @@ func assertLogs(tester ManagerTester, t *testing.T, titles []map[string]bool, di
 		return
 	}
 
-	for i, _ := range titles {
+	for i := range titles {
 		if _, ok := titles[i][logs[i].LogMsg()]; !ok {
 			t.Error("Unexpected commit message:" + logs[i].LogMsg())
 		}

@@ -15,4 +15,3 @@ func getEditor() string {
 	return "vim"
 
 }
-

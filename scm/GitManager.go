@@ -162,7 +162,7 @@ func (a GitManager) commitMsg(dir bugs.Directory) []byte {
 func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string) error {
 	cmd := exec.Command("git", "add", "-A", string(dir))
 	if err := cmd.Run(); err != nil {
-		fmt.Printf("Could not add issues to be commited: %s?\n", err.Error())
+		fmt.Printf("Could not add issues to be committed: %s?\n", err.Error())
 		return err
 
 	}
@@ -171,7 +171,7 @@ func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string) error {
 
 	file, err := ioutil.TempFile("", "bugCommit")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not create temporary file.\nNothing commited.\n")
+		fmt.Fprintf(os.Stderr, "Could not create temporary file.\nNothing committed.\n")
 		return err
 	}
 	defer os.Remove(file.Name())
@@ -190,7 +190,7 @@ func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string) error {
 		// If nothing was added commit will have an error,
 		// but we don't care it just means there's nothing
 		// to commit.
-		fmt.Printf("No new issues commited\n")
+		fmt.Printf("No new issues committed\n")
 		return nil
 	}
 	return nil

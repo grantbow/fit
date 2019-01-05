@@ -30,7 +30,6 @@ func FindBugsByTag(tags []string, config Config) []Bug {
 		}
 	}
 	return bugs
-	return []Bug{}
 }
 
 func LoadBugByDirectory(dir string, config Config) (*Bug, error) {

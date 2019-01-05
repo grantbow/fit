@@ -12,15 +12,17 @@ import (
 
 func filecp(sourceFile string, destinationFile string) {
 	// https://opensource.com/article/18/6/copying-files-go
-    input, err := ioutil.ReadFile(sourceFile); if err != nil {
-            fmt.Println(err)
-            return
-    }
-    err = ioutil.WriteFile(destinationFile, input, 0644); if err != nil {
-            fmt.Println("Error creating", destinationFile)
-            fmt.Println(err)
-            return
-    }
+	input, err := ioutil.ReadFile(sourceFile)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	err = ioutil.WriteFile(destinationFile, input, 0644)
+	if err != nil {
+		fmt.Println("Error creating", destinationFile)
+		fmt.Println(err)
+		return
+	}
 }
 
 func Create(Args ArgumentList, config bugs.Config) {
@@ -79,7 +81,7 @@ func Create(Args ArgumentList, config bugs.Config) {
 		fmt.Fprintf(os.Stderr, "\n%s error: mkdir\n", os.Args[0])
 		log.Fatal(err)
 	}
-	DescriptionFile := string(dir)+"/Description"
+	DescriptionFile := string(dir) + "/Description"
 	if noDesc {
 		txt := []byte("")
 		if config.DefaultDescriptionFile != "" {

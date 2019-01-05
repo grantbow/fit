@@ -40,6 +40,7 @@ func TestBugWrite(t *testing.T) {
 	}
 }
 
+/*
 func ExampleBugWriter() {
 	config := Config{}
 	if b, err := New("Bug Title", config); err != nil {
@@ -47,3 +48,4 @@ func ExampleBugWriter() {
 		fmt.Fprintf(b, "The bug will be created as necessary.\n")
 	}
 }
+*/

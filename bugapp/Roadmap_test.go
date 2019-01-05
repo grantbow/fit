@@ -10,7 +10,7 @@ import (
 )
 
 func TestRoadmapLess(t *testing.T) {
-// func (a BugListByMilestone) Less(i, j int) bool {
+	// func (a BugListByMilestone) Less(i, j int) bool {
 	config := bugs.Config{}
 	dir, err := ioutil.TempDir("", "roadmaptest")
 	if err != nil {
@@ -32,16 +32,18 @@ func TestRoadmapLess(t *testing.T) {
 	expected := "Created issue: Test1bug\n"
 	stdout, stderr := captureOutput(func() {
 		Create(ArgumentList{"-n", "Test1bug"}, config)
-	}, t) ; if stderr != "" || stdout != expected {
+	}, t)
+	if stderr != "" || stdout != expected {
 		t.Error("Unexpected err/out create 1")
 		fmt.Printf("Expected stdout: %s\nGot: %s\n", expected, stdout)
 		fmt.Printf("Expected stderr: %s\nGot: %s\n", "", stderr)
 	}
 	// bug 2
-	expected  = "Created issue: Test2bug\n"
-	stdout, stderr  = captureOutput(func() {
+	expected = "Created issue: Test2bug\n"
+	stdout, stderr = captureOutput(func() {
 		Create(ArgumentList{"-n", "Test2bug"}, config)
-	}, t) ; if stderr != "" || stdout != expected {
+	}, t)
+	if stderr != "" || stdout != expected {
 		t.Error("Unexpected error/out create 2")
 		fmt.Printf("Expected stdout: %s\nGot: %s\n", expected, stdout)
 		fmt.Printf("Expected stderr: %s\nGot: %s\n", "", stderr)
@@ -50,7 +52,7 @@ func TestRoadmapLess(t *testing.T) {
 	runmiles(ArgumentList{"1", "v1.0"}, "", t)
 	runmiles(ArgumentList{"2", "v2.0"}, "", t)
 	// roadmap
-	expected  = `# Roadmap for .*
+	expected = `# Roadmap for .*
 
 ## v2.0:
 - Test2bug
@@ -63,16 +65,17 @@ func TestRoadmapLess(t *testing.T) {
 	//dd, _  := d.Readdir(0)
 	//dd, _ := ioutil.ReadDir(dir+"/issues")
 	//fmt.Printf("dirdump %s\n", dirDump(fmt.Sprintf("%s/%s",dir,"issues")))
-	stdout, stderr  = captureOutput(func() {
+	stdout, stderr = captureOutput(func() {
 		Roadmap(ArgumentList{}, bugs.Config{})
 	}, t)
 	matched := re.MatchString(stdout)
-	if stderr != "" || ! matched {
+	if stderr != "" || !matched {
 		t.Error("Unexpected error/out roadmap")
 		fmt.Printf("Expected stdout: %s\nGot: %s\n", expected, stdout)
 		fmt.Printf("Expected stderr: %s\nGot: %s\n", "", stderr)
 	}
 }
+
 //func TestRoadmap(t *testing.T) {
 // Roadmap(ArgumentList{}, bugs.Config{})
 //}

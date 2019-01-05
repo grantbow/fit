@@ -30,7 +30,8 @@ func TestPurgeNoEditor(t *testing.T) {
 		return
 	}
 	cmd := exec.Command("git", "init", "-q")
-	err = cmd.Run() ; if err != nil {
+	err = cmd.Run()
+	if err != nil {
 		log.Fatal(err)
 	}
 
@@ -53,10 +54,10 @@ func TestPurgeNoEditor(t *testing.T) {
 		t.Errorf("Expected 1 issue  : %v\n", dirDumpFI(issuesDir))
 	}
 
-	stdout, stderr  = captureOutput(func() {
+	stdout, stderr = captureOutput(func() {
 		Purge(config)
 	}, t)
-	issuesDir, err   = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
 	if err != nil {
 		t.Error("Could not purge issues directory")
 		return

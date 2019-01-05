@@ -2,11 +2,11 @@ package bugapp
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/driusan/bug/bugs"
 	"github.com/google/go-github/github" // handles json
 	"io/ioutil"
-	"encoding/json"
 	"os"
 )
 
@@ -42,7 +42,7 @@ func githubImport(user, repo string, config bugs.Config) {
 			if issue.PullRequestLinks == nil {
 				// add issue.Number to title
 				//b := bugs.Bug{Dir: bugs.Directory(config.BugDir+"issues/" + string(bugs.TitleToDir(*issue.Title)))}
-				b := bugs.Bug{Dir: bugs.Directory(config.BugDir+"issues/" + string(bugs.TitleToDir(fmt.Sprintf("%s%s%v", *issue.Title, "-", *issue.Number))))}
+				b := bugs.Bug{Dir: bugs.Directory(config.BugDir + "issues/" + string(bugs.TitleToDir(fmt.Sprintf("%s%s%v", *issue.Title, "-", *issue.Number))))}
 				if dir := b.GetDirectory(); dir != "" {
 					os.Mkdir(string(dir), 0755)
 				}
@@ -55,7 +55,7 @@ func githubImport(user, repo string, config bugs.Config) {
 				if config.ImportXmlDump == true {
 					// b.SetXml()
 					xml, _ := json.MarshalIndent(issue, "", "    ")
-					err = ioutil.WriteFile(string(b.GetDirectory())+"/issue.xml",append(xml,'\n'),0644)
+					err = ioutil.WriteFile(string(b.GetDirectory())+"/issue.xml", append(xml, '\n'), 0644)
 					check(err)
 				}
 				// Don't set a bug identifier, but put an empty line and
@@ -75,18 +75,18 @@ func githubImport(user, repo string, config bugs.Config) {
 					for _, l := range comments {
 						xml, err := json.MarshalIndent(l, "", "    ")
 						check(err)
-						x := bugs.Comment{ 
+						x := bugs.Comment{
 							Author: *l.User.Login,
-							Time: *l.CreatedAt,
-							Body: *l.Body,
-							Order: j,
-							Xml: xml }
+							Time:   *l.CreatedAt,
+							Body:   *l.Body,
+							Order:  j,
+							Xml:    xml}
 						b.CommentBug(x, config)
 						if config.ImportXmlDump == true {
 							// b.SetXml()
 							err = ioutil.WriteFile(string(b.GetDirectory())+"/comment-"+
 								string(bugs.ShortTitleToDir(string(*l.Body)))+"-"+string(j)+
-								".xml",append(xml,'\n'),0644)
+								".xml", append(xml, '\n'), 0644)
 							check(err)
 						}
 						j += 1

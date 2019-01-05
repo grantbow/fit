@@ -30,7 +30,7 @@ type HgTester struct {
 	workdir string
 }
 
-func (t HgTester) GetLogs() ([]Commit, error) {
+func (h HgTester) GetLogs() ([]Commit, error) {
 	logs, err := runCmd("hg", "log", "-r", ":", "--template", "{node} {desc}\\n")
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (t HgTester) GetLogs() ([]Commit, error) {
 	return commits, nil
 }
 
-func (c HgTester) AssertStagingIndex(t *testing.T, f []FileStatus) {
+func (h HgTester) AssertStagingIndex(t *testing.T, f []FileStatus) {
 	for _, file := range f {
 		out, err := runCmd("hg", "status", file.Filename)
 		if err != nil {
@@ -67,24 +67,24 @@ func (c HgTester) AssertStagingIndex(t *testing.T, f []FileStatus) {
 	}
 }
 
-func (c HgTester) StageFile(file string) error {
+func (h HgTester) StageFile(file string) error {
 	_, err := runCmd("hg", "add", file)
 	return err
 }
-func (c *HgTester) Setup() error {
+func (h *HgTester) Setup() error {
 	if dir, err := ioutil.TempDir("", "hgbug"); err == nil {
-		c.workdir = dir
-		os.Chdir(c.workdir)
+		h.workdir = dir
+		os.Chdir(h.workdir)
 	} else {
 		return err
 	}
 
 	_, err := runCmd("hg", "init")
 	if err != nil {
-		//c.Fail()
+		//h.Fail()
 		log.Fatal(err)
 	}
-	c.handler = HgManager{}
+	h.handler = HgManager{}
 	return nil
 }
 
@@ -99,14 +99,14 @@ func init() {
 	}
 }
 
-func (c HgTester) TearDown() {
-	os.RemoveAll(c.workdir)
+func (h HgTester) TearDown() {
+	os.RemoveAll(h.workdir)
 }
 
-func (c HgTester) GetWorkDir() string {
-	return c.workdir
+func (h HgTester) GetWorkDir() string {
+	return h.workdir
 }
-func (c HgTester) AssertCleanTree(t *testing.T) {
+func (h HgTester) AssertCleanTree(t *testing.T) {
 	out, err := runCmd("hg", "status")
 	if err != nil {
 		t.Error("Error running hg status")
@@ -117,15 +117,15 @@ func (c HgTester) AssertCleanTree(t *testing.T) {
 	}
 }
 
-func (m HgTester) GetManager() SCMHandler {
-	return m.handler
+func (h HgTester) GetManager() SCMHandler {
+	return h.handler
 }
 
 func TestHgBugRenameCommits(t *testing.T) {
 	if hg == false {
 		t.Skip("hg executable not found")
 	}
-	tester := HgTester{}
+	h := HgTester{}
 
 	t.Skip("TODO: fix HgBugRenameCommits changed output")
 	expectedDiffs := []string{
@@ -138,21 +138,21 @@ diff --git a/issues/Test-bug/Description b/issues/Test-bug/Description
 deleted file mode 100644
 
 `}
-	runtestRenameCommitsHelper(&tester, t, expectedDiffs)
+	runtestRenameCommitsHelper(&h, t, expectedDiffs)
 }
 func TestHgFilesOutsideOfBugNotCommited(t *testing.T) {
 	if hg == false {
 		t.Skip("hg executable not found")
 	}
-	tester := HgTester{}
-	tester.handler = HgManager{}
-	runtestCommitDirtyTree(&tester, t)
+	h := HgTester{}
+	h.handler = HgManager{}
+	runtestCommitDirtyTree(&h, t)
 }
 
 func TestHgGetType(t *testing.T) {
-	m := HgManager{}
+	h := HgManager{}
 
-	if m.GetSCMType() != "hg" {
+	if h.GetSCMType() != "hg" {
 		t.Error("Incorrect type for HgManager")
 	}
 }
@@ -160,9 +160,9 @@ func TestHgGetType(t *testing.T) {
 func TestHgPurge(t *testing.T) {
 	// This should eventually be replaced by something more
 	// like:
-	//      m := HgTester{}
-	//      m.handler = HgManager{}
-	//      runtestPurgeFiles(&m, t)
+	//      h := HgTester{}
+	//      h.handler = HgManager{}
+	//      runtestPurgeFiles(&h, t)
 	// but since the current behaviour is to return a not
 	// supported error, that would evidently fail..
 	m := HgManager{}

@@ -10,13 +10,12 @@ import (
 func getBugName(b bugs.Bug, idx int) string {
 	if id := b.Identifier(); id != "" {
 		return fmt.Sprintf("Issue %s", id)
-	} else {
-		return fmt.Sprintf("Issue %d", idx+1)
 	}
+	return fmt.Sprintf("Issue %d", idx+1)
 }
 func listTags(files []os.FileInfo, args ArgumentList, config bugs.Config) {
 	b := bugs.Bug{}
-	for idx, _ := range files {
+	for idx := range files {
 		b.LoadBug(bugs.Directory(bugs.GetIssuesDir(config) + bugs.Directory(files[idx].Name())))
 
 		for _, tag := range args {

@@ -34,7 +34,7 @@ type GitTester struct {
 	workdir string
 }
 
-func (t GitTester) GetLogs() ([]Commit, error) {
+func (g GitTester) GetLogs() ([]Commit, error) {
 	logs, err := runCmd("git", "log", "--oneline", "--reverse", "-z")
 	if err != nil {
 		wd, _ := os.Getwd()
@@ -75,10 +75,10 @@ func (g GitTester) StageFile(file string) error {
 	_, err := runCmd("git", "add", file)
 	return err
 }
-func (t *GitTester) Setup() error {
+func (g *GitTester) Setup() error {
 	if dir, err := ioutil.TempDir("", "gitbug"); err == nil {
-		t.workdir = dir
-		os.Chdir(t.workdir)
+		g.workdir = dir
+		os.Chdir(g.workdir)
 	} else {
 		return err
 	}
@@ -103,14 +103,14 @@ func init() {
 	}
 }
 
-func (t GitTester) TearDown() {
-	os.RemoveAll(t.workdir)
+func (g GitTester) TearDown() {
+	os.RemoveAll(g.workdir)
 }
-func (t GitTester) GetWorkDir() string {
-	return t.workdir
+func (g GitTester) GetWorkDir() string {
+	return g.workdir
 }
 
-func (m GitTester) AssertCleanTree(t *testing.T) {
+func (g GitTester) AssertCleanTree(t *testing.T) {
 	out, err := runCmd("git", "status", "--porcelain")
 	if err != nil {
 		t.Error("Error running git status")
@@ -120,16 +120,16 @@ func (m GitTester) AssertCleanTree(t *testing.T) {
 	}
 }
 
-func (m GitTester) GetManager() SCMHandler {
-	return m.handler
+func (g GitTester) GetManager() SCMHandler {
+	return g.handler
 }
 
 func TestGitBugRenameCommits(t *testing.T) {
 	if git == false {
 		t.Skip("git executable not found")
 	}
-	gm := GitTester{}
-	gm.handler = GitManager{}
+	g := GitTester{}
+	g.handler = GitManager{}
 
 	expectedDiffs := []string{
 		`
@@ -143,16 +143,16 @@ rename from issues/Test-bug/Description
 rename to issues/Renamed-bug/Description
 `}
 
-	runtestRenameCommitsHelper(&gm, t, expectedDiffs)
+	runtestRenameCommitsHelper(&g, t, expectedDiffs)
 }
 
 func TestGitFilesOrtsideOfBugNotCommited(t *testing.T) {
 	if git == false {
 		t.Skip("git executable not found")
 	}
-	gm := GitTester{}
-	gm.handler = GitManager{}
-	runtestCommitDirtyTree(&gm, t)
+	g := GitTester{}
+	g.handler = GitManager{}
+	runtestCommitDirtyTree(&g, t)
 }
 
 func TestGitManagerGetType(t *testing.T) {
@@ -167,9 +167,9 @@ func TestGitManagerPurge(t *testing.T) {
 	if git == false {
 		t.Skip("git executable not found")
 	}
-	gm := GitTester{}
-	gm.handler = GitManager{}
-	runtestPurgeFiles(&gm, t)
+	g := GitTester{}
+	g.handler = GitManager{}
+	runtestPurgeFiles(&g, t)
 }
 
 func TestGitManagerAutoclosingGitHub(t *testing.T) {

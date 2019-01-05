@@ -13,4 +13,3 @@ func getEditor() string {
 	return "sam"
 
 }
-

@@ -13,6 +13,9 @@ func doconfigteststring(t *testing.T, rootDir string, bugymlfile string, config 
 	}
 	// read and stored correctly
 	err = ConfigRead(".bug.yml", config)
+	if err != nil {
+		t.Error(err)
+	}
 	if *configstr != expected {
 		t.Errorf("DefaultDescriptionFile expected: %v\nGot: %v\n", expected, config.DefaultDescriptionFile)
 	}
@@ -26,6 +29,9 @@ func doconfigtestbool(t *testing.T, rootDir string, bugymlfile string, config *C
 	}
 	// read and stored correctly
 	err = ConfigRead(".bug.yml", config)
+	if err != nil {
+		t.Error(err)
+	}
 	if *configbool != expected {
 		t.Errorf("DefaultDescriptionFile expected: %v\nGot: %v\n", expected, config.DefaultDescriptionFile)
 	}
