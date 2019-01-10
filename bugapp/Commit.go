@@ -6,6 +6,7 @@ import (
 	"github.com/driusan/bug/scm"
 )
 
+// Commit is a subcommand to save issues to the git or mercurial (hg) SCMs.
 func Commit(args ArgumentList, config bugs.Config) {
 	options := make(map[string]bool)
 	if !args.HasArgument("--no-autoclose") {

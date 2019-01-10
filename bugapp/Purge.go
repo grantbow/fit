@@ -6,6 +6,7 @@ import (
 	"github.com/driusan/bug/scm"
 )
 
+// Purge is a subcommand to delete all issues.
 func Purge(config bugs.Config) {
 	scm, _, err := scm.DetectSCM(make(map[string]bool))
 

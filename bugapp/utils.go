@@ -12,6 +12,7 @@ import (
 
 type ArgumentList []string
 
+// HasArgument checks pkg global ArgumentList for an argument parameter. Returns true or false.
 func (args ArgumentList) HasArgument(arg string) bool {
 	for _, argCandidate := range args {
 		if arg == argCandidate {
@@ -21,6 +22,7 @@ func (args ArgumentList) HasArgument(arg string) bool {
 	return false
 }
 
+// GetArgument gets an argument from the pkg global ArgumentList. Returns a string.
 func (args ArgumentList) GetArgument(argname, defaultVal string) string {
 	for idx, argCandidate := range args {
 		if argname == argCandidate {
@@ -37,6 +39,7 @@ func (args ArgumentList) GetArgument(argname, defaultVal string) string {
 	return defaultVal
 }
 
+// GetAndRemoveArguments returns an ArgumentList and corresponding values as an ArgumentList and a slice of strings.
 func (args ArgumentList) GetAndRemoveArguments(argnames []string) (ArgumentList, []string) {
 	var nextArgumentType int = -1
 	matches := make([]string, len(argnames))
@@ -141,6 +144,7 @@ func fieldHandler(command string, args ArgumentList,
 	}
 }
 
+// dirDump accepts a string directory and returns details.
 func dirDump(dir string) string {
 	a := []string{}
 	err := filepath.Walk(dir,
@@ -160,6 +164,7 @@ func dirDump(dir string) string {
 	return strings.Join(a, ",\n")
 }
 
+// dirDumpFI accepts an array of os.FileInfo and returns details.
 func dirDumpFI(files []os.FileInfo) string {
 	a := []string{}
 	for _, file := range files {
@@ -168,6 +173,7 @@ func dirDumpFI(files []os.FileInfo) string {
 	return strings.Join(a, ",\n")
 }
 
+// SkipRootCheck is a helper function to avoid unnecessary filesystem checking..
 func SkipRootCheck(args *[]string) bool {
 	ret := false
 	switch len(*args) {

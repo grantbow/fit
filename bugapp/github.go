@@ -10,13 +10,13 @@ import (
 	"os"
 )
 
-func FetchIssues(owner string, repo string, opt *github.IssueListByRepoOptions) ([]*github.Issue, *github.Response, error) {
+func fetchIssues(owner string, repo string, opt *github.IssueListByRepoOptions) ([]*github.Issue, *github.Response, error) {
 	client := github.NewClient(nil)
 	issues, response, err := client.Issues.ListByRepo(context.Background(), owner, repo, opt)
 	return issues, response, err
 }
 
-func FetchIssueComments(owner string, repo string, comment int, opt *github.IssueListCommentsOptions) ([]*github.IssueComment, *github.Response, error) {
+func fetchIssueComments(owner string, repo string, comment int, opt *github.IssueListCommentsOptions) ([]*github.IssueComment, *github.Response, error) {
 	client := github.NewClient(nil)
 	comments, response, err := client.Issues.ListComments(context.Background(), owner, repo, comment, opt)
 	return comments, response, err
@@ -28,7 +28,7 @@ func githubImport(user, repo string, config bugs.Config) {
 		ListOptions: github.ListOptions{PerPage: 100},
 	}
 	// https://api.github.com/repos/<user>/<repo>/issues
-	issues, resp, err := FetchIssues(user, repo, opt)
+	issues, resp, err := fetchIssues(user, repo, opt)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
@@ -67,7 +67,7 @@ func githubImport(user, repo string, config bugs.Config) {
 				}
 				j := 1
 				if *issue.Comments > 0 {
-					comments, _, err := FetchIssueComments(user, repo, *issue.Number, nil)
+					comments, _, err := fetchIssueComments(user, repo, *issue.Number, nil)
 					if err != nil {
 						fmt.Fprintln(os.Stderr, err)
 						return
@@ -99,7 +99,7 @@ func githubImport(user, repo string, config bugs.Config) {
 			lastPage = true
 		} else {
 			opt.ListOptions.Page = resp.NextPage
-			issues, resp, err = FetchIssues(user, repo, opt)
+			issues, resp, err = fetchIssues(user, repo, opt)
 			check(err)
 		}
 	}

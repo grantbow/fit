@@ -25,6 +25,8 @@ func getAllTags(config bugs.Config) []string {
 	}
 	return keys
 }
+
+// Tag is a subcommand to assign a tag to an issue.
 func Tag(Args ArgumentList, config bugs.Config) {
 	if len(Args) < 2 {
 		fmt.Printf("Usage: %s tag [--rm] BugID tagname [more tagnames]\n", os.Args[0])

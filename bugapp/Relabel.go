@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// Relabel is a subcommand to change an issue title.
 func Relabel(Args ArgumentList, config bugs.Config) {
 	if len(Args) < 2 {
 		fmt.Printf("Usage: %s relabel BugID New Title\n", os.Args[0])

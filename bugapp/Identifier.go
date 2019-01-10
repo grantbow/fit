@@ -12,6 +12,8 @@ func generateID(val string) string {
 	hash := sha1.Sum([]byte(val))
 	return fmt.Sprintf("b%x", hash)[0:5]
 }
+
+// Identifier is a subcommand to assign tags to issues.
 func Identifier(args ArgumentList, config bugs.Config) {
 	if len(args) < 1 {
 		fmt.Printf("Usage: %s identifier BugID [value]\n", os.Args[0])

@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// Help is a subcommand to describe the program and it's subcommands.
 func Help(args ...string) {
 	var cmd string
 	if args == nil {

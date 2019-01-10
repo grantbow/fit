@@ -9,8 +9,8 @@ import (
 	"testing"
 )
 
-// copied and slightly modified from Bugs.go
 type tester struct {
+	// copied and slightly modified from Bugs.go
 	dir string
 	bug *bugs.Bug
 }

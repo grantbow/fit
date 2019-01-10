@@ -7,12 +7,15 @@ import (
 	"os"
 )
 
+// getBugName takes an index and outputs a string.
 func getBugName(b bugs.Bug, idx int) string {
 	if id := b.Identifier(); id != "" {
 		return fmt.Sprintf("Issue %s", id)
 	}
 	return fmt.Sprintf("Issue %d", idx+1)
 }
+
+// listTags takes an array of files and selects which issues to print
 func listTags(files []os.FileInfo, args ArgumentList, config bugs.Config) {
 	b := bugs.Bug{}
 	for idx := range files {
@@ -25,6 +28,8 @@ func listTags(files []os.FileInfo, args ArgumentList, config bugs.Config) {
 		}
 	}
 }
+
+// List is a subcommand to output issues.
 func List(args ArgumentList, config bugs.Config) {
 	issuesroot := bugs.GetIssuesDir(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot))

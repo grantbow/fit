@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// Close is a subcommand to close issues.
 func Close(args ArgumentList, config bugs.Config) {
 	// No parameters, print a list of all bugs
 	if len(args) == 0 {

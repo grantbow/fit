@@ -6,6 +6,7 @@ import (
 	"github.com/driusan/bug/scm"
 )
 
+// Env is a subcommand to output detected editor, directory and scm type.
 func Env(config bugs.Config) {
 	scm, scmdir, scmerr := scm.DetectSCM(make(map[string]bool))
 	fmt.Printf("Settings used by this command:\n")

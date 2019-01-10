@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// Edit is a subcommand to modify an issue.
 func Edit(args ArgumentList, config bugs.Config) {
 
 	var file, bugID string

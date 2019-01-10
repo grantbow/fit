@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// find does the work of finding bugs.
 func find(findType string, findValues []string, config bugs.Config) {
 	issuesroot := bugs.GetIssuesDir(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot))
@@ -46,6 +47,7 @@ func find(findType string, findValues []string, config bugs.Config) {
 	}
 }
 
+// Find is a subcommand to find issues.
 func Find(args ArgumentList, config bugs.Config) {
 	if len(args) < 2 {
 		fmt.Printf("Usage: %s find {tags, status, priority, milestone} value1 [value2 ...]\n", os.Args[0])

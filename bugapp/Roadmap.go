@@ -9,8 +9,10 @@ import (
 	"strings"
 )
 
+// BugListByMilestone is a pkg global to hold a list of issues.
 type BugListByMilestone [](bugs.Bug)
 
+// Len, Swap and Less sort issues.
 func (a BugListByMilestone) Len() int      { return len(a) }
 func (a BugListByMilestone) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a BugListByMilestone) Less(i, j int) bool {
@@ -44,6 +46,7 @@ func (a BugListByMilestone) Less(i, j int) bool {
 	return iMS < jMS
 }
 
+// Roadmap is a subcommand to output issues by milestone.
 func Roadmap(args ArgumentList, config bugs.Config) {
 	var bgs []bugs.Bug
 
