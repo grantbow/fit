@@ -14,7 +14,7 @@ func generateID(val string) string {
 }
 
 // Identifier is a subcommand to assign tags to issues.
-func Identifier(args ArgumentList, config bugs.Config) {
+func Identifier(args argumentList, config bugs.Config) {
 	if len(args) < 1 {
 		fmt.Printf("Usage: %s identifier BugID [value]\n", os.Args[0])
 		return

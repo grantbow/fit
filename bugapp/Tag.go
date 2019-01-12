@@ -27,7 +27,7 @@ func getAllTags(config bugs.Config) []string {
 }
 
 // Tag is a subcommand to assign a tag to an issue.
-func Tag(Args ArgumentList, config bugs.Config) {
+func Tag(Args argumentList, config bugs.Config) {
 	if len(Args) < 2 {
 		fmt.Printf("Usage: %s tag [--rm] BugID tagname [more tagnames]\n", os.Args[0])
 		fmt.Printf("\nBoth issue number and tagname to set are required.\n")

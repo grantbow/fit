@@ -16,7 +16,7 @@ func getBugName(b bugs.Bug, idx int) string {
 }
 
 // listTags takes an array of files and selects which issues to print
-func listTags(files []os.FileInfo, args ArgumentList, config bugs.Config) {
+func listTags(files []os.FileInfo, args argumentList, config bugs.Config) {
 	b := bugs.Bug{}
 	for idx := range files {
 		b.LoadBug(bugs.Directory(bugs.GetIssuesDir(config) + bugs.Directory(files[idx].Name())))
@@ -30,7 +30,7 @@ func listTags(files []os.FileInfo, args ArgumentList, config bugs.Config) {
 }
 
 // List is a subcommand to output issues.
-func List(args ArgumentList, config bugs.Config) {
+func List(args argumentList, config bugs.Config) {
 	issuesroot := bugs.GetIssuesDir(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot))
 

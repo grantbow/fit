@@ -15,7 +15,7 @@ import (
 func TestCloseHelpOutput(t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Close(ArgumentList{}, config)
+		Close(argumentList{}, config)
 	}, t)
 
 	if stdout != "" {
@@ -58,7 +58,7 @@ func TestCloseByIndex(t *testing.T) {
 	}
 	// check error
 	stdout, stderr := captureOutput(func() {
-		Close(ArgumentList{"FooBug"}, config)
+		Close(argumentList{"FooBug"}, config)
 	}, t)
 	if stderr != "Could not close bug FooBug: Could not find bug FooBug\n" {
 		t.Error("Unexpected output on STDERR for Foo-bug")
@@ -69,7 +69,7 @@ func TestCloseByIndex(t *testing.T) {
 	}
 	// now success
 	stdout, stderr = captureOutput(func() {
-		Close(ArgumentList{"TestBug"}, config)
+		Close(argumentList{"TestBug"}, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected output on STDERR for Test-bug")
@@ -116,7 +116,7 @@ func TestCloseBugByIdentifier(t *testing.T) {
 		return
 	}
 	stdout, stderr := captureOutput(func() {
-		Close(ArgumentList{"1"}, config)
+		Close(argumentList{"1"}, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected output on STDERR for Test-bug")
@@ -158,7 +158,7 @@ func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
 		t.Error("Unexpected number of issues in issues dir after creating multiple issues\n")
 	}
 	_, stderr := captureOutput(func() {
-		Close(ArgumentList{"1", "3"}, config)
+		Close(argumentList{"1", "3"}, config)
 	}, t)
 	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
 	if err != nil {
@@ -196,7 +196,7 @@ func TestCloseMultipleIndexesAtOnce(t *testing.T) {
 		t.Error("Unexpected number of issues in issues dir after creating multiple issues\n")
 	}
 	_, _ = captureOutput(func() {
-		Close(ArgumentList{"1", "2"}, config)
+		Close(argumentList{"1", "2"}, config)
 	}, t)
 	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
 	if err != nil {

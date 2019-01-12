@@ -18,7 +18,7 @@ func rungenid(t *testing.T, expected string, input string) {
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, out)
 	}
 }
-func runid(t *testing.T, expected string, args ArgumentList) {
+func runid(t *testing.T, expected string, args argumentList) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
 		Identifier(args, config)
@@ -37,10 +37,10 @@ func TestIdGen(t *testing.T) {
 	rungenid(t, "b6612", "test string")
 }
 func TestIdUsage(t *testing.T) {
-	runid(t, "Usage: .* identifier BugID \\[value\\]\n", ArgumentList{})
+	runid(t, "Usage: .* identifier BugID \\[value\\]\n", argumentList{})
 }
 func TestIdInvalid(t *testing.T) {
-	runid(t, "Invalid BugID: Could not find bug test\n", ArgumentList{"test"})
+	runid(t, "Invalid BugID: Could not find bug test\n", argumentList{"test"})
 }
 func TestIdGenerate(t *testing.T) {
 	config := bugs.Config{}
@@ -66,11 +66,11 @@ func TestIdGenerate(t *testing.T) {
 
 	// bug
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_id_bug"}, config)
+		Create(argumentList{"-n", "no_id_bug"}, config)
 	}, t)
-	runid(t, "Identifier not defined\n", ArgumentList{"1"})
+	runid(t, "Identifier not defined\n", argumentList{"1"})
 
-	runid(t, "Generated id .* for bug\n", ArgumentList{"1", "--generate"})
+	runid(t, "Generated id .* for bug\n", argumentList{"1", "--generate"})
 	file, err := ioutil.ReadFile(fmt.Sprintf("%s/issues/no_id_bug/Identifier", gdir))
 	if err != nil {
 		t.Error("Could not load description file for Test bug" + err.Error())

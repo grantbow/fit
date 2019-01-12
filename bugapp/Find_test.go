@@ -12,7 +12,7 @@ import (
 //func Testfind(t *testing.T) {
 //	// find(string, []string)
 //}
-func runfind(args ArgumentList, expected string, t *testing.T) {
+func runfind(args argumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
 		Find(args, config)
@@ -29,15 +29,15 @@ func runfind(args ArgumentList, expected string, t *testing.T) {
 }
 
 func TestFindUsage(t *testing.T) {
-	args := ArgumentList{"any"} // < 2
+	args := argumentList{"any"} // < 2
 	expected := "Usage: .* find \\{tags, status, priority, milestone\\} value1 \\[value2 ...\\]\n"
 	runfind(args, expected, t)
 }
 func TestFindSubcommandUnknown(t *testing.T) {
-	runfind(ArgumentList{"unk_sub", "matchstring"}, "Unknown command:.*\n", t)
+	runfind(argumentList{"unk_sub", "matchstring"}, "Unknown command:.*\n", t)
 }
 func TestFindSubcommandUnknownGTOne(t *testing.T) {
-	runfind(ArgumentList{"unk_sub", "not_found", "more"}, "Unknown command: .*\n", t)
+	runfind(argumentList{"unk_sub", "not_found", "more"}, "Unknown command: .*\n", t)
 }
 func TestFindSubcommands(t *testing.T) {
 	config := bugs.Config{}
@@ -63,15 +63,15 @@ func TestFindSubcommands(t *testing.T) {
 		return
 	}
 
-	runfind(ArgumentList{"tags", "matchstring"}, "", t)
-	runfind(ArgumentList{"status", "matchstring"}, "", t)
-	runfind(ArgumentList{"priority", "matchstring"}, "", t)
-	runfind(ArgumentList{"milestone", "matchstring"}, "", t)
+	runfind(argumentList{"tags", "matchstring"}, "", t)
+	runfind(argumentList{"status", "matchstring"}, "", t)
+	runfind(argumentList{"priority", "matchstring"}, "", t)
+	runfind(argumentList{"milestone", "matchstring"}, "", t)
 
 	// bug "id bug"
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_id_bug", "--tag", "foo"}, config)
+		Create(argumentList{"-n", "no_id_bug", "--tag", "foo"}, config)
 	}, t)
-	runfind(ArgumentList{"tags", "foo"}, "Issue 1: no_id_bug \\(foo\\)\n", t)
-	runfind(ArgumentList{"tags", "matchstring"}, "", t) // still not found
+	runfind(argumentList{"tags", "foo"}, "Issue 1: no_id_bug \\(foo\\)\n", t)
+	runfind(argumentList{"tags", "matchstring"}, "", t) // still not found
 }

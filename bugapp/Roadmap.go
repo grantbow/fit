@@ -47,7 +47,7 @@ func (a BugListByMilestone) Less(i, j int) bool {
 }
 
 // Roadmap is a subcommand to output issues by milestone.
-func Roadmap(args ArgumentList, config bugs.Config) {
+func Roadmap(args argumentList, config bugs.Config) {
 	var bgs []bugs.Bug
 
 	if args.HasArgument("--filter") {

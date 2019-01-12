@@ -10,7 +10,7 @@ import (
 )
 
 // Edit is a subcommand to modify an issue.
-func Edit(args ArgumentList, config bugs.Config) {
+func Edit(args argumentList, config bugs.Config) {
 
 	var file, bugID string
 	switch len(args) {

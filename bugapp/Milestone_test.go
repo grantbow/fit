@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func runmiles(args ArgumentList, expected string, t *testing.T) {
+func runmiles(args argumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
 		Milestone(args, config)
@@ -51,12 +51,12 @@ func TestMilestone(t *testing.T) {
 	}
 	// bug
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_miles_bug"}, config)
+		Create(argumentList{"-n", "no_miles_bug"}, config)
 	}, t)
 	// before
-	runfind(ArgumentList{"milestone", "foo"}, "", t)
+	runfind(argumentList{"milestone", "foo"}, "", t)
 	// add
-	runmiles(ArgumentList{"1", "foo"}, "", t) // no cmd as argument
+	runmiles(argumentList{"1", "foo"}, "", t) // no cmd as argument
 	// force it to test when runmiles doesn't work
 	//val := []byte("foo\n")
 	//fmt.Println(ioutil.WriteFile(string(gdir)+"/issues/no_miles_bug/Milestone", []byte(val), 0644))
@@ -73,5 +73,5 @@ func TestMilestone(t *testing.T) {
 	if len(file) == 0 {
 		t.Error("Expected a Milestone file")
 	}
-	runfind(ArgumentList{"milestone", "foo"}, "Issue 1: no_miles_bug\n", t)
+	runfind(argumentList{"milestone", "foo"}, "Issue 1: no_miles_bug\n", t)
 }

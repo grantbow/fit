@@ -14,7 +14,7 @@ import (
 func runcommit(expected string, t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Commit(ArgumentList{}, config)
+		Commit(argumentList{}, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)

@@ -10,7 +10,7 @@ import (
 func TestEditInvalid(t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Edit(ArgumentList{"Test"}, config)
+		Edit(argumentList{"Test"}, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error:")
@@ -23,7 +23,7 @@ func TestEditInvalid(t *testing.T) {
 	}
 
 	stdout, stderr = captureOutput(func() {
-		Edit(ArgumentList{"a", "b", "c"}, config)
+		Edit(argumentList{"a", "b", "c"}, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error:")

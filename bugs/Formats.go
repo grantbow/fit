@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 )
 
+// ToJSONString encodes an issue. A string and an error are returned.
 func (b Bug) ToJSONString() (string, error) {
 	bJSONStruct := struct {
 		Identifier  string `json:",omitempty"`

@@ -5,7 +5,7 @@ import (
 	"github.com/ghodss/yaml"
 )
 
-type Person struct {
+type person struct {
 	// location of root dir and .bug.yml
 	BugDir string `json:"BugDir"`
 	// overrides auto-find root dir
@@ -18,8 +18,8 @@ type Person struct {
 }
 
 func main() {
-	// Marshal a Person struct to YAML.
-	p := Person{"goodbugdir", "pain", "path", true}
+	// Marshal a person struct to YAML.
+	p := person{"goodbugdir", "pain", "path", true}
 	y, err := yaml.Marshal(p)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
@@ -31,8 +31,8 @@ func main() {
 	name: John
 	*/
 
-	// Unmarshal the YAML back into a Person struct.
-	var p2 Person
+	// Unmarshal the YAML back into a person struct.
+	var p2 person
 	err = yaml.Unmarshal(y, &p2)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)

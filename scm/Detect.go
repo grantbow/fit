@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// ScmNotFound is a struct for the new Error.
 type SCMNotFound struct{}
 
 func (a SCMNotFound) Error() string {
@@ -32,6 +33,7 @@ func walkAndSearch(startpath string, dirnames []string) (fullpath, scmtype strin
 	return "", ""
 }
 
+// DetectSCM takes options and returns an SCMHandler and directory.
 func DetectSCM(options map[string]bool) (SCMHandler, bugs.Directory, error) {
 	// First look for a Git directory
 	wd, _ := os.Getwd()

@@ -15,7 +15,7 @@ import (
 func TestCreateHelpOutput(t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Create(ArgumentList{}, config)
+		Create(argumentList{}, config)
 	}, t)
 
 	if stdout != "" {
@@ -50,7 +50,7 @@ func TestCreateNoEditor(t *testing.T) {
 	}
 
 	stdout, stderr := captureOutput(func() {
-		Create(ArgumentList{"-n", "Test", "bug"}, config)
+		Create(argumentList{"-n", "Test", "bug"}, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected output on STDERR for Test-bug")
@@ -105,7 +105,7 @@ func TestCreateNoIssuesDir(t *testing.T) {
 	}
 
 	stdout, stderr := captureOutput(func() {
-		Create(ArgumentList{"Test", "bug"}) // fire editor without -n
+		Create(argumentList{"Test", "bug"}) // fire editor without -n
 	}, t)
 	_ = stderr
 	_ = stdout

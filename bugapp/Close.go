@@ -7,7 +7,7 @@ import (
 )
 
 // Close is a subcommand to close issues.
-func Close(args ArgumentList, config bugs.Config) {
+func Close(args argumentList, config bugs.Config) {
 	// No parameters, print a list of all bugs
 	if len(args) == 0 {
 		fmt.Fprintf(os.Stderr, "Usage: %s close BugID\n\nMust provide an BugID to close as parameter\n", os.Args[0])

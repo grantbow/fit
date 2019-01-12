@@ -8,7 +8,7 @@ import (
 )
 
 // Import is a subcommand to read from a bugsEverywhere.org or github.com systems and create identical issues.
-func Import(args ArgumentList, config bugs.Config) {
+func Import(args argumentList, config bugs.Config) {
 	if len(args) < 1 {
 		fmt.Printf("Usage: %s import {--github,--be} <repo>\n", os.Args[0])
 		//fmt.Printf("Usage: %s import {<github.com/user/repo>,--be}\n", os.Args[0])

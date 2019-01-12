@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func runlist(args ArgumentList, expected string, t *testing.T) {
+func runlist(args argumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
 		List(args, config)
@@ -51,14 +51,14 @@ func TestList(t *testing.T) {
 	}
 	// before
 	//fmt.Println("before")
-	runlist(ArgumentList{""}, "", t)
+	runlist(argumentList{""}, "", t)
 	// bug
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_list_bug"}, config)
+		Create(argumentList{"-n", "no_list_bug"}, config)
 	}, t)
 	// after
 	//fmt.Println("after")
-	runlist(ArgumentList{""}, "Title: no_list_bug\n", t) // why?
+	runlist(argumentList{""}, "Title: no_list_bug\n", t) // why?
 
 	// after
 	//fmt.Println("after")
@@ -69,5 +69,5 @@ func TestList(t *testing.T) {
 	//if len(file) == 0 {
 	//	t.Error("Expected a Milestone file")
 	//}
-	//runfind(ArgumentList{"milestone", "foo"}, "Issue 1: no_list_bug\n", t)
+	//runfind(argumentList{"milestone", "foo"}, "Issue 1: no_list_bug\n", t)
 }

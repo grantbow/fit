@@ -5,6 +5,6 @@ import (
 )
 
 // Milestone is a subcommand to assign a milestone to an issue.
-func Milestone(args ArgumentList, config bugs.Config) {
+func Milestone(args argumentList, config bugs.Config) {
 	fieldHandler("milestone", args, bugs.Bug.SetMilestone, bugs.Bug.Milestone, config)
 }

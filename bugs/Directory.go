@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// GetRootDir returns the directory containing the issues subdirectory.
 func GetRootDir(config Config) Directory {
 	dir := os.Getenv("PMIT")
 	if dir != "" {
@@ -44,6 +45,8 @@ func GetRootDir(config Config) Directory {
 	return "" // out of luck
 }
 
+// GetIssuesDir returns the directory containing the issues.
+// The root directory contains the issues directory.
 func GetIssuesDir(config Config) Directory {
 	root := GetRootDir(config)
 	if root == "" {
@@ -69,13 +72,16 @@ func GetIssuesDir(config Config) Directory {
 	*/
 }
 
+// Directory type is a string path name.
 type Directory string
 
+// GetShortName returns the directory name of a bug
 func (d Directory) GetShortName() Directory {
 	pieces := strings.Split(string(d), "/")
 	return Directory(pieces[len(pieces)-1])
 }
 
+// ToTitle decodes the human string from the filesystem directory name.
 func (d Directory) ToTitle() string {
 	multidash := regexp.MustCompile("([_]*)-([-_]*)")
 	dashReplacement := strings.Replace(string(d), " ", "/", -1)
@@ -90,6 +96,7 @@ func (d Directory) ToTitle() string {
 	})
 }
 
+// LastModified returns the last modified time from the file system.
 func (d Directory) LastModified() time.Time {
 	var t time.Time
 	stat, err := os.Stat(string(d))

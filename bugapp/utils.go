@@ -10,10 +10,10 @@ import (
 	"testing"
 )
 
-type ArgumentList []string
+type argumentList []string
 
-// HasArgument checks pkg global ArgumentList for an argument parameter. Returns true or false.
-func (args ArgumentList) HasArgument(arg string) bool {
+// HasArgument checks pkg global argumentList for an argument parameter. Returns true or false.
+func (args argumentList) HasArgument(arg string) bool {
 	for _, argCandidate := range args {
 		if arg == argCandidate {
 			return true
@@ -22,8 +22,8 @@ func (args ArgumentList) HasArgument(arg string) bool {
 	return false
 }
 
-// GetArgument gets an argument from the pkg global ArgumentList. Returns a string.
-func (args ArgumentList) GetArgument(argname, defaultVal string) string {
+// GetArgument gets an argument from the pkg global argumentList. Returns a string.
+func (args argumentList) GetArgument(argname, defaultVal string) string {
 	for idx, argCandidate := range args {
 		if argname == argCandidate {
 			// If it's the last argument, then return string
@@ -39,8 +39,8 @@ func (args ArgumentList) GetArgument(argname, defaultVal string) string {
 	return defaultVal
 }
 
-// GetAndRemoveArguments returns an ArgumentList and corresponding values as an ArgumentList and a slice of strings.
-func (args ArgumentList) GetAndRemoveArguments(argnames []string) (ArgumentList, []string) {
+// GetAndRemoveArguments returns an argumentList and corresponding values as an argumentList and a slice of strings.
+func (args argumentList) GetAndRemoveArguments(argnames []string) (argumentList, []string) {
 	var nextArgumentType int = -1
 	matches := make([]string, len(argnames))
 	var retArgs []string
@@ -116,7 +116,7 @@ func captureOutput(f func(), t *testing.T) (string, string) {
 }
 
 // fieldHandler is used for Priority, Milestone and Status
-func fieldHandler(command string, args ArgumentList,
+func fieldHandler(command string, args argumentList,
 	setCallback func(bugs.Bug, string) error, retrieveCallback func(bugs.Bug) string, config bugs.Config) {
 	if len(args) < 1 {
 		fmt.Printf("Usage: %s %s BugID [set %s]\n", os.Args[0], command, command)

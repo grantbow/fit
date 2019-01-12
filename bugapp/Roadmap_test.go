@@ -31,7 +31,7 @@ func TestRoadmapLess(t *testing.T) {
 	// bug 1
 	expected := "Created issue: Test1bug\n"
 	stdout, stderr := captureOutput(func() {
-		Create(ArgumentList{"-n", "Test1bug"}, config)
+		Create(argumentList{"-n", "Test1bug"}, config)
 	}, t)
 	if stderr != "" || stdout != expected {
 		t.Error("Unexpected err/out create 1")
@@ -41,7 +41,7 @@ func TestRoadmapLess(t *testing.T) {
 	// bug 2
 	expected = "Created issue: Test2bug\n"
 	stdout, stderr = captureOutput(func() {
-		Create(ArgumentList{"-n", "Test2bug"}, config)
+		Create(argumentList{"-n", "Test2bug"}, config)
 	}, t)
 	if stderr != "" || stdout != expected {
 		t.Error("Unexpected error/out create 2")
@@ -49,8 +49,8 @@ func TestRoadmapLess(t *testing.T) {
 		fmt.Printf("Expected stderr: %s\nGot: %s\n", "", stderr)
 	}
 	// milestones
-	runmiles(ArgumentList{"1", "v1.0"}, "", t)
-	runmiles(ArgumentList{"2", "v2.0"}, "", t)
+	runmiles(argumentList{"1", "v1.0"}, "", t)
+	runmiles(argumentList{"2", "v2.0"}, "", t)
 	// roadmap
 	expected = `# Roadmap for .*
 
@@ -66,7 +66,7 @@ func TestRoadmapLess(t *testing.T) {
 	//dd, _ := ioutil.ReadDir(dir+"/issues")
 	//fmt.Printf("dirdump %s\n", dirDump(fmt.Sprintf("%s/%s",dir,"issues")))
 	stdout, stderr = captureOutput(func() {
-		Roadmap(ArgumentList{}, bugs.Config{})
+		Roadmap(argumentList{}, bugs.Config{})
 	}, t)
 	matched := re.MatchString(stdout)
 	if stderr != "" || !matched {
@@ -77,7 +77,7 @@ func TestRoadmapLess(t *testing.T) {
 }
 
 //func TestRoadmap(t *testing.T) {
-// Roadmap(ArgumentList{}, bugs.Config{})
+// Roadmap(argumentList{}, bugs.Config{})
 //}
 
 /*
@@ -115,7 +115,7 @@ func (a BugListByMilestone) Less(i, j int) bool {
 	return iMS < jMS
 }
 
-func Roadmap(args ArgumentList, config bugs.Config) {
+func Roadmap(args argumentList, config bugs.Config) {
 	var bgs []bugs.Bug
 
 	if args.HasArgument("--filter") {

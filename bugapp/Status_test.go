@@ -11,7 +11,7 @@ import (
 
 // Priority and Status find printed differently
 
-func runstatus(args ArgumentList, expected string, t *testing.T) {
+func runstatus(args argumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
 		Status(args, config)
@@ -53,12 +53,12 @@ func TestStatus(t *testing.T) {
 	}
 	// bug
 	_, _ = captureOutput(func() {
-		Create(ArgumentList{"-n", "no_status_bug"}, config)
+		Create(argumentList{"-n", "no_status_bug"}, config)
 	}, t)
 	// before
-	runfind(ArgumentList{"status", "foo"}, "", t)
+	runfind(argumentList{"status", "foo"}, "", t)
 	// add
-	runstatus(ArgumentList{"1", "foo"}, "", t) // no cmd as argument
+	runstatus(argumentList{"1", "foo"}, "", t) // no cmd as argument
 	// force it to test when runmiles doesn't work
 	//val := []byte("foo\n")
 	//fmt.Println(ioutil.WriteFile(string(gdir)+"/issues/no_status_bug/Status", []byte(val), 0644))
@@ -68,7 +68,7 @@ func TestStatus(t *testing.T) {
 	//fmt.Printf("readdir %#v\n", bugDir[0])
 	//fmt.Printf("readdir %#v\n", bugDir[1])
 	// after
-	runfind(ArgumentList{"status", "foo"}, "Issue 1: no_status_bug \\(Status: foo\\)\n", t)
+	runfind(argumentList{"status", "foo"}, "Issue 1: no_status_bug \\(Status: foo\\)\n", t)
 	file, err := ioutil.ReadFile(fmt.Sprintf("%s/issues/no_status_bug/Status", gdir))
 	if err != nil {
 		t.Error("Could not load Status file" + err.Error())

@@ -10,16 +10,26 @@ import (
 	"time"
 )
 
-var NoDescriptionError = errors.New("No description provided")
-var NotFoundError = errors.New("Could not find bug")
+// ErrNoDescription defines a new error.
+var ErrNoDescription = errors.New("No description provided")
 
+// ErrNotFound defines a new error.
+var ErrNotFound = errors.New("Could not find bug")
+
+// Bug is the type of an issue.
+// The fields are Dir and descFile.
 type Bug struct {
 	Dir      Directory
 	descFile *os.File
 }
 
+// Tag is the type of an issue identifier.
+// There is only a string key.
+// Values are not supported so there is an implied true/present false/absent value.
 type Tag string
 
+// Comment is the struct type of a unit of discussion about an issue.
+// The fields are Author, Time, Body, Order and Xml.
 type Comment struct {
 	Author string
 	Time   time.Time
@@ -28,6 +38,7 @@ type Comment struct {
 	Xml    []byte
 }
 
+// TitleToDir returns a Directory from a string argument.
 func TitleToDir(title string) Directory {
 	// replace non-matching valid characters with _
 	// for user entered strings
@@ -61,17 +72,23 @@ func TitleToDir(title string) Directory {
 	s = strings.Replace(s, " ", "-", -1)
 	return Directory(s)
 }
+
+// ShortTitleToDir truncates a title to 25 characters.
 func ShortTitleToDir(title string) Directory {
 	return TitleToDir(title[:25]) // TODO: remove leading or trailing _ or -
 }
+
+// GetDirectory returns the directory of an issue.
 func (b Bug) GetDirectory() Directory {
 	return b.Dir
 }
 
+// LoadBug assigns a directory to an issue.
 func (b *Bug) LoadBug(dir Directory) {
 	b.Dir = dir
 }
 
+// Title returns a string with the name of an issue and optionally present Status and Priority.
 func (b Bug) Title(options string) string {
 	var hasOption = func(o string) bool {
 		return strings.Contains(options, o)
@@ -106,11 +123,12 @@ func (b Bug) Title(options string) string {
 	return title
 }
 
+// Description returns a string of an issue.
 func (b Bug) Description() string {
 	value, err := ioutil.ReadAll(&b)
 
 	if err != nil {
-		if err == NoDescriptionError {
+		if err == ErrNoDescription {
 			return "No description provided.\n"
 		}
 		panic("Unhandled error" + err.Error())
@@ -121,11 +139,15 @@ func (b Bug) Description() string {
 	}
 	return string(value)
 }
+
+// SetDescription writes the Description file of an issue.
 func (b Bug) SetDescription(val string) error {
 	dir := b.GetDirectory()
 
 	return ioutil.WriteFile(string(dir)+"/Description", []byte(val+"\n"), 0644)
 }
+
+// RemoveTag deletes a tag file in the tags subdirectory of an issue.
 func (b *Bug) RemoveTag(tag Tag) {
 	if dir := b.GetDirectory(); dir != "" {
 		os.Remove(string(dir) + "/tags/" + string(tag))
@@ -133,6 +155,8 @@ func (b *Bug) RemoveTag(tag Tag) {
 		fmt.Printf("Error removing tag: %s", tag)
 	}
 }
+
+// TagBug writes an empty tag file in the tags subdirectory of an issue.
 func (b *Bug) TagBug(tag Tag) {
 	if dir := b.GetDirectory(); dir != "" {
 		os.Mkdir(string(dir)+"/tags/", 0755)
@@ -141,6 +165,8 @@ func (b *Bug) TagBug(tag Tag) {
 		fmt.Printf("Error tagging bug: %s", tag)
 	}
 }
+
+// RemoveComment deletes a comment file of an issue.
 func (b *Bug) RemoveComment(comment Comment) {
 	if dir := b.GetDirectory(); dir != "" {
 		os.Remove(string(dir) + "/comment-" + string(ShortTitleToDir(string(comment.Body))))
@@ -148,6 +174,8 @@ func (b *Bug) RemoveComment(comment Comment) {
 		fmt.Printf("Error removing comment: %s", comment.Body)
 	}
 }
+
+// CommentBug writes a text file for an issue.
 func (b *Bug) CommentBug(comment Comment, config Config) {
 	if dir := b.GetDirectory(); dir != "" {
 		//os.Mkdir(string(dir)+"/", 0755)
@@ -166,7 +194,10 @@ func (b *Bug) CommentBug(comment Comment, config Config) {
 		fmt.Printf("Error commenting bug: %s", comment.Body)
 	}
 }
+
+// ViewBug outputs an issue.
 func (b Bug) ViewBug() {
+	// This could be more generalized and shortened if the bug design is changed.
 	if identifier := b.Identifier(); identifier != "" {
 		fmt.Printf("Identifier: %s\n", identifier)
 	}
@@ -189,6 +220,7 @@ func (b Bug) ViewBug() {
 
 }
 
+// ViewBug outputs an issue.
 func (b Bug) StringTags() []string {
 	dir := b.GetDirectory()
 	dir += "/tags/"
@@ -204,6 +236,7 @@ func (b Bug) StringTags() []string {
 	return tags
 }
 
+// HasTag returns if an issue is assigned a tag.
 func (b Bug) HasTag(tag Tag) bool {
 	allTags := b.Tags()
 	for _, bugTag := range allTags {
@@ -213,6 +246,8 @@ func (b Bug) HasTag(tag Tag) bool {
 	}
 	return false
 }
+
+// Tags returns an array of assigned tags.
 func (b Bug) Tags() []Tag {
 	dir := b.GetDirectory()
 	dir += "/tags/"
@@ -229,6 +264,7 @@ func (b Bug) Tags() []Tag {
 
 }
 
+// getField reads and returns the string value from the file of an issue.
 func (b Bug) getField(fieldName string) string {
 	dir := b.GetDirectory()
 	field, err := ioutil.ReadFile(string(dir) + "/" + fieldName)
@@ -242,6 +278,7 @@ func (b Bug) getField(fieldName string) string {
 	return ""
 }
 
+// setField writes the string value to the file of an issue.
 func (b Bug) setField(fieldName, value string) error {
 	dir := b.GetDirectory()
 	oldValue, err := ioutil.ReadFile(string(dir) + "/" + fieldName)
@@ -266,36 +303,47 @@ func (b Bug) setField(fieldName, value string) error {
 	return nil
 }
 
+// Status returns the string from the Status file of an issue.
 func (b Bug) Status() string {
 	return b.getField("Status")
 }
 
+// SetStatus writes the Status file to an issue.
 func (b Bug) SetStatus(newStatus string) error {
 	return b.setField("Status", newStatus)
 }
+
+// Priority returns the string from the Priority file of an issue.
 func (b Bug) Priority() string {
 	return b.getField("Priority")
 }
 
+// SetPriority writes the Priority file to an issue.
 func (b Bug) SetPriority(newValue string) error {
 	return b.setField("Priority", newValue)
 }
+
+// Milestone returns the string from the Milestone file of an issue.
 func (b Bug) Milestone() string {
 	return b.getField("Milestone")
 }
 
+// SetMilestone writes the Milestone file to an issue.
 func (b Bug) SetMilestone(newValue string) error {
 	return b.setField("Milestone", newValue)
 }
 
+// Identifier returns the string from the Identifier file of an issue.
 func (b Bug) Identifier() string {
 	return b.getField("Identifier")
 }
 
+// SetIdentifier writes the Identifier file to an issue.
 func (b Bug) SetIdentifier(newValue string) error {
 	return b.setField("Identifier", newValue)
 }
 
+// New assigns and writes an issue.
 func New(title string, config Config) (*Bug, error) {
 	expectedDir := GetIssuesDir(config) + TitleToDir(title)
 	err := os.Mkdir(string(expectedDir), 0755)

@@ -48,7 +48,7 @@ func find(findType string, findValues []string, config bugs.Config) {
 }
 
 // Find is a subcommand to find issues.
-func Find(args ArgumentList, config bugs.Config) {
+func Find(args argumentList, config bugs.Config) {
 	if len(args) < 2 {
 		fmt.Printf("Usage: %s find {tags, status, priority, milestone} value1 [value2 ...]\n", os.Args[0])
 		return

@@ -27,7 +27,7 @@ func filecp(sourceFile string, destinationFile string) {
 }
 
 // Create is a subcommand to open a new issue.
-func Create(Args ArgumentList, config bugs.Config) {
+func Create(Args argumentList, config bugs.Config) {
 	if len(Args) < 1 || (len(Args) < 2 && Args[0] == "-n") {
 		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] Bug Description\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "\nNo Bug Description provided.\n")

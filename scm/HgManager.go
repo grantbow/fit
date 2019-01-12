@@ -6,12 +6,15 @@ import (
 	"os/exec"
 )
 
+// HgManager is a struct for a mercurial (hg) software configuration manager.
 type HgManager struct{}
 
+// Purge would give the hg command to purge files but this is not supported.
 func (a HgManager) Purge(dir bugs.Directory) error {
 	return UnsupportedType("Purge is not supported under Hg. Sorry!")
 }
 
+// Commit gives the hg command to commit files.
 func (a HgManager) Commit(dir bugs.Directory, commitMsg string) error {
 	cmd := exec.Command("hg", "addremove", string(dir))
 	if err := cmd.Run(); err != nil {
@@ -27,6 +30,7 @@ func (a HgManager) Commit(dir bugs.Directory, commitMsg string) error {
 	return nil
 }
 
+// GetSCMType returns hg.
 func (a HgManager) GetSCMType() string {
 	return "hg"
 }

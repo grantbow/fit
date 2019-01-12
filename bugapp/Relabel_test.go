@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func runrelabel(label string, args ArgumentList, config bugs.Config, expected string, t *testing.T) {
+func runrelabel(label string, args argumentList, config bugs.Config, expected string, t *testing.T) {
 	stdout, _ := captureOutput(func() {
 		Relabel(args, config)
 	}, t)
@@ -22,7 +22,7 @@ func runrelabel(label string, args ArgumentList, config bugs.Config, expected st
 
 func TestRelabel(t *testing.T) {
 	config := bugs.Config{}
-	args := ArgumentList{"1"} // < 2
+	args := argumentList{"1"} // < 2
 	test := tester{}          // from Bug_test.go
 	test.Setup()
 	defer test.Teardown()
@@ -35,11 +35,11 @@ func TestRelabel(t *testing.T) {
 	expected := "Usage: .*"
 	runrelabel("usage", args, config, expected, t)
 
-	args = ArgumentList{"bad", "bar"} // bad
+	args = argumentList{"bad", "bar"} // bad
 	expected = "Could not load bug: .*"
 	runrelabel("bad", args, config, expected, t)
 
-	args = ArgumentList{"1", "Error Bug"} // rename err
+	args = argumentList{"1", "Error Bug"} // rename err
 	// before chmod
 	//fi, _ := os.Open(string(rootDir))
 	//stat, _ := fi.Stat()
@@ -58,7 +58,7 @@ func TestRelabel(t *testing.T) {
 	expected = "Moving .*\\nError moving directory\\n"
 	runrelabel("rename err", args, config, expected, t)
 
-	args = ArgumentList{"1", "Success Bug"} // good
+	args = argumentList{"1", "Success Bug"} // good
 	// chmod 700 temp parent directory
 	err = os.Chmod(string(rootDir), 0700) // change
 	check(err)

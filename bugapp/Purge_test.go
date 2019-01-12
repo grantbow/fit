@@ -36,7 +36,7 @@ func TestPurgeNoEditor(t *testing.T) {
 	}
 
 	stdout, stderr := captureOutput(func() {
-		Create(ArgumentList{"-n", "Test", "bug"}, config)
+		Create(argumentList{"-n", "Test", "bug"}, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)

@@ -11,11 +11,13 @@ import (
 	"strings"
 )
 
+// GitManager type has fields Autoclose and UseBugPrefix.
 type GitManager struct {
 	Autoclose    bool
 	UseBugPrefix bool
 }
 
+// Purge runs git clean -fd on the directory containig the issues directory.
 func (a GitManager) Purge(dir bugs.Directory) error {
 	cmd := exec.Command("git", "clean", "-fd", string(dir))
 
@@ -28,6 +30,7 @@ func (a GitManager) Purge(dir bugs.Directory) error {
 type issueStatus struct {
 	a, d, m bool // Added, Deleted, Modified
 }
+
 type issuesStatus map[string]issueStatus
 
 // Get list of created, updated, closed and closed-on-github issues.
@@ -48,6 +51,7 @@ type issuesStatus map[string]issueStatus
 // A  issues/issue--2/Status			new field added (status); considered as update unless Description is also created
 // D  issues/issue1/Description			issue closed
 // A  issues/issue3/Description			new issue, description field is mandatory for rich format
+
 func (a GitManager) currentStatus(dir bugs.Directory) (closedOnGitHub []string, _ issuesStatus) {
 	ghRegex := regexp.MustCompile("(?im)^-Github:(.*)$")
 	closesGH := func(file string) (issue string, ok bool) {
@@ -112,11 +116,11 @@ func (a GitManager) currentStatus(dir bugs.Directory) (closedOnGitHub []string, 
 	return ghClosed, issues
 }
 
-// Create commit message by iterate over issues in order:
-// closed issues are most important (something is DONE, ok? ;), those issues will also become hidden)
-// new issues are next, with just updates at the end
-// TODO: do something if this message will be too long
 func (a GitManager) commitMsg(dir bugs.Directory) []byte {
+	// Create commit message by iterating over issues in order:
+	// closed issues are most important (something is DONE, ok? ;), those issues will also become hidden)
+	// new issues are next, with just updates at the end
+	// TODO: do something if this message will be too long
 	ghClosed, issues := a.currentStatus(dir)
 
 	done, add, update, together := &bytes.Buffer{}, &bytes.Buffer{}, &bytes.Buffer{}, &bytes.Buffer{}
@@ -159,6 +163,7 @@ func (a GitManager) commitMsg(dir bugs.Directory) []byte {
 	return together.Bytes()
 }
 
+// Commit saves files to the SCM. It runs git add -A.
 func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string) error {
 	cmd := exec.Command("git", "add", "-A", string(dir))
 	if err := cmd.Run(); err != nil {
@@ -196,6 +201,7 @@ func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string) error {
 	return nil
 }
 
+// GetSCMType returns "git".
 func (a GitManager) GetSCMType() string {
 	return "git"
 }

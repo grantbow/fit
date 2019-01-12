@@ -12,7 +12,7 @@ func (b *Bug) Read(p []byte) (int, error) {
 		b.descFile = fp
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "err: %s", err.Error())
-			return 0, NoDescriptionError
+			return 0, ErrNoDescription
 		}
 	}
 
@@ -33,6 +33,8 @@ func (b *Bug) Write(data []byte) (n int, err error) {
 	return b.descFile.Write(data)
 }
 
+// WriteAt makes a directory, writes a byte string to the Description using an offset.
+// It returns the number of bytes written and an error.
 func (b *Bug) WriteAt(data []byte, off int64) (n int, err error) {
 	if b.descFile == nil {
 		dir := b.GetDirectory()
@@ -46,6 +48,8 @@ func (b *Bug) WriteAt(data []byte, off int64) (n int, err error) {
 	}
 	return b.descFile.WriteAt(data, off)
 }
+
+// Close returns an error if there is an error closing the descFile of an issue.
 func (b Bug) Close() error {
 	if b.descFile != nil {
 		err := b.descFile.Close()
@@ -55,10 +59,11 @@ func (b Bug) Close() error {
 	return nil
 }
 
+// Remove deletes the directory and files of an issue.
 func (b *Bug) Remove() error {
 	dir := b.GetDirectory()
 	if dir != "" {
 		return os.RemoveAll(string(dir))
 	}
-	return NotFoundError
+	return ErrNotFound
 }

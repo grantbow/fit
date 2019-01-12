@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+// Config type holds .bug.yml configured values.
 type Config struct {
 	// storage of location of root dir with .bug.yml
 	// if we are reading the config file we already found the root
@@ -22,8 +23,10 @@ type Config struct {
 	ImportCommentsTogether bool `json:"ImportCommentsTogether"`
 }
 
-var NoConfigError = errors.New("No .bug.yml provided")
+// ErrNoConfig is a new error.
+var ErrNoConfig = errors.New("No .bug.yml provided")
 
+// ConfigRead assigns values to the Config type from .bug.yml.
 func ConfigRead(bugYml string, c *Config) (err error) {
 	temp := Config{}
 	if fileinfo, err := os.Stat(bugYml); err == nil && fileinfo.Mode().IsRegular() {

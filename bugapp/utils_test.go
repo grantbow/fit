@@ -5,7 +5,7 @@ import (
 )
 
 func TestGetArgument(t *testing.T) {
-	Args := ArgumentList{"--tag", "bar"}
+	Args := argumentList{"--tag", "bar"}
 	argout, argVals := Args.GetAndRemoveArguments([]string{"--tag", "--status", "--priority", "--milestone", "--identifier"})
 
 	if len(argout) != 0 {

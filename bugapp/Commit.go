@@ -7,7 +7,7 @@ import (
 )
 
 // Commit is a subcommand to save issues to the git or mercurial (hg) SCMs.
-func Commit(args ArgumentList, config bugs.Config) {
+func Commit(args argumentList, config bugs.Config) {
 	options := make(map[string]bool)
 	if !args.HasArgument("--no-autoclose") {
 		options["autoclose"] = true
