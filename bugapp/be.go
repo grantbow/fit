@@ -26,9 +26,9 @@ func beImportComments(b bugs.Bug, directory string, includeHeaders bool) string 
 	   }
 	*/
 	type BeValues struct {
-		Author      string `json:Author`
-		ContentType string `json:Content-type`
-		Date        string `json:Date`
+		Author      string `json:"Author"`
+		ContentType string `json:"Content-type"`
+		Date        string `json:"Date"`
 	}
 	file = directory + "/values"
 	jsonVal, _ := ioutil.ReadFile(file)
@@ -58,12 +58,12 @@ func beImportBug(identifier, issuesDir, fullbepath string) {
 	*/
 
 	type BeValues struct {
-		Creator  string `json:creator`
-		Reporter string `json:reporter`
-		Severity string `json:severity`
-		Status   string `json:status`
-		Summary  string `json:summary`
-		Time     string `json:time`
+		Creator  string `json:"creator"`
+		Reporter string `json:"reporter"`
+		Severity string `json:"severity"`
+		Status   string `json:"status"`
+		Summary  string `json:"summary"`
+		Time     string `json:"time"`
 	}
 	file := fullbepath + "/values"
 

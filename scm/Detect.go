@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// ScmNotFound is a struct for the new Error.
+// SCMNotFound is a struct for the new Error.
 type SCMNotFound struct{}
 
 func (a SCMNotFound) Error() string {

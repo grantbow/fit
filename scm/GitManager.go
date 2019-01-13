@@ -17,7 +17,7 @@ type GitManager struct {
 	UseBugPrefix bool
 }
 
-// Purge runs git clean -fd on the directory containig the issues directory.
+// Purge runs git clean -fd on the directory containing the issues directory.
 func (a GitManager) Purge(dir bugs.Directory) error {
 	cmd := exec.Command("git", "clean", "-fd", string(dir))
 

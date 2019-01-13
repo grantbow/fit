@@ -220,7 +220,7 @@ func (b Bug) ViewBug() {
 
 }
 
-// ViewBug outputs an issue.
+// StringTags outputs tags of an issue.
 func (b Bug) StringTags() []string {
 	dir := b.GetDirectory()
 	dir += "/tags/"
