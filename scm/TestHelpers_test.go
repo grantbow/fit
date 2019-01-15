@@ -135,11 +135,11 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		{"donotcommit.txt", "A", " "},
 	})
 	//fmt.Print("pre  2 runtestCommitDirtyTree\n")
-    m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
-    //errCommit := m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
+	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
+	//errCommit := m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
 	//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", errCommit) // nil here
-    //    running test shows output here. actually HgManager.go Commit() returns *expected* error not fully handled.
-    //    stdout not captured this time.
+	//    running test shows output here. actually HgManager.go Commit() returns *expected* error not fully handled.
+	//    stdout not captured this time.
 	//fmt.Print("post 2 runtestCommitDirtyTree\n")
 	tester.AssertStagingIndex(t, []FileStatus{
 		{"donotcommit.txt", "A", " "},
