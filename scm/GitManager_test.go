@@ -97,7 +97,7 @@ var git bool
 func init() {
 	flag.BoolVar(&git, "git", true, "git presence")
 	flag.Parse()
-	_, err := runCmd("git")
+	_, err := runCmd("git", "help")
 	if err != nil {
 		git = false
 	}

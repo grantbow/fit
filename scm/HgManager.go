@@ -23,8 +23,10 @@ func (a HgManager) Commit(dir bugs.Directory, commitMsg string) error {
 	}
 
 	cmd = exec.Command("hg", "commit", string(dir), "-m", commitMsg)
+    // stdout and stderr not captured in HgManager_test.go runtestCommitDirtyTree()
 	if err := cmd.Run(); err != nil {
-		fmt.Printf("No new issues to commit.\n")
+	    //fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", err) // 255 when $?=1 and stdout text "nothing changed" present
+		fmt.Printf("No new issues to commit.\n") // assumes this error, same for GitManager.go
 		return err
 	}
 	return nil
