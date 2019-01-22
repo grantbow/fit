@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"regexp"
+	"strings"
 	"testing"
 )
 
@@ -26,6 +28,8 @@ type ManagerTester interface {
 	GetManager() SCMHandler
 }
 
+type argumentList []string
+
 func runCmd(cmd string, options ...string) (string, error) {
 	runcmd := exec.Command(cmd, options...)
 	out, err := runcmd.CombinedOutput()
@@ -41,11 +45,11 @@ func assertLogs(tester ManagerTester, t *testing.T, titles []map[string]bool, di
 	}
 
 	if len(diffs) != len(titles) {
-		t.Error("Different number of diffs (" + string(len(diffs)) + ") from titles (" + string(len(titles)) + ")")
+		t.Errorf("Different number of diffs (%v) from titles(%v)", len(diffs), len(titles))
 		return
 	}
 	if len(logs) != len(titles) || len(logs) != len(diffs) {
-		t.Error("Unexpected, len(logs) " + string(len(logs)) + " != len(titles) " + string(len(titles)) + " || len(diffs) " + string(len(diffs)) + ")")
+		t.Errorf("Unexpected, len(logs) %v != len(titles) %v || len(diffs) %v", len(logs), len(titles), len(diffs))
 		return
 	}
 
@@ -88,7 +92,11 @@ func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiff
 	os.MkdirAll("issues/Test-bug", 0755)
 	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
 	m.Commit(bugs.Directory(tester.GetWorkDir()), "Initial commit")
-	runCmd("bug", "relabel", "1", "Renamed", "bug")
+	//runCmd("bug", "relabel", "1", "Renamed", "bug")
+	config := bugs.Config{}
+	args := argumentList{"1", "Renamed bug"}
+	expected := "Moving .*"
+	runrelabel("scm/TestHelpers_test runtestRenameCommitsHelper", args, config, expected, t)
 	m.Commit(bugs.Directory(tester.GetWorkDir()), "This is a test rename")
 
 	tester.AssertCleanTree(t)
@@ -115,8 +123,8 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		t.Error("Could not get manager")
 		return
 	}
-	os.Mkdir("issues", 0755)
-	runCmd("bug", "create", "-n", "Test", "bug")
+	os.MkdirAll("issues/Test-bug", 0755)
+	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
 	if err = ioutil.WriteFile("donotcommit.txt", []byte(""), 0644); err != nil {
 		t.Error("Could not write file")
 		return
@@ -158,13 +166,15 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 		t.Error("Could not get manager")
 		return
 	}
-	os.Mkdir("issues", 0755)
 	// Commit a bug which should stay around after the purge
-	runCmd("bug", "create", "-n", "Test", "bug")
+	//runCmd("bug", "create", "-n", "Test", "bug")
+	os.MkdirAll("issues/Test-bug", 0755)
+	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
 	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
 
-	// Create another bug to elimate with "bug purge"
-	runCmd("bug", "create", "-n", "Test", "purge", "bug")
+	// Create another bug to elimate with purge
+	//runCmd("bug", "create", "-n", "Test", "Purge", "bug")
+	os.MkdirAll("issues/Test-Purge-Bug", 0755)
 	err = m.Purge(bugs.Directory(tester.GetWorkDir() + "/issues"))
 	if err != nil {
 		t.Error("Error purging bug directory: " + err.Error())
@@ -174,9 +184,76 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 		t.Error("Error reading issues directory: " + err.Error())
 	}
 	if len(issuesDir) != 1 {
-		t.Error("Unexpected number of directories (" + string(len(issuesDir)) + ", expected 1) in issues/ after purge.")
+		t.Errorf("Unexpected number of directories (%v, expected 1) in issues/ after purge.", len(issuesDir))
 	}
 	if len(issuesDir) > 0 && issuesDir[0].Name() != "Test-bug" {
 		t.Error("Expected Test-bug to remain.")
+	}
+}
+
+func runrelabel(label string, args argumentList, config bugs.Config, expected string, t *testing.T) {
+	stdout, _ := captureOutput(func() {
+		scmRelabel(args, config)
+	}, t)
+	re := regexp.MustCompile(expected)
+	matched := re.MatchString(stdout)
+	if !matched {
+		t.Errorf("Unexpected output on STDOUT for %s.", label)
+		fmt.Printf("Expected to match: %s\nGot: %s\n", expected, stdout)
+	}
+}
+
+func captureOutput(f func(), t *testing.T) (string, string) {
+	// Capture STDOUT with a pipe
+	stdout := os.Stdout
+	stderr := os.Stderr
+	so, op, _ := os.Pipe() //outpipe
+	oe, ep, _ := os.Pipe() //errpipe
+	defer func(stdout, stderr *os.File) {
+		os.Stdout = stdout
+		os.Stderr = stderr
+	}(stdout, stderr)
+
+	os.Stdout = op
+	os.Stderr = ep
+
+	f()
+
+	os.Stdout = stdout
+	os.Stderr = stderr
+
+	op.Close()
+	ep.Close()
+
+	errOutput, err := ioutil.ReadAll(oe)
+	if err != nil {
+		t.Error("Could not get output from stderr")
+	}
+	stdOutput, err := ioutil.ReadAll(so)
+	if err != nil {
+		t.Error("Could not get output from stdout")
+	}
+	return string(stdOutput), string(errOutput)
+}
+
+func scmRelabel(Args argumentList, config bugs.Config) {
+	if len(Args) < 2 {
+		fmt.Printf("Usage: %s relabel BugID New Title\n", os.Args[0])
+		return
+	}
+
+	b, err := bugs.LoadBugByHeuristic(Args[0], config)
+
+	if err != nil {
+		fmt.Printf("Could not load bug: %s\n", err.Error())
+		return
+	}
+
+	currentDir := b.GetDirectory()
+	newDir := bugs.GetIssuesDir(config) + bugs.TitleToDir(strings.Join(Args[1:], " "))
+	fmt.Printf("Moving %s to %s\n", currentDir, newDir)
+	err = os.Rename(string(currentDir), string(newDir))
+	if err != nil {
+		fmt.Printf("Error moving directory\n")
 	}
 }
