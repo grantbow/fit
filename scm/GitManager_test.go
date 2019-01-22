@@ -146,7 +146,7 @@ rename to issues/Renamed-bug/Description
 	runtestRenameCommitsHelper(&g, t, expectedDiffs)
 }
 
-func TestGitFilesOrtsideOfBugNotCommited(t *testing.T) {
+func TestGitFilesOutsideOfBugNotCommited(t *testing.T) {
 	if git == false {
 		t.Skip("git executable not found")
 	}

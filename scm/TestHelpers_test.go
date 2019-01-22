@@ -41,11 +41,11 @@ func assertLogs(tester ManagerTester, t *testing.T, titles []map[string]bool, di
 	}
 
 	if len(diffs) != len(titles) {
-		t.Error("Different number of diffs from titles")
+		t.Error("Different number of diffs (" + string(len(diffs)) + ") from titles (" + string(len(titles)) + ")")
 		return
 	}
 	if len(logs) != len(titles) || len(logs) != len(diffs) {
-		t.Error("Unexpected number of log messages")
+		t.Error("Unexpected, len(logs) " + string(len(logs)) + " != len(titles) " + string(len(titles)) + " || len(diffs) " + string(len(diffs)) + ")")
 		return
 	}
 
@@ -103,6 +103,7 @@ func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiff
 	}}, expectedDiffs)
 
 }
+
 func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	err := tester.Setup()
 	if err != nil {
@@ -121,18 +122,18 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		return
 	}
 	tester.AssertStagingIndex(t, []FileStatus{
-		{"donotcommit.txt", "?", "?"},
+		FileStatus{"donotcommit.txt", "?", "?"},
 	})
 
 	//fmt.Print("pre  1 runtestCommitDirtyTree\n")
 	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
 	//fmt.Print("post 1 runtestCommitDirtyTree\n")
 	tester.AssertStagingIndex(t, []FileStatus{
-		{"donotcommit.txt", "?", "?"},
+		FileStatus{"donotcommit.txt", "?", "?"},
 	})
 	tester.StageFile("donotcommit.txt")
 	tester.AssertStagingIndex(t, []FileStatus{
-		{"donotcommit.txt", "A", " "},
+		FileStatus{"donotcommit.txt", "A", " "},
 	})
 	//fmt.Print("pre  2 runtestCommitDirtyTree\n")
 	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
@@ -142,7 +143,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	//    stdout not captured this time.
 	//fmt.Print("post 2 runtestCommitDirtyTree\n")
 	tester.AssertStagingIndex(t, []FileStatus{
-		{"donotcommit.txt", "A", " "},
+		FileStatus{"donotcommit.txt", "A", " "},
 	})
 }
 
@@ -168,12 +169,12 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	if err != nil {
 		t.Error("Error purging bug directory: " + err.Error())
 	}
-	issuesDir, err := ioutil.ReadDir("issues") //fmt.Sprintf("%s/issues/", tester.GetWorkDir()))
+	issuesDir, err := ioutil.ReadDir("issues") //fmt.Sprintf("debug: %s/issues/", tester.GetWorkDir()))
 	if err != nil {
-		t.Error("Error reading issues directory")
+		t.Error("Error reading issues directory: " + err.Error())
 	}
 	if len(issuesDir) != 1 {
-		t.Error("Unexpected number of directories in issues/ after purge.")
+		t.Error("Unexpected number of directories (" + string(len(issuesDir)) + ", expected 1) in issues/ after purge.")
 	}
 	if len(issuesDir) > 0 && issuesDir[0].Name() != "Test-bug" {
 		t.Error("Expected Test-bug to remain.")
