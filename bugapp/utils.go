@@ -173,7 +173,7 @@ func dirDumpFI(files []os.FileInfo) string {
 	return strings.Join(a, ",\n")
 }
 
-// SkipRootCheck is a helper function to avoid unnecessary filesystem checking..
+// SkipRootCheck is a helper function to avoid unnecessary filesystem checking.
 func SkipRootCheck(args *[]string) bool {
 	ret := false
 	switch len(*args) {

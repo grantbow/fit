@@ -23,15 +23,17 @@ func main() {
 		os.Exit(2)
 	}
 
-	// flags package is nice but this seems more direct because of
-	// subcommands and arguments that are space separated names
-	if len(os.Args) <= 1 {
+	// flags package is nice but this seemed more direct at the time
+	// because of subcommands and
+	// arguments that are space separated names
+	osArgs := os.Args // TODO: use an env var and assign to osArgs to setup for testing
+	if len(osArgs) <= 1 {
 		bugapp.Help()
-	} else if len(os.Args) >= 3 && os.Args[2] == "--help" {
-		bugapp.Help(os.Args[1])
+	} else if len(osArgs) >= 3 && osArgs[2] == "--help" { // bug cmd --help just like bug help cmd
+		bugapp.Help(osArgs[1])
 	} else {
-		switch os.Args[1] {
-		case "--version", "version":
+		switch osArgs[1] {
+		case "--version", "version": // subcommands without osArgs
 			bugapp.Version()
 		case "dir", "pwd":
 			bugapp.Pwd(config)
@@ -39,41 +41,41 @@ func main() {
 			bugapp.Env(config)
 		case "purge":
 			bugapp.Purge(config)
-		case "add", "new", "create":
-			bugapp.Create(os.Args[2:], config)
+		case "add", "new", "create": // subcommands with    osArgs
+			bugapp.Create(osArgs[2:], config)
 		case "commit":
-			bugapp.Commit(os.Args[2:], config)
+			bugapp.Commit(osArgs[2:], config)
 		case "edit":
-			bugapp.Edit(os.Args[2:], config)
+			bugapp.Edit(osArgs[2:], config)
 		case "find":
-			bugapp.Find(os.Args[2:], config)
+			bugapp.Find(osArgs[2:], config)
 		case "id", "identifier":
-			bugapp.Identifier(os.Args[2:], config)
+			bugapp.Identifier(osArgs[2:], config)
 		case "import":
-			bugapp.Import(os.Args[2:], config)
+			bugapp.Import(osArgs[2:], config)
 		case "milestone":
-			bugapp.Milestone(os.Args[2:], config)
+			bugapp.Milestone(osArgs[2:], config)
 		case "mv", "rename", "retitle", "relabel":
-			bugapp.Relabel(os.Args[2:], config)
+			bugapp.Relabel(osArgs[2:], config)
 		case "priority":
-			bugapp.Priority(os.Args[2:], config)
+			bugapp.Priority(osArgs[2:], config)
 		case "roadmap":
-			bugapp.Roadmap(os.Args[2:], config)
+			bugapp.Roadmap(osArgs[2:], config)
 		case "status":
-			bugapp.Status(os.Args[2:], config)
+			bugapp.Status(osArgs[2:], config)
 		case "rm", "close":
-			bugapp.Close(os.Args[2:], config)
+			bugapp.Close(osArgs[2:], config)
 		case "tag":
-			bugapp.Tag(os.Args[2:], config)
+			bugapp.Tag(osArgs[2:], config)
 		case "view", "list":
 			// bug list with no parameters shouldn't autopage,
 			// bug list with bugs to view should. So the original
 			// stdout is passed as a parameter.
-			bugapp.List(os.Args[2:], config)
+			bugapp.List(osArgs[2:], config)
 		case "help":
 			fallthrough
 		default:
-			bugapp.Help(os.Args[1:]...)
+			bugapp.Help(osArgs[1:]...)
 		}
 	}
 }
