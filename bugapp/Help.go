@@ -292,38 +292,51 @@ If there are no exact matches for the BugID provided, %s commands will
 also try and look up the bug by a substring match on all the valid 
 identifiers in the system before giving up.
 `, os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0])
+	case "import":
+		fmt.Printf("Usage: %s import {--github,--be} <repo>\n\n", os.Args[0])
+		fmt.Printf(
+			`This will read from github <user/repository> issues 
+or a local BugsEverywhere bug database to the issues/ directory.
 
+Either "--github user/repo" is required to import GitHub issues
+or "--be" is required to import a BugsEverywhere database
+in the current directory.
+`)
 	case "help":
 		fallthrough
 	default:
 		fmt.Printf("Usage: " + os.Args[0] + " command [options]\n")
 
-		fmt.Printf("\nUse \"bug help [command]\" for more information about any command below\n")
+		fmt.Printf("\nUse \"bug help [command]\" or \"bug [command] help\" for\n")
+		fmt.Printf("more information about any command below.\n")
 
-		fmt.Printf("\nValid commands\n")
+		fmt.Printf("\nValid Commands\n")
+
+		fmt.Printf("\nStatus/reading commands:\n")
+		fmt.Printf("\tlist       List existing bugs\n")
+		fmt.Printf("\tfind       Search bugs for a tag, status, priority, or milestone\n")
+		fmt.Printf("\tenv        Show settings that bug will use if invoked from this directory\n")
+		fmt.Printf("\tpwd        Prints the issues directory to stdout (useful subcommand in the shell)\n")
+		fmt.Printf("\tversion    Print the version of this software\n")
+		fmt.Printf("\thelp       Show this screen\n")
 
 		fmt.Printf("\nIssue editing commands:\n")
-		fmt.Printf("\tcreate\t   File a new bug\n")
-		fmt.Printf("\tlist\t   List existing bugs\n")
-		fmt.Printf("\tedit\t   Edit an existing bug\n")
-		fmt.Printf("\ttag\t   Tag a bug with a category\n")
+		fmt.Printf("\tcreate     File a new bug\n")
+		fmt.Printf("\tedit       Edit an existing bug\n")
+		fmt.Printf("\ttag        Tag a bug with a category\n")
 		fmt.Printf("\tidentifier Set a stable identifier for the bug\n")
-		fmt.Printf("\trelabel\t   Rename the title of a bug\n")
-		fmt.Printf("\tclose\t   Delete an existing bug\n")
-		fmt.Printf("\tstatus\t   View or edit a bug's status\n")
+		fmt.Printf("\trelabel    Rename the title of a bug\n")
+		fmt.Printf("\tclose      Delete an existing bug\n")
+		fmt.Printf("\tstatus     View or edit a bug's status\n")
 		fmt.Printf("\tpriority   View or edit a bug's priority\n")
 		fmt.Printf("\tmilestone  View or edit a bug's milestone\n")
-		fmt.Printf("\tfind\t   Search bugs for a tag, status, priority, or milestone\n")
+		fmt.Printf("\timport     Create local bugs from a github repository\n")
 
 		fmt.Printf("\nSource control commands:\n")
-		fmt.Printf("\tcommit\t Commit any new, changed or deleted bug to git\n")
-		fmt.Printf("\tpurge\t Remove all issues not tracked by git\n")
+		fmt.Printf("\tcommit     Commit any new, changed or deleted bug to git\n")
+		fmt.Printf("\tpurge      Remove all issues not tracked by git\n")
 
 		fmt.Printf("\nOther commands:\n")
-		fmt.Printf("\tenv\t Show settings that bug will use if invoked from this directory\n")
-		fmt.Printf("\tpwd\t Prints the issues directory to stdout (useful subcommand in the shell)\n")
-		fmt.Printf("\troadmap\t Print list of open issues sorted by milestone\n")
-		fmt.Printf("\tversion\t Print the version of this software\n")
-		fmt.Printf("\thelp\t Show this screen\n")
+		fmt.Printf("\troadmap    Print list of open issues sorted by milestone\n")
 	}
 }

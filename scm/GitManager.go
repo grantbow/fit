@@ -195,7 +195,9 @@ func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string) error {
 		// If nothing was added commit will have an error,
 		// but we don't care it just means there's nothing
 		// to commit.
-		fmt.Printf("No new issues committed\n")
+		// but the stdout to test could be captured
+		//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", err) // $?
+		fmt.Printf("No new issues committed\n") // assumes this error, same for HgManager.go
 		return nil
 	}
 	return nil

@@ -15,7 +15,7 @@ func runrelabel(label string, args argumentList, config bugs.Config, expected st
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
 	if !matched {
-		t.Errorf("Unexpected output on STDOUT for bugapp/Pwd_test %s.", label)
+		t.Errorf("Unexpected output on STDOUT for bugapp/Relabel_test %s.", label)
 		fmt.Printf("Expected to match: %s\nGot: %s\n", expected, stdout)
 	}
 }

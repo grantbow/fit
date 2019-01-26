@@ -76,12 +76,18 @@ func (g GitTester) StageFile(file string) error {
 	return err
 }
 func (g *GitTester) Setup() error {
-	if dir, err := ioutil.TempDir("", "gitbug"); err == nil {
-		g.workdir = dir
+	if gdir, err := ioutil.TempDir("", "gitbug"); err == nil {
+		g.workdir = gdir
 		os.Chdir(g.workdir)
+		os.Unsetenv("PMIT")
+		// Hack to get around the fact that /tmp is a symlink on
+		// OS X, and it causes the directory checks to fail..
+		//gdir, _ = os.Getwd() // gdir not used later
 	} else {
-		return err
+		panic("Failed creating temporary directory")
 	}
+	// Make sure we get the right directory from the top level
+	os.Mkdir("issues", 0755)
 
 	out, err := runCmd("git", "init")
 	if err != nil {
@@ -97,7 +103,7 @@ var git bool
 func init() {
 	flag.BoolVar(&git, "git", true, "git presence")
 	flag.Parse()
-	_, err := runCmd("git")
+	_, err := runCmd("git", "help")
 	if err != nil {
 		git = false
 	}
@@ -146,7 +152,7 @@ rename to issues/Renamed-bug/Description
 	runtestRenameCommitsHelper(&g, t, expectedDiffs)
 }
 
-func TestGitFilesOrtsideOfBugNotCommited(t *testing.T) {
+func TestGitFilesOutsideOfBugNotCommited(t *testing.T) {
 	if git == false {
 		t.Skip("git executable not found")
 	}
@@ -191,15 +197,19 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 		t.Error("Could not get manager")
 		return
 	}
-	os.Mkdir("issues", 0755)
-	runCmd("bug", "create", "-n", "Test", "bug")
-	runCmd("bug", "create", "-n", "Test", "Another", "bug")
+	//runCmd("bug", "create", "-n", "Test", "bug")
+	os.MkdirAll("issues/Test-bug", 0755)
+	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
 	if err = ioutil.WriteFile("issues/Test-bug/Identifier", []byte("\n\nGitHub:#TestBug"), 0644); err != nil {
-		t.Error("Could not write Identifier file")
+		t.Error("Could not write Test-bug/Identifier file")
 		return
 	}
+
+	//runCmd("bug", "create", "-n", "Test", "Another", "bug")
+	os.MkdirAll("issues/Test-Another-bug", 0755)
+	ioutil.WriteFile("issues/Test-Another-bug/Description", []byte(""), 0644)
 	if err = ioutil.WriteFile("issues/Test-Another-bug/Identifier", []byte("\n\nGITHuB:  #Whitespace   "), 0644); err != nil {
-		t.Error("Could not write Identifier file")
+		t.Error("Could not write Test-Another-bug/Identifier file")
 		return
 	}
 

@@ -43,9 +43,10 @@ may specify options. Current options include:
           when doing bug {add|new|create}
           first copy this file name to Description
     * ImportXmlDump: true or false, 
-          saves raw xml as a file
+          during import, save raw xml files
     * ImportCommentsTogether: true or false,
-          commments save to one file or many files
+          during import, commments save together as one file
+          instead of one comment per file.
 
 bug is the (almost) simplest system that can still work. It differs from other
 distributed, versioned, filesystem issue tracking tools in several ways.  Human
@@ -54,6 +55,8 @@ without access to the bug tool unlike a database or hidden directory based
 system.  Standard tools are used and further minimize context switching between
 systems.  bug also supports multiple `issues/` directories throughout the
 directory tree.
+
+For a demo, see my talk at [GoMTL-01](https://www.youtube.com/watch?v=ysgMlGHtDMo)
 
 # Installation
 If you have [go installed](https://golang.org/doc/install), install the latest version with:
@@ -65,8 +68,10 @@ The environment variable enables golang 1.11 module support.
 Make sure `$GOPATH/bin` or `$GOBIN` are in your path (or copy
 the "bug" binary somewhere that is.)
 
-An alias can be put in your .gitconfig file so bug can be used as a git
-subcommand.
+Using Bug with git you can run Bug as a git subcommand like `git bug` or `git
+issue`. As described in this [chapter about
+Aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) of the Pro Git
+book available online. Simple add it to your .gitconfig manually or:
 
 `git config --global alias.issue !/path/to/bug`
 
@@ -79,41 +84,46 @@ This adds to your .gitconfig:
 If an environment variable named PMIT is set, that directory will be
 used to create and maintain issues, otherwise the bug command will
 walk up the tree until it finds somewhere with a subdirectory named
-"issues" to track issues in.
+"issues".  Examples assume you are already in a directory tracked by
+git. To get started simply `mkdir issues`.
 
-Some sample usage (assuming you're already in a directory tracked by
-git):
+Example usage:
 
 ```
-$ mkdir issues
 $ bug help
 Usage: bug command [options]
 
-Use "bug help [command]" for more information about any command below
+Use "bug help [command]" or "bug [command] help" for
+more information about any command below.
 
-Valid commands
+Valid Commands
+
+Status/reading commands:
+	list       List existing bugs
+	find       Search bugs for a tag, status, priority, or milestone
+	env        Show settings that bug will use if invoked from this directory
+	pwd        Prints the issues directory to stdout (useful subcommand in the shell)
+	version    Print the version of this software
+	help       Show this screen
 
 Issue editing commands:
-	create	  File a new bug
-	list	  List existing bugs
-	edit	  Edit an existing bug
-	tag	      Tag a bug with a category
-	relabel	  Rename the title of a bug
-	close	  Delete an existing bug
-	status	  View or edit a bug's status
-	priority  View or edit a bug's priority
-	milestone View or edit a bug's milestone
+	create     File a new bug
+	edit       Edit an existing bug
+	tag        Tag a bug with a category
+	identifier Set a stable identifier for the bug
+	relabel    Rename the title of a bug
+	close      Delete an existing bug
+	status     View or edit a bug's status
+	priority   View or edit a bug's priority
+	milestone  View or edit a bug's milestone
+	import     Create local bugs from a github repository
 
 Source control commands:
-	commit	 Commit any new, changed or deleted bug to git
-	purge	 Remove all issues not tracked by git
+	commit     Commit any new, changed or deleted bug to git
+	purge      Remove all issues not tracked by git
 
 Other commands:
-	env	 Show settings that bug will use if invoked from this directory
-	pwd	 Prints the issues directory to stdout (useful subcommand in the shell)
-	roadmap	 Print list of open issues sorted by milestone
-	version	 Print the version of this software
-	help	 Show this screen
+	roadmap    Print list of open issues sorted by milestone
 
 $ bug create Need better help
 (Your editor opens here to enter a description)

@@ -5,6 +5,7 @@ import (
 	"os"
 	_ "os/exec"
 	"regexp"
+	_ "strings"
 	"testing"
 )
 
@@ -12,16 +13,33 @@ var bugargtests = []struct {
 	input  string
 	output string
 }{
-	{"./main", `^Usage:`},
-	//{"./main --help", `^Usage:`},
+	{"", `^Usage:`},
+	{"--version", ``},
+	{"pwd", ``},
+	{"env", ``},
+	{"find", `Usage:`},
+	{"status", `Usage:`},
+	{"list", ``},
+	{"help", `^Usage:`},
+	{"pwd --help aha yes", `^Usage:`},
 }
 
 func TestBugArgParser(t *testing.T) {
 	//log.Print("PATH " + os.Getenv("PATH"))
 	for _, tt := range bugargtests {
-		//runcmd := exec.Command("sh", "-c", tt.input) // input
-		//out, err := runcmd.CombinedOutput()
-		out, err := captureOutput(main, t)
+		// //runcmd := exec.Command("sh", "-c", tt.input) // input
+		// //out, err := runcmd.CombinedOutput()
+		//numArgs := 0
+		//args := strings.Fields(tt.input)
+		//for _, arg := range args {
+		//	os.Args[numArgs] = arg
+		//	numArgs += 1
+		//}
+		//for i := numArgs; i < 4; i++ {
+		//	os.Args[i] = ""
+		//}
+
+		out, err := captureOutput(main, t) // TODO: needs tt.input for the main func via an env var for testing
 		if err != "" {
 			//t.Error("Could not exec command bug: " + err.Error())
 			t.Error("Could not exec command bug: " + err)
@@ -30,7 +48,7 @@ func TestBugArgParser(t *testing.T) {
 		if ferr != nil {
 			t.Error("Usage output: " + ferr.Error())
 		} else if !found {
-			t.Errorf("Unexpected usage, got %q, want to match %q", tt.input, tt.output)
+			t.Errorf("Unexpected usage, wanted to match %q, got %q", tt.output, tt.input)
 		}
 	}
 }
