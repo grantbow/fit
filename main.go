@@ -1,4 +1,4 @@
-// bug writes code problem reports to plain text files.
+// bug manages plain text issue files.
 package main
 
 import (

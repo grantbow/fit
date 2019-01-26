@@ -12,11 +12,13 @@ func Help(args ...string) {
 		cmd = "help"
 	} else if len(args) <= 1 {
 		cmd = "help"
+	} else if args[1] == "help" {
+		cmd = args[2]
 	} else {
 		cmd = args[1]
 	}
 	switch cmd {
-	case "create":
+	case "add", "new", "create":
 		fmt.Printf("Usage: " + os.Args[0] + " create [-n] [options] Issue Title\n\n")
 		fmt.Printf(
 			`This will create an issue with the title Issue Title.  An editor 
@@ -294,9 +296,12 @@ identifiers in the system before giving up.
 	case "help":
 		fallthrough
 	default:
-		fmt.Printf("Usage: " + os.Args[0] + " command [options]\n\n")
-		fmt.Printf("Use \"bug help [command]\" for more information about any command below\n\n")
-		fmt.Printf("Valid commands\n")
+		fmt.Printf("Usage: " + os.Args[0] + " command [options]\n")
+
+		fmt.Printf("\nUse \"bug help [command]\" for more information about any command below\n")
+
+		fmt.Printf("\nValid commands\n")
+
 		fmt.Printf("\nIssue editing commands:\n")
 		fmt.Printf("\tcreate\t   File a new bug\n")
 		fmt.Printf("\tlist\t   List existing bugs\n")

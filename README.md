@@ -1,62 +1,81 @@
 # Bug
 
-[![GoDoc](https://godoc.org/github.com/driusan/bug?status.svg)](https://godoc.org/github.com/driusan/bug) [![Build Status](https://travis-ci.org/driusan/bug.svg?branch=master)](https://travis-ci.org/driusan/bug) [![Test Coverage](https://codecov.io/gh/driusan/bug/branch/master/graphs/badge.svg)](https://codecov.io/gh/driusan/bug)
+[![GoDoc](https://godoc.org/github.com/grantbow/bug?status.svg)](https://godoc.org/github.com/grantbow/bug) [![Build Status](https://travis-ci.org/grantbow/bug.svg?branch=master)](https://travis-ci.org/grantbow/bug) [![Test Coverage](https://codecov.io/gh/grantbow/bug/branch/master/graphs/badge.svg)](https://codecov.io/gh/grantbow/bug) [![GoReportCard](https://goreportcard.com/badge/github.com/grantbow/bug)](https://goreportcard.com/report/github.com/grantbow/bug)
 
-bug writes code problem reports to plain text files.
+bug manages plain text issue files.
+bug works with git and mercurial distributed versioning.
+See below for how bug can be aliased as a git subcommand `bug` or `issue`.
 
-bug requires Go version 1.9 or greater.
+The goal is to use a filesystem in a human readable way similar to how (see
+FAQ.md) an organized person would keep track of issues beyond text files or
+spreadsheets. This program streamlines working with issues and version control.
 
-Bug is an implementation of a distributed issue tracker using
-git (or hg) to manage issues on the filesystem following [poor man's
-issue tracker](https://github.com/driusan/PoormanIssueTracker) conventions.
+An `issues/` directory holds one (descriptive) subdirectory per issue. bug
+maintains the nearest `issues/` directory to your current working directory
+(there can be more than one) and provides hooks to commit (or remove) issues
+from versioning. Issues naturally branch and merge along with the rest of your
+versioned files.
 
-Bug can be aliased as a git subcommand `bug` or `issue`.
+bug was started by Dave MacFarlane (driusan) and was extended from his
+implementation of his "poor man's issue tracker" conventions. For his demo, see
+[his talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
+GolangMontreal.org conference, GoMTL-01.
 
-The goal is to use the filesystem in a human readable way, similar to
-how an organized person without any bug tracking software might, 
-by keeping track of bugs in an `issues/` directory, one (descriptive)
-subdirectory per issue. bug provides a tool to maintain the nearest 
-`issues/` directory to your current working directory and provides hooks 
-to commit (or remove) the issues from source control.
+This fork of bug has a renamed path so it requires version 1.11 to properly
+redirect building and testing the sub-modules using go.mod files. This is
+currently the best way to handle module paths in golang.
 
-An optional config file next to the issues directory named .bug.yml may
-specify options. Current options include:
+# Feedback
+I would like to work with others and would appreciate feedback at
+grantbow+bug@gmail.com.
+
+Since the original project is not very active I have gone ahead and published
+code through this public fork. Instead of submitting a pull request to our
+upstream getting code from others can be done using [git
+remotes](https://stackoverflow.com/questions/36628859/git-how-to-merge-a-pull-request-into-a-fork).
+
+You can report any bugs either by email or by sending a pull request.
+
+# Configuration
+An optional config file next to the closest issues directory named .bug.yml
+may specify options. Current options include:
     * DefaultDescriptionFile: string,
-          create bug template file name
+          when doing bug {add|new|create}
+          first copy this file name to Description
     * ImportXmlDump: true or false, 
           saves raw xml as a file
     * ImportCommentsTogether: true or false,
           commments save to one file or many files
 
-This differs from other distributed bug tracking tools, (which usually 
-store a database in a hidden directory) in that you can still easily 
-view, edit, or understand bugs even without access to the bug tool. bug
-only acts as a way to streamline the process of maintaining them. Another 
-benefit is that you can also have multiple `issues/` directories at 
-different places in your directory tree to, for instance, keep separate 
-bug repositories for different submodules or packages contained in a 
-single git repository.
+bug is the (almost) simplest system that can still work. It differs from other
+distributed, versioned, filesystem issue tracking tools in several ways.  Human
+readable plain text files are still easily viewed, edited and understood
+without access to the bug tool unlike a database or hidden directory based
+system.  Standard tools are used and further minimize context switching between
+systems.  bug also supports multiple `issues/` directories throughout the
+directory tree.
 
-Because issues are stored as human readable plaintext files, they branch
-and merge along with the rest of your code, and you can resolve conflicts 
-using your standard tools.
-
-For a demo, see my talk at [GoMTL-01](https://www.youtube.com/watch?v=ysgMlGHtDMo)
 # Installation
-If you have go installed, install the latest released version with:
+If you have [go installed](https://golang.org/doc/install), install the latest version with:
 
-`go get github.com/driusan/bug`
+`GO111MODULE=on go get github.com/grantbow/bug`
+
+The environment variable enables golang 1.11 module support.
 
 Make sure `$GOPATH/bin` or `$GOBIN` are in your path (or copy
 the "bug" binary somewhere that is.)
 
-Otherwise, you can download a 64-bit release for OS X or Linux on the 
-[releases](https://github.com/driusan/bug/releases/) page.
+An alias can be put in your .gitconfig file so bug can be used as a git
+subcommand.
 
-(The latest development version is on the latest v0.x-dev branch)
+`git config --global alias.issue !/path/to/bug`
+
+This adds to your .gitconfig:
+
+`[alias]
+    issue = !/path/to/bug`
 
 # Sample Usage
-
 If an environment variable named PMIT is set, that directory will be
 used to create and maintain issues, otherwise the bug command will
 walk up the tree until it finds somewhere with a subdirectory named
@@ -119,11 +138,3 @@ Issue 1: Need better formating for README
 $ bug commit
 $ git push
 ```
-
-# Feedback
-
-Currently, there aren't enough users to set up a mailing list, but 
-I'd nonetheless appreciate any feedback at driusan+bug@gmail.com. 
-
-You can report any bugs either by email, via GitHub issues, or by sending
-a pull request to this repo.
