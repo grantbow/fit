@@ -15,7 +15,7 @@ import (
 func TestVersionOutput(t *testing.T) {
 
 	stdout, stderr := captureOutput(func() {
-		Version()
+		PrintVersion()
 	}, t)
 
 	if stdout == "" {
