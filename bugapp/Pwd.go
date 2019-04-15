@@ -7,5 +7,5 @@ import (
 
 // Pwd is a subcommand to output the issues directory.
 func Pwd(config bugs.Config) {
-	fmt.Printf("%s", bugs.GetIssuesDir(config))
+	fmt.Printf("%s\n", bugs.GetIssuesDir(config))
 }

@@ -21,6 +21,8 @@ type Config struct {
 	ImportXmlDump bool `json:"ImportXmlDump"`
 	// import comments together or separate files
 	ImportCommentsTogether bool `json:"ImportCommentsTogether"`
+	// import comments together or separate files
+	ProgramVersion string `json:"ProgramVersion"`
 }
 
 // ErrNoConfig is a new error.

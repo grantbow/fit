@@ -1,0 +1,16 @@
+steps to reproduce:
+
+$ bug --version
+
+what happens:
+
+Could not find issues directory.
+Make sure either the PMIT environment variable is set, or a parent directory of your working directory has an issues folder.
+(If you just started new repo, you probably want to create directory named `issues`).
+Aborting.
+$
+
+what should happen:
+
+version number is also provided.
+

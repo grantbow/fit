@@ -25,6 +25,10 @@ This fork of bug has a renamed path so it requires version 1.11 to properly
 redirect building and testing the sub-modules using go.mod files. This is
 currently the best way to handle module paths in golang.
 
+I feel the word "poor" has a negative connotation. I think a better name for
+these conventions might be "Filesystem Issue Tracker" or FIT. However if using
+bug with git any command alias can be used to call the program.
+
 # Feedback
 I would like to work with others and would appreciate feedback at
 grantbow+bug@gmail.com.
@@ -82,7 +86,7 @@ This adds to your .gitconfig:
 
 # Sample Usage
 If an environment variable named PMIT is set, that directory will be
-used to create and maintain issues, otherwise the bug command will
+used to create and maintain issues as an 'issues' directory, otherwise the bug command will
 walk up the tree until it finds somewhere with a subdirectory named
 "issues".  Examples assume you are already in a directory tracked by
 git. To get started simply `mkdir issues`.

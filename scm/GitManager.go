@@ -116,11 +116,11 @@ func (a GitManager) currentStatus(dir bugs.Directory) (closedOnGitHub []string, 
 	return ghClosed, issues
 }
 
+// Create commit message by iterating over issues in order:
+// closed issues are most important (something is DONE, ok? ;), those issues will also become hidden)
+// new issues are next, with just updates at the end
+// TODO: do something if this message will be too long
 func (a GitManager) commitMsg(dir bugs.Directory) []byte {
-	// Create commit message by iterating over issues in order:
-	// closed issues are most important (something is DONE, ok? ;), those issues will also become hidden)
-	// new issues are next, with just updates at the end
-	// TODO: do something if this message will be too long
 	ghClosed, issues := a.currentStatus(dir)
 
 	done, add, update, together := &bytes.Buffer{}, &bytes.Buffer{}, &bytes.Buffer{}, &bytes.Buffer{}
@@ -197,7 +197,7 @@ func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string) error {
 		// to commit.
 		// but the stdout to test could be captured
 		//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", err) // $?
-		fmt.Printf("No new issues committed\n") // assumes this error, same for HgManager.go
+		fmt.Printf("No new issues committed.\n") // assumes this error, same for HgManager.go
 		return nil
 	}
 	return nil

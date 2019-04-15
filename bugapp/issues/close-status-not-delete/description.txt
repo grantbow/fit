@@ -1,0 +1,12 @@
+How to reproduce:
+
+bug close foo
+
+What happened:
+
+rm -rf foo
+
+What should happen:
+
+bug status close foo
+

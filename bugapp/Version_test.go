@@ -24,7 +24,7 @@ func TestVersionOutput(t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected output on stderr.")
 	}
-	if stdout != fmt.Sprintf("%s version 0.4 built using %s\n", os.Args[0], runtime.Version()) {
+	if stdout != fmt.Sprintf("%s version %s built using %s\n", os.Args[0], ProgramVersion(), runtime.Version()) {
 		t.Error("Unexpected output on stdout.")
 	}
 }

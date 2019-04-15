@@ -305,14 +305,12 @@ in the current directory.
 	case "help":
 		fallthrough
 	default:
-		fmt.Printf("Usage: " + os.Args[0] + " command [options]\n")
+		fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
 
-		fmt.Printf("\nUse \"bug help [command]\" or \"bug [command] help\" for\n")
+		fmt.Printf("\nUse \"bug help <command>\" or \"bug <command> help\" for\n")
 		fmt.Printf("more information about any command below.\n")
-
-		fmt.Printf("\nValid Commands\n")
-
-		fmt.Printf("\nStatus/reading commands:\n")
+		PrintVersion()
+		fmt.Printf("\n\nStatus/reading commands:\n")
 		fmt.Printf("\tlist       List existing bugs\n")
 		fmt.Printf("\tfind       Search bugs for a tag, status, priority, or milestone\n")
 		fmt.Printf("\tenv        Show settings that bug will use if invoked from this directory\n")

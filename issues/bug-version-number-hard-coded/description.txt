@@ -1,0 +1,9 @@
+issue:
+
+the version number for bug is hard coded.
+
+plan:
+
+1. add a variable with the version number: config.ProgramVersion in set using bugapp.ProgramVersion()
+2. change all functions and tests to use the new function.
+

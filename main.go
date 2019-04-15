@@ -11,14 +11,15 @@ import (
 func main() {
 
 	config := bugs.Config{}
+	config.ProgramVersion = bugapp.ProgramVersion()
 	bugs.GetIssuesDir(config) // bugs/Directory.go
 	bugYml := ".bug.yml"
 	bugs.ConfigRead(bugYml, &config)
 
 	if bugapp.SkipRootCheck(&os.Args) && bugs.GetRootDir(config) == "" {
-		fmt.Printf("Could not find issues directory.\n")
-		fmt.Printf("Make sure either the PMIT environment variable is set, or a parent directory of your working directory has an issues folder.\n")
-		fmt.Println("(If you just started new repo, you probably want to create directory named `issues`).")
+		//bugapp.PrintVersion()
+		fmt.Printf("Could not find `issues` directory. You probably want to create one.\n")
+		fmt.Printf("Make sure the current directory or a parent directory has an issues folder\nor set the PMIT environment variable.\n")
 		fmt.Printf("Aborting.\n")
 		os.Exit(2)
 	}
@@ -28,13 +29,14 @@ func main() {
 	// arguments that are space separated names
 	osArgs := os.Args // TODO: use an env var and assign to osArgs to setup for testing
 	if len(osArgs) <= 1 {
-		bugapp.Help()
+		fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
+		fmt.Printf("\nUse \"bug help\" or \"bug help <command>\" for details.\n")
 	} else if len(osArgs) >= 3 && osArgs[2] == "--help" { // bug cmd --help just like bug help cmd
 		bugapp.Help(osArgs[1])
 	} else {
 		switch osArgs[1] {
-		case "--version", "version": // subcommands without osArgs
-			bugapp.Version()
+		case "--version", "version", "-v": // subcommands without osArgs
+			bugapp.PrintVersion()
 		case "dir", "pwd":
 			bugapp.Pwd(config)
 		case "env":
