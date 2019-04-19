@@ -1,0 +1,4 @@
+code (functions) and comments in bugapp/ use the "identifier" concept in a way
+that is outdated given a more flexible tag system.
+This needs to be cleaned up for legibility
+

@@ -23,6 +23,8 @@ type Config struct {
 	ImportCommentsTogether bool `json:"ImportCommentsTogether"`
 	// import comments together or separate files
 	ProgramVersion string `json:"ProgramVersion"`
+	// allows overriding the default file name
+	DescriptionFileName string `json:"DescriptionFileName"`
 }
 
 // ErrNoConfig is a new error.
@@ -51,6 +53,8 @@ func ConfigRead(bugYml string, c *Config) (err error) {
 		if temp.ImportCommentsTogether {
 			c.ImportCommentsTogether = true
 		}
+		//* ProgramVersion
+		//* DescriptionFileName
 	}
 	return nil
 }

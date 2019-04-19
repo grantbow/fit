@@ -1,0 +1,10 @@
+code is for a subdirectory.
+
+code needs to handle both cases for tag locations:
+     a. subdirectory limited to true/false
+     b. tag_key_value field
+
+see bugs/Bug.go
+functions have Tag
+type Tag may change
+finally split out bugs/Tag.go code under
