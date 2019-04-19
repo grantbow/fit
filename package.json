@@ -1,0 +1,23 @@
+{
+    "description": "manage plain text issue directories working with git or mercurial",
+    "keywords": { "bug", "golang", "bash", "git", "hg", "bugs", "issues", "requests", "incidents", "tickets"},
+    "homepage": "https://github.com/grantbow/bug#README.md",
+    "bugs": { "url": "https://github.com/grantbow/bug/tree/master/issues"
+            , "email": "grantbow+bug@gmail.com"},
+    "license": "GPL-3.0",
+    "author": "Dave MacFarlane <driusan@gmail.com> (https://github.com/driusan)",
+    "contributors": { "Grant Bowman <grantbow+bug@gmail.com (https://github.com/grantbow"
+                    , "komosa (https://github.com/Komosa)"
+                    , "mikecapone (https://github.com/mikecapone)"
+                    , "HazCod (https://github.com/HazCod)"
+                    },
+    "bin": {"bug": "./main"},
+    "repository": {"github:grantbow/bug"},
+    "dependencies":
+        { "ghodss/yaml": "v1.0.0"
+        , "google/go-querystring": "v1.0.0"
+        , "gopkg.in/yaml.v2": "v2.2.2"
+	    , "blang/semver": "v3.5.1+incompatible"
+	    , "google/go-github": "v17.0.0+incompatible"
+    }
+}

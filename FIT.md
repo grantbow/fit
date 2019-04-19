@@ -55,7 +55,11 @@ will determine how well your system is working.
 `Assumptions` are what we call all of the other decisions used when building
 your system that are not otherwise specified. FIT conventions together with
 your assumptions are intended to help naturally build systems that precisely
-meet your needs.
+meet your needs. [User
+Innovation](https://en.wikipedia.org/wiki/User_innovation) describes how
+products and services developed and refined by end users result in better
+products and services. How you system evolves is critical to the success of
+it's use and of it's end users.
 
 # Issues
 
@@ -72,7 +76,7 @@ naming for clarity. Teams have used different terms to name their issues:
 
     Use Cases            (Backlog) Items      Agile, Lean or Kanban Cards
 
-    Mind Map Nodes
+    Mind Map Nodes       Suggestions (Box)
 
 We use the term `title` for the short human readable text identifier. People
 may sometimes confuse the terms of `issue` and `title`. Other terms include:

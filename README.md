@@ -4,6 +4,8 @@
 
 bug helps manage plain text issue directories working with git or mercurial.
 
+https://github.com/grantbow/bug/wiki
+
 # Goal
 # Layout
 # Installation
