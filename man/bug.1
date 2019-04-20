@@ -1,0 +1,81 @@
+.TH bug 1
+.SH NAME
+bug \- manage plain text issues directories
+.SH SYNOPSIS
+.B bug
+[\fB\-\-help\fR \fIcommand\fR]
+.IR command \fR[options] ...
+.SH DESCRIPTION
+.B bug
+manage plain text issues directories with git and mercurial using Filesystem Issue Tracker (fit) format.
+.SH OPTIONS
+.\
+.PP Status/reading commands
+.\
+.TP
+.BR list \fR[\fIid\fR]
+List existing bugs, all or a subset with one of several types of identifiers.
+.TP
+.BR find \fR[\fIid\fR]
+Search bugs for a tag, status, priority, or milestone
+.TP
+.BR env
+Show settings that bug will use if invoked from this directory
+.TP
+.BR pwd
+Prints the issues directory to stdout (useful subcommand in the shell)
+.TP
+.BR version
+Print the version of this software
+.TP
+.BR help \fR[\fIcommand\fR]
+Show help for all commands. If a command is provided show just that command's help.
+.\
+.PP Issue editing commands:
+.\
+.TP
+.BR create \fR[\fI\-n <title>\fR]
+File a new bug and open the default editor for Description. If -n is provided the text is used as the title and no editor is launched.
+.TP
+.BR edit
+Edit an existing bug
+.TP
+.BR tag
+Tag a bug with a category
+.TP
+.BR identifier
+Set a stable identifier for the bug
+.TP
+.BR relabel
+Rename the title of a bug
+.TP
+.BR close
+Delete an existing bug
+.TP
+.BR status
+View or edit a bug's status
+.TP
+.BR priority
+View or edit a bug's priority
+.TP
+.BR milestone
+View or edit a bug's milestone
+.TP
+.BR import
+Create local bugs from a github repository
+.\
+.PP Source control commands:
+.\
+.TP
+.BR commit
+Commit any new, changed or deleted bug to git
+.TP
+.BR purge
+Remove all issues not tracked by git
+.\
+.PP Other commands:
+.\
+.TP
+.BR roadmap
+Print list of open issues sorted by milestone
+

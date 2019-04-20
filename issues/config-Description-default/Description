@@ -1,4 +1,6 @@
-Description is hard coded.
+currently Description is hard coded.
 
 Add a new variable so this can be changed.
+
+a config variable will allow any file to be used like description.txt or anything else.
 
