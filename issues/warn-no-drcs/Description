@@ -1,7 +1,7 @@
 when listing, creating or removing issues two warnings might help remind team
 members keep their git or mercurial updated.
 
-1. no git or mercurial present
+1. no git or mercurial present - done
 
-2. tracked files dirty files or new issues present
+2. tracked files dirty files or new issues present - needs work
 

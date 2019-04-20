@@ -1,0 +1,14 @@
+special case of
+
+$bug create -n bug-dash-dash
+
+bug or feature?
+
+what happened?
+
+ls issues
+...
+bug--dash--dash
+...
+
+expected: bug-dash-dash

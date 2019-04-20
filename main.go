@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/driusan/bug/bugapp"
 	"github.com/driusan/bug/bugs"
+	"github.com/driusan/bug/scm"
 	"os"
 )
 
@@ -16,10 +17,17 @@ func main() {
 	bugYml := ".bug.yml"
 	bugs.ConfigRead(bugYml, &config)
 
+	scmoptions := make(map[string]bool)
+	_, _, err := scm.DetectSCM(scmoptions)
+	if err != nil {
+		fmt.Printf("Warn: %s\n", err.Error())
+	}
+
 	if bugapp.SkipRootCheck(&os.Args) && bugs.GetRootDir(config) == "" {
 		//bugapp.PrintVersion()
-		fmt.Printf("Could not find `issues` directory. You probably want to create one.\n")
-		fmt.Printf("Make sure the current directory or a parent directory has an issues folder\nor set the PMIT environment variable.\n")
+		fmt.Printf("Error: Could not find `issues` directory. You probably want to create one.\n")
+		fmt.Printf("    Make sure the current directory or a parent directory has an issues folder\n")
+		fmt.Printf("    or set the PMIT environment variable.\n")
 		fmt.Printf("Aborting.\n")
 		os.Exit(2)
 	}
