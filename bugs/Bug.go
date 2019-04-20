@@ -335,12 +335,12 @@ func (b Bug) SetMilestone(newValue string) error {
 
 // Identifier returns the string from the Identifier file of an issue.
 func (b Bug) Identifier() string {
-	return b.getField("id")
+	return b.getField("Identifier")
 }
 
 // SetIdentifier writes the Identifier file to an issue.
 func (b Bug) SetIdentifier(newValue string) error {
-	return b.setField("id", newValue)
+	return b.setField("Identifier", newValue)
 }
 
 // New assigns and writes an issue.
