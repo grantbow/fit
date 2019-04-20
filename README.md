@@ -188,12 +188,19 @@ GolangMontreal.org conference, GoMTL-01.
 I would like to work with others and would appreciate feedback at
 grantbow+bug@gmail.com.
 
-Since the original project is not very active I have gone ahead and published
-code through this public fork. Instead of submitting a pull request to our
-upstream getting code from others can be done using [git
+Since the original project is not very active I have gone ahead and continuted
+some development on my fork. I encourage discussion. Submitting can be done
+with a pull request to me, to our upstream project or using [git
 remotes](https://stackoverflow.com/questions/36628859/git-how-to-merge-a-pull-request-into-a-fork).
 
-You can report any bugs either by email or by sending a pull request.
+Anyone thinking of CONTRIBUTING.md please do so. As this is an issue tracking
+system a pull request with an issue seems logical enough and good working
+practice.
+
+As mentioned in SUPPORT.md questions are encouraged via email, issues or pull
+requests for now.
+
+The CODE_OF_CONDUCT.md is the standard offered by github and looks great.
 
 # Next Steps
 

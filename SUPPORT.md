@@ -1,1 +1,2 @@
-Questions are encouraged via issues/pull requests for now.
+Questions are encouraged via email, issues or pull requests for now.
+
