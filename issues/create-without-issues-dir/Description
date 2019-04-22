@@ -1,0 +1,15 @@
+what happens?
+
+new directory
+git init
+bug create -n foo
+
+in the new directory I get foo/Description.
+
+what should happen?
+
+in the new directory I should get issues/foo/Description
+
+I worked around the issue with a mkdir.
+The test fails in a weird way.
+

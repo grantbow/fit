@@ -135,7 +135,8 @@ func TestGetNoIssuesDir(t *testing.T) {
 		t.Error("Failed creating temporary directory")
 		return
 	}
-	// Don't create an issues directory. Just try and get the directory
+	// Don't create an issues directory. Just try and get the directory.
+	// empty is accepted! why?
 	if dir := GetIssuesDir(config); dir != "" {
 		t.Error("Found unexpected issues directory." + string(dir))
 	}

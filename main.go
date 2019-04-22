@@ -13,6 +13,7 @@ func main() {
 
 	config := bugs.Config{}
 	config.ProgramVersion = bugapp.ProgramVersion()
+	config.DescriptionFileName = "Description"
 	bugs.GetIssuesDir(config) // bugs/Directory.go
 	bugYml := ".bug.yml"
 	bugs.ConfigRead(bugYml, &config)
@@ -36,6 +37,7 @@ func main() {
 	// because of subcommands and
 	// arguments that are space separated names
 	osArgs := os.Args // TODO: use an env var and assign to osArgs to setup for testing
+	//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
 	if len(osArgs) <= 1 {
 		fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
 		fmt.Printf("\nUse \"bug help\" or \"bug help <command>\" for details.\n")
@@ -52,7 +54,9 @@ func main() {
 		case "purge":
 			bugapp.Purge(config)
 		case "add", "new", "create": // subcommands with    osArgs
+			//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
 			bugapp.Create(osArgs[2:], config)
+			//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
 		case "commit":
 			bugapp.Commit(osArgs[2:], config)
 		case "edit":

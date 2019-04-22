@@ -19,7 +19,7 @@ func TestCreateHelpOutput(t *testing.T) {
 	}, t)
 
 	if stdout != "" {
-		t.Error("Unexpected output on stdout.")
+		t.Error("Unexpected output on stdout.\nwanted nil\ngot: " + stdout)
 	}
 	if stderr[:7] != "Usage: " {
 		t.Error("Expected usage information with no arguments")
@@ -27,11 +27,54 @@ func TestCreateHelpOutput(t *testing.T) {
 
 }
 
+// Test "Create" without an issues directory
+func TestCreateWithoutIssues(t *testing.T) {
+	config := bugs.Config{}
+	config.DescriptionFileName = "Description"
+	dir, err := ioutil.TempDir("", "createtest")
+	if err != nil {
+		t.Error("Could not create temporary dir for test")
+		return
+	}
+	os.Chdir(dir)
+	os.MkdirAll("issues", 0700) // the real test
+	defer os.RemoveAll(dir)
+	err = os.Setenv("PMIT", dir)
+	if err != nil {
+		t.Error("Could not set environment variable: " + err.Error())
+		return
+	}
+
+	fmt.Print("1")
+	//fmt.Print(err)
+	stdout, stderr := captureOutput(func() {
+		Create(argumentList{"-n", "Test", "bug"}, config)
+	}, t)
+	if stderr != "" {
+		t.Error("Unexpected output on STDERR for Test-bug")
+	}
+	if stdout != "Created issue: Test bug\n" {
+		t.Error("Unexpected output on STDOUT for Test-bug")
+	}
+	fmt.Print("2")
+	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	fmt.Print("3")
+	if err != nil {
+		t.Error("Could not read issues directory")
+		return
+	}
+	if len(issuesDir) != 1 {
+		t.Error("Unexpected number of issues in issues dir\n")
+	}
+	fmt.Print("4")
+}
+
 // Test a very basic invocation of "Create" with the -n
 // argument. We can't try it without -n, since it means
 // an editor will be spawned..
 func TestCreateNoEditor(t *testing.T) {
 	config := bugs.Config{}
+	config.DescriptionFileName = "Description"
 	dir, err := ioutil.TempDir("", "createtest")
 	if err != nil {
 		t.Error("Could not create temporary dir for test")
