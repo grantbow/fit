@@ -28,8 +28,9 @@ func filecp(sourceFile string, destinationFile string) {
 
 // Create is a subcommand to open a new issue.
 func Create(Args argumentList, config bugs.Config) {
+	//fmt.Print("a\n")
 	if len(Args) < 1 || (len(Args) < 2 && Args[0] == "-n") {
-		//fmt.Print("a")
+		//fmt.Print("b\n")
 		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] Bug Description\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "\nNo Bug Description provided.\n")
 		return
@@ -103,11 +104,13 @@ func Create(Args argumentList, config bugs.Config) {
 		}
 		cmd := exec.Command(getEditor(), DescriptionFile)
 
+		//osi := os.Stdin
+		//oso := os.Stdout
+		//ose := os.Stderr
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		err := cmd.Run()
-
 		if err != nil {
 			log.Fatal(err)
 		}
