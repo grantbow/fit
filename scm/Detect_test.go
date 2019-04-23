@@ -8,6 +8,8 @@ import (
 )
 
 func TestDetectGit(t *testing.T) {
+	var config bugs.Config
+	config.DescriptionFileName = "Description"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "gitdetect")
 	if err == nil {
@@ -24,7 +26,7 @@ func TestDetectGit(t *testing.T) {
 	os.Mkdir(".git", 0755)
 
 	options := make(map[string]bool)
-	handler, dir, err := DetectSCM(options)
+	handler, dir, err := DetectSCM(options, config)
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
@@ -42,7 +44,7 @@ func TestDetectGit(t *testing.T) {
 	// Go somewhere higher in the tree and do it again
 	os.MkdirAll("tmp/abc/hello", 0755)
 	os.Chdir("tmp/abc/hello")
-	handler, dir, err = DetectSCM(options)
+	handler, dir, err = DetectSCM(options, config)
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
@@ -59,6 +61,8 @@ func TestDetectGit(t *testing.T) {
 }
 
 func TestDetectHg(t *testing.T) {
+	var config bugs.Config
+	config.DescriptionFileName = "Description"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "hgdetect")
 	if err == nil {
@@ -75,7 +79,7 @@ func TestDetectHg(t *testing.T) {
 	os.Mkdir(".hg", 0755)
 
 	options := make(map[string]bool)
-	handler, dir, err := DetectSCM(options)
+	handler, dir, err := DetectSCM(options, config)
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
@@ -93,7 +97,7 @@ func TestDetectHg(t *testing.T) {
 	// Go somewhere higher in the tree and do it again
 	os.MkdirAll("tmp/abc/hello", 0755)
 	os.Chdir("tmp/abc/hello")
-	handler, dir, err = DetectSCM(options)
+	handler, dir, err = DetectSCM(options, config)
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}

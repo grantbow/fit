@@ -52,7 +52,7 @@ type issuesStatus map[string]issueStatus
 // D  issues/issue1/Description			issue closed
 // A  issues/issue3/Description			new issue, description field is mandatory for rich format
 
-func (a GitManager) currentStatus(dir bugs.Directory) (closedOnGitHub []string, _ issuesStatus) {
+func (a GitManager) currentStatus(dir bugs.Directory, config bugs.Config) (closedOnGitHub []string, _ issuesStatus) {
 	ghRegex := regexp.MustCompile("(?im)^-Github:(.*)$")
 	closesGH := func(file string) (issue string, ok bool) {
 		if !a.Autoclose {
@@ -92,7 +92,7 @@ func (a GitManager) currentStatus(dir bugs.Directory) (closedOnGitHub []string, 
 
 		path := file[3:]
 		op := file[0]
-		desc := strings.HasSuffix(path, "/Description")
+		desc := strings.HasSuffix(path, "/"+config.DescriptionFileName)
 		name := short(path)
 		issue := issues[name]
 
@@ -120,8 +120,8 @@ func (a GitManager) currentStatus(dir bugs.Directory) (closedOnGitHub []string, 
 // closed issues are most important (something is DONE, ok? ;), those issues will also become hidden)
 // new issues are next, with just updates at the end
 // TODO: do something if this message will be too long
-func (a GitManager) commitMsg(dir bugs.Directory) []byte {
-	ghClosed, issues := a.currentStatus(dir)
+func (a GitManager) commitMsg(dir bugs.Directory, config bugs.Config) []byte {
+	ghClosed, issues := a.currentStatus(dir, config)
 
 	done, add, update, together := &bytes.Buffer{}, &bytes.Buffer{}, &bytes.Buffer{}, &bytes.Buffer{}
 	var cntd, cnta, cntu int
@@ -164,7 +164,7 @@ func (a GitManager) commitMsg(dir bugs.Directory) []byte {
 }
 
 // Commit saves files to the SCM. It runs git add -A.
-func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string) error {
+func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config bugs.Config) error {
 	cmd := exec.Command("git", "add", "-A", string(dir))
 	if err := cmd.Run(); err != nil {
 		fmt.Printf("Could not add issues to be committed: %s?\n", err.Error())
@@ -172,7 +172,7 @@ func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string) error {
 
 	}
 
-	msg := a.commitMsg(dir)
+	msg := a.commitMsg(dir, config)
 
 	file, err := ioutil.TempFile("", "bugCommit")
 	if err != nil {

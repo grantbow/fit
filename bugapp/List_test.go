@@ -11,6 +11,7 @@ import (
 
 func runlist(args argumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
+	config.DescriptionFileName = "Description"
 	stdout, stderr := captureOutput(func() {
 		List(args, config)
 	}, t)
@@ -27,6 +28,7 @@ func runlist(args argumentList, expected string, t *testing.T) {
 
 func TestList(t *testing.T) {
 	config := bugs.Config{}
+	config.DescriptionFileName = "Description"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "listgit")
 	if err == nil {

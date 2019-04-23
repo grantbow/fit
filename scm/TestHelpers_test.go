@@ -77,6 +77,8 @@ func assertLogs(tester ManagerTester, t *testing.T, titles []map[string]bool, di
 }
 
 func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiffs []string) {
+	var config bugs.Config
+	config.DescriptionFileName = "Description"
 	err := tester.Setup()
 	defer tester.TearDown()
 	if err != nil {
@@ -91,13 +93,12 @@ func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiff
 	}
 	os.MkdirAll("issues/Test-bug", 0755)
 	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
-	m.Commit(bugs.Directory(tester.GetWorkDir()), "Initial commit")
+	m.Commit(bugs.Directory(tester.GetWorkDir()), "Initial commit", config)
 	//runCmd("bug", "relabel", "1", "Renamed", "bug")
-	config := bugs.Config{}
 	args := argumentList{"1", "Renamed bug"}
 	expected := "Moving .*"
 	runrelabel("scm/TestHelpers_test runtestRenameCommitsHelper", args, config, expected, t)
-	m.Commit(bugs.Directory(tester.GetWorkDir()), "This is a test rename")
+	m.Commit(bugs.Directory(tester.GetWorkDir()), "This is a test rename", config)
 
 	tester.AssertCleanTree(t)
 
@@ -113,6 +114,8 @@ func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiff
 }
 
 func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
+	var config bugs.Config
+	config.DescriptionFileName = "Description"
 	err := tester.Setup()
 	if err != nil {
 		panic("Something went wrong trying to initialize git:" + err.Error())
@@ -134,7 +137,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	})
 
 	//fmt.Print("pre  1 runtestCommitDirtyTree\n")
-	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
+	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit", config)
 	//fmt.Print("post 1 runtestCommitDirtyTree\n")
 	tester.AssertStagingIndex(t, []FileStatus{
 		FileStatus{"donotcommit.txt", "?", "?"},
@@ -144,7 +147,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		FileStatus{"donotcommit.txt", "A", " "},
 	})
 	//fmt.Print("pre  2 runtestCommitDirtyTree\n")
-	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
+	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit", config)
 	//errCommit := m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
 	//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", errCommit) // nil here
 	//    running test shows output here. actually HgManager.go Commit() returns *expected* error not fully handled.
@@ -156,6 +159,8 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 }
 
 func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
+	var config bugs.Config
+	config.DescriptionFileName = "Description"
 	err := tester.Setup()
 	if err != nil {
 		panic("Something went wrong trying to initialize: " + err.Error())
@@ -170,7 +175,7 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	//runCmd("bug", "create", "-n", "Test", "bug")
 	os.MkdirAll("issues/Test-bug", 0755)
 	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
-	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
+	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit", config)
 
 	// Create another bug to elimate with purge
 	//runCmd("bug", "create", "-n", "Test", "Purge", "bug")

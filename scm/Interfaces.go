@@ -4,7 +4,7 @@ import "github.com/driusan/bug/bugs"
 
 // SCMHandler interface defines how to call Commit, Purge and GetSCMType.
 type SCMHandler interface {
-	Commit(dir bugs.Directory, commitMsg string) error
+	Commit(dir bugs.Directory, commitMsg string, config bugs.Config) error
 	Purge(bugs.Directory) error
 	GetSCMType() string
 }

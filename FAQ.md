@@ -40,6 +40,10 @@ A: bug is the program written in Go. PMIT is the old name.
    and testing. As of 2019 go.mod files are the best way to rename module
    paths.
 
+Q: What's the difference between a DVCS and an SCM?
+A: A source code management (SCM) system is a (distributed) version control
+   system (DVCS) used in the context of source code. All SCM and VCS as well.
+
 Q: How do I add an issue x?
 A: `mkdir issues/x ; edit issues/x/Description ; git add issues/x/Description ; git commit ; git push`
 

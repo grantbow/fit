@@ -22,9 +22,9 @@ func Help(args ...string) {
 		fmt.Printf("Usage: " + os.Args[0] + " create [-n] [options] Issue Title\n\n")
 		fmt.Printf(
 			`This will create an issue with the title Issue Title.  An editor 
-will be opened automatically for you to enter a more detailed 
-description. If your EDITOR environment variable is set, it 
-will be used, otherwise the default editor is vim.
+will be opened on Description automatically.  If your EDITOR
+environment variable is set, it will be used, otherwise
+the default editor is vim.
 
 If the first argument to create is "-n", then %s will not open 
 any editor and create an empty Description.
@@ -49,8 +49,8 @@ with the issue number that can be used to reference this issue
 on the command line.
 
 If 1 or more BugIDs are provided, the whole issue including
-description will be printed to STDOUT.  See "bug help identifiers"
-for a description of what makes a BugID.
+Description will be printed to STDOUT.  See "bug help identifiers"
+for what makes a BugID.
 
 If, instead of BugIDs, you provide list with 1 or more tags, 
 it will print any issues which have that tag (in short form).
@@ -65,9 +65,9 @@ The subcommand "view" is an alias for "list".
 	case "edit":
 		fmt.Printf("Usage: " + os.Args[0] + " edit [Filename] BugID\n\n")
 		fmt.Printf(
-			`This will launch your standard editor to edit the description 
-of the bug identified by BugID.  See "bug help identifiers" for a 
-description of what makes a BugID.
+			`This will launch your standard editor to edit the Description 
+of the bug identified by BugID.  See "bug help identifiers" for
+what makes a BugID.
 
 If the Filename option is provided, bug will instead launch an editor
 to edit that file name within the bug directory. Files that have
@@ -79,7 +79,7 @@ directly to your editor.
 		fmt.Printf("Usage: " + os.Args[0] + " status BugID [NewStatus]\n\n")
 		fmt.Printf(
 			`This will edit or display the status of the bug identified by BugID.
-See "bug help identifiers" for a description of what constitutes a BugID.
+See "bug help identifiers" for what constitutes a BugID.
             
 If NewStatus is provided, it will update the first line of the Status file
 for the issue (creating the file as necessary). If not provided, it will 
@@ -95,7 +95,7 @@ further context on a status (for instance, why that status is setup.)
 		fmt.Printf("Usage: " + os.Args[0] + " priority BugID [NewPriority]\n\n")
 		fmt.Printf(
 			`This will edit or display the priority of BugID. See "bug help identifiers"
-for a description of what constitutes a BugID.
+for what constitutes a BugID.
 
 By convention, priorities should be an integer number (higher is more 
 urgent), but that is not enforced by this command and NewPriority can
@@ -114,7 +114,7 @@ explanation when updating a priority.
 		fmt.Printf("Usage: " + os.Args[0] + " milestone BugID [NewMilestone]\n\n")
 		fmt.Printf(
 			`This will edit or display the milestone of the identified by BugID.
-See "%s help identifiers" for a description of what constitutes a BugID.
+See "%s help identifiers" for what constitutes a BugID.
 
 There are no restrictions on how milestones must be named, but
 semantic versioning is a good convention to adopt. Failing that,

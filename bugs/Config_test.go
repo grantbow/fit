@@ -12,7 +12,7 @@ func doconfigteststring(t *testing.T, rootDir string, bugymlfile string, config 
 		t.Error(err)
 	}
 	// read and stored correctly
-	err = ConfigRead(".bug.yml", config)
+	err = ConfigRead(".bug.yml", config, "testversion")
 	if err != nil {
 		t.Error(err)
 	}
@@ -28,7 +28,7 @@ func doconfigtestbool(t *testing.T, rootDir string, bugymlfile string, config *C
 		t.Error(err)
 	}
 	// read and stored correctly
-	err = ConfigRead(".bug.yml", config)
+	err = ConfigRead(".bug.yml", config, "testversion")
 	if err != nil {
 		t.Error(err)
 	}

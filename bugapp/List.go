@@ -47,7 +47,7 @@ func List(args argumentList, config bugs.Config) {
 				continue
 			}
 			var dir bugs.Directory = issuesroot + bugs.Directory(issue.Name())
-			b := bugs.Bug{Dir: dir}
+			b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName}
 			name := getBugName(b, idx)
 			if wantTags == false {
 				fmt.Printf("%s: %s\n", name, b.Title(""))

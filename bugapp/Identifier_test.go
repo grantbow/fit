@@ -73,7 +73,7 @@ func TestIdGenerate(t *testing.T) {
 	runid(t, "Generated id .* for bug\n", argumentList{"1", "--generate"})
 	file, err := ioutil.ReadFile(fmt.Sprintf("%s/issues/no_id_bug/Identifier", gdir))
 	if err != nil {
-		t.Error("Could not load description file for Test bug" + err.Error())
+		t.Error("Could not load an Identifier file for Test bug" + err.Error())
 	}
 	if len(file) == 0 {
 		t.Error("Expected an Identifier file")

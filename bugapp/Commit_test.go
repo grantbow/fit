@@ -13,6 +13,7 @@ import (
 
 func runcommit(expected string, t *testing.T) {
 	config := bugs.Config{}
+	config.DescriptionFileName = "Description"
 	stdout, stderr := captureOutput(func() {
 		Commit(argumentList{}, config)
 	}, t)

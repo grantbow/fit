@@ -21,7 +21,7 @@ type Config struct {
 	ImportXmlDump bool `json:"ImportXmlDump"`
 	// import comments together or separate files
 	ImportCommentsTogether bool `json:"ImportCommentsTogether"`
-	// import comments together or separate files
+	// Appends to the program version
 	ProgramVersion string `json:"ProgramVersion"`
 	// allows overriding the default file name
 	DescriptionFileName string `json:"DescriptionFileName"`
@@ -31,7 +31,7 @@ type Config struct {
 var ErrNoConfig = errors.New("No .bug.yml provided")
 
 // ConfigRead assigns values to the Config type from .bug.yml.
-func ConfigRead(bugYml string, c *Config) (err error) {
+func ConfigRead(bugYml string, c *Config, progVersion string) (err error) {
 	temp := Config{}
 	if fileinfo, err := os.Stat(bugYml); err == nil && fileinfo.Mode().IsRegular() {
 		dat, _ := ioutil.ReadFile(bugYml)
@@ -47,14 +47,27 @@ func ConfigRead(bugYml string, c *Config) (err error) {
 		//      saves raw xml as a file
 		if temp.ImportXmlDump {
 			c.ImportXmlDump = true
+		} else {
+			c.ImportXmlDump = false
 		}
 		//* ImportCommentsTogether: true or false,
 		//      commments save to one file or many files
 		if temp.ImportCommentsTogether {
 			c.ImportCommentsTogether = true
+		} else {
+			c.ImportCommentsTogether = false
 		}
 		//* ProgramVersion
+		c.ProgramVersion = progVersion
+		if temp.ProgramVersion != "" {
+			c.ProgramVersion = c.ProgramVersion + temp.ProgramVersion
+		}
 		//* DescriptionFileName
+		if temp.DescriptionFileName != "" {
+			c.DescriptionFileName = temp.DescriptionFileName
+		} else {
+			c.DescriptionFileName = "Description"
+		}
 	}
 	return nil
 }

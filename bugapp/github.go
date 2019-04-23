@@ -47,7 +47,7 @@ func githubImport(user, repo string, config bugs.Config) {
 					os.Mkdir(string(dir), 0755)
 				}
 				if issue.Body != nil {
-					b.SetDescription(*issue.Body)
+					b.SetDescription(*issue.Body, config)
 				}
 				if issue.Milestone != nil {
 					b.SetMilestone(*issue.Milestone.Title)

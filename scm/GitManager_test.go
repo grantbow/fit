@@ -179,6 +179,8 @@ func TestGitManagerPurge(t *testing.T) {
 }
 
 func TestGitManagerAutoclosingGitHub(t *testing.T) {
+	var config bugs.Config
+	config.DescriptionFileName = "Description"
 	// This test is specific to gitmanager, since GitHub
 	// only supports git..
 	if git == false {
@@ -214,11 +216,11 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 	}
 
 	// Commit the file, so that we can close it..
-	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Adding commit")
+	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Adding commit", config)
 	// Delete the bug
 	os.RemoveAll(tester.GetWorkDir() + "/issues/Test-bug")
 	os.RemoveAll(tester.GetWorkDir() + "/issues/Test-Another-bug")
-	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Removal commit")
+	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Removal commit", config)
 
 	commits, err := tester.GetLogs()
 	if len(commits) != 2 || err != nil {

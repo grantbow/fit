@@ -16,10 +16,10 @@ func main() {
 	config.DescriptionFileName = "Description"
 	bugs.GetIssuesDir(config) // bugs/Directory.go
 	bugYml := ".bug.yml"
-	bugs.ConfigRead(bugYml, &config)
+	bugs.ConfigRead(bugYml, &config, bugapp.ProgramVersion())
 
 	scmoptions := make(map[string]bool)
-	_, _, err := scm.DetectSCM(scmoptions)
+	_, _, err := scm.DetectSCM(scmoptions, config)
 	if err != nil {
 		fmt.Printf("Warn: %s\n", err.Error())
 	}
@@ -57,7 +57,7 @@ func main() {
 			//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
 			bugapp.Create(osArgs[2:], config)
 			//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
-		case "commit":
+		case "commit", "save":
 			bugapp.Commit(osArgs[2:], config)
 		case "edit":
 			bugapp.Edit(osArgs[2:], config)
@@ -81,7 +81,7 @@ func main() {
 			bugapp.Close(osArgs[2:], config)
 		case "tag":
 			bugapp.Tag(osArgs[2:], config)
-		case "view", "list":
+		case "view", "list", "show", "display":
 			// bug list with no parameters shouldn't autopage,
 			// bug list with bugs to view should. So the original
 			// stdout is passed as a parameter.

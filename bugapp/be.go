@@ -37,7 +37,7 @@ func beImportComments(b bugs.Bug, directory string, includeHeaders bool) string 
 	return "---------- Comment ---------\nFrom:" + beComment.Author + "\nDate:" + beComment.Date + "\n\n" + string(data)
 }
 
-func beImportBug(identifier, issuesDir, fullbepath string) {
+func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
 	/* BE appears to store the top level data of a bug
 	   ins a json file named values with the format:
 	    {
@@ -49,7 +49,7 @@ func beImportBug(identifier, issuesDir, fullbepath string) {
 	        "time": "Tue, 12 Jan 2016 00:05:28 +0000"
 	    }
 
-	    and the description of bugs entirely in comments.
+	    and the Description of bugs entirely in comments.
 	    All we really care about is the summary so that we
 	    can get the directory name for the issues/ directory,
 	    but the severity+status can also be used as a status
@@ -91,19 +91,19 @@ func beImportBug(identifier, issuesDir, fullbepath string) {
 	dir, err := os.Open(comments)
 
 	files, err := dir.Readdir(-1)
-	var Description string
+	var DescriptionStr string
 	if len(files) > 0 && err == nil {
 		for _, file := range files {
 			if file.IsDir() {
-				Description = Description + "\n" +
+				DescriptionStr = DescriptionStr + "\n" +
 					beImportComments(b, comments+file.Name(), len(files) > 1)
 			}
 		}
 	}
-	b.SetDescription(Description)
+	b.SetDescription(DescriptionStr, config)
 	b.SetIdentifier(identifier)
 }
-func beImportBugs(prefix, issuesdir, bedir, dirname string) {
+func beImportBugs(prefix, issuesdir, bedir, dirname string, config bugs.Config) {
 	bugsdir := bedir + "/" + dirname + "/bugs"
 	dir, err := os.Open(bugsdir)
 	if err != nil {
@@ -121,7 +121,7 @@ func beImportBugs(prefix, issuesdir, bedir, dirname string) {
 			}
 			name := shortestPrefix(file.Name(), nextIdentifier, lastIdentifier, 3)
 			identifier := fmt.Sprintf("%s/%s", prefix, name)
-			beImportBug(identifier, issuesdir, bugsdir+"/"+file.Name())
+			beImportBug(identifier, issuesdir, bugsdir+"/"+file.Name(), config)
 			lastIdentifier = file.Name()
 		}
 	}
@@ -162,7 +162,7 @@ func beImport(config bugs.Config) {
 				}
 				name := shortestPrefix(file.Name(), nextIdentifier, lastIdentifier, 3)
 
-				beImportBugs(name, string(issuesDir), dir.Name(), file.Name())
+				beImportBugs(name, string(issuesDir), dir.Name(), file.Name(), config)
 				lastIdentifier = file.Name()
 			}
 		}

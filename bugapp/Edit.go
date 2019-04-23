@@ -16,12 +16,12 @@ func Edit(args argumentList, config bugs.Config) {
 	switch len(args) {
 	case 1:
 		// If there's only 1 argument, it's an issue
-		// identifier and it's editing the description.
+		// identifier and it's editing the Description.
 		// So set the variables and fallthrough to the
 		// 2 argument (editing a specific fieldname)
 		// case
 		bugID = args[0]
-		file = "Description"
+		file = config.DescriptionFileName
 		fallthrough
 	case 2:
 		// If there's exactly 2 arguments, idx and

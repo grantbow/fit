@@ -15,7 +15,7 @@ func (a HgManager) Purge(dir bugs.Directory) error {
 }
 
 // Commit gives the hg command to commit files.
-func (a HgManager) Commit(dir bugs.Directory, commitMsg string) error {
+func (a HgManager) Commit(dir bugs.Directory, commitMsg string, config bugs.Config) error {
 	cmd := exec.Command("hg", "addremove", string(dir))
 	if err := cmd.Run(); err != nil {
 		fmt.Printf("Could not add issues to be committed: %s?\n", err.Error())

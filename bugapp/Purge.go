@@ -8,7 +8,7 @@ import (
 
 // Purge is a subcommand to delete all issues.
 func Purge(config bugs.Config) {
-	scm, _, err := scm.DetectSCM(make(map[string]bool))
+	scm, _, err := scm.DetectSCM(make(map[string]bool), config)
 
 	if err != nil {
 		fmt.Printf("Error: %s\n", err.Error())

@@ -77,7 +77,8 @@ func Create(Args argumentList, config bugs.Config) {
 		bgid = bugs.GetIssuesDir(config)
 	}
 	var bug = bugs.Bug{
-		Dir: bgid + bugs.TitleToDir(strings.Join(Args, " ")),
+		Dir:                 bgid + bugs.TitleToDir(strings.Join(Args, " ")),
+		DescriptionFileName: config.DescriptionFileName,
 	}
 
 	dir := bug.GetDirectory()

@@ -8,10 +8,12 @@ import (
 )
 
 func TestBugWrite(t *testing.T) {
+	config := Config{}
+	config.DescriptionFileName = "Description"
 	var b *Bug
 	if dir, err := ioutil.TempDir("", "BugWrite"); err == nil {
 		os.Chdir(dir)
-		b = &Bug{Dir: Directory(dir + "/issues/Test-bug")}
+		b = &Bug{Dir: Directory(dir + "/issues/Test-bug"), DescriptionFileName: config.DescriptionFileName}
 		defer os.RemoveAll(dir)
 	} else {
 		t.Error("Could not get temporary directory to test bug write()")
@@ -43,6 +45,7 @@ func TestBugWrite(t *testing.T) {
 /*
 func ExampleBugWriter() {
 	config := Config{}
+	config.DescriptionFileName = "Description"
 	if b, err := New("Bug Title", config); err != nil {
 		fmt.Fprintf(b, "This is a bug report.\n")
 		fmt.Fprintf(b, "The bug will be created as necessary.\n")

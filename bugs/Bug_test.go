@@ -14,6 +14,7 @@ type tester struct {
 
 func (t *tester) Setup() {
 	config := Config{}
+	config.DescriptionFileName = "Description"
 	gdir, err := ioutil.TempDir("", "issuetest")
 	if err == nil {
 		os.Chdir(gdir)
@@ -61,6 +62,7 @@ func TestTitleToDirectory(t *testing.T) {
 func TestNewBug(t *testing.T) {
 	var gdir string
 	config := Config{}
+	config.DescriptionFileName = "Description"
 	gdir, err := ioutil.TempDir("", "newbug")
 	if err == nil {
 		os.Chdir(gdir)
@@ -83,13 +85,15 @@ func TestNewBug(t *testing.T) {
 }
 
 func TestSetDescription(t *testing.T) {
+	config := Config{}
+	config.DescriptionFileName = "Description"
 	test := tester{}
 	test.Setup()
 	defer test.Teardown()
 
 	b := test.bug
 
-	b.SetDescription("Hello, I am a bug.")
+	b.SetDescription("Hello, I am a bug.", config)
 	val, err := ioutil.ReadFile(string(b.GetDirectory()) + "/Description")
 	if err != nil {
 		t.Error("Could not read Description file")
@@ -101,16 +105,20 @@ func TestSetDescription(t *testing.T) {
 }
 
 func TestDescription(t *testing.T) {
+	config := Config{}
+	config.DescriptionFileName = "Description"
 	test := tester{}
 	test.Setup()
 	defer test.Teardown()
 
 	b := test.bug
+	b.DescriptionFileName = config.DescriptionFileName
 
 	desc := "I am yet another bug.\nWith Two Lines."
-	b.SetDescription(desc)
+	b.SetDescription(desc, config)
 
 	if b.Description() != desc+"\n" {
-		t.Error("Unexpected result from bug.Description()")
+		title := "TestDescription"
+		t.Error(fmt.Sprintf("Failed on %s:\ngot:\n%s\nbut expected:\n%s\n", title, b.Description(), desc))
 	}
 }

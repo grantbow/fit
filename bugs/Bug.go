@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"reflect"
 	"regexp"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -19,8 +21,9 @@ var ErrNotFound = errors.New("Could not find bug")
 // Bug is the type of an issue.
 // The fields are Dir and descFile.
 type Bug struct {
-	Dir      Directory
-	descFile *os.File
+	Dir                 Directory
+	descFile            *os.File
+	DescriptionFileName string
 }
 
 // Tag is the type of an issue identifier.
@@ -125,26 +128,35 @@ func (b Bug) Title(options string) string {
 
 // Description returns a string of an issue.
 func (b Bug) Description() string {
-	value, err := ioutil.ReadAll(&b)
-
-	if err != nil {
-		if err == ErrNoDescription {
-			return "No description provided.\n"
+	df := string(b.Dir) + "/" + b.DescriptionFileName
+	value := ""
+	if _, staterr := os.Stat(df); staterr == nil {
+		v, readerr := ioutil.ReadFile(df)
+		if readerr == nil {
+			value = string(v)
+		} else if perr, ok := staterr.(*os.PathError); ok {
+			switch perr.Err.(syscall.Errno) {
+			// os.PathError Op, Path, Err
+			case syscall.ENOENT:
+				return string(value)
+			default:
+				panic("Unhandled error " + fmt.Sprint(reflect.TypeOf(readerr)) + " " + readerr.Error())
+			}
 		}
-		panic("Unhandled error" + err.Error())
 	}
-
-	if string(value) == "" {
-		return "No description provided.\n"
-	}
+	//if string(value) == "" {
+	//	return "(No description provided.)\n"
+	//}
 	return string(value)
 }
 
 // SetDescription writes the Description file of an issue.
-func (b Bug) SetDescription(val string) error {
+func (b *Bug) SetDescription(val string, config Config) error {
 	dir := b.GetDirectory()
+	//fmt.Printf("aha %s\n", config.DescriptionFileName)
+	b.DescriptionFileName = config.DescriptionFileName
 
-	return ioutil.WriteFile(string(dir)+"/Description", []byte(val+"\n"), 0644)
+	return ioutil.WriteFile(string(dir)+"/"+b.DescriptionFileName, []byte(val+"\n"), 0644)
 }
 
 // RemoveTag deletes a tag file in the tags subdirectory of an issue.

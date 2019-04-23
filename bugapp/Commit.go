@@ -16,13 +16,13 @@ func Commit(args argumentList, config bugs.Config) {
 	}
 	options["use_bug_prefix"] = true // SCM will ignore this option if it doesn't know it
 
-	scm, _, err := scm.DetectSCM(options)
+	scm, _, err := scm.DetectSCM(options, config)
 	if err != nil {
 		fmt.Printf("Error: %s\n", err.Error())
 		return
 	}
 
-	err = scm.Commit(bugs.GetIssuesDir(config), "Added or removed issues with the tool \"bug\"")
+	err = scm.Commit(bugs.GetIssuesDir(config), "Added or removed issues with the tool \"bug\"", config)
 
 	if err != nil {
 		fmt.Printf("Could not commit: %s\n", err.Error())
