@@ -14,6 +14,11 @@ I worked around the issue with a mkdir.
 The test fails in a weird way due to my unusal test method.
 
 
+
+fixed - test fails in a weird way
+
+
+
 diff --git a/bugapp/Create_test.go b/bugapp/Create_test.go
 index 6b2b215..892d2d0 100644
 --- a/bugapp/Create_test.go

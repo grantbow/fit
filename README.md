@@ -204,7 +204,9 @@ The CODE_OF_CONDUCT.md is the standard offered by github and looks great.
 
 # Next Steps
 
-Much has been written about how to use and setup bug and issue tracking systems. trouble ticket system, support ticket, request management or incident ticket system.
+Your system is the beginning, not the end. Much has been written about how to
+use and setup systems to track or manage issues, software bugs, trouble
+tickets, support tickets, incident ticket or requests.
 
 How to Report Bugs Effectively by Simon Tatham
     https://www.chiark.greenend.org.uk/~sgtatham/bugs.html
