@@ -14,7 +14,4 @@ require github.com/driusan/bug/scm v0.0.0
 
 replace github.com/driusan/bug/scm => ../../grantbow/bug/scm // fork
 
-require (
-	github.com/ghodss/yaml v1.0.0
-	github.com/google/go-querystring v1.0.0 // indirect
-)
+require github.com/ghodss/yaml v1.0.0

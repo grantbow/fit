@@ -63,7 +63,7 @@ func GetIssuesDir(config Config) Directory {
 	bugapp/List.go
 	bugapp/Purge.go
 	bugapp/Pwd.go
-	bugapp/Relabel.go
+	bugapp/Retitle.go
 	bugs/Bug.go
 	bugs/Bug_test.go
 	bugs/Directory.go

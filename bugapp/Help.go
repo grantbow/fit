@@ -133,12 +133,12 @@ milestone is set) with the command "bug edit milestone BugID"
 This command will preserve the explanation when updating a priority.
 `, os.Args[0], os.Args[0])
 	case "retitle", "mv", "rename", "relabel":
-		fmt.Printf("Usage: " + os.Args[0] + " relabel BugID New Title\n\n")
+		fmt.Printf("Usage: " + os.Args[0] + " retitle BugID New Title\n\n")
 		fmt.Printf(
 			`This will change the title of BugID to "New Title". Use this
 to rename an issue.
 
-"%s mv", "%s retitle", and "%s rename" are all aliases for "%s relabel".
+"%s mv", "%s relabel", and "%s rename" are all aliases for "%s retitle".
 `, os.Args[0], os.Args[0], os.Args[0], os.Args[0])
 	case "rm", "close":
 		fmt.Printf("Usage: " + os.Args[0] + " close BugID\n")
@@ -323,7 +323,7 @@ in the current directory.
 		fmt.Printf("\tedit       Edit an existing bug\n")
 		fmt.Printf("\ttag        Tag a bug with a category\n")
 		fmt.Printf("\tidentifier Set a stable identifier for the bug\n")
-		fmt.Printf("\trelabel    Rename the title of a bug\n")
+		fmt.Printf("\tretitle    Rename the title of a bug\n")
 		fmt.Printf("\tclose      Delete an existing bug\n")
 		fmt.Printf("\tstatus     View or edit a bug's status\n")
 		fmt.Printf("\tpriority   View or edit a bug's priority\n")

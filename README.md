@@ -138,7 +138,7 @@ Issue editing commands:
 	edit       Edit an existing bug
 	tag        Tag a bug with a category
 	identifier Set a stable identifier for the bug
-	relabel    Rename the title of a bug
+	retitle    Rename the title of a bug
 	close      Delete an existing bug
 	status     View or edit a bug's status
 	priority   View or edit a bug's priority

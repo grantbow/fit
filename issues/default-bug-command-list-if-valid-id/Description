@@ -1,0 +1,13 @@
+How to reproduce:
+
+$ bug create -n test
+$ bug 1
+
+What happened?
+
+bug help because no command found
+
+What was expected?
+
+bug list 1
+

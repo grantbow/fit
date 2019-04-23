@@ -94,10 +94,10 @@ func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiff
 	os.MkdirAll("issues/Test-bug", 0755)
 	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
 	m.Commit(bugs.Directory(tester.GetWorkDir()), "Initial commit", config)
-	//runCmd("bug", "relabel", "1", "Renamed", "bug")
+	//runCmd("bug", "retitle", "1", "Renamed", "bug")
 	args := argumentList{"1", "Renamed bug"}
 	expected := "Moving .*"
-	runrelabel("scm/TestHelpers_test runtestRenameCommitsHelper", args, config, expected, t)
+	runretitle("scm/TestHelpers_test runtestRenameCommitsHelper", args, config, expected, t)
 	m.Commit(bugs.Directory(tester.GetWorkDir()), "This is a test rename", config)
 
 	tester.AssertCleanTree(t)
@@ -196,9 +196,9 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	}
 }
 
-func runrelabel(label string, args argumentList, config bugs.Config, expected string, t *testing.T) {
+func runretitle(label string, args argumentList, config bugs.Config, expected string, t *testing.T) {
 	stdout, _ := captureOutput(func() {
-		scmRelabel(args, config)
+		scmRetitle(args, config)
 	}, t)
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
@@ -241,9 +241,9 @@ func captureOutput(f func(), t *testing.T) (string, string) {
 	return string(stdOutput), string(errOutput)
 }
 
-func scmRelabel(Args argumentList, config bugs.Config) {
+func scmRetitle(Args argumentList, config bugs.Config) {
 	if len(Args) < 2 {
-		fmt.Printf("Usage: %s relabel BugID New Title\n", os.Args[0])
+		fmt.Printf("Usage: %s retitle BugID New Title\n", os.Args[0])
 		return
 	}
 
