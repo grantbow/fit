@@ -38,11 +38,14 @@ func main() {
 	// arguments that are space separated names
 	osArgs := os.Args // TODO: use an env var and assign to osArgs to setup for testing
 	//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
+	_, bugerr := bugs.LoadBugByHeuristic(osArgs[1], config) // prepare to check for osArgs==2, bugerr==nil
 	if len(osArgs) <= 1 {
 		fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
 		fmt.Printf("\nUse \"bug help\" or \"bug help <command>\" for details.\n")
 	} else if len(osArgs) >= 3 && osArgs[2] == "--help" { // bug cmd --help just like bug help cmd
 		bugapp.Help(osArgs[1])
+	} else if len(osArgs) == 2 && bugerr == nil { // bug list cmd default if found
+		bugapp.List(osArgs[1:], config)
 	} else {
 		switch osArgs[1] {
 		case "--version", "version", "-v": // subcommands without osArgs
@@ -89,6 +92,7 @@ func main() {
 		case "help":
 			fallthrough
 		default:
+			//if
 			bugapp.Help(osArgs[1:]...)
 		}
 	}

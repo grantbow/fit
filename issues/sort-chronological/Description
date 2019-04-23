@@ -1,0 +1,19 @@
+#### What did you do?
+
+$ bug list
+
+
+#### What did you expect to see?
+
+stable sort order of bugs as they are added - use chronological
+
+
+#### What did you see instead?
+
+unstable sort order, numeric ids change around too much
+
+
+#### Does this issue reproduce with the latest release?
+
+yes
+
