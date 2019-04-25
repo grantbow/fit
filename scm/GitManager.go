@@ -2,6 +2,7 @@ package scm
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/driusan/bug/bugs"
 	"io/ioutil"
@@ -197,7 +198,7 @@ func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config bu
 		// to commit.
 		// but the stdout to test could be captured
 		//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", err) // $?
-		fmt.Printf("No new issues committed.\n") // assumes this error, same for HgManager.go
+		fmt.Printf("No new issues committed.\n") // assumes this error, same for HgManager
 		return nil
 	}
 	return nil
@@ -206,4 +207,15 @@ func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config bu
 // GetSCMType returns "git".
 func (a GitManager) GetSCMType() string {
 	return "git"
+}
+
+// GetSCMIssuesUpdates returns whether the issues working tree is dirty or not
+func (a GitManager) GetSCMIssueUpdates() error { // config bugs.Config
+	cmd := exec.Command("git", "status", "--porcelain", "issues", "\":(top)\"")
+	o, _ := cmd.CombinedOutput()
+	if string(o) == "" {
+		return nil
+	} else {
+		return errors.New("Issues Files Need Staging")
+	}
 }

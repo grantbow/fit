@@ -1,16 +1,26 @@
 package scm
 
 import (
+	"errors"
 	"github.com/driusan/bug/bugs"
 	"os"
 	"strings"
 )
 
-// SCMNotFound is a struct for the new Error.
-type SCMNotFound struct{}
+type SCMNotFound struct {
+	s string
+}
 
-func (a SCMNotFound) Error() string {
-	return "No SCM found"
+func (e *SCMNotFound) Error() string {
+	return e.s
+}
+
+type SCMDirty struct {
+	s string
+}
+
+func (e *SCMDirty) Error() string {
+	return e.s
 }
 
 func walkAndSearch(startpath string, dirnames []string) (fullpath, scmtype string) {
@@ -35,7 +45,7 @@ func walkAndSearch(startpath string, dirnames []string) (fullpath, scmtype strin
 
 // DetectSCM takes options and returns an SCMHandler and directory.
 func DetectSCM(options map[string]bool, config bugs.Config) (SCMHandler, bugs.Directory, error) {
-	// First look for a Git directory
+	// First look for an SCM directory
 	wd, _ := os.Getwd()
 
 	dirFound, scmtype := walkAndSearch(wd, []string{".git", ".hg"})
@@ -53,5 +63,5 @@ func DetectSCM(options map[string]bool, config bugs.Config) (SCMHandler, bugs.Di
 		return HgManager{}, bugs.Directory(dirFound), nil
 	}
 
-	return nil, "", SCMNotFound{}
+	return nil, "", errors.New("No SCM found")
 }

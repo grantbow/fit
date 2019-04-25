@@ -7,6 +7,7 @@ type SCMHandler interface {
 	Commit(dir bugs.Directory, commitMsg string, config bugs.Config) error
 	Purge(bugs.Directory) error
 	GetSCMType() string
+	GetSCMIssueUpdates() error
 }
 
 // FileStatus type holds information about a file.

@@ -1,10 +1,29 @@
 #### What did you do?
-Facts are preferred, opinions may not.
-If possible, provide a recipe for reproducing the error.
-Fully complete, minimal examples are ideal.
-
+$ bug
 
 #### What did you expect to see?
+
+it depends on how the team member uses git for issue and non-issues.
+
+manual git command `git status issues` will show changes in the filespec
+"issues" working directory without affecting the rest of the tree.
+
+it also depends on how the team member updates their issues.
+
+without a warn-issues-dirty feature, then when running bug or git commands
+there is no warning that the issues are dirty (updated or added).
+
+For examle, `bug create -n foo` will create the directory and touch Description
+but not add the Description file to the git staging area. Also as files under
+issues are updated or created these are not automatically added to the working
+directory. Updates are easier to catch along with other files already in git.
+Getting files into git requires something manual. This gets annoying when
+adding many different issue files like I have been doing with this program.
+
+Using `git add -A issues` correctly with a filespec will add all of these at
+one time. This assumes all edits under the issues directory should be staged.
+I sometimes leave files in my working directories so having a feature to warn
+me during `bug list` and perhaps elsewhere would help.
 
 
 #### What did you see instead?

@@ -19,9 +19,10 @@ func main() {
 	bugs.ConfigRead(bugYml, &config, bugapp.ProgramVersion())
 
 	scmoptions := make(map[string]bool)
-	_, _, err := scm.DetectSCM(scmoptions, config)
-	if err != nil {
+	if handler, _, err := scm.DetectSCM(scmoptions, config); err != nil {
 		fmt.Printf("Warn: %s\n", err.Error())
+	} else if err := handler.GetSCMIssueUpdates(); err != nil {
+		fmt.Printf("%s\n", err)
 	}
 
 	if bugapp.SkipRootCheck(&os.Args) && bugs.GetRootDir(config) == "" {

@@ -26,7 +26,7 @@ func (a HgManager) Commit(dir bugs.Directory, commitMsg string, config bugs.Conf
 	// stdout and stderr not captured in HgManager_test.go runtestCommitDirtyTree()
 	if err := cmd.Run(); err != nil {
 		//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", err) // 255 when $?=1 and stdout text "nothing changed" present
-		fmt.Printf("No new issues to commit.\n") // assumes this error, same for GitManager.go
+		fmt.Printf("No new issues to commit.\n") // assumes this error, same for GitManager
 		return err
 	}
 	return nil
@@ -35,4 +35,9 @@ func (a HgManager) Commit(dir bugs.Directory, commitMsg string, config bugs.Conf
 // GetSCMType returns hg.
 func (a HgManager) GetSCMType() string {
 	return "hg"
+}
+
+// GetSCMIssuesUpdates returns in error
+func (a HgManager) GetSCMIssueUpdates() error { // config bugs.Config
+	return nil
 }
