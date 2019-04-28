@@ -50,7 +50,7 @@ func githubImport(user, repo string, config bugs.Config) {
 					b.SetDescription(*issue.Body, config)
 				}
 				if issue.Milestone != nil {
-					b.SetMilestone(*issue.Milestone.Title)
+					b.SetMilestone(*issue.Milestone.Title, config)
 				}
 				if config.ImportXmlDump == true {
 					// b.SetXml()
@@ -61,9 +61,9 @@ func githubImport(user, repo string, config bugs.Config) {
 				// Don't set a bug identifier, but put an empty line and
 				// then a GitHub identifier, so that bug commit can include
 				// "Closes ..." in the commit message.
-				b.SetIdentifier(fmt.Sprintf("\n\nGitHub:%s/%s%s%d\n", user, repo, "#", *issue.Number))
+				b.SetIdentifier(fmt.Sprintf("\n\nGitHub:%s/%s%s%d\n", user, repo, "#", *issue.Number), config)
 				for _, l := range issue.Labels {
-					b.TagBug(bugs.Tag(*l.Name))
+					b.TagBug(bugs.TagBoolTrue(*l.Name), config)
 				}
 				j := 1
 				if *issue.Comments > 0 {

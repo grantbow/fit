@@ -18,10 +18,10 @@ func Env(config bugs.Config) {
 		fmt.Printf("\n\nVCS Type:\t%s", t)
 		fmt.Printf("\n%s Directory:\t%s", t, scmdir)
 		fmt.Printf("\nNeed Staging:\t")
-		if err := vcs.GetSCMIssueUpdates(); err == nil {
+		if b, err := vcs.GetSCMIssuesUpdates(); err == nil {
 			fmt.Print("(No files in issues)")
 		} else {
-			fmt.Print("Issues")
+			fmt.Printf("Issues:\n%v", b)
 		}
 	} else {
 		fmt.Printf("\n\nVCS Type: None (purge and commit commands unavailable)")

@@ -1,6 +1,31 @@
 status
 priority
 milestone
+identifier
 
-collapse these hard coded implementations down to tag_key_value implementations
+append and collapse these hard coded implementations down to
+also read tag_key_value implementations
+
+Quite a lot of code was needed to add this feature.
+Adding the reading of both lower case and upper case keys
+should add significant ease of use in edge cases inherent
+with user-entered content like this.
+
+in the code we call each of status priority milestone and identifier
+a "field". These still have significance apart from any other key value pair.
+
+The "tags" are now either a file under /tags/ in the issue directory or
+simply tag_key_value (optionally tag_key with value contained in file)
+in the issue directory. This speeds up readability for people looking
+at the directory.
+
+Using config.TagKeyValue if adding the special four fields via command line
+they should now go into tag_key_value format. adding new "tags" with the
+configuration will write empty tag_key files already.
+I think the UI for entering values would be complicated and confusing
+so I will leave that to hand editing the files themselves.
+This seems reasonable.
+
+All edge cases are not yet fully tested but I think this will work
+even better than I imagined when starting to implement this feature.
 

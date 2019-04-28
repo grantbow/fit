@@ -38,6 +38,6 @@ func (a HgManager) GetSCMType() string {
 }
 
 // GetSCMIssuesUpdates returns in error
-func (a HgManager) GetSCMIssueUpdates() error { // config bugs.Config
-	return nil
+func (a HgManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Config
+	return []byte(""), nil
 }

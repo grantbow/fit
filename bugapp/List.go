@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-// getBugName takes an index and outputs a string.
+// getBugName takes a bug and an int index then outputs a string.
 func getBugName(b bugs.Bug, idx int) string {
 	if id := b.Identifier(); id != "" {
 		return fmt.Sprintf("Issue %s", id)
@@ -22,14 +22,14 @@ func listTags(files []os.FileInfo, args argumentList, config bugs.Config) {
 		b.LoadBug(bugs.Directory(bugs.GetIssuesDir(config) + bugs.Directory(files[idx].Name())))
 
 		for _, tag := range args {
-			if b.HasTag(bugs.Tag(tag)) {
+			if b.HasTag(bugs.TagBoolTrue(tag)) {
 				fmt.Printf("%s: %s\n", getBugName(b, idx), b.Title("tags"))
 			}
 		}
 	}
 }
 
-// List is a subcommand to output issues.
+// List is a subcommand to print issues.
 func List(args argumentList, config bugs.Config) {
 	issuesroot := bugs.GetIssuesDir(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot))
@@ -48,7 +48,7 @@ func List(args argumentList, config bugs.Config) {
 			}
 			var dir bugs.Directory = issuesroot + bugs.Directory(issue.Name())
 			b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName}
-			name := getBugName(b, idx)
+			name := getBugName(b, idx) // Issue x:
 			if wantTags == false {
 				fmt.Printf("%s: %s\n", name, b.Title(""))
 			} else {
@@ -85,5 +85,5 @@ func List(args argumentList, config bugs.Config) {
 			fmt.Printf("\n--\n\n")
 		}
 	}
-	fmt.Printf("\n")
+	//fmt.Printf("\n")
 }

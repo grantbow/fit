@@ -40,7 +40,7 @@ func TestIdUsage(t *testing.T) {
 	runid(t, "Usage: .* identifier BugID \\[value\\]\n", argumentList{})
 }
 func TestIdInvalid(t *testing.T) {
-	runid(t, "Invalid BugID: Could not find bug test\n", argumentList{"test"})
+	runid(t, "Invalid BugID: Not found test\n", argumentList{"test"})
 }
 func TestIdGenerate(t *testing.T) {
 	config := bugs.Config{}

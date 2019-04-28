@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// Directory type is a string path name.
+type Directory string
+
 // GetRootDir returns the directory containing the issues subdirectory.
 func GetRootDir(config Config) Directory {
 	dir := os.Getenv("PMIT")
@@ -71,9 +74,6 @@ func GetIssuesDir(config Config) Directory {
 	bugs/Find.go
 	*/
 }
-
-// Directory type is a string path name.
-type Directory string
 
 // GetShortName returns the directory name of a bug
 func (d Directory) GetShortName() Directory {

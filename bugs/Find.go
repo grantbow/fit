@@ -26,7 +26,7 @@ func FindBugsByTag(tags []string, config Config) []Bug {
 			bug := Bug{}
 			bug.LoadBug(Directory(root + "/issues/" + Directory(issues[idx].Name())))
 			for _, tag := range tags {
-				if bug.HasTag(Tag(tag)) {
+				if bug.HasTag(TagBoolTrue(tag)) {
 					bugs = append(bugs, bug)
 					break
 				}
@@ -41,7 +41,7 @@ func LoadBugByDirectory(dir string, config Config) (*Bug, error) {
 	root := GetRootDir(config)
 	_, err := ioutil.ReadDir(string(root) + "/issues/" + dir)
 	if err != nil {
-		return nil, BugNotFoundError("Could not find bug " + dir)
+		return nil, BugNotFoundError("Not found " + dir)
 	}
 	bug := Bug{}
 	bug.LoadBug(GetIssuesDir(config) + Directory(dir))
@@ -74,7 +74,7 @@ func LoadBugByHeuristic(id string, config Config) (*Bug, error) {
 	if candidate != nil {
 		return candidate, nil
 	}
-	return nil, BugNotFoundError("Could not find bug " + id)
+	return nil, BugNotFoundError("Not found " + id)
 }
 
 // LoadBugByStringIndex returns an issue from a string index.
@@ -131,6 +131,7 @@ func LoadBugByIndex(idx int, config Config) (*Bug, error) {
 func GetAllBugs(config Config) []Bug {
 	root := GetRootDir(config)
 	issues, _ := ioutil.ReadDir(string(root) + "/issues")
+	//fmt.Printf("%+v\n", issues)
 
 	var bugs []Bug
 	for idx, file := range issues {

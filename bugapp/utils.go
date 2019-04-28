@@ -117,7 +117,7 @@ func captureOutput(f func(), t *testing.T) (string, string) {
 
 // fieldHandler is used for Priority, Milestone and Status
 func fieldHandler(command string, args argumentList,
-	setCallback func(bugs.Bug, string) error, retrieveCallback func(bugs.Bug) string, config bugs.Config) {
+	setCallback func(bugs.Bug, string, bugs.Config) error, retrieveCallback func(bugs.Bug) string, config bugs.Config) {
 	if len(args) < 1 {
 		fmt.Printf("Usage: %s %s BugID [set %s]\n", os.Args[0], command, command)
 		return
@@ -130,7 +130,7 @@ func fieldHandler(command string, args argumentList,
 	}
 	if len(args) > 1 {
 		newValue := strings.Join(args[1:], " ")
-		err := setCallback(*b, newValue)
+		err := setCallback(*b, newValue, config)
 		if err != nil {
 			fmt.Printf("Error setting %s: %s", command, err.Error())
 		}

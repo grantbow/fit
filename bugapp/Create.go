@@ -118,19 +118,19 @@ func Create(Args argumentList, config bugs.Config) {
 	}
 
 	if tag != "" {
-		bug.TagBug(bugs.Tag(tag))
+		bug.TagBug(bugs.TagBoolTrue(tag), config)
 	}
 	if status != "" {
-		bug.SetStatus(status)
+		bug.SetStatus(status, config)
 	}
 	if priority != "" {
-		bug.SetPriority(priority)
+		bug.SetPriority(priority, config)
 	}
 	if milestone != "" {
-		bug.SetMilestone(milestone)
+		bug.SetMilestone(milestone, config)
 	}
 	if identifier != "" {
-		bug.SetIdentifier(identifier)
+		bug.SetIdentifier(identifier, config)
 	}
 	fmt.Printf("Created issue: %s\n", bug.Title(""))
 }

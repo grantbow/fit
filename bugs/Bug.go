@@ -5,18 +5,19 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"reflect"
 	"regexp"
+	"sort"
 	"strings"
 	"syscall"
 	"time"
 )
 
-// ErrNoDescription defines a new error.
-var ErrNoDescription = errors.New("No description provided")
-
-// ErrNotFound defines a new error.
-var ErrNotFound = errors.New("Could not find bug")
+type TagKeyValue struct {
+	key  string
+	file string
+}
 
 // Bug is the type of an issue.
 // The fields are Dir and descFile.
@@ -24,12 +25,14 @@ type Bug struct {
 	Dir                 Directory
 	descFile            *os.File
 	DescriptionFileName string
+	TagArray            []TagKeyValue
 }
 
-// Tag is the type of an issue identifier.
+// Tag is the first type of an issue identifier.
 // There is only a string key.
-// Values are not supported so there is an implied true/present false/absent value.
-type Tag string
+// Values were not supported originally
+// so there is an implied true/present false/absent value.
+type TagBoolTrue string
 
 // Comment is the struct type of a unit of discussion about an issue.
 // The fields are Author, Time, Body, Order and Xml.
@@ -40,6 +43,12 @@ type Comment struct {
 	Order  int
 	Xml    []byte
 }
+
+// ErrNoDescription defines a new error.
+var ErrNoDescription = errors.New("No description provided")
+
+// ErrNotFound defines a new error.
+var ErrNotFound = errors.New("Could not find bug")
 
 // TitleToDir returns a Directory from a string argument.
 func TitleToDir(title string) Directory {
@@ -159,20 +168,33 @@ func (b *Bug) SetDescription(val string, config Config) error {
 	return ioutil.WriteFile(string(dir)+"/"+b.DescriptionFileName, []byte(val+"\n"), 0644)
 }
 
-// RemoveTag deletes a tag file in the tags subdirectory of an issue.
-func (b *Bug) RemoveTag(tag Tag) {
+// RemoveTag deletes a tag file of an issue.
+func (b *Bug) RemoveTag(tag TagBoolTrue, config Config) {
 	if dir := b.GetDirectory(); dir != "" {
 		os.Remove(string(dir) + "/tags/" + string(tag))
+		files, err := filepath.Glob(string(dir) + "tag_" + string(tag) + "")
+		if err == nil {
+			for _, x := range files {
+				os.Remove(x)
+			}
+		}
 	} else {
 		fmt.Printf("Error removing tag: %s", tag)
+		// no b.Dir?
+		// this was added during debugging when this happened sometimes
+		// it's still a good idea to check just in case
 	}
 }
 
-// TagBug writes an empty tag file in the tags subdirectory of an issue.
-func (b *Bug) TagBug(tag Tag) {
+// TagBug writes an empty tag file.
+func (b *Bug) TagBug(tag TagBoolTrue, config Config) {
 	if dir := b.GetDirectory(); dir != "" {
-		os.Mkdir(string(dir)+"/tags/", 0755)
-		ioutil.WriteFile(string(dir)+"/tags/"+string(tag), []byte(""), 0644)
+		if config.TagKeyValue == true {
+			ioutil.WriteFile(string(dir)+"/tag_"+string(tag), []byte(""), 0644)
+		} else {
+			os.Mkdir(string(dir)+"/tags/", 0755)
+			ioutil.WriteFile(string(dir)+"/tags/"+string(tag), []byte(""), 0644)
+		}
 	} else {
 		fmt.Printf("Error tagging bug: %s", tag)
 	}
@@ -232,24 +254,19 @@ func (b Bug) ViewBug() {
 
 }
 
-// StringTags outputs tags of an issue.
+// StringTags gets all Tags and returns []string.
 func (b Bug) StringTags() []string {
-	dir := b.GetDirectory()
-	dir += "/tags/"
-	issues, err := ioutil.ReadDir(string(dir))
-	if err != nil {
-		return nil
+	tags := b.Tags()
+	tagout := []string{}
+	for _, tag := range tags {
+		tagout = append(tagout, string(tag))
 	}
-
-	tags := make([]string, 0, len(issues))
-	for _, issue := range issues {
-		tags = append(tags, issue.Name())
-	}
-	return tags
+	sort.Strings(tagout)
+	return tagout
 }
 
 // HasTag returns if an issue is assigned a tag.
-func (b Bug) HasTag(tag Tag) bool {
+func (b Bug) HasTag(tag TagBoolTrue) bool {
 	allTags := b.Tags()
 	for _, bugTag := range allTags {
 		if bugTag == tag {
@@ -259,56 +276,229 @@ func (b Bug) HasTag(tag Tag) bool {
 	return false
 }
 
-// Tags returns an array of assigned tags.
-func (b Bug) Tags() []Tag {
+// created b.getTag for similar needs of {bugs/Bug.go:Tags, bugs/Bug.go:setField}
+
+// getTag takes a file name, returns the key, value,
+// bool if value in name,
+// bool if value in file contents, error
+func (b Bug) getTag(abspath string) (string, string, bool, bool, error) {
 	dir := b.GetDirectory()
-	dir += "/tags/"
-	issues, err := ioutil.ReadDir(string(dir))
-	if err != nil {
+	//hit := withtagsubdirfile.Name() // simple for tags subdir
+	//   aka abspath
+	key := ""
+	value := ""
+	tag_name := false
+	tag_contents := false
+	//var presentLines []string
+	segments := strings.Split(abspath, "/") // path separator
+	parts := strings.Split(segments[len(segments)-1], "_")
+	if len(parts) <= 1 {
+		return key, value, tag_name, tag_contents, errors.New("tag has no key or value")
+	} else if len(parts) == 2 {
+		key = parts[1]
+		field, err := ioutil.ReadFile(string(dir) + "/tag_")
+		if err == nil {
+			value = ([]string(strings.Split(string(field), "\n")))[0] // tag_Status file contents overrides "Status" file contents
+			// assumes value is ok, not false
+			tag_contents = true
+		}
+	} else if len(parts) >= 3 {
+		key = parts[1] // tag_Status_ file overrides "Status" file contents
+		//presentLines = append(presentLines, strings.Join(parts[2:], "_")) // tag_Status_ file overrides "Status" file contents
+		value = strings.Join(parts[2:], "_") // tag_Status_ file overrides "Status" file contents
+		// assumes value is ok, not false
+		tag_name = true
+	}
+	if value == "false" {
+		return "", "", false, false, errors.New("tag has no key or value")
+	} else {
+		return strings.ToLower(key), strings.ToLower(value), tag_name, tag_contents, nil // key, value, tag_name, tag_contents, err
+	}
+}
+
+// Tags returns a bug's array of tags.
+func (b Bug) Tags() []TagBoolTrue {
+	dir := b.GetDirectory()
+	hit := ""
+	tagsdir := dir + "/tags/"
+	withtagsubdir, errsubdir := ioutil.ReadDir(string(tagsdir))      // returns []os.FileInfo
+	withtagfile, errtagfile := filepath.Glob(string(dir) + "/tag_*") // returns []string
+	if errsubdir != nil && errtagfile != nil {
 		return nil
 	}
 
-	tags := make([]Tag, 0, len(issues))
-	for _, issue := range issues {
-		tags = append(tags, Tag(issue.Name()))
+	totallength := len(withtagsubdir) + len(withtagfile) // could be len() higher for tag files
+	tags := make([]string, 0, totallength)
+	tagsfound := make([]string, 0, totallength)
+	//fmt.Printf("withtagsubdir %v\n", withtagsubdir)
+	for _, withtagsubdirfile := range withtagsubdir {
+		hit = withtagsubdirfile.Name()
+		tags = append(tags, hit)
+		tagsfound = append(tagsfound, hit)
 	}
-	return tags
+	//fmt.Printf("withtagfile %v\n", withtagfile)
+	for _, withtagfilefile := range withtagfile {
+		key, value, _, _, err := b.getTag(withtagfilefile)
+		//hit = key
+		//fmt.Printf("key %v value %v e %v\n", key, value, err)
+		if err == nil && value != "false" {
+			if !findArrayString(tagsfound, key) {
+				// only add unique TagBoolTrue
+				tags = append(tags, key)
+			}
+		}
+	}
+	sort.Strings(tags)
 
+	tagtags := make([]TagBoolTrue, 0, totallength)
+	for _, x := range tags {
+		tagtags = append(tagtags, TagBoolTrue(x))
+	}
+	return tagtags
+}
+
+//type byString []string
+//func (t byString) Len() int {
+//	return string(t)
+//}
+//func (t byString) Swap(i, j string) {
+//	t[i], t[j] = t[j], t[i]
+//}
+//func (t byString) Less(i, j string) bool {
+//	return t[i] < t[j]
+//}
+
+//type byString []string
+//func (t byString) Len() int {
+//	return string(t)
+//}
+//func (t byString) Swap(i, j string) {
+//	t[i], t[j] = t[j], t[i]
+//}
+//func (t byString) Less(i, j string) bool {
+//	return t[i] < t[j]
+//}
+
+// findArrayString returns a bool if looking is an element of arr.
+func findArrayString(arr []string, looking string) bool {
+	for loop, _ := range arr {
+		if arr[loop] == looking {
+			return true
+		}
+	}
+	return false
 }
 
 // getField reads and returns the string value from the file of an issue.
 func (b Bug) getField(fieldName string) string {
-	dir := b.GetDirectory()
-	field, err := ioutil.ReadFile(string(dir) + "/" + fieldName)
-	if err != nil {
-		return ""
-	}
-	lines := strings.Split(string(field), "\n")
+	// TODO: add tag_ files?
+	// also checks the ToLower filedName via func getLines
+	lines := b.getLines(fieldName)
 	if len(lines) > 0 {
 		return strings.TrimSpace(lines[0])
+	} else {
+		return ""
 	}
-	return ""
 }
 
-// setField writes the string value to the file of an issue.
-func (b Bug) setField(fieldName, value string) error {
-	dir := b.GetDirectory()
-	oldValue, err := ioutil.ReadFile(string(dir) + "/" + fieldName)
-	var oldLines []string
+// getLines does the work for getField with extra lines.
+func (b Bug) getLines(fieldName string) []string {
+	dirr := b.GetDirectory()
+	dir := string(dirr)
+	lines := []string{}
+	// try (F)ieldName
+	field, err := ioutil.ReadFile(dir + "/" + fieldName)
 	if err == nil {
-		oldLines = strings.Split(string(oldValue), "\n")
+		lines = strings.Split(string(field), "\n")
+		return lines
 	}
+	// try lower (f)ieldname
+	field, err = ioutil.ReadFile(dir + "/" + strings.ToLower(fieldName))
+	if err == nil {
+		lines = strings.Split(string(field), "\n")
+		return lines
+	}
+	// try tag_(K)ey_value
+	_, value, _, _, err := b.getTag(dir + "/tag_" + fieldName)
+	if err == nil {
+		lines = []string{value}
+		return lines
+	}
+	// try tag_(k)ey_value
+	_, value, _, _, err = b.getTag(dir + "/tag_" + strings.ToLower(fieldName))
+	if err == nil {
+		lines = []string{value}
+		return lines
+	}
+	// try tag_(k)ey file contents
+	field, err = ioutil.ReadFile(dir + "/tag_" + fieldName)
+	if err == nil {
+		lines = strings.Split(string(field), "\n")
+		return lines
+	}
+	// try tag_(K)ey file contents
+	field, err = ioutil.ReadFile(dir + "/tag_" + strings.ToLower(fieldName))
+	if err == nil {
+		lines = strings.Split(string(field), "\n")
+		return lines
+	}
+	return lines
+}
+
+//key, value, _, _, err := getField(withtagfile[withtagfilefile], string(dir))
+
+// setField writes the string value to the file of an issue.
+func (b Bug) setField(fieldName string, value string, config Config) error { // TODO: complete func for config tag files : paused with tag_name, tag_contents, file_contents
+	// using Status for fielName string example in comments
+	dir := b.GetDirectory()
+	//possible locations
+	tag_name := false
+	tag_contents := false
+	file_contents := false
+	// try "Status" file
+	presentLines := b.getLines(fieldName) // var presentLines []string
+	if len(presentLines) > 0 {
+		file_contents = true
+	}
+	// try tag_Status* files
+	withtagfile, errtagfile := filepath.Glob(string(dir) + "/tag_" + fieldName + "*") // returns []string
+	errfind := errtagfile
+	// two cases, ie tag_Status_closed or tag_Status contains closed
+	if errtagfile == nil {
+		for _, withtagfilefile := range withtagfile {
+			presentvalue := ""
+			_, presentvalue, tag_name, tag_contents, errfind = b.getTag(withtagfilefile)
+			if errfind == nil {
+				presentLines = []string{presentvalue}
+			}
+			//segments := strings.Split(withtagfile[f], "/") // path separator
+			//parts := strings.Split(segments[len(segments)-1], "_")
+			//if len(parts) == 2 {
+			//	field, errpresent = ioutil.ReadFile(string(dir) + "/tag_" + fieldName)
+			//	if errpresent == nil {
+			//		presentLines = strings.Split(string(field), "\n") // tag_ file contents overrides "Status" file contents
+			//		tag_contents = true
+			//	}
+			//} else if len(parts) >= 3 {
+			//	presentLines = append(presentLines, strings.Join(parts[2:], "_")) // tag_ file overrides "Status" file contents
+			//	tag_name = true
+			//}
+		}
+	}
+	_ = tag_name
+	_ = tag_contents
+	_ = file_contents
 
 	newValue := ""
-	if len(oldLines) >= 1 {
-		// If there were 0 or 1 old lines, overwrite them
-		oldLines[0] = value
-		newValue = strings.Join(oldLines, "\n")
+	if len(presentLines) >= 1 {
+		// If there were 0 or 1 present lines, overwrite 1 and maintain the rest
+		presentLines[0] = value
+		newValue = strings.Join(presentLines, "\n")
 	} else {
 		newValue = value
 	}
 
-	err = ioutil.WriteFile(string(dir)+"/"+fieldName, []byte(newValue), 0644)
+	err := ioutil.WriteFile(string(dir)+"/"+fieldName, []byte(newValue), 0644)
 	if err != nil {
 		return err
 	}
@@ -321,8 +511,8 @@ func (b Bug) Status() string {
 }
 
 // SetStatus writes the Status file to an issue.
-func (b Bug) SetStatus(newStatus string) error {
-	return b.setField("Status", newStatus)
+func (b Bug) SetStatus(newStatus string, config Config) error {
+	return b.setField("Status", newStatus, config)
 }
 
 // Priority returns the string from the Priority file of an issue.
@@ -331,8 +521,8 @@ func (b Bug) Priority() string {
 }
 
 // SetPriority writes the Priority file to an issue.
-func (b Bug) SetPriority(newValue string) error {
-	return b.setField("Priority", newValue)
+func (b Bug) SetPriority(newValue string, config Config) error {
+	return b.setField("Priority", newValue, config)
 }
 
 // Milestone returns the string from the Milestone file of an issue.
@@ -341,8 +531,8 @@ func (b Bug) Milestone() string {
 }
 
 // SetMilestone writes the Milestone file to an issue.
-func (b Bug) SetMilestone(newValue string) error {
-	return b.setField("Milestone", newValue)
+func (b Bug) SetMilestone(newValue string, config Config) error {
+	return b.setField("Milestone", newValue, config)
 }
 
 // Identifier returns the string from the Identifier file of an issue.
@@ -351,8 +541,8 @@ func (b Bug) Identifier() string {
 }
 
 // SetIdentifier writes the Identifier file to an issue.
-func (b Bug) SetIdentifier(newValue string) error {
-	return b.setField("Identifier", newValue)
+func (b Bug) SetIdentifier(newValue string, config Config) error {
+	return b.setField("Identifier", newValue, config)
 }
 
 // New assigns and writes an issue.

@@ -210,12 +210,16 @@ func (a GitManager) GetSCMType() string {
 }
 
 // GetSCMIssuesUpdates returns whether the issues working tree is dirty or not
-func (a GitManager) GetSCMIssueUpdates() error { // config bugs.Config
-	cmd := exec.Command("git", "status", "--porcelain", "issues", "\":(top)\"")
+func (a GitManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Config
+	cmd := exec.Command("git", "status", "--porcelain", "-u", "issues", "\":(top)\"")
+	// --porcelain output format
+	// -u shows all unstaged files, not just directories
+	// issues is the directory off of the git repo to show
+	// the ":(top)" shows full paths when not at the git root directory
 	o, _ := cmd.CombinedOutput()
 	if string(o) == "" {
-		return nil
+		return []byte(""), nil
 	} else {
-		return errors.New("Issues Files Need Staging")
+		return o, errors.New("Files In issues/ Need Committing")
 	}
 }

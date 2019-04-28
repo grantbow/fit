@@ -13,18 +13,20 @@ var bugargtests = []struct {
 	input  string
 	output string
 }{
-	//{"", `^Warn:`},
 	{"", ``},
+	//{"", `^Warn:`},
 	{"--version", ``},
 	{"pwd", ``},
 	{"env", ``},
-	{"find", `Usage:`},
-	{"status", `Usage:`},
+	{"find", ``},
+	//{"find", `Usage:`},
+	{"status", ``},
+	//{"status", `Usage:`},
 	{"list", ``},
 	{"help", ``},
 	//{"help", `^Warn:`},
-	//{"pwd --help aha yes", `^Warn:`},
 	{"pwd --help aha yes", ``},
+	//{"pwd --help aha yes", `^Warn:`},
 }
 
 func TestBugArgParser(t *testing.T) {

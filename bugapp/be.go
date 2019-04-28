@@ -84,7 +84,7 @@ func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
 		os.Mkdir(string(dir), 0755)
 	}
 	if beBug.Status != "" && beBug.Severity != "" {
-		b.SetStatus(beBug.Status + ":" + beBug.Severity)
+		b.SetStatus(beBug.Status+":"+beBug.Severity, config)
 	}
 
 	comments := fullbepath + "/comments/"
@@ -101,7 +101,7 @@ func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
 		}
 	}
 	b.SetDescription(DescriptionStr, config)
-	b.SetIdentifier(identifier)
+	b.SetIdentifier(identifier, config)
 }
 func beImportBugs(prefix, issuesdir, bedir, dirname string, config bugs.Config) {
 	bugsdir := bedir + "/" + dirname + "/bugs"

@@ -21,10 +21,12 @@ type Config struct {
 	ImportXmlDump bool `json:"ImportXmlDump"`
 	// import comments together or separate files
 	ImportCommentsTogether bool `json:"ImportCommentsTogether"`
-	// Appends to the program version
+	// append to the program version
 	ProgramVersion string `json:"ProgramVersion"`
-	// allows overriding the default file name
+	// override the default file name
 	DescriptionFileName string `json:"DescriptionFileName"`
+	// tag_key_value or tag subdir (default)
+	TagKeyValue bool `json:"TagKeyValue"`
 }
 
 // ErrNoConfig is a new error.
@@ -67,6 +69,13 @@ func ConfigRead(bugYml string, c *Config, progVersion string) (err error) {
 			c.DescriptionFileName = temp.DescriptionFileName
 		} else {
 			c.DescriptionFileName = "Description"
+		}
+		//* TagKeyValue: true or false,
+		//      Default tags subdir
+		if temp.TagKeyValue {
+			c.TagKeyValue = true
+		} else {
+			c.TagKeyValue = false
 		}
 	}
 	return nil

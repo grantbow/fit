@@ -33,7 +33,7 @@ func Identifier(args argumentList, config bugs.Config) {
 		} else {
 			newValue = strings.Join(args[1:], " ")
 		}
-		err := b.SetIdentifier(newValue)
+		err := b.SetIdentifier(newValue, config)
 		if err != nil {
 			fmt.Printf("Error setting identifier: %s", err.Error())
 		}

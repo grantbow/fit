@@ -18,14 +18,14 @@ func TestFindBugsByTag(t *testing.T) {
 	if err != nil {
 		panic("Unexpected error creating bug find me")
 	}
-	c.TagBug("hit")
-	c.SetIdentifier("special")
+	c.TagBug("hit", config)
+	c.SetIdentifier("special", config)
 
 	d, errd := New("hiding", config)
 	if errd != nil {
 		panic("Unexpected error creating bug hiding")
 	}
-	d.TagBug("miss")
+	d.TagBug("miss", config)
 
 	a := FindBugsByTag([]string{"tag"}, config)
 	if len(a) != 0 {

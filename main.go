@@ -19,10 +19,11 @@ func main() {
 	bugs.ConfigRead(bugYml, &config, bugapp.ProgramVersion())
 
 	scmoptions := make(map[string]bool)
-	if handler, _, err := scm.DetectSCM(scmoptions, config); err != nil {
-		fmt.Printf("Warn: %s\n", err.Error())
-	} else if err := handler.GetSCMIssueUpdates(); err != nil {
-		fmt.Printf("%s\n", err)
+	handler, _, herr := scm.DetectSCM(scmoptions, config)
+	if herr != nil {
+		fmt.Printf("Warn: %s\n", herr.Error())
+	} else if _, err := handler.GetSCMIssuesUpdates(); err != nil {
+		fmt.Printf("Warn: %s\n", err)
 	}
 
 	if bugapp.SkipRootCheck(&os.Args) && bugs.GetRootDir(config) == "" {
@@ -39,14 +40,11 @@ func main() {
 	// arguments that are space separated names
 	osArgs := os.Args // TODO: use an env var and assign to osArgs to setup for testing
 	//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
-	_, bugerr := bugs.LoadBugByHeuristic(osArgs[1], config) // prepare to check for osArgs==2, bugerr==nil
 	if len(osArgs) <= 1 {
 		fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
 		fmt.Printf("\nUse \"bug help\" or \"bug help <command>\" for details.\n")
 	} else if len(osArgs) >= 3 && osArgs[2] == "--help" { // bug cmd --help just like bug help cmd
 		bugapp.Help(osArgs[1])
-	} else if len(osArgs) == 2 && bugerr == nil { // bug list cmd default if found
-		bugapp.List(osArgs[1:], config)
 	} else {
 		switch osArgs[1] {
 		case "--version", "version", "-v": // subcommands without osArgs
@@ -57,6 +55,16 @@ func main() {
 			bugapp.Env(config)
 		case "purge":
 			bugapp.Purge(config)
+		case "tagsassigned":
+			bugapp.TagsAssigned(config)
+		case "tagsnone":
+			bugapp.TagsNone(config)
+		case "staging":
+			if b, err := handler.GetSCMIssuesUpdates(); err != nil {
+				fmt.Printf("Files in issues/ need committing, see $ git status --porcelain -u issues \":top\"\n%v\n", string(b))
+			} else {
+				fmt.Printf("No files in issues/ need committing, see $ git status --porcelain -u issues \":top\"\n")
+			}
 		case "add", "new", "create": // subcommands with    osArgs
 			//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
 			bugapp.Create(osArgs[2:], config)
@@ -94,7 +102,15 @@ func main() {
 			fallthrough
 		default:
 			//if
-			bugapp.Help(osArgs[1:]...)
+			if len(osArgs) == 2 {
+				buglist, _ := bugs.LoadBugByHeuristic(osArgs[1], config)
+				fmt.Printf("%+v\n", buglist)
+				if buglist != nil { // || ae, ok := bugerr.(bugs.ErrNotFound); ! ok { // bug list when possible, not help
+					bugapp.List(osArgs[1:], config)
+				} else {
+					bugapp.Help(osArgs[1:]...)
+				}
+			}
 		}
 	}
 }
