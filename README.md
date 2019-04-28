@@ -136,7 +136,7 @@ Status/reading commands:
 Issue editing commands:
 	create     File a new bug
 	edit       Edit an existing bug
-	tag        Tag a bug with a category
+	tag        Tag a bug
 	identifier Set a stable identifier for the bug
 	retitle    Rename the title of a bug
 	close      Delete an existing bug

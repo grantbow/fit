@@ -321,7 +321,7 @@ in the current directory.
 		fmt.Printf("\nIssue editing commands:\n")
 		fmt.Printf("\tcreate     File a new bug\n")
 		fmt.Printf("\tedit       Edit an existing bug\n")
-		fmt.Printf("\ttag        Tag a bug with a category\n")
+		fmt.Printf("\ttag        Tag a bug\n")
 		fmt.Printf("\tidentifier Set a stable identifier for the bug\n")
 		fmt.Printf("\tretitle    Rename the title of a bug\n")
 		fmt.Printf("\tclose      Delete an existing bug\n")
