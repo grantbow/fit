@@ -13,15 +13,24 @@ independently of the VCS.
 I don't know about hg or other VCS but a git plugin run during the post-receive
 hook exists: git-multimail.py
 
-The recommended implementation of this is a python override of
-get_revision_recipients() as described on line 2497 of
+This is a tool distributed with git and developed at
+https://github.com/git-multimail/git-multimail
+
+The recommended implementation is a python override of
+get_revision_recipients() as described on line 2555 of
 https://github.com/git/git/blob/master/contrib/hooks/multimail/git_multimail.py
+as of release 1.5.0.
 
-The file post.receive.example has just such python overrides.
+The contrib/hooks/multimail/post.receive.example file has just such python
+overrides.
 
-If a python implementation is not desired configurable exerimental a feature
-multimailhook.refFilterInclusionRegex of git-multimail.py hook. It matches
+If a python implementation is not desired a configurable exerimental feature
+multimailhook.refFilterInclusionRegex is part of git-multimail.py. It matches
 against complete refnames and could match against just issue path names.
+
+The multimail/README.rst has a section "multimailhook.refFilterInclusionRegex,
+multimailhook.refFilterExclusionRegex, multimailhook.refFilterDoSendRegex,
+multimailhook.refFilterDontSendRegex" that covers the inclusion regex.
 
 github and other systems built on top of VCS have their own notification
 systems.

@@ -8,15 +8,17 @@ import (
 // Help is a subcommand to describe the program and it's subcommands.
 func Help(args ...string) {
 	var cmd string
-	if args == nil {
+	if args == nil || len(args) == 0 {
 		cmd = "help"
-	} else if len(args) <= 1 {
-		cmd = "help"
-	} else if args[1] == "help" {
-		cmd = args[2]
+	} else if len(args) == 1 {
+		//cmd = "help"
+		cmd = args[0]
+	} else if len(args) == 2 && (args[1] == "help" || args[1] == "--help") {
+		cmd = args[0]
 	} else {
 		cmd = args[1]
 	}
+	fmt.Printf("cmd %v\n", cmd)
 	switch cmd {
 	case "add", "new", "create":
 		fmt.Printf("Usage: " + os.Args[0] + " create [-n] [options] Issue Title\n\n")

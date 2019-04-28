@@ -39,11 +39,12 @@ func main() {
 	// because of subcommands and
 	// arguments that are space separated names
 	osArgs := os.Args // TODO: use an env var and assign to osArgs to setup for testing
-	//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
+	//fmt.Printf("A %s %#v\n", "osArgs: ", osArgs)
 	if len(osArgs) <= 1 {
 		fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
 		fmt.Printf("\nUse \"bug help\" or \"bug help <command>\" for details.\n")
-	} else if len(osArgs) >= 3 && osArgs[2] == "--help" { // bug cmd --help just like bug help cmd
+	} else if len(osArgs) >= 3 && (osArgs[2] == "--help" || osArgs[2] == "help") { // bug cmd --help just like bug help cmd
+		//fmt.Printf("B %s %#v\n", "osArgs: ", osArgs)
 		bugapp.Help(osArgs[1])
 	} else {
 		switch osArgs[1] {
@@ -98,13 +99,14 @@ func main() {
 			// bug list with bugs to view should. So the original
 			// stdout is passed as a parameter.
 			bugapp.List(osArgs[2:], config)
-		case "help":
-			fallthrough
+		case "help", "--help":
+			//fmt.Printf("C %s %#v\n", "osArgs: ", osArgs)
+			bugapp.Help(osArgs[2])
 		default:
 			//if
 			if len(osArgs) == 2 {
 				buglist, _ := bugs.LoadBugByHeuristic(osArgs[1], config)
-				fmt.Printf("%+v\n", buglist)
+				//fmt.Printf("%+v\n", buglist)
 				if buglist != nil { // || ae, ok := bugerr.(bugs.ErrNotFound); ! ok { // bug list when possible, not help
 					bugapp.List(osArgs[1:], config)
 				} else {

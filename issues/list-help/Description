@@ -1,0 +1,22 @@
+#### What did you do?
+$ bug --help list
+
+#### What did you expect to see?
+
+detailed help
+
+
+#### What did you see instead?
+
+no output
+
+
+#### Does this issue reproduce with the latest release?
+
+yes
+
+
+
+new code added for both main.go and bugapp/Help.go
+to interpret the parameters better.
+
