@@ -4,95 +4,113 @@
 
 bug helps manage plain text issue directories working with git or mercurial.
 
-https://github.com/grantbow/bug/wiki
+** TOC:**
+<!-- toc -->
+- [Goal](#goal)
+- [Getting Started](#getting-started)
+  * [Layout](#layout)
+  * [Installation](#installation)
+  * [Configuration](#configuration)
+  * [Hooks](#hooks)
+  * [Sample Usage](#sample-usage)
+- [History](#history)
+- [Next Steps](#next-steps)
+  * [Feedback](#feedback)
 
-# Goal
-# Layout
-# Installation
-# Configuration
-# Hooks
-# Sample Usage
-# History
-# Feedback
-# Next Steps
+<!-- tocstop -->
 
-# Goal
+## Goal
 
 The goal is to use human readable issue directories and files similar to how an
 organized person (see FAQ.md) would keep track of issues beyond text files or
 spreadsheets. This program streamlines working with
 [issues](https://en.wikipedia.org/wiki/Issue_tracking_system) and [version
-control](https://en.wikipedia.org/wiki/Version_control)
+control](https://en.wikipedia.org/wiki/Version_control)_
 
-bug saves issues using Filesystem Issue Tracker (FIT) conventions/format.
-bug works well with both git and mercurial distributed version control but now
-works more closely with git.
+bug saves issues using Filesystem Issue Tracker (see FIT.md)
+conventions/format. bug works well with both git and mercurial distributed
+version control. The git features are now more advanced.
 
-bug can be run as a git subcommand such as `bug` or `issue`.
+bug can be aliased as a git subcommand such as `bug` or `issue`.
 
-# Layout
+## Getting Started
 
-An `issues/` directory holds one (descriptive) directory per issue. bug
-maintains the nearest `issues/` directory to your current working directory.
-There can be more than one. bug can commit (or remove) issues from versioning.
-Unlike many other issue systems, bug issues naturally branch and merge along
-with the rest of your versioned files.
+### Layout
 
-Filesystem Issue Tracker (FIT) conventions/format are a set of suggestions for
+Filesystem Issue Tracker (FIT.md) conventions/format are a set of suggestions for
 storing issues, one directory/folder per issue with plain text file details.
 
-# Installation
+An `issues/` directory holds one (descriptively titled) directory per issue.
+The "Description" file is the only text needed providing the details. Optional
+tag_key_value files assign meta data.
 
-If you have [go installed](https://golang.org/doc/install), install the latest version with:
+bug maintains the nearest `issues/` directory to your current working directory
+or it's parent directories. There can be more than one. bug can commit (or
+remove) issues from versioning. Unlike many other issue systems, bug issues
+naturally branch and merge along with the rest of your versioned files.
 
-`GO111MODULE=on go get github.com/grantbow/bug`
+### Installation
 
-The environment variable enables golang 1.11 module support.
+After you have [go installed](https://golang.org/doc/install), install the
+latest version of bug with:
+
+`GO111MODULE=on go install github.com/grantbow/bug`
 
 Make sure `$GOPATH/bin` or `$GOBIN` are in your path (or copy
 the "bug" binary somewhere that is.)
 
-Using bug with git can be simplified to work together with git on the command
-line. You can run bug as a git subcommand like `git bug` or `git issue`. This
-[chapter about git
+The environment variable GO111MODULE changes how your golang works by enabling
+golang 1.11 module support required for this version of bug. The default in
+golang 1.12 is still "auto" but golang 1.13 is expected to default to "on".
+
+Working with bug and git via the command line can be simplified. You can run
+bug as a git subcommand like `git bug` or `git issue`. This [chapter about git
 aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) describes how
-to set them up. It is part of the Pro Git book available online. Simply add it
-to your .gitconfig manually or:
+to set them up. It is part of the Pro Git book available for free online.
+Simply add the alias to your .gitconfig or edit your .gitconfig.
 
 `git config --global alias.issue !/path/to/bug`
 
-This adds to your .gitconfig:
+This adds to your $HOME/.gitconfig:
 
 `[alias]
     issue = !/path/to/bug`
 
-# Configuration
+### Configuration
 
 Settings can be read from an optional config file .bug.yml placed next to the
-closest issues directory. Current options include:
+issues directory. Current options include:
 
     * DefaultDescriptionFile: string,
+          Default is ""
           when doing bug {add|new|create}
           first copy this file name to Description
           recommended: issues/Default
     * ImportXmlDump: true or false, 
-          during import, save raw xml files
           Default is false.
+          during import, save raw xml files
     * ImportCommentsTogether: true or false,
+          Default is false.
           during import, commments save together as one file
           instead of one comment per file.
-          Default is false.
     * ProgramVersion: string
-          used within the program but can be set when system is customized.
-    * DescriptionFileName: string (in progress)
-          defaults to "Description".
+          Default is ""
+          String appended to the version of the program to
+          identify customization.
+    * DescriptionFileName: string
+          Default is "Description".
           The name is one of the few imposed limitations.
           This configuration allows overriding the name used in your system.
+	* TagKeyValue: true or false
+          Default is false.
+          writes tags in tag_key_value format (true)
+          rather than .../tag/key without values.
+          tags in both forms are read automatically.
           
-The bug implementation of FIT is (almost) the simplest issue system that can
+The bug implementation of FIT (FIT.md) is (almost) the simplest issue system that can
 still work. It differs from other distributed, versioned, filesystem issue
 tracking tools in several ways. Human readable plain text files are still
-easily viewed, edited and understood.  Standard tools are used and further
+easily viewed, edited and understood. Standard tools are used and further
 minimize context switching between systems. bug also supports multiple
 `issues/` directories throughout the directory tree.
 
@@ -100,13 +118,13 @@ Other issue systems use databases, hidden directories or hidden branches. While
 these may be useful techniques in certain circumstances they do not seem
 necessary and obfuscate how to access the valuable data.
 
-# Hooks
+### Hooks
 
 Event based automation can be added through git or mercurial. We created a
 hooks directory and look forward to seeing what code teams use and contribute.
 Adapting hooks for both git and hg would be appreciated.
 
-# Sample Usage
+### Sample Usage
 
 If an environment variable named PMIT is set, that directory will be used to
 create and maintain issues as an 'issues' directory, otherwise the bug command
@@ -175,15 +193,37 @@ Issue 1: Need better formating for README
 Issue 2: Need better help
 ```
 
-# History
+## History
 
 bug is the program written in Go developed by Dave MacFarlane (driusan).
-Filesystem Issue Tracker (FIT) is the new name for the Poor Man's Issue Tracker
+Filesystem Issue Tracker (FIT.md) is the new name for the Poor Man's Issue Tracker
 (PMIT) storage system also developed by driusan. For his demo from 2016, see
 [driusan's talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
 GolangMontreal.org conference, GoMTL-01.
 
-# Feedback
+## Next Steps
+
+* [FIT.md](FIT.md)
+* [FAQ.md](FAQ.md)
+* [CONTRIBUTING.md](CONTRUBUTING.md)
+* [CODE_OF_CONDUCT.md](CODE_OF_CONDICT.md)
+* [SUPPORT.md](SUPPORT.md)
+* https://github.com/grantbow/bug/wiki
+
+Your system is the beginning, not the end. Much has been written about how to
+use and setup systems to track or manage issues, software bugs, trouble
+tickets, support tickets, incident ticket or requests.
+
+How to Report Bugs Effectively by Simon Tatham
+    https://www.chiark.greenend.org.uk/~sgtatham/bugs.html
+
+While I hesitate to include this URL and while it uses very colloquial
+terminology the content could help many people.
+    http://www.catb.org/esr/faqs/smart-questions.html
+
+### Feedback
+
+We would like to hear about how you use this system.
 
 I would like to work with others and would appreciate feedback at
 grantbow+bug@gmail.com.
@@ -201,17 +241,4 @@ As mentioned in SUPPORT.md questions are encouraged via email, issues or pull
 requests for now.
 
 The CODE_OF_CONDUCT.md is the standard offered by github and looks great.
-
-# Next Steps
-
-Your system is the beginning, not the end. Much has been written about how to
-use and setup systems to track or manage issues, software bugs, trouble
-tickets, support tickets, incident ticket or requests.
-
-How to Report Bugs Effectively by Simon Tatham
-    https://www.chiark.greenend.org.uk/~sgtatham/bugs.html
-
-While I hesitate to include this URL and while it uses very colloquial
-terminology the content could help many people.
-    http://www.catb.org/esr/faqs/smart-questions.html
 
