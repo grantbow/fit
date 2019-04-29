@@ -96,8 +96,8 @@ func (d Directory) ToTitle() string {
 	})
 }
 
-// LastModified returns the last modified time from the file system.
-func (d Directory) LastModified() time.Time {
+// ModTime returns the last modified time from the file system.
+func (d Directory) ModTime() time.Time {
 	var t time.Time
 	stat, err := os.Stat(string(d))
 	if err != nil {
@@ -115,7 +115,7 @@ func (d Directory) LastModified() time.Time {
 	}
 	for _, file := range files {
 		if file.IsDir() {
-			mtime := (d + "/" + Directory(file.Name())).LastModified()
+			mtime := (d + "/" + Directory(file.Name())).ModTime()
 			if mtime.After(t) {
 				t = mtime
 			}

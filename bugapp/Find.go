@@ -5,12 +5,14 @@ import (
 	"github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
+	"sort"
 )
 
 // find does the work of finding bugs.
 func find(findType string, findValues []string, config bugs.Config) {
 	issuesroot := bugs.GetIssuesDir(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot))
+	sort.Sort(byDir(issues))
 	for idx, issue := range issues {
 		if issue.IsDir() != true {
 			continue

@@ -5,6 +5,7 @@ import (
 	"github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
+	"sort"
 )
 
 // getBugName takes a bug and an int index then outputs a string.
@@ -29,10 +30,24 @@ func listTags(files []os.FileInfo, args argumentList, config bugs.Config) {
 	}
 }
 
+//sort.Sort(byDir(issues))
+type byDir []os.FileInfo
+
+func (t byDir) Len() int {
+	return len(t)
+}
+func (t byDir) Swap(i, j int) {
+	t[i], t[j] = t[j], t[i]
+}
+func (t byDir) Less(i, j int) bool {
+	return (t[i]).ModTime().Unix() < (t[j]).ModTime().Unix()
+}
+
 // List is a subcommand to print issues.
 func List(args argumentList, config bugs.Config) {
 	issuesroot := bugs.GetIssuesDir(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot))
+	sort.Sort(byDir(issues))
 
 	var wantTags bool = false
 	if args.HasArgument("--tags") {

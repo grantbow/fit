@@ -18,6 +18,9 @@ fi
 
 for d in $(find ./* -maxdepth 0 -type d); do
     if ls $d/*.go &> /dev/null; then
+        if [[ $d = *issues* ]] ; then
+            continue
+        fi
         echo "testing in $d"
         cd $d
         go test -v -coverprofile=profile.out -covermode=atomic

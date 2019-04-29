@@ -23,6 +23,7 @@ type TagKeyValue struct {
 // The fields are Dir and descFile.
 type Bug struct {
 	Dir                 Directory
+	modtime             int
 	descFile            *os.File
 	DescriptionFileName string
 	TagArray            []TagKeyValue
@@ -98,6 +99,7 @@ func (b Bug) GetDirectory() Directory {
 // LoadBug assigns a directory to an issue.
 func (b *Bug) LoadBug(dir Directory) {
 	b.Dir = dir
+	b.modtime = int((dir.ModTime()).Unix())
 }
 
 // Title returns a string with the name of an issue and optionally present Status and Priority.
@@ -357,16 +359,29 @@ func (b Bug) Tags() []TagBoolTrue {
 	return tagtags
 }
 
-//type byString []string
-//func (t byString) Len() int {
-//	return string(t)
+func (t Bug) Len() int {
+	//return time.Format(time.UnixNano(t.modtime).UnixNano())
+	return t.modtime
+}
+
+//sort.Sort(byBug(bugs))
+type byBug []Bug
+
+func (t byBug) Len() int {
+	//return time.Format(time.UnixNano(t.modtime).UnixNano())
+	return len(t)
+}
+func (t byBug) Swap(i, j int) {
+	t[i], t[j] = t[j], t[i]
+}
+func (t byBug) Less(i, j int) bool {
+	return (t[i]).Len() < (t[j]).Len()
+}
+
+//func (t byBug) Len() int {
+//	return t
 //}
-//func (t byString) Swap(i, j string) {
-//	t[i], t[j] = t[j], t[i]
-//}
-//func (t byString) Less(i, j string) bool {
-//	return t[i] < t[j]
-//}
+//type byName []string
 
 //type byString []string
 //func (t byString) Len() int {

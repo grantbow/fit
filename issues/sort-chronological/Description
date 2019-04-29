@@ -17,3 +17,12 @@ unstable sort order, numeric ids change around too much
 
 yes
 
+
+https://gobyexample.com/sorting-by-functions
+https://www.google.com/search?q=golang+sort+array+strings+alphabetically
+https://golang.org/pkg/time/#example_Time_Unix
+https://golang.org/pkg/os/#FileInfo
+
+This was a great exercise using sort.Sort and sort.Strings.
+easily implemented if sorting the directory entries every time you do an os.readdir
+

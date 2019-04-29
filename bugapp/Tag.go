@@ -35,6 +35,7 @@ func getAllTags(config bugs.Config) []string {
 func TagsNone(config bugs.Config) {
 	issuesroot := bugs.GetIssuesDir(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot)) // TODO: should be a method elsewhere
+	sort.Sort(byDir(issues))
 	var wantTags bool = false
 
 	allbugs := bugs.GetAllBugs(config)

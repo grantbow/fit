@@ -3,6 +3,7 @@ package bugs
 import (
 	"fmt"
 	"io/ioutil"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -21,10 +22,10 @@ func FindBugsByTag(tags []string, config Config) []Bug {
 	issues, _ := ioutil.ReadDir(string(root) + "/issues")
 
 	var bugs []Bug
-	for idx, file := range issues {
-		if file.IsDir() == true {
+	for _, issue := range issues { // idx not needed
+		if issue.IsDir() == true {
 			bug := Bug{}
-			bug.LoadBug(Directory(root + "/issues/" + Directory(issues[idx].Name())))
+			bug.LoadBug(Directory(root + "/issues/" + Directory(issue.Name())))
 			for _, tag := range tags {
 				if bug.HasTag(TagBoolTrue(tag)) {
 					bugs = append(bugs, bug)
@@ -33,6 +34,9 @@ func FindBugsByTag(tags []string, config Config) []Bug {
 			}
 		}
 	}
+	//fmt.Printf("c %+v\n", bugs)
+	sort.Sort(byBug(bugs))
+	//fmt.Printf("d %+v\n", bugs)
 	return bugs
 }
 
@@ -59,10 +63,10 @@ func LoadBugByHeuristic(id string, config Config) (*Bug, error) {
 	}
 
 	var candidate *Bug
-	for idx, file := range issues {
-		if file.IsDir() == true {
+	for _, issue := range issues { // idx not needed
+		if issue.IsDir() == true {
 			bug := Bug{}
-			bug.LoadBug(Directory(root + "/issues/" + Directory(issues[idx].Name())))
+			bug.LoadBug(Directory(root + "/issues/" + Directory(issue.Name())))
 			if bugid := bug.Identifier(); bugid == id {
 				return &bug, nil
 			} else if strings.Index(bugid, id) >= 0 {
@@ -101,10 +105,10 @@ func LoadBugByIdentifier(id string, config Config) (*Bug, error) {
 	root := GetRootDir(config)
 	issues, _ := ioutil.ReadDir(string(root) + "/issues")
 
-	for idx, file := range issues {
-		if file.IsDir() == true {
+	for _, issue := range issues { // idx not needed
+		if issue.IsDir() == true {
 			bug := Bug{}
-			bug.LoadBug(Directory(root + "/issues/" + Directory(issues[idx].Name())))
+			bug.LoadBug(Directory(root + "/issues/" + Directory(issue.Name())))
 			if bug.Identifier() == id {
 				return &bug, nil
 			}
@@ -134,12 +138,16 @@ func GetAllBugs(config Config) []Bug {
 	//fmt.Printf("%+v\n", issues)
 
 	var bugs []Bug
-	for idx, file := range issues {
-		if file.IsDir() == true {
+	for _, issue := range issues { // idx not needed
+		if issue.IsDir() == true {
 			bug := Bug{}
-			bug.LoadBug(Directory(root + "/issues/" + Directory(issues[idx].Name())))
+			bug.LoadBug(Directory(root + "/issues/" + Directory(issue.Name())))
 			bugs = append(bugs, bug)
 		}
 	}
+
+	//fmt.Printf("a %+v\n", bugs)
+	sort.Sort(byBug(bugs))
+	//fmt.Printf("b %+v\n", bugs)
 	return bugs
 }
