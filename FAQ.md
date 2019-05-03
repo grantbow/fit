@@ -1,21 +1,31 @@
 # FAQ
 
 Q: Why would you use this?
-A: Different people may have different reasons. You can bootstrap project
-   management of something you're working on without any dependencies on
-   external software. Working offline has advantages. You use whatever tools you
-   want (SublimeText, notepad, ed, cat, vim..) to manage issues and not be
-   locked into any vendor-specific tracking software. You keep track of
-   things you need to do on as granular a level as you want locally without
-   management complaining about the number of tickets. You follow this
-   convention and keep your issues alongside your code in the same repo. You
-   can trivially define your own extensions/conventions to add to this since
-   arbitrary files are permited.
+A: Different people may have different reasons. Bootstrapping project
+   management without needing any external software dependencies is valuable.
+   Working offline has advantages. You use whatever tools you want
+   (SublimeText, notepad, ed, cat, vim..) to manage issues and not be locked
+   into any vendor-specific tracking software. You keep track of things you
+   need to do on as granular a level as you want locally without management
+   complaining about the number of tickets. You follow this convention and keep
+   your issues alongside your code in the same repo. You can trivially define
+   your own extensions/conventions to add to this since arbitrary files are
+   permited.
 
-Q: Why change the name from PMIT to FIT?
-A: bug is the program written in Go. PMIT is the old name.
-   FIT is the new name for the system that stores the issues.
-   Dave MacFarlane (driusan) created bug and PMIT.
+Q: Why change the name from PMIT to [FIT](FIT.md)?
+
+A: bug is the program written in Go. PMIT is the old name of the storage
+   system. [FIT](FIT.md) is the new name for the system that stores the
+   issues. Dave MacFarlane (driusan) created bug and PMIT. The combination
+   of flat files with git is fantastic.
+
+   Several assumptions are built into bug and PMIT that do not meet some of my
+   needs. Therefore I have extended this version by writing or rewriting code
+   to handle things a little differently, trying to retain compability. The
+   original bug repository assumes deleting issues is ok. It assumes tags do
+   not need values, only true/false present/not present is enough. It uses a
+   tags subdirectory. It assumes four "tags" need values: Status, Priority,
+   Milestone and Identifier. These four are hard coded.
 
    Despite the intended meaning, I feel the word "poor" in PMIT is too
    negative. The program binary can be called by any name using using aliases.
@@ -24,21 +34,24 @@ A: bug is the program written in Go. PMIT is the old name.
    The "poor man's" idiom as [described](https://www.merriam-webster.com/dictionary/poor%20man's)
    is a useful description in two ways.
 
-   First, PMIT is a less expensive system to set up and use. Ease of setup is
-   an inherent benefit of FIT. Unfortunately the "poor man's" idiom used in
-   PMIT is also used to indicate an entity that is similar to an original
-   entity but not as talented or successful. This feels wrong to me because I
-   believe using a filesystem is in some ways more talented than other systems
-   and could become very successful in the future.
+   First, PMIT and file system issue systems are much less expensive to set up
+   and use. Ease of setup is an inherent benefit of [FIT](FIT.md).
+   Unfortunately the "poor man's" idiom used in PMIT can also be used to
+   indicate that an entity is similar to an original entity but is not as
+   talented or successful as that original entity. This feels wrong to me
+   because I believe using a filesystem is in some ways more talented than
+   other systems and could become very successful in the future.
 
-   I offered some patches to the original repository. Development there as
-   slowed down. I have forked the original github repository to continue
-   development and to improve bug which does many things well. To build the
-   submodules in a golang fork the paths to the modules must be renamed.
-   Therefore golang version 1.11 or greater and `export GO111MODULE=on` are
-   required. This allows setting up go.mod files to rename the paths, building
-   and testing. As of 2019 go.mod files are the best way to rename module
-   paths.
+   I offered some patches to the original repository and some have been
+   applied. Development there as slowed down. I have forked the original github
+   repository to continue development and to improve bug which does many things
+   well.
+
+   To build the submodules in this golang fork the paths to the modules must be
+   renamed. Therefore golang version 1.11 or greater and `export
+   GO111MODULE=on` are required. This allows setting up go.mod files to rename
+   the build paths and test paths. As of 2019 go.mod files are the best way to
+   rename module paths.
 
 Q: What's the difference between a DVCS and an SCM?
 A: A source code management (SCM) system is a (distributed) version control
@@ -109,7 +122,7 @@ A: `Jobs` are the reasons for your issues you track. This term is inspired by
 
    Jobs are the needs big enough to do something about or hire someone.
 
-   There are many reasons to organize issues. The uses of a FIT storage system
+   There are many reasons to organize issues. The uses of a [FIT](FIT.md) storage system
    could be varied. In today's fast paced environments tasks must queue up if
    there is more to do than currently possible without more resources. Things
    can get missed if not recorded accurately.
@@ -124,7 +137,7 @@ A: `Jobs` are the reasons for your issues you track. This term is inspired by
 
    Non-computer focused areas also benefit where important communications take
    place. If you start looking it's amazing where issue type systems may be
-   used.  Simple first come first served queue management like take-a-number,
+   used. Simple first come first served queue management like take-a-number,
    paper based type medical waiting room or food ordering systems require no
    lists or sophisticated management as the result is immediately evident. More
    sophisticated systems with many inputs and outputs can be seen through the
@@ -155,27 +168,39 @@ A: Yes. Recording shared understandings can be difficult even when a system
    underlying causes. Tools need to change as problems are more clearly
    understood.
 
-Q: What inspired FIT and what does it compare and contrast with?
+Q: What inspired [FIT](FIT.md) and what does it compare and contrast with?
 A: There are some impressive options out there available as open source
    software, commercial software and SAAS cloud services providing solutions
    tracking many different kinds of issues. There are no shortage of
    solutions customized for particular purposes.
 
-    https://www.google.com/search?q=simple+issue+tracker
-    https://en.wikipedia.org/wiki/Comparison_of_issue-tracking_systems
-    https://en.wikipedia.org/wiki/Comparison_of_help_desk_issue_tracking_software
-    https://en.wikipedia.org/wiki/Comparison_of_CRM_systems
-    https://en.wikipedia.org/wiki/Comparison_of_Mobile_CRM_systems
-    https://en.wikipedia.org/wiki/Comparison_of_time_tracking_software
-    https://en.wikipedia.org/wiki/Comparison_of_project_management_software
-    https://dist-bugs.branchable.com/software/
-    https://bugs.chromium.org/p/monorail/adminIntro
+   [google search?q=simple+issue+tracker](https://www.google.com/search?q=simple+issue+tracker)
+   [wikipedia Comparison_of_issue-tracking_systems](https://en.wikipedia.org/wiki/Comparison_of_issue-tracking_systems)
+   [wikipedia Comparison_of_help_desk_issue_tracking_software](https://en.wikipedia.org/wiki/Comparison_of_help_desk_issue_tracking_software)
+   [wikipedia Comparison_of_CRM_systems](https://en.wikipedia.org/wiki/Comparison_of_CRM_systems)
+   [wikipedia Comparison_of_Mobile_CRM_systems](https://en.wikipedia.org/wiki/Comparison_of_Mobile_CRM_systems)
+   [wikipedia Comparison_of_time_tracking_software](https://en.wikipedia.org/wiki/Comparison_of_time_tracking_software)
+   [wikipedia Comparison_of_project_management_software](https://en.wikipedia.org/wiki/Comparison_of_project_management_software)
+   [dist-bugs software](https://dist-bugs.branchable.com/software/)
+   [chromium adminIntro](https://bugs.chromium.org/p/monorail/adminIntro)
 
    Inspirations for these conventions, in no particular order ...
 
+   While broad, parts of [Big History](https://en.wikipedia.org/wiki/Big_History)
+   show themes that are relevant to issue tracking systems. In this narrative,
+   everything is connected through Threshold Moments. Collective learning is
+   one of the thresholds that changes everything. There is no going back and
+   things accelerate when collective learning is engaged. Recording issues can
+   be seen as assisting a project's collective learning, allowing team members
+   to better distinguish more important improvements from less important ones.
+   Many applications bring people together in hubs of interest separated by
+   massive voids, making the improbable become possible if just the right
+   "Goldilocks Conditions come together.
+
    OKR systems used by many companies including Google. It is well evangelized
    by Peter Drucker (MBO), Andy Grove of Intel, John Doerr of Kleiner Perkins
-   VC firm in Menlo Park (who wrote Measure What Matters) and others.
+   VC firm in Menlo Park (who wrote [Measure What Matters](https://www.whatmatters.com/))
+   and others.
 
    [David Allen's](https://davidco.com) GTD systems have inspired an amazing
    array of other useful systems. His TED talk is great. David says the art of
@@ -189,84 +214,96 @@ A: There are some impressive options out there available as open source
     2. Identify and make outcome/action decisions
     3. Use the right maps
 
-   Manager Tools guides organizational development using (un)common sense.
+   [Manager Tools](https://www.manager-tools.com) guides organizational development using (un)common sense.
 
    Mindfulness generally as human beings can only effectively focus on a few
    things at a time.
 
-   https://en.wikipedia.org/wiki/Lean_manufacturing
+   [Lean Manufacturing](https://en.wikipedia.org/wiki/Lean_manufacturing)
+   has inspired all of the agile style methods that came afterward.
 
-   GitLab.com builds on distributed versioning tools and has extended into a
+   [GitLab.com](https://gitlab.com) builds on distributed versioning tools and has extended into a
    single application for the entire software development life cycle with
    DevOps focused features.
 
-   Pivotal Tracker is truly amazing for high volume agile software development.
+   [Pivotal Tracker](https://www.pivotaltracker.com) is truly amazing for high volume agile software development.
 
-   Asana.com tracks projects well.
+   [Asana.com](https://asana.com) tracks projects well.
 
-   Trello.com provides a great Kanban board.
+   [Axosoft](https://en.wikipedia.org/wiki/Axosoft) offers a proprietary
+   project management system, specifically the Gitkraken git IDE client and the
+   [Glo](https://www.gitkraken.com/glo) task tracking system.
 
-   Evernote.com has an array of useful features.
+   [Trello.com](https://trello.com) provides a great Kanban board.
 
-   ServiceNow.com provides tools for many human workflows.
+   [Evernote.com](https://evernote.com) has an array of useful features.
 
-   Zenkit.com does a great job providing an elegant, easy to use system.
+   [ServiceNow.com](https://www.servicenow.com) provides tools for many human workflows.
 
-   Wunderlist.com is a great app for managing tasks.
+   [Zenkit.com](https://zenkit.com/en/) does a great job providing an elegant, easy to use system.
 
-   GetDoneDone.com for bugs and issues looks easy to use.
+   [Wunderlist.com](https://www.wunderlist.com) is a great app for managing tasks.
 
-   TaskWarrior.org is a command line todo list manager.
+   [Todoist.com](https://todoist.com) is a new cloud based todo list.
 
-   debbugs is still used as debian.org/Bugs starting in 1994.
+   [notion.so](https://notion.so) is a new cloud based manager for many services.
 
-   Bugzilla began use in 1998 for mozilla.org
+   [GetDoneDone.com](https://www.getdonedone.com) for bugs and issues looks easy to use.
 
-   BestPractical.com/rt Request Tracker started as a perl and email based system in 1999.
+   [TaskWarrior.org](https://taskwarrior.org) is a command line todo list manager.
 
-   Bugseverywhere.org is written in python and supports many different
+   [debbugs](https://www.debian.org/Bugs/) is still used as bugs.debian.org since 1994.
+
+   [Bugzilla](https://www.bugzilla.org) began use in 1998 for mozilla.org
+
+   [BestPractical.com/rt](https://bestpractical.com/request-tracker) Request Tracker started as a perl and email based system in 1999.
+
+   [Bugseverywhere.org](http://bugseverywhere.org) is written in python and supports many different
    distributed version control backends. It's been in use since 2005.
 
-   RedMine.org is used in business production environments starting in 2006.
+   [RedMine.org](https://www.redmine.org) is used in business production environments starting in 2006.
 
-   Github and Bitbucket have hosted projects since 2008
+   [Github](https://github.com) by Microsoft and [Bitbucket](https://bitbucket.org) by Atlassian have hosted projects since 2008
 
-   github.com/duplys/git-issues is very similar to bug but is written in python
-   and uses a hidden branch for storage depending on a system called a shelf.
-   It was able to store a version of itself under the .git/ directory so only
-   python is required. I contributed some code but after that I didn't feel it
-   was stable and was a bit difficult to debug because of the shelf storage.
-   Development activity has decreased.
+   [github.com/duplys/git-issues](https://github.com/duplys/git-issues) is 
+   very similar to bug but is written in python and uses a hidden branch for
+   storage depending on a system called a shelf. It was able to store a
+   version of itself under the .git/ directory so only python is required. I
+   contributed some code but after that I didn't feel it was stable and was a
+   bit difficult to debug because of the shelf storage. Development activity
+   has decreased.
 
-   github.com/dspinellis/git-issue is a single shell script to work with git.
-   It can use an existing git repo or a new one. It stores files in a .issues
-   directory as a hierarchy. It is backward compatible with gi.
+   [github.com/dspinellis/git-issue](https://github.com/dspinellis/git-issue)
+   is a single shell script to work with git. It can use an existing git repo
+   or a new one. It stores files in a .issues directory as a hierarchy. It is
+   backward compatible with gi.
 
-   github.com/jeffWelling/ticgit is another git based system that stores data
-   in a branch.
+   [github.com/jeffWelling/ticgit](https://github.com/jeffWelling/ticgit) is 
+   another git based system that stores data in a branch.
 
-   Jonathan Corbet wrote a useful article in 2008
-   https://lwn.net/Articles/281849/ about Distributed bug tracking.
+   Jonathan Corbet wrote a [useful article](https://lwn.net/Articles/281849/)
+   in 2008 about Distributed bug tracking.
 
-   github.com/google/git-appraise is a distributed code review system written
-   in go that stores reviews as git objects that reference commits using a
-   built-in git notes system. https://git-scm.com/docs/git-notes
+   [github.com/google/git-appraise](https://github.com/google/git-appraise) 
+   is a distributed code review system written in go that stores reviews as git
+   objects that reference commits using a built-in git notes system.
+   [git-scm.com/docs/git-notes](https://git-scm.com/docs/git-notes)
 
-   github.com/MichaelMure/git-bug is a written in go, uses a golang struct
-   (shown as json) data model to store changes to bugs as git tree (dir) and
-   git blob objects in a structure like refs/bugs/<bug-id> which are hashes.
-   These are aggregated into an array called an OperationPack. It uses a
-   colorful, interactive terminal UI and is developing a web based UI. It has
-   "bridges" to other trackers and is packaged for Archlinux.
+   [github.com/MichaelMure/git-bug](github.com/MichaelMure/git-bug) is a
+   written in go, uses a golang struct (shown as json) data model to store
+   changes to bugs as git tree (dir) and git blob objects in a structure like
+   refs/bugs/<bug-id> which are hashes.  These are aggregated into an array
+   called an OperationPack. It uses a colorful, interactive terminal UI and is
+   developing a web based UI. It has "bridges" to other trackers and is
+   packaged for Archlinux.
 
-   The issue-based information system (IBIS) is an approach developed in the
-   1960's for clarifying complex, ill-defined (aka wicked) problems that
-   involve multiple stakeholders. IBIS focuses on questions and is especially
-   suited for exploring early phases of problem solving conversations when a
-   problem is ill-defined.
-   https://en.wikipedia.org/wiki/Issue-based_information_system
+   The [issue-based information system (IBIS)](https://en.wikipedia.org/wiki/Issue-based_information_system)
+   is an approach developed in the 1960's for clarifying complex, ill-defined
+   (aka wicked) problems that involve multiple stakeholders. IBIS focuses on
+   questions and is especially suited for exploring early phases of problem
+   solving conversations when a problem is ill-defined.
 
-   [Compendium](https://en.wikipedia.org/wiki/Compendium_(software) implements
+   [Compendium](https://en.wikipedia.org/wiki/Compendium_(software)) implements
    IBIS using a notation made up of issues/questions (?), positions/ideas
    (light bulb), supporting pro arguments (+), detracting con arguments (-),
    notes (paper) and lists (bullet items). Position/ideas that show
@@ -295,7 +332,7 @@ A: This is a good question. While that's just how people manage data, let's
    system changes can be tracked and reviewed even better than with most
    database systems.
 
-Q: How do I work with teams?
+Q: How do I work better with teams?
 A: Members of project teams deal with seemingly unending streams of wildly
    variable `issues` generated externally or internally at any time.
 
@@ -315,6 +352,25 @@ A: Members of project teams deal with seemingly unending streams of wildly
    together to achieve shared goals. A system of shared storage is adaptable to
    many team needs and can be implemented in many ways. This system has evolved
    to capitalize on shared storage with the fewest limitations.
+
+Q: Why do IT projects run over time and over budget?
+A: The alternatives to good IT project practices are are all too common, in IT 
+   projects and other projects. Intentionally disregard issues are lost.
+   Project members hope problems known to some but somehow not surfaced will
+   not attract attention. Facts that may affecting limitng project budget,
+   time, scope, quality or other resources need to be known despite shifting
+   pressures. Implementers should keep their own notes in addition to whatever
+   systems projects provide. Hoping people remember things isn't a recipe for
+   success as one person's recollection may or may not be valuable to another
+   project member now or in the future. Due to human nature people who do
+   notice things will often not say anything, so when they do it's best to
+   record the ideas they have so everyone has a better chance of providing the
+   best project outcome possible. These issues need to be recorded immediately
+   using any available device. Using [FIT](FIT.md) conventions supports this
+   using your present tools to capture valuable notes and ideas. The bug tool
+   manages them. Specialized, high maintenance issue systems officially
+   provided to project team members are not appropriate for collecting all
+   possible project knowledge.
 
 Q: This can never work because [...]
 A: Okay, so use something that works better for you.

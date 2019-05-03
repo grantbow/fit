@@ -2,17 +2,19 @@
 
 [![GoDoc](https://godoc.org/github.com/grantbow/bug?status.svg)](https://godoc.org/github.com/grantbow/bug) [![Build Status](https://travis-ci.org/grantbow/bug.svg?branch=master)](https://travis-ci.org/grantbow/bug) [![Test Coverage](https://codecov.io/gh/grantbow/bug/branch/master/graphs/badge.svg)](https://codecov.io/gh/grantbow/bug) [![GoReportCard](https://goreportcard.com/badge/github.com/grantbow/bug)](https://goreportcard.com/report/github.com/grantbow/bug) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/fit-issue/community)
 
-bug helps manage plain text issue directories working with git or mercurial.
+bug manages plain text issues with git or mercurial.
 
 ** TOC:**
+
 <!-- toc -->
+
 - [Goal](#goal)
 - [Getting Started](#getting-started)
   * [Layout](#layout)
   * [Installation](#installation)
   * [Configuration](#configuration)
   * [Hooks](#hooks)
-  * [Sample Usage](#sample-usage)
+  * [Example Use](#example-use)
 - [History](#history)
 - [Next Steps](#next-steps)
   * [Feedback](#feedback)
@@ -21,23 +23,37 @@ bug helps manage plain text issue directories working with git or mercurial.
 
 ## Goal
 
-The goal is to use human readable issue directories and files similar to how an
-organized person (see FAQ.md) would keep track of issues beyond text files or
-spreadsheets. This program streamlines working with
-[issues](https://en.wikipedia.org/wiki/Issue_tracking_system) and [version
-control](https://en.wikipedia.org/wiki/Version_control)_
+The goal is to use human readable issue directories and files so all issues are
+are captured, surfaced and addressed, whether they are actual problems or some
+other kind of question or idea.
 
-bug saves issues using Filesystem Issue Tracker (see FIT.md)
+This is how people naturally keep track of issues after single text files and
+spreadsheets fail to meet all project needs. (see [FAQ.md](FAQ.md)) 
+
+Using bug and FIT helps implementers streamline working with
+[issues](https://en.wikipedia.org/wiki/Issue_tracking_system) and [version
+control](https://en.wikipedia.org/wiki/Version_control)
+
+The alternative is all too common in IT projects or other projects:
+intentionally disregard issues and hope problems will not attract attention due
+to lack of project budget, time, scope, quality or other resources.
+
+bug manages issues using Filesystem Issue Tracker (see [FIT.md](FIT.md))
 conventions/format. bug works well with both git and mercurial distributed
-version control. The git features are now more advanced.
+version control. The git features are now more developed.
 
 bug can be aliased as a git subcommand such as `bug` or `issue`.
+
+bug software is written using [golang](https://golang.org) to make things easy,
+simple and reliable. Why go? [This video](https://vimeo.com/69237265) from a
+2013 Ruby conference by Andrew Gerrand of Google seems a good explanation,
+found linked from the golang.org home page.
 
 ## Getting Started
 
 ### Layout
 
-Filesystem Issue Tracker (FIT.md) conventions/format are a set of suggestions for
+Filesystem Issue Tracker ([FIT.md](FIT.md)) conventions/format are a set of suggestions for
 storing issues, one directory/folder per issue with plain text file details.
 
 An `issues/` directory holds one (descriptively titled) directory per issue.
@@ -107,7 +123,7 @@ issues directory. Current options include:
           rather than .../tag/key without values.
           tags in both forms are read automatically.
           
-The bug implementation of FIT (FIT.md) is (almost) the simplest issue system that can
+The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue system that can
 still work. It differs from other distributed, versioned, filesystem issue
 tracking tools in several ways. Human readable plain text files are still
 easily viewed, edited and understood. Standard tools are used and further
@@ -124,15 +140,13 @@ Event based automation can be added through git or mercurial. We created a
 hooks directory and look forward to seeing what code teams use and contribute.
 Adapting hooks for both git and hg would be appreciated.
 
-### Sample Usage
+### Example Use
 
 If an environment variable named PMIT is set, that directory will be used to
 create and maintain issues as an 'issues' directory, otherwise the bug command
 will walk up the tree until it finds an "issues" subdirectory. Examples assume
 you are already in a directory tracked by git. To get started simply `mkdir
 issues`.
-
-Example usage:
 
 ```
 $ mkdir issues
@@ -196,7 +210,7 @@ Issue 2: Need better help
 ## History
 
 bug is the program written in Go developed by Dave MacFarlane (driusan).
-Filesystem Issue Tracker (FIT.md) is the new name for the Poor Man's Issue Tracker
+Filesystem Issue Tracker ([FIT.md](FIT.md)) is the new name for the Poor Man's Issue Tracker
 (PMIT) storage system also developed by driusan. For his demo from 2016, see
 [driusan's talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
 GolangMontreal.org conference, GoMTL-01.
@@ -206,7 +220,7 @@ GolangMontreal.org conference, GoMTL-01.
 * [FIT.md](FIT.md)
 * [FAQ.md](FAQ.md)
 * [CONTRIBUTING.md](CONTRUBUTING.md)
-* [CODE_OF_CONDUCT.md](CODE_OF_CONDICT.md)
+* [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 * [SUPPORT.md](SUPPORT.md)
 * https://github.com/grantbow/bug/wiki
 
@@ -233,12 +247,12 @@ some development on my fork. I encourage discussion. Submitting can be done
 with a pull request to me, to our upstream project or using [git
 remotes](https://stackoverflow.com/questions/36628859/git-how-to-merge-a-pull-request-into-a-fork).
 
-Anyone thinking of CONTRIBUTING.md please do so. As this is an issue tracking
+Anyone thinking of [CONTRIBUTING.md](CONTRIBUTING.md) may do so. As this is an issue tracking
 system a pull request with an issue seems logical enough and good working
-practice.
+practice. Development Guidelines are covered.
 
-As mentioned in SUPPORT.md questions are encouraged via email, issues or pull
+As mentioned in [SUPPORT.md](SUPPORT.md) questions are encouraged via email, issues or pull
 requests for now.
 
-The CODE_OF_CONDUCT.md is the standard offered by github and looks great.
+The [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) is the standard offered by github and looks great.
 

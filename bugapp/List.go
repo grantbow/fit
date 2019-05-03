@@ -16,7 +16,7 @@ func getBugName(b bugs.Bug, idx int) string {
 	return fmt.Sprintf("Issue %d", idx+1)
 }
 
-// listTags takes an array of files and selects which issues to print
+// listTags takes an array of os.FileInfo directories and prints bugs.
 func listTags(files []os.FileInfo, args argumentList, config bugs.Config) {
 	b := bugs.Bug{}
 	for idx := range files {
