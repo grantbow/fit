@@ -43,6 +43,8 @@ func main() {
 	if len(osArgs) <= 1 {
 		fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
 		fmt.Printf("\nUse \"bug help\" or \"bug help <command>\" for details.\n")
+	} else if len(osArgs) == 2 && (osArgs[2] == "--help" || osArgs[2] == "help") {
+		bugapp.Help(osArgs) // just bug help
 	} else if len(osArgs) >= 3 && (osArgs[2] == "--help" || osArgs[2] == "help") { // bug cmd --help just like bug help cmd
 		//fmt.Printf("B %s %#v\n", "osArgs: ", osArgs)
 		bugapp.Help(osArgs[1])

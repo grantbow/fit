@@ -1,0 +1,6 @@
+$ bug help                                            
+panic: runtime error: index out of range                                                                      
+                                                                                                              
+goroutine 1 [running]:                                                                                        main.main()                                                                                                   
+        /home/grantbow/go/src/github.com/grantbow/bug/main.go:104 +0x1b6b
+
