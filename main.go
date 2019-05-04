@@ -26,7 +26,11 @@ func main() {
 		fmt.Printf("Warn: %s\n", err)
 	}
 
-	if bugapp.SkipRootCheck(&os.Args) && bugs.GetRootDir(config) == "" {
+	rootPresent := false
+	if bugs.GetRootDir(config) != "" {
+		rootPresent = true
+	}
+	if bugapp.SkipRootCheck(&os.Args) && !rootPresent {
 		//bugapp.PrintVersion()
 		fmt.Printf("Error: Could not find `issues` directory. You probably want to create one.\n")
 		fmt.Printf("    Make sure the current directory or a parent directory has an issues folder\n")
@@ -41,10 +45,14 @@ func main() {
 	osArgs := os.Args // TODO: use an env var and assign to osArgs to setup for testing
 	//fmt.Printf("A %s %#v\n", "osArgs: ", osArgs)
 	if len(osArgs) <= 1 {
-		fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
-		fmt.Printf("\nUse \"bug help\" or \"bug help <command>\" for details.\n")
-	} else if len(osArgs) == 2 && (osArgs[2] == "--help" || osArgs[2] == "help") {
-		bugapp.Help(osArgs) // just bug help
+		if rootPresent {
+			bugapp.List([]string{}, config)
+		} else {
+			fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
+			fmt.Printf("\nUse \"bug help\" or \"bug help <command>\" for details.\n")
+		}
+	} else if len(osArgs) == 2 && (osArgs[1] == "--help" || osArgs[1] == "help") {
+		bugapp.Help("") // just bug help
 	} else if len(osArgs) >= 3 && (osArgs[2] == "--help" || osArgs[2] == "help") { // bug cmd --help just like bug help cmd
 		//fmt.Printf("B %s %#v\n", "osArgs: ", osArgs)
 		bugapp.Help(osArgs[1])
