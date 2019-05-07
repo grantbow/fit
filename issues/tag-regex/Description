@@ -1,0 +1,15 @@
+what did you do:
+
+bug list bug*
+
+what happened :
+
+Not found bug*
+
+what should happen:
+
+rather than == strings we should match wildcards compiled as a regular expression
+if it compiles without error.
+
+Another method should be used to stop such matching.
+

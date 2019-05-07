@@ -1,0 +1,17 @@
+what did you do:
+
+bug list bug*
+
+what happened :
+
+Not found bugapp
+Not found bugs
+
+what should happen:
+
+a. command line arguments shoudl not be interpreted as file names by the shell.
+   as this interpretation is done before the command is run, document about
+   escaping for shell glob expansions.
+
+   https://stackoverflow.com/questions/11456403/stop-shell-wildcard-character-expansion
+

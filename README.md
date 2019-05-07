@@ -4,7 +4,7 @@
 
 bug manages plain text issues with git or mercurial.
 
-** TOC:**
+** TOC: **
 
 <!-- toc -->
 
