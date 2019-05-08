@@ -360,16 +360,15 @@ func (b Bug) Tags() []TagBoolTrue {
 }
 
 func (t Bug) Len() int {
-	//return time.Format(time.UnixNano(t.modtime).UnixNano())
-	return t.modtime
+	return t.modtime // time.Format(time.UnixNano(t.modtime).UnixNano())
 }
 
-//sort.Sort(byBug(bugs))
+//byBug allows sort.Sort(byBug(bugs))
+// type, Len, and three functions are needed - see also List.go for type byDir
 type byBug []Bug
 
 func (t byBug) Len() int {
-	//return time.Format(time.UnixNano(t.modtime).UnixNano())
-	return len(t)
+	return len(t) // time.Format(time.UnixNano(t.modtime).UnixNano())
 }
 func (t byBug) Swap(i, j int) {
 	t[i], t[j] = t[j], t[i]
@@ -377,22 +376,6 @@ func (t byBug) Swap(i, j int) {
 func (t byBug) Less(i, j int) bool {
 	return (t[i]).Len() < (t[j]).Len()
 }
-
-//func (t byBug) Len() int {
-//	return t
-//}
-//type byName []string
-
-//type byString []string
-//func (t byString) Len() int {
-//	return string(t)
-//}
-//func (t byString) Swap(i, j string) {
-//	t[i], t[j] = t[j], t[i]
-//}
-//func (t byString) Less(i, j string) bool {
-//	return t[i] < t[j]
-//}
 
 // findArrayString returns a bool if looking is an element of arr.
 func findArrayString(arr []string, looking string) bool {
