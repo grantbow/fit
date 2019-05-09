@@ -31,7 +31,7 @@ func Create(Args argumentList, config bugs.Config) {
 	//fmt.Print("a\n")
 	if len(Args) < 1 || (len(Args) < 2 && Args[0] == "-n") {
 		//fmt.Print("b\n")
-		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] Bug Description\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] <Bug Description>\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "\nNo Bug Description provided.\n")
 		return
 	}
@@ -42,12 +42,12 @@ func Create(Args argumentList, config bugs.Config) {
 		Args = Args[1:]
 	}
 
-	Args, argVals := Args.GetAndRemoveArguments([]string{"--tag", "--status", "--priority", "--milestone", "--identifier"})
+	Args, argVals := Args.GetAndRemoveArguments([]string{"--tag", "--status", "--priority", "--milestone", "--identifier", "--id"})
 	tag := argVals[0]
 	status := argVals[1]
 	priority := argVals[2]
 	milestone := argVals[3]
-	identifier := argVals[4]
+	identifier := argVals[4] + argVals[5]
 
 	if Args.HasArgument("--generate-id") {
 		for i, token := range Args {
@@ -67,7 +67,7 @@ func Create(Args argumentList, config bugs.Config) {
 	// It's possible there were arguments provided, but still no title
 	// included. Do another check before trying to create the bug.
 	if strings.TrimSpace(strings.Join(Args, " ")) == "" {
-		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] Bug Description\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] <Bug Description>\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "\nNo Bug Description provided.\n")
 		return
 	}

@@ -115,7 +115,7 @@ func captureOutput(f func(), t *testing.T) (string, string) {
 	return string(stdOutput), string(errOutput)
 }
 
-// fieldHandler is used for Priority, Milestone and Status
+// fieldHandler is used for Priority, Milestone and Status, not Identifier
 func fieldHandler(command string, args argumentList,
 	setCallback func(bugs.Bug, string, bugs.Config) error, retrieveCallback func(bugs.Bug) string, config bugs.Config) {
 	if len(args) < 1 {

@@ -43,7 +43,7 @@ A: bug is the program written in Go. PMIT is the old name of the storage
    other systems and could become very successful in the future.
 
    I offered some patches to the original repository and some have been
-   applied. Development there as slowed down. I have forked the original github
+   applied. Development there has slowed down. I have forked the original github
    repository to continue development and to improve bug which does many things
    well.
 
@@ -55,16 +55,16 @@ A: bug is the program written in Go. PMIT is the old name of the storage
 
 Q: What's the difference between a DVCS and an SCM?
 A: A source code management (SCM) system is a (distributed) version control
-   system (DVCS) used in the context of source code. All SCM and VCS as well.
+   system (DVCS) used in the context of source code. All SCM are VCS as well.
 
 Q: How do I add an issue x?
 A: `mkdir issues/x ; edit issues/x/Description ; git add issues/x/Description ; git commit ; git push`
 
 Q: How do I close issue x?
-A: `mv issues/x/tag_status_* issues/x/tag_status_closed`
+A: `mv issues/x/tag_Status_* issues/x/tag_Status_closed`
 
 Q: How do I reopen an issue?
-A: `mv issues/x/tag_status_* issues/x/tag_status_open`
+A: `mv issues/x/tag_Status_* issues/x/tag_Status_open`
 
 Q: How do I rename an issue?
 A: `git mv issues/x issues/y`

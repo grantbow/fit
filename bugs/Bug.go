@@ -51,8 +51,7 @@ var ErrNoDescription = errors.New("No description provided")
 // ErrNotFound defines a new error.
 var ErrNotFound = errors.New("Could not find bug")
 
-// TitleToDir returns a Directory from a string argument.
-func TitleToDir(title string) Directory {
+func TitleToDirString(title string) string {
 	// replace non-matching valid characters with _
 	// for user entered strings
 	re := regexp.MustCompile("[^a-zA-Z0-9_ -]+")
@@ -61,17 +60,19 @@ func TitleToDir(title string) Directory {
 	replaceWhitespaceWithUnderscore := func(match string) string {
 		return strings.Replace(match, " ", "_", -1)
 	}
-	replaceDashWithMore := func(match string) string {
-		if strings.Count(match, " ") > 0 {
-			return match
-		}
-		return "-" + match
-	}
+	//replaceDashWithMore := func(match string) string {
+	//	if strings.Count(match, " ") > 0 {
+	//		return match
+	//	}
+	//	return "-" + match
+	//}
 
 	// Replace sequences of dashes with 1 more dash,
 	// as long as there's no whitespace around them
-	re = regexp.MustCompile("([\\s]*)([-]+)([\\s]*)")
-	s = re.ReplaceAllStringFunc(s, replaceDashWithMore)
+	//commented because of unexpected behavior
+	//re = regexp.MustCompile("([\\s]*)([-]+)([\\s]*)")
+	//s = re.ReplaceAllStringFunc(s, replaceDashWithMore)
+
 	// If there are dashes with whitespace around them,
 	// replace the whitespace with underscores
 	// This is a two step process, because the whitespace
@@ -83,7 +84,12 @@ func TitleToDir(title string) Directory {
 	s = re.ReplaceAllStringFunc(s, replaceWhitespaceWithUnderscore)
 
 	s = strings.Replace(s, " ", "-", -1)
-	return Directory(s)
+	return s
+}
+
+// TitleToDir returns a Directory from a string argument.
+func TitleToDir(title string) Directory {
+	return Directory(TitleToDirString(title))
 }
 
 // ShortTitleToDir truncates a title to 25 characters.
@@ -389,8 +395,6 @@ func findArrayString(arr []string, looking string) bool {
 
 // getField reads and returns the string value from the file of an issue.
 func (b Bug) getField(fieldName string) string {
-	// TODO: add tag_ files?
-	// also checks the ToLower filedName via func getLines
 	lines := b.getLines(fieldName)
 	if len(lines) > 0 {
 		return strings.TrimSpace(lines[0])
@@ -496,11 +500,17 @@ func (b Bug) setField(fieldName string, value string, config Config) error { // 
 		newValue = value
 	}
 
-	err := ioutil.WriteFile(string(dir)+"/"+fieldName, []byte(newValue), 0644)
+	var err error
+	if config.NewFieldAsTag == true {
+		err = ioutil.WriteFile(string(dir)+"/tag_"+fieldName+"_"+TitleToDirString(newValue), []byte(""), 0644)
+	} else {
+		err = ioutil.WriteFile(string(dir)+"/"+fieldName, []byte(newValue), 0644)
+	}
 	if err != nil {
 		return err
+	} else {
+		return nil
 	}
-	return nil
 }
 
 // Status returns the string from the Status file of an issue.

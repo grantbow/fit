@@ -83,7 +83,7 @@ may sometimes confuse the terms of `issue` and `title`. Other terms include:
 
     Subject    Name    Summary    Description
 
-Records of completed issues can be very valuable. Using tag_status_closed is
+Records of completed issues can be very valuable. Using tag_Status_closed is
 recommended but other assumptions such as moving issues to another directory
 or deleting them may have other advantages or limitations.
 
@@ -290,7 +290,7 @@ Implementations should trim beginning/end of line whitespace just in case.
 Some example tag file names:
 
 `tag_id_1001`
-`tag_status_done`
+`tag_Status_done`
 `tag_assigned_grantbow`
 `tag_notify_driusan`
 `tag_type_infrastructure`
@@ -301,14 +301,16 @@ Some example tag file names:
 `tag_wtf`
 
 Keys and values should not be case sensitive as consistent case in filesystem
-names will speed up working with issues.
+names will speed up working with issues. The unix convention of all lower case
+may help reduce accidental mistakes.
 
 Three character file extensions on tag files are not recommended.
 
 Tag files may be empty or contain arbitrary text. Tools should allow for the
 preservation of the rest of the file while editing. This can be useful if a
 team member includes contextual information like why this issue was given this
-tag, historical comments, etc.
+tag, historical comments, etc. though updating the Description text may better
+meet team needs.
 
 These tag files seem a good compromise between data processing needs and the
 needs of the people using the system with or without custom tools.
@@ -319,15 +321,15 @@ existing tag values.
 
 Some anticipated tags might include:
 
-`tag_status_new`
-`tag_status_triage`
-`tag_status_confirmed`
-`tag_status_backlog`
-`tag_status_assigned`
-`tag_status_implement`
-`tag_status_fixed`
-`tag_status_peer-review`
-`tag_status_closed`
+`tag_Status_new`
+`tag_Status_triage`
+`tag_Status_confirmed`
+`tag_Status_backlog`
+`tag_Status_assigned`
+`tag_Status_implement`
+`tag_Status_fixed`
+`tag_Status_peer-review`
+`tag_Status_closed`
 
     Status values can answer the hallway question "how's that issue going?"
     People may want to know and/or may be impacted by a change made to an
@@ -336,6 +338,7 @@ Some anticipated tags might include:
     provide the date and time.
 
 `tag_id_1001`
+`tag_identifier_1001`
 `tag_number_123`
 `tag_fedora_12345`
 `tag_debian_12345`

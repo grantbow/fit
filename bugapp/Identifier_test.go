@@ -70,7 +70,7 @@ func TestIdGenerate(t *testing.T) {
 	}, t)
 	runid(t, "Identifier not defined\n", argumentList{"1"})
 
-	runid(t, "Generated id .* for bug\n", argumentList{"1", "--generate"})
+	runid(t, "Generated id .* for bug\n", argumentList{"1", "--generate-id"})
 	file, err := ioutil.ReadFile(fmt.Sprintf("%s/issues/no_id_bug/Identifier", gdir))
 	if err != nil {
 		t.Error("Could not load an Identifier file for Test bug" + err.Error())

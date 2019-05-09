@@ -4,7 +4,7 @@
 
 bug manages plain text issues with git or mercurial.
 
-** TOC: **
+**TOC:**
 
 <!-- toc -->
 
@@ -177,7 +177,7 @@ Issue editing commands:
 	milestone  View or edit a bug's milestone
 	import     Create local bugs from a github repository
 
-Source control commands:
+Version control commands:
 	commit     Commit any new, changed or deleted bug to git
 	purge      Remove all issues not tracked by git
 

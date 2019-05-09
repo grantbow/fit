@@ -27,7 +27,7 @@ func Identifier(args argumentList, config bugs.Config) {
 	}
 	if len(args) > 1 {
 		var newValue string
-		if args.HasArgument("--generate") {
+		if args.HasArgument("--generate-id") {
 			newValue = generateID(b.Title(""))
 			fmt.Printf("Generated id %s for bug\n", newValue)
 		} else {
