@@ -65,7 +65,7 @@ https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html
 If valid BugIDs are provided, whole issues with Description
 will print.  See "bug help ids" for what makes a BugID.
 
-If 1 or more <tag]s are provided, matching issues are listed.
+If 1 or more <tag>s are provided, matching issues are listed.
 
 Note that BugIDs may change as you create, edit, and close other
 issues. Details are provided by "bug help ids."

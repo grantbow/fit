@@ -8,6 +8,7 @@ type SCMHandler interface {
 	Purge(bugs.Directory) error
 	GetSCMType() string
 	GetSCMIssuesUpdates() ([]byte, error)
+	GetSCMIssuesCached() ([]byte, error)
 }
 
 // FileStatus type holds information about a file.

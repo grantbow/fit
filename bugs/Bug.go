@@ -284,7 +284,7 @@ func (b Bug) HasTag(tag TagBoolTrue) bool {
 	return false
 }
 
-// created b.getTag for similar needs of {bugs/Bug.go:Tags, bugs/Bug.go:setField}
+// created b.getTag for similar needs of {bugs/Bug.go:Tags, bugs/Bug.go:setField}, also bugs/Bug.go:getLines
 
 // getTag takes a file name, returns the key, value,
 // bool if value in name,
@@ -327,38 +327,53 @@ func (b Bug) getTag(abspath string) (string, string, bool, bool, error) {
 // Tags returns a bug's array of tags.
 func (b Bug) Tags() []TagBoolTrue {
 	dir := b.GetDirectory()
-	hit := ""
-	tagsdir := dir + "/tags/"
-	withtagsubdir, errsubdir := ioutil.ReadDir(string(tagsdir))      // returns []os.FileInfo
-	withtagfile, errtagfile := filepath.Glob(string(dir) + "/tag_*") // returns []string
-	if errsubdir != nil && errtagfile != nil {
+	tags := []string{}
+	// fields
+	for _, k := range []string{"Status", "Priority", "Milestone", "Identifier"} {
+		if v := b.getField(k); v != "" {
+			keyvalue := strings.ToLower(k) + ":" + strings.ToLower(v)
+			if !findArrayString(tags, keyvalue) {
+				//fmt.Printf("keyvalue 1 %v\n", keyvalue)
+				tags = append(tags, keyvalue)
+			}
+		}
+	}
+	withtagsubdir, errsubdir := ioutil.ReadDir(string(dir) + "/tags/") // returns []os.FileInfo
+	withtagfile, errtagfile := filepath.Glob(string(dir) + "/tag_*")   // returns []string
+	if len(tags) == 0 && errsubdir != nil && errtagfile != nil {
 		return nil
 	}
 
-	totallength := len(withtagsubdir) + len(withtagfile) // could be len() higher for tag files
-	tags := make([]string, 0, totallength)
-	tagsfound := make([]string, 0, totallength)
 	//fmt.Printf("withtagsubdir %v\n", withtagsubdir)
 	for _, withtagsubdirfile := range withtagsubdir {
-		hit = withtagsubdirfile.Name()
-		tags = append(tags, hit)
-		tagsfound = append(tagsfound, hit)
+		name := strings.ToLower(withtagsubdirfile.Name())
+		if !findArrayString(tags, name) {
+			//fmt.Printf("keyvalue 2 %v\n", name)
+			tags = append(tags, name)
+		}
 	}
 	//fmt.Printf("withtagfile %v\n", withtagfile)
 	for _, withtagfilefile := range withtagfile {
-		key, value, _, _, err := b.getTag(withtagfilefile)
-		//hit = key
+		k, v, _, _, err := b.getTag(withtagfilefile)
+		key := strings.ToLower(k)
+		value := strings.ToLower(v)
 		//fmt.Printf("key %v value %v e %v\n", key, value, err)
 		if err == nil && value != "false" {
-			if !findArrayString(tagsfound, key) {
+			if value != "" && !findArrayString(tags, key+":"+value) {
 				// only add unique TagBoolTrue
+				//fmt.Printf("keyvalue 3 %v\n", key+":"+value)
+				tags = append(tags, key+":"+value)
+			} else if value == "" && !findArrayString(tags, key) {
+				//fmt.Printf("keyvalue 3.5 %v\n", key+":"+value)
+				//fmt.Printf("keyvalue 4 %v\n", key)
 				tags = append(tags, key)
 			}
 		}
 	}
+	// sort
 	sort.Strings(tags)
 
-	tagtags := make([]TagBoolTrue, 0, totallength)
+	tagtags := []TagBoolTrue{}
 	for _, x := range tags {
 		tagtags = append(tagtags, TagBoolTrue(x))
 	}
@@ -403,6 +418,7 @@ func (b Bug) getField(fieldName string) string {
 	}
 }
 
+// created b.getLines for similar needs of {bugs/Bug.go:getField, bugs/Bug.go:setField}
 // getLines does the work for getField with extra lines.
 func (b Bug) getLines(fieldName string) []string {
 	dirr := b.GetDirectory()
@@ -432,13 +448,13 @@ func (b Bug) getLines(fieldName string) []string {
 		lines = []string{value}
 		return lines
 	}
-	// try tag_(k)ey file contents
+	// try tag_(K)ey file contents
 	field, err = ioutil.ReadFile(dir + "/tag_" + fieldName)
 	if err == nil {
 		lines = strings.Split(string(field), "\n")
 		return lines
 	}
-	// try tag_(K)ey file contents
+	// try tag_(k)ey file contents
 	field, err = ioutil.ReadFile(dir + "/tag_" + strings.ToLower(fieldName))
 	if err == nil {
 		lines = strings.Split(string(field), "\n")
@@ -502,7 +518,11 @@ func (b Bug) setField(fieldName string, value string, config Config) error { // 
 
 	var err error
 	if config.NewFieldAsTag == true {
-		err = ioutil.WriteFile(string(dir)+"/tag_"+fieldName+"_"+TitleToDirString(newValue), []byte(""), 0644)
+		if config.NewFieldLowerCase == true {
+			err = ioutil.WriteFile(string(dir)+"/tag_"+fieldName+"_"+strings.ToLower(TitleToDirString(newValue)), []byte(""), 0644)
+		} else {
+			err = ioutil.WriteFile(string(dir)+"/tag_"+fieldName+"_"+TitleToDirString(newValue), []byte(""), 0644)
+		}
 	} else {
 		err = ioutil.WriteFile(string(dir)+"/"+fieldName, []byte(newValue), 0644)
 	}

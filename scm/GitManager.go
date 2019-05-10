@@ -209,17 +209,30 @@ func (a GitManager) GetSCMType() string {
 	return "git"
 }
 
-// GetSCMIssuesUpdates returns whether the issues working tree is dirty or not
+// GetSCMIssuesUpdates returns uncommitted files including staged and working directory
 func (a GitManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Config
-	cmd := exec.Command("git", "status", "--porcelain", "-u", "issues", "\":(top)\"")
+	cmd := exec.Command("git", "status", "--porcelain", "-u", "--", ":/issues")
 	// --porcelain output format
 	// -u shows all unstaged files, not just directories
 	// issues is the directory off of the git repo to show
 	// the ":(top)" shows full paths when not at the git root directory
+	// the shorthand is ":/issues"
 	o, _ := cmd.CombinedOutput()
 	if string(o) == "" {
 		return []byte(""), nil
 	} else {
 		return o, errors.New("Files In issues/ Need Committing")
+	}
+}
+
+// GetSCMIssuesCached returns uncommitted files only staged not working directory
+func (a GitManager) GetSCMIssuesCached() ([]byte, error) { // config bugs.Config
+	cmd := exec.Command("git", "diff", "--name-status", "--cached", "HEAD", "--", ":/issues")
+	// whitespace differs from output of git status - darn
+	o, _ := cmd.CombinedOutput()
+	if string(o) == "" {
+		return []byte(""), nil
+	} else {
+		return o, errors.New("Files In issues/ Staged and Need Committing")
 	}
 }

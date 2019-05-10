@@ -1,0 +1,9 @@
+currently bug.Tags returns keys, not values
+
+I thought it should return values only when present
+However key/value pairs must be unique so i joined
+them like <key>:<value>
+
+Not just keys need to be accounted for but also
+the four special files interprete as tags.
+

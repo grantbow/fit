@@ -41,3 +41,8 @@ func (a HgManager) GetSCMType() string {
 func (a HgManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Config
 	return []byte(""), nil
 }
+
+// GetSCMIssuesCached returns in error
+func (a HgManager) GetSCMIssuesCached() ([]byte, error) { // config bugs.Config
+	return []byte(""), nil
+}

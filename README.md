@@ -122,6 +122,16 @@ issues directory. Current options include:
           writes tags in tag_key_value format (true)
           rather than .../tag/key without values.
           tags in both forms are read automatically.
+	* NewFieldAsTag: true or false
+          Default is false.
+          writes fields in tag_key_value format (true)
+          rather than .../Key file with value in the text.
+          fields in both forms are read automatically.
+	* NewFieldLowerCase: true or false
+          Default is false.
+          writes fields as tag_key_value format (true)
+          rather than .../tag_Key_value.
+          fields in both forms are read automatically.
           
 The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue system that can
 still work. It differs from other distributed, versioned, filesystem issue
@@ -138,7 +148,7 @@ necessary and obfuscate how to access the valuable data.
 
 Event based automation can be added through git or mercurial. We created a
 hooks directory and look forward to seeing what code teams use and contribute.
-Adapting hooks for both git and hg would be appreciated.
+Contributed work to adapt all hooks for both git and hg would be appreciated.
 
 ### Example Use
 

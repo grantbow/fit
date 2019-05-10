@@ -7,6 +7,7 @@ import (
 	"github.com/driusan/bug/bugs"
 	"github.com/driusan/bug/scm"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -21,9 +22,15 @@ func main() {
 	scmoptions := make(map[string]bool)
 	handler, _, herr := scm.DetectSCM(scmoptions, config)
 	if herr != nil {
-		fmt.Printf("Warn: %s\n", herr.Error())
-	} else if _, err := handler.GetSCMIssuesUpdates(); err != nil {
-		fmt.Printf("Warn: %s\n", err)
+		if _, uerr := handler.GetSCMIssuesUpdates(); uerr != nil {
+			if _, cerr := handler.GetSCMIssuesCached(); cerr != nil {
+				fmt.Printf("Warn: %s\n", cerr)
+			} else {
+				fmt.Printf("Warn: %s\n", uerr)
+			}
+		} else {
+			fmt.Printf("Warn: %s\n", herr)
+		}
 	}
 
 	rootPresent := false
@@ -70,9 +77,19 @@ func main() {
 			bugapp.TagsAssigned(config)
 		case "tagsnone":
 			bugapp.TagsNone(config)
-		case "staging":
+		case "staging", "staged", "cached", "cache", "index":
 			if b, err := handler.GetSCMIssuesUpdates(); err != nil {
-				fmt.Printf("Files in issues/ need committing, see $ git status --porcelain -u issues \":top\"\n%v\n", string(b))
+				fmt.Printf("Files in issues/ need committing, see $ git status --porcelain -u -- :/issues\nand for files already in index see $ git diff --name-status --cached HEAD -- :/issues\n")
+				if _, errc := handler.GetSCMIssuesCached(); errc != nil {
+					for _, bline := range strings.Split(string(b), "\n") {
+						//if bline in c {
+						//} else {
+						fmt.Printf("%v\n", string(bline))
+						//}
+					}
+				} else {
+					fmt.Printf("%v\n", string(b))
+				}
 			} else {
 				fmt.Printf("No files in issues/ need committing, see $ git status --porcelain -u issues \":top\"\n")
 			}

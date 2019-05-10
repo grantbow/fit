@@ -29,6 +29,8 @@ type Config struct {
 	TagKeyValue bool `json:"TagKeyValue"`
 	// tag_Field_value or Field file and contents (default)
 	NewFieldAsTag bool `json:"NewFieldAsTag"`
+	// tag_field_value or tag_Field_value (default)
+	NewFieldLowerCase bool `json:"NewFieldLowerCase"`
 }
 
 // ErrNoConfig is a new error.
@@ -85,6 +87,13 @@ func ConfigRead(bugYml string, c *Config, progVersion string) (err error) {
 			c.NewFieldAsTag = true
 		} else {
 			c.NewFieldAsTag = false
+		}
+		//* NewFieldLowerCase: true or false,
+		//      Default Field as given
+		if temp.NewFieldLowerCase {
+			c.NewFieldLowerCase = true
+		} else {
+			c.NewFieldLowerCase = false
 		}
 	}
 	return nil
