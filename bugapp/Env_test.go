@@ -34,7 +34,8 @@ func TestEnvGit(t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-	expected := "Settings used by this command:\n\nEditor:.*\nIssues Directory:.*\n\nVCS Type:.*\ngit Directory:.*\n"
+	expected := "Settings:\n\nEditor:.*\nRoot Directory:.*\nIssues Directory:.*\nSettings file:.*\n\nVCS Type:.*\ngit Directory:.*\nNeed Staging:.*"
+	// TODO: fix Need Staging output and test
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
 	if !matched {

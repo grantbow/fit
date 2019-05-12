@@ -10,37 +10,43 @@ import (
 
 // Config type holds .bug.yml configured values.
 type Config struct {
+	// aka RootDir
 	// storage of location of root dir with .bug.yml
 	// if we are reading the config file we already found the root
-	// auto-find root dir or
-	// overridden by PMIT environment variable
+	// auto-find root dir
+	// overridden by PMIT environment variable? ** runtime only
 	BugDir string `json:"BugDir"`
-	// new bug Description text template
+	// BugDir+"/.bug.yml" * if present ** runtime only
+	BugYml string `json:"BugYml"`
+	// Description contents for new issue or empty file (default)
 	DefaultDescriptionFile string `json:"DefaultDescriptionFile"`
-	// saves raw json files of import
+	// saves raw json files of import (true) or don't save (false default)
 	ImportXmlDump bool `json:"ImportXmlDump"`
-	// import comments together or separate files
+	// import comments together (true) or separate files (false default)
 	ImportCommentsTogether bool `json:"ImportCommentsTogether"`
-	// append to the program version
+	// append to the program version ** runtime + append
 	ProgramVersion string `json:"ProgramVersion"`
-	// override the default file name
+	// file name (Description default)
 	DescriptionFileName string `json:"DescriptionFileName"`
-	// tag_key_value or tag subdir (default)
+	// tag_key_value (true) or tag subdir (false default)
 	TagKeyValue bool `json:"TagKeyValue"`
-	// tag_Field_value or Field file and contents (default)
+	// tag_Field_value (true) or Field file and contents (false default)
 	NewFieldAsTag bool `json:"NewFieldAsTag"`
-	// tag_field_value or tag_Field_value (default)
+	// tag_field_value (true) or tag_Field_value (false default)
 	NewFieldLowerCase bool `json:"NewFieldLowerCase"`
 }
 
-// ErrNoConfig is a new error.
+// ErrNoConfig
 var ErrNoConfig = errors.New("No .bug.yml provided")
 
 // ConfigRead assigns values to the Config type from .bug.yml.
-func ConfigRead(bugYml string, c *Config, progVersion string) (err error) {
+func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 	temp := Config{}
-	if fileinfo, err := os.Stat(bugYml); err == nil && fileinfo.Mode().IsRegular() {
-		dat, _ := ioutil.ReadFile(bugYml)
+	if fileinfo, err := os.Stat(bugYmls); err == nil && fileinfo.Mode().IsRegular() {
+		dat, _ := ioutil.ReadFile(bugYmls)
+		// didn't work well
+		////wd, _ := os.Getwd()
+		////c.BugYmls = wd + "/" + bugYmls
 		//fmt.Fprint(os.Stdout, dat)
 		err := yaml.Unmarshal(dat, &temp)
 		check(err)
@@ -95,6 +101,7 @@ func ConfigRead(bugYml string, c *Config, progVersion string) (err error) {
 		} else {
 			c.NewFieldLowerCase = false
 		}
+		return nil
 	}
-	return nil
+	return ErrNoConfig
 }

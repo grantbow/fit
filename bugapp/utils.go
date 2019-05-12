@@ -74,6 +74,7 @@ func (args argumentList) GetAndRemoveArguments(argnames []string) (argumentList,
 	return retArgs, matches
 }
 
+// check will panic with an error
 func check(e error) {
 	if e != nil {
 		//	fmt.Fprintf(os.Stderr, "err: %s", err.Error())
@@ -82,6 +83,7 @@ func check(e error) {
 	}
 }
 
+// captureOutput accepts a function for testing and returns stdout string and stderr string.
 func captureOutput(f func(), t *testing.T) (string, string) {
 	// Capture STDOUT with a pipe
 	stdout := os.Stdout
@@ -144,7 +146,7 @@ func fieldHandler(command string, args argumentList,
 	}
 }
 
-// dirDump accepts a string directory and returns details.
+// dirDump accepts a string directory and returns a string.
 func dirDump(dir string) string {
 	a := []string{}
 	err := filepath.Walk(dir,
@@ -164,7 +166,7 @@ func dirDump(dir string) string {
 	return strings.Join(a, ",\n")
 }
 
-// dirDumpFI accepts an array of os.FileInfo and returns details.
+// dirDumpFI accepts an array of os.FileInfo and returns a string
 func dirDumpFI(files []os.FileInfo) string {
 	a := []string{}
 	for _, file := range files {

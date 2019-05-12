@@ -1,0 +1,5 @@
+function GetRootDir
+is not named correctly
+it and all that call it should be renamed to
+something like GetIssuesRootDir
+

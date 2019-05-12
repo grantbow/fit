@@ -10,12 +10,12 @@ import (
 type HgManager struct{}
 
 // Purge would give the hg command to purge files but this is not supported.
-func (a HgManager) Purge(dir bugs.Directory) error {
+func (mgr HgManager) Purge(dir bugs.Directory) error {
 	return UnsupportedType("Purge is not supported under Hg. Sorry!")
 }
 
 // Commit gives the hg command to commit files.
-func (a HgManager) Commit(dir bugs.Directory, commitMsg string, config bugs.Config) error {
+func (mgr HgManager) Commit(dir bugs.Directory, commitMsg string, config bugs.Config) error {
 	cmd := exec.Command("hg", "addremove", string(dir))
 	if err := cmd.Run(); err != nil {
 		fmt.Printf("Could not add issues to be committed: %s?\n", err.Error())
@@ -33,16 +33,16 @@ func (a HgManager) Commit(dir bugs.Directory, commitMsg string, config bugs.Conf
 }
 
 // GetSCMType returns hg.
-func (a HgManager) GetSCMType() string {
+func (mgr HgManager) GetSCMType() string {
 	return "hg"
 }
 
 // GetSCMIssuesUpdates returns in error
-func (a HgManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Config
+func (mgr HgManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Config
 	return []byte(""), nil
 }
 
 // GetSCMIssuesCached returns in error
-func (a HgManager) GetSCMIssuesCached() ([]byte, error) { // config bugs.Config
+func (mgr HgManager) GetSCMIssuesCached() ([]byte, error) { // config bugs.Config
 	return []byte(""), nil
 }

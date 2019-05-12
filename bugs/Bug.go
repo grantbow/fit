@@ -565,7 +565,12 @@ func (b Bug) SetMilestone(newValue string, config Config) error {
 
 // Identifier returns the string from the Identifier file of an issue.
 func (b Bug) Identifier() string {
-	return b.getField("Identifier")
+	i := b.getField("Identifier")
+	if i != "" {
+		return i
+	} else {
+		return b.getField("Id")
+	}
 }
 
 // SetIdentifier writes the Identifier file to an issue.

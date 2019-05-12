@@ -4,28 +4,37 @@ import (
 	"fmt"
 	"github.com/driusan/bug/bugs"
 	"github.com/driusan/bug/scm"
+	"strings"
 )
 
 // Env is a subcommand to output detected editor, directory and scm type.
 func Env(config bugs.Config) {
 	vcs, scmdir, scmerr := scm.DetectSCM(make(map[string]bool), config)
-	fmt.Printf("Settings used by this command:\n")
-	fmt.Printf("\nEditor: %s", getEditor())
-	fmt.Printf("\nIssues Directory: %s", bugs.GetIssuesDir(config))
+	fmt.Printf("Settings:\n\nEditor: %s\nRoot Directory: %s\nIssues Directory: %s\nSettings file: %s\n\n",
+		getEditor(), config.BugDir, bugs.GetIssuesDir(config), config.BugYml)
 
-	if scmerr == nil {
-		t := vcs.GetSCMType()
-		fmt.Printf("\n\nVCS Type:\t%s", t)
-		fmt.Printf("\n%s Directory:\t%s", t, scmdir)
-		fmt.Printf("\nNeed Staging:\t")
-		if b, err := vcs.GetSCMIssuesUpdates(); err == nil {
-			fmt.Print("(No files in issues)")
-		} else {
-			fmt.Printf("Issues:\n%v", b)
-		}
+	if scmerr != nil {
+		fmt.Printf("VCS Type: <missing> (purge and commit commands unavailable)\n\n")
 	} else {
-		fmt.Printf("\n\nVCS Type: None (purge and commit commands unavailable)")
+		t := vcs.GetSCMType()
+		fmt.Printf("VCS Type:    %s\n", t)
+		fmt.Printf("%s Directory:    %s\n", t, scmdir)
+		//
+		fmt.Printf("Need Staging:    ")
+		if b, err := vcs.GetSCMIssuesUpdates(); err == nil {
+			fmt.Printf("(nothing)\n\n")
+		} else {
+			fmt.Printf("%v\n\n", string(b))
+		}
 	}
-
+	fmt.Printf("Config:\n    " +
+		strings.Replace(
+			strings.TrimLeft(
+				strings.Replace(
+					fmt.Sprintf("%#v\n", config),
+					", ", "\n    ", -1), // Replace
+				"bugs.Config"), // TrimLeft
+			":", " : ", -1), // Replace
+	) // Printf
 	fmt.Printf("\n")
 }

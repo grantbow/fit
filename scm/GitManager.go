@@ -19,7 +19,7 @@ type GitManager struct {
 }
 
 // Purge runs git clean -fd on the directory containing the issues directory.
-func (a GitManager) Purge(dir bugs.Directory) error {
+func (mgr GitManager) Purge(dir bugs.Directory) error {
 	cmd := exec.Command("git", "clean", "-fd", string(dir))
 
 	cmd.Stdin = os.Stdin
@@ -53,10 +53,10 @@ type issuesStatus map[string]issueStatus
 // D  issues/issue1/Description			issue closed
 // A  issues/issue3/Description			new issue, description field is mandatory for rich format
 
-func (a GitManager) currentStatus(dir bugs.Directory, config bugs.Config) (closedOnGitHub []string, _ issuesStatus) {
+func (mgr GitManager) currentStatus(dir bugs.Directory, config bugs.Config) (closedOnGitHub []string, _ issuesStatus) {
 	ghRegex := regexp.MustCompile("(?im)^-Github:(.*)$")
 	closesGH := func(file string) (issue string, ok bool) {
-		if !a.Autoclose {
+		if !mgr.Autoclose {
 			return "", false
 		}
 		if !strings.HasSuffix(file, "Identifier") {
@@ -71,12 +71,12 @@ func (a GitManager) currentStatus(dir bugs.Directory, config bugs.Config) (close
 		return "", false
 	}
 	short := func(path string) string {
-		b := strings.Index(path, "/")
-		e := strings.LastIndex(path, "/")
-		if b+1 >= e {
+		beg := strings.Index(path, "/")
+		end := strings.LastIndex(path, "/")
+		if beg+1 >= end {
 			return "???"
 		}
-		return path[b+1 : e]
+		return path[beg+1 : end]
 	}
 
 	cmd := exec.Command("git", "status", "-z", "--porcelain", string(dir))
@@ -121,8 +121,8 @@ func (a GitManager) currentStatus(dir bugs.Directory, config bugs.Config) (close
 // closed issues are most important (something is DONE, ok? ;), those issues will also become hidden)
 // new issues are next, with just updates at the end
 // TODO: do something if this message will be too long
-func (a GitManager) commitMsg(dir bugs.Directory, config bugs.Config) []byte {
-	ghClosed, issues := a.currentStatus(dir, config)
+func (mgr GitManager) commitMsg(dir bugs.Directory, config bugs.Config) []byte {
+	ghClosed, issues := mgr.currentStatus(dir, config)
 
 	done, add, update, together := &bytes.Buffer{}, &bytes.Buffer{}, &bytes.Buffer{}, &bytes.Buffer{}
 	var cntd, cnta, cntu int
@@ -140,22 +140,22 @@ func (a GitManager) commitMsg(dir bugs.Directory, config bugs.Config) []byte {
 		}
 	}
 
-	f := func(b *bytes.Buffer, what string, many bool) {
-		if b.Len() == 0 {
+	outf := func(buf *bytes.Buffer, what string, many bool) {
+		if buf.Len() == 0 {
 			return
 		}
-		var m string
+		var plural string
 		if many {
-			m = "s:"
+			plural = "s:"
 		}
-		s := b.Bytes()[2:]
-		fmt.Fprintf(together, "%s issue%s %s; ", what, m, s)
+		item := buf.Bytes()[2:]
+		fmt.Fprintf(together, "%s issue%s %s; ", what, plural, item)
 	}
-	f(done, "Close", cntd > 1)
-	f(add, "Create", cnta > 1)
-	f(update, "Update", cntu > 1)
+	outf(done, "Close", cntd > 1)
+	outf(add, "Create", cnta > 1)
+	outf(update, "Update", cntu > 1)
 	if l := together.Len(); l > 0 {
-		together.Truncate(l - 2) // "; " from last applied f()
+		together.Truncate(l - 2) // "; " from last applied outf()
 	}
 
 	if len(ghClosed) > 0 {
@@ -165,15 +165,14 @@ func (a GitManager) commitMsg(dir bugs.Directory, config bugs.Config) []byte {
 }
 
 // Commit saves files to the SCM. It runs git add -A.
-func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config bugs.Config) error {
+func (mgr GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config bugs.Config) error {
 	cmd := exec.Command("git", "add", "-A", string(dir))
 	if err := cmd.Run(); err != nil {
 		fmt.Printf("Could not add issues to be committed: %s?\n", err.Error())
 		return err
-
 	}
 
-	msg := a.commitMsg(dir, config)
+	msg := mgr.commitMsg(dir, config)
 
 	file, err := ioutil.TempFile("", "bugCommit")
 	if err != nil {
@@ -186,7 +185,7 @@ func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config bu
 		fmt.Fprintf(file, "%s\n", backupCommitMsg)
 	} else {
 		var pref string
-		if a.UseBugPrefix {
+		if mgr.UseBugPrefix {
 			pref = "bug: "
 		}
 		fmt.Fprintf(file, "%s%s\n", pref, msg)
@@ -205,34 +204,34 @@ func (a GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config bu
 }
 
 // GetSCMType returns "git".
-func (a GitManager) GetSCMType() string {
+func (mgr GitManager) GetSCMType() string {
 	return "git"
 }
 
 // GetSCMIssuesUpdates returns uncommitted files including staged and working directory
-func (a GitManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Config
+func (mgr GitManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Config
 	cmd := exec.Command("git", "status", "--porcelain", "-u", "--", ":/issues")
 	// --porcelain output format
 	// -u shows all unstaged files, not just directories
 	// issues is the directory off of the git repo to show
 	// the ":(top)" shows full paths when not at the git root directory
 	// the shorthand is ":/issues"
-	o, _ := cmd.CombinedOutput()
-	if string(o) == "" {
+	co, _ := cmd.CombinedOutput()
+	if string(co) == "" {
 		return []byte(""), nil
 	} else {
-		return o, errors.New("Files In issues/ Need Committing")
+		return co, errors.New("Files In issues/ Need Committing")
 	}
 }
 
 // GetSCMIssuesCached returns uncommitted files only staged not working directory
-func (a GitManager) GetSCMIssuesCached() ([]byte, error) { // config bugs.Config
+func (mgr GitManager) GetSCMIssuesCached() ([]byte, error) { // config bugs.Config
 	cmd := exec.Command("git", "diff", "--name-status", "--cached", "HEAD", "--", ":/issues")
 	// whitespace differs from output of git status - darn
-	o, _ := cmd.CombinedOutput()
-	if string(o) == "" {
+	co, _ := cmd.CombinedOutput()
+	if string(co) == "" {
 		return []byte(""), nil
 	} else {
-		return o, errors.New("Files In issues/ Staged and Need Committing")
+		return co, errors.New("Files In issues/ Staged and Need Committing")
 	}
 }

@@ -9,29 +9,27 @@ import (
 	"strings"
 )
 
-// getAllTags reads the tags subdir only
+// getAllTags returns all the tags
 func getAllTags(config bugs.Config) []string {
 	bugs := bugs.GetAllBugs(config)
 	//fmt.Printf("%+v\n", bugs)
-
-	// Put all the tags in a map, then iterate over
-	// the keys so that only unique tags are included
 	tagMap := make(map[string]int, 0)
+	// Put all the tags in a map, then iterate over
+	// the tags so that only unique tags are included
 	for _, bug := range bugs {
 		for _, tag := range bug.Tags() {
-			tagMap[string(tag)] += 1
+			tagMap[strings.ToLower(string(tag))] += 1
 		}
 	}
-
-	keys := make([]string, 0, len(tagMap))
+	var tags []string
 	for k := range tagMap {
-		keys = append(keys, k)
+		tags = append(tags, k)
 	}
-	sort.Strings(keys)
-	return keys
+	sort.Strings(tags)
+	return tags
 }
 
-// TagsNone is a subcommand to return print ready issues with no assigned tags.
+// TagsNone is a subcommand to print issues with no assigned tags.
 func TagsNone(config bugs.Config) {
 	issuesroot := bugs.GetIssuesDir(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot)) // TODO: should be a method elsewhere

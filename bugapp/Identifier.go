@@ -4,9 +4,78 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"github.com/driusan/bug/bugs"
+	"io/ioutil"
 	"os"
+	"sort"
 	"strings"
 )
+
+// getAllIds returns all the ids
+func getAllIds(config bugs.Config) []string {
+	bugs := bugs.GetAllBugs(config)
+	idMap := make(map[string]int, 0)
+	for _, bug := range bugs {
+		idMap[strings.ToLower(string(bug.Identifier()))] += 1
+	}
+	var ids []string
+	for k := range idMap {
+		ids = append(ids, k)
+	}
+	sort.Strings(ids)
+	return ids
+}
+
+// IdsNone is a subcommand to print issues with no assigned tags.
+func IdsNone(config bugs.Config) {
+	issuesroot := bugs.GetIssuesDir(config)
+	issues, _ := ioutil.ReadDir(string(issuesroot)) // TODO: should be a method elsewhere
+	sort.Sort(byDir(issues))
+	var wantTags bool = false
+
+	allbugs := bugs.GetAllBugs(config)
+	idMap := make(map[string]int, 0)
+	for _, bug := range allbugs {
+		if bug.Identifier() == "" {
+			title := bug.Dir.GetShortName()
+			idMap[string(title)] += 1
+		}
+	}
+	fmt.Printf("No ids assigned:\n")
+	for idx, issue := range issues {
+		//fmt.Printf("%v\n", issue)
+		for k, _ := range idMap {
+			if issue.Name() == k {
+				//fmt.Printf("1in: %v\n2tm: %v\n", issue.Name(), k)
+				var dir bugs.Directory = issuesroot + bugs.Directory(issue.Name()) //issuesroot + issue.Dir
+				//fmt.Printf("dir %v\n", dir)
+				b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName}
+				name := getBugName(b, idx) // Issue x:
+				//fmt.Printf("name %v\n", name)
+				if wantTags == false { // always
+					fmt.Printf("%s: %s\n", name, b.Title(""))
+					//keys = append(keys, fmt.Sprintf("%s: %s\n", name, b.Title("")))
+				} else {
+					fmt.Printf("%s: %s\n", name, b.Title("tags"))
+					//keys = append(keys, fmt.Sprintf("%s: %s\n", name, b.Title("tags")))
+				}
+			}
+		}
+	}
+	//return keys
+	return
+}
+
+// IdsAssigned is a subcommand to print the assigned ids.
+func IdsAssigned(config bugs.Config) {
+	//fmt.Printf("here\n")
+	get := getAllIds(config)
+	fmt.Printf("Ids used in current tree: ")
+	if len(get) > 0 {
+		fmt.Printf("%s\n", strings.Join(get, ", "))
+	} else {
+		fmt.Print("<none assigned yet>\n")
+	}
+}
 
 func generateID(val string) string {
 	hash := sha1.Sum([]byte(val))

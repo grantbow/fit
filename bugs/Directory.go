@@ -10,11 +10,12 @@ import (
 // Directory type is a string path name.
 type Directory string
 
-// GetRootDir returns the directory containing the issues subdirectory.
+// GetRootDir returns the directory usually containing the issues subdirectory.
+// TODO: should be GetIssuesDir ! no wonder !! fix here and everywhere called
 func GetRootDir(config Config) Directory {
 	dir := os.Getenv("PMIT")
 	if dir != "" {
-		// that PMIT dir exists is a bad assumption
+		// TODO: that PMIT dir exists is a bad assumption
 		if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
 			config.BugDir = dir
 			os.Chdir(dir)

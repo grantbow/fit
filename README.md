@@ -159,44 +159,53 @@ you are already in a directory tracked by git. To get started simply `mkdir
 issues`.
 
 ```
+$ mkdir foo && cd foo
+$ git init
 $ mkdir issues
 $ bug help
-Usage: bug <command> [options]
+cmd: help
+Usage: help <command>
 
 Use "bug help <command>" or "bug <command> help" for
 more information about any command below.
-bug version 0.4 built using go1.12.2
+bug version 0.4.1 built using go1.12.5
 
 Status/reading commands:
-	list       List existing bugs
-	find       Search bugs for a tag, status, priority, or milestone
-	env        Show settings that bug will use if invoked from this directory
-	pwd        Prints the issues directory to stdout (useful subcommand in the shell)
-	version    Print the version of this software
-	help       Show this screen
+    list       List issues
+    find       Search for tag of fields: id, status, priority, or milestone
+    tagslist   List assigned tags
+    notags     List issues without tags
+    ids        List stable identifiers
+    noids      List issues without stable identifiers
+    env        Show settings used when invoked from this directory
+    pwd        Print the issues directory
+    help       Show this screen
+    version    Print the version of this software
 
-Issue editing commands:
-	create     File a new bug
-	edit       Edit an existing bug
-	tag        Tag a bug
-	identifier Set a stable identifier for the bug
-	retitle    Rename the title of a bug
-	close      Delete an existing bug
-	status     View or edit a bug's status
-	priority   View or edit a bug's priority
-	milestone  View or edit a bug's milestone
-	import     Create local bugs from a github repository
+Editing commands:
+    create     Open new issue
+    edit       Edit an issue
+    retitle    Rename an issue
+    close      Delete an issue
+    tag        Tag an issue
+    id         View or set a stable identifier
+    status     View or set status
+    priority   View or set priority
+    milestone  View or set milestone
+    import     Download from github or bugseverywhere repository
 
 Version control commands:
-	commit     Commit any new, changed or deleted bug to git
-	purge      Remove all issues not tracked by git
+    commit     Commit any new, changed or deleted issues
+    purge      Remove all issues not tracked
 
-Other commands:
-	roadmap    Print list of open issues sorted by milestone
+Processing commands:
+    roadmap    Print list of open issues sorted by milestone
+
+aliases for help: --help -h
 
 $ bug create Need better help
 (<your editor> Description)
-(save)
+(save and quit)
 Created issue: Need better help
 
 $ bug list
@@ -213,17 +222,19 @@ $ bug create -n Need better formating for README
 Created issue: Need better formatting for README
 
 $ bug list
-Issue 1: Need better formating for README
-Issue 2: Need better help
+Issue 1: Need better help
+Issue 2: Need better formating for README
 ```
 
 ## History
 
-bug is the program written in Go developed by Dave MacFarlane (driusan).
-Filesystem Issue Tracker ([FIT.md](FIT.md)) is the new name for the Poor Man's Issue Tracker
-(PMIT) storage system also developed by driusan. For his demo from 2016, see
-[driusan's talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
-GolangMontreal.org conference, GoMTL-01.
+bug is the program written in Go who was first developed by
+Dave MacFarlane (driusan). Filesystem Issue Tracker ([FIT.md](FIT.md))
+is the new name for the Poor Man's Issue Tracker (PMIT) storage system also
+first developed by driusan. For his demo from 2016, see [driusan's talk](https://www.youtube.com/watch?v=ysgMlGHtDMo)
+at the first GolangMontreal.org conference, GoMTL-01. The program and
+storage system have had additions while trying to remain backward compatible.
+See the [FAQ.md](FAQ.md) for more information.
 
 ## Next Steps
 
@@ -232,17 +243,20 @@ GolangMontreal.org conference, GoMTL-01.
 * [CONTRIBUTING.md](CONTRUBUTING.md)
 * [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 * [SUPPORT.md](SUPPORT.md)
-* https://github.com/grantbow/bug/wiki
+* [wiki](https://github.com/grantbow/bug/wiki)
+* [gitter](https://gitter.im/fit-issue/community)
 
 Your system is the beginning, not the end. Much has been written about how to
 use and setup systems to track or manage issues, software bugs, trouble
-tickets, support tickets, incident ticket or requests.
+tickets, support tickets, incident tickets or requests.
 
 How to Report Bugs Effectively by Simon Tatham
     https://www.chiark.greenend.org.uk/~sgtatham/bugs.html
 
-While I hesitate to include this URL and while it uses very colloquial
-terminology the content could help many people.
+While I hesitate to include this URL because it uses very colloquial
+terminology not fully undestood by everyone that might read it the content
+is carefully written and can help many people understand open source support
+perspectives they may not have thought of before.
     http://www.catb.org/esr/faqs/smart-questions.html
 
 ### Feedback
