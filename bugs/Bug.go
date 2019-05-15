@@ -94,7 +94,11 @@ func TitleToDir(title string) Directory {
 
 // ShortTitleToDir truncates a title to 25 characters.
 func ShortTitleToDir(title string) Directory {
-	return TitleToDir(title[:25]) // TODO: remove leading or trailing _ or -
+	if len(title) > 25 {
+		return TitleToDir(title[:25]) // TODO: remove leading or trailing _ or -
+	} else {
+		return TitleToDir(title)
+	}
 }
 
 // GetDirectory returns the directory of an issue.

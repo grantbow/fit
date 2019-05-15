@@ -132,6 +132,10 @@ issues directory. Current options include:
           writes fields as tag_key_value format (true)
           rather than .../tag_Key_value.
           fields in both forms are read automatically.
+    * GithubPersonalAccessToken: string
+          Default is empty.
+          Set one at github.com/settings/tokens
+          for import of private projects that need authentication
           
 The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue system that can
 still work. It differs from other distributed, versioned, filesystem issue

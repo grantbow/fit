@@ -17,12 +17,19 @@ func Import(args argumentList, config bugs.Config) {
 	switch args[0] {
 	case "--github":
 		if githubRepo := args.GetArgument("--github", ""); githubRepo != "" {
-			if strings.Count(githubRepo, "/") != 1 {
-				fmt.Fprintf(os.Stderr, "Invalid GitHub repo: %s\n", githubRepo)
+			numStrings := strings.Count(githubRepo, "/")
+			pieces := strings.Split(githubRepo, "/")
+			//fmt.Printf("ns %v\np %v\n", numStrings, pieces)
+			if numStrings == 1 {
+				githubImportIssues(pieces[0], pieces[1], config)
+			} else if numStrings == 2 &&
+				pieces[2] == "projects" &&
+				config.GithubPersonalAccessToken != "" {
+				githubImportProjects(pieces[0], pieces[1], config)
+			} else {
+				fmt.Fprintf(os.Stderr, "GitHub invalid: %s\n", githubRepo)
 				return
 			}
-			pieces := strings.Split(githubRepo, "/")
-			githubImport(pieces[0], pieces[1], config)
 		}
 	case "--be":
 		if len(args) > 1 {

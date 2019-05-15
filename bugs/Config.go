@@ -34,7 +34,38 @@ type Config struct {
 	NewFieldAsTag bool `json:"NewFieldAsTag"`
 	// tag_field_value (true) or tag_Field_value (false default)
 	NewFieldLowerCase bool `json:"NewFieldLowerCase"`
+	// github.com/settings/tokens
+	GithubPersonalAccessToken string `json:"GithubPersonalAccessToken"`
 }
+
+/*
+create list of places for help:
+    * bugapp/Help.go   // case lines
+                       // alias line at bottom of each long description
+                       // help output at bottom of the file
+    * main.go          // case lines
+    * README.md        // includes help output generated from bottom of Help.go file, collected by running program
+    * FIT.md
+    * FAQ.md
+
+create list of places for config:
+    * bugs/Config.go   // bugs.Config struct
+                       // ConfigRead for reading values of config file
+    * README.md        // includes config descriptions
+                       // like comments from bugs.Config struct file
+
+synchronize
+
+Put the list in a good place for when new configs are added
+
+notes:
+
+		//* NewFieldAsTag: true or false,
+		//      Default Field file
+
+		//* NewFieldLowerCase: true or false,
+		//      Default Field as given
+*/
 
 // ErrNoConfig
 var ErrNoConfig = errors.New("No .bug.yml provided")
@@ -100,6 +131,12 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 			c.NewFieldLowerCase = true
 		} else {
 			c.NewFieldLowerCase = false
+		}
+		//* github.com/settings/tokens for import of projects and private repos
+		if temp.GithubPersonalAccessToken != "" {
+			c.GithubPersonalAccessToken = temp.GithubPersonalAccessToken
+		} else {
+			c.GithubPersonalAccessToken = ""
 		}
 		return nil
 	}
