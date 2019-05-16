@@ -7,7 +7,7 @@ import (
 )
 
 func ProgramVersion() string {
-	return "0.4.1"
+	return "0.5"
 }
 
 // Version is a subcommand to output the command name and golang runtime.Version().

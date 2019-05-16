@@ -6,12 +6,12 @@
             , "email": "grantbow+bug@gmail.com"},
     "license": "GPL-3.0",
     "author": "Dave MacFarlane <driusan@gmail.com> (https://github.com/driusan)",
-    "contributors": [ "Grant Bowman <grantbow+bug@gmail.com (https://github.com/grantbow"
+    "contributors": [ "Grant Bowman <grantbow+bug@gmail.com (https://github.com/grantbow)"
                     , "komosa (https://github.com/Komosa)"
                     , "mikecapone (https://github.com/mikecapone)"
                     , "HazCod (https://github.com/HazCod)"
                     ],
-    "bin": {"bug": "./main"},
+    "bin": {"bug": "./cmd/bug/main"},
     "repository": {"github:grantbow/bug"},
     "dependencies":
         { "ghodss/yaml": "v1.0.0"

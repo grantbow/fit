@@ -10,11 +10,13 @@ export GO111MODULE=on # for forks
 
 echo "testing main"
 #go build
+cd cmd/bug
 go test -v -coverprofile=profile.out -covermode=atomic
 if [ -f profile.out ]; then
-    cat profile.out >> ./coverage.txt
+    cat profile.out >> ../../coverage.txt
     rm profile.out
 fi
+cd ../..
 
 for d in $(find ./* -maxdepth 0 -type d); do
     if ls $d/*.go &> /dev/null; then
