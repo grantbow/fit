@@ -18,14 +18,14 @@ type Commit interface {
 }
 
 type ManagerTester interface {
-	GetLogs() ([]Commit, error)
+	Loggers() ([]Commit, error)
 	Setup() error
-	GetWorkDir() string
+	WorkDir() string
 	TearDown()
 	StageFile(string) error
 	AssertCleanTree(t *testing.T)
 	AssertStagingIndex(*testing.T, []FileStatus)
-	GetManager() SCMHandler
+	Manager() SCMHandler
 }
 
 type argumentList []string
@@ -38,7 +38,7 @@ func runCmd(cmd string, options ...string) (string, error) {
 }
 
 func assertLogs(tester ManagerTester, t *testing.T, titles []map[string]bool, diffs []string) {
-	logs, err := tester.GetLogs()
+	logs, err := tester.Loggers()
 	if err != nil {
 		t.Error("Could not get scm logs" + err.Error())
 		return
@@ -86,19 +86,19 @@ func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiff
 		return
 	}
 
-	m := tester.GetManager()
+	m := tester.Manager()
 	if m == nil {
 		t.Error("Could not get manager")
 		return
 	}
 	os.MkdirAll("issues/Test-bug", 0755)
 	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
-	m.Commit(bugs.Directory(tester.GetWorkDir()), "Initial commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()), "Initial commit", config)
 	//runCmd("bug", "retitle", "1", "Renamed", "bug")
 	args := argumentList{"1", "Renamed bug"}
 	expected := "Moving .*"
 	runretitle("scm/TestHelpers_test runtestRenameCommitsHelper", args, config, expected, t)
-	m.Commit(bugs.Directory(tester.GetWorkDir()), "This is a test rename", config)
+	m.Commit(bugs.Directory(tester.WorkDir()), "This is a test rename", config)
 
 	tester.AssertCleanTree(t)
 
@@ -121,7 +121,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		panic("Something went wrong trying to initialize git:" + err.Error())
 	}
 	defer tester.TearDown()
-	m := tester.GetManager()
+	m := tester.Manager()
 	if m == nil {
 		t.Error("Could not get manager")
 		return
@@ -137,7 +137,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	})
 
 	//fmt.Print("pre  1 runtestCommitDirtyTree\n")
-	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
 	//fmt.Print("post 1 runtestCommitDirtyTree\n")
 	tester.AssertStagingIndex(t, []FileStatus{
 		FileStatus{"donotcommit.txt", "?", "?"},
@@ -147,8 +147,8 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		FileStatus{"donotcommit.txt", "A", " "},
 	})
 	//fmt.Print("pre  2 runtestCommitDirtyTree\n")
-	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit", config)
-	//errCommit := m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit")
+	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
+	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit")
 	//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", errCommit) // nil here
 	//    running test shows output here. actually HgManager.go Commit() returns *expected* error not fully handled.
 	//    stdout not captured this time.
@@ -166,7 +166,7 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 		panic("Something went wrong trying to initialize: " + err.Error())
 	}
 	defer tester.TearDown()
-	m := tester.GetManager()
+	m := tester.Manager()
 	if m == nil {
 		t.Error("Could not get manager")
 		return
@@ -175,16 +175,16 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	//runCmd("bug", "create", "-n", "Test", "bug")
 	os.MkdirAll("issues/Test-bug", 0755)
 	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
-	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Initial commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
 
 	// Create another bug to elimate with purge
 	//runCmd("bug", "create", "-n", "Test", "Purge", "bug")
 	os.MkdirAll("issues/Test-Purge-Bug", 0755)
-	err = m.Purge(bugs.Directory(tester.GetWorkDir() + "/issues"))
+	err = m.Purge(bugs.Directory(tester.WorkDir() + "/issues"))
 	if err != nil {
 		t.Error("Error purging bug directory: " + err.Error())
 	}
-	issuesDir, err := ioutil.ReadDir("issues") //fmt.Sprintf("debug: %s/issues/", tester.GetWorkDir()))
+	issuesDir, err := ioutil.ReadDir("issues") //fmt.Sprintf("debug: %s/issues/", tester.WorkDir()))
 	if err != nil {
 		t.Error("Error reading issues directory: " + err.Error())
 	}
@@ -254,8 +254,8 @@ func scmRetitle(Args argumentList, config bugs.Config) {
 		return
 	}
 
-	currentDir := b.GetDirectory()
-	newDir := bugs.GetIssuesDir(config) + bugs.TitleToDir(strings.Join(Args[1:], " "))
+	currentDir := b.Direr()
+	newDir := bugs.IssuesDirer(config) + "/" + bugs.TitleToDir(strings.Join(Args[1:], " "))
 	fmt.Printf("Moving %s to %s\n", currentDir, newDir)
 	err = os.Rename(string(currentDir), string(newDir))
 	if err != nil {

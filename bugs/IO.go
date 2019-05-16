@@ -10,7 +10,7 @@ func (b *Bug) Read(p []byte) (int, error) {
 		return 0, ErrNoDescription
 	}
 	if b.descFile == nil {
-		dir := b.GetDirectory()
+		dir := b.Direr()
 		fp, err := os.OpenFile(string(dir)+"/"+b.DescriptionFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 		b.descFile = fp
 		if err != nil {
@@ -27,7 +27,7 @@ func (b *Bug) Write(data []byte) (n int, err error) {
 		return 0, ErrNoDescription
 	}
 	if b.descFile == nil {
-		dir := b.GetDirectory()
+		dir := b.Direr()
 		os.MkdirAll(string(dir), 0755)
 		fp, err := os.OpenFile(string(dir)+"/"+b.DescriptionFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
@@ -46,7 +46,7 @@ func (b *Bug) WriteAt(data []byte, off int64) (n int, err error) {
 		return 0, ErrNoDescription
 	}
 	if b.descFile == nil {
-		dir := b.GetDirectory()
+		dir := b.Direr()
 		os.MkdirAll(string(dir), 0755)
 		fp, err := os.OpenFile(b.DescriptionFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
@@ -70,7 +70,7 @@ func (b Bug) Close() error {
 
 // Remove deletes the directory and files of an issue.
 func (b *Bug) Remove() error {
-	dir := b.GetDirectory()
+	dir := b.Direr()
 	if dir != "" {
 		return os.RemoveAll(string(dir))
 	}

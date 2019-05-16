@@ -101,8 +101,8 @@ func ShortTitleToDir(title string) Directory {
 	}
 }
 
-// GetDirectory returns the directory of an issue.
-func (b Bug) GetDirectory() Directory {
+// Direr returns the directory of an issue.
+func (b Bug) Direr() Directory {
 	return b.Dir
 }
 
@@ -118,7 +118,7 @@ func (b Bug) Title(options string) string {
 		return strings.Contains(options, o)
 	}
 
-	title := b.Dir.GetShortName().ToTitle()
+	title := b.Dir.ShortNamer().ToTitle()
 
 	if id := b.Identifier(); hasOption("identifier") && id != "" {
 		title = fmt.Sprintf("(%s) %s", id, title)
@@ -173,7 +173,7 @@ func (b Bug) Description() string {
 
 // SetDescription writes the Description file of an issue.
 func (b *Bug) SetDescription(val string, config Config) error {
-	dir := b.GetDirectory()
+	dir := b.Direr()
 	//fmt.Printf("aha %s\n", config.DescriptionFileName)
 	b.DescriptionFileName = config.DescriptionFileName
 
@@ -182,7 +182,7 @@ func (b *Bug) SetDescription(val string, config Config) error {
 
 // RemoveTag deletes a tag file of an issue.
 func (b *Bug) RemoveTag(tag TagBoolTrue, config Config) {
-	if dir := b.GetDirectory(); dir != "" {
+	if dir := b.Direr(); dir != "" {
 		os.Remove(string(dir) + "/tags/" + string(tag))
 		files, err := filepath.Glob(string(dir) + "tag_" + string(tag) + "")
 		if err == nil {
@@ -200,7 +200,7 @@ func (b *Bug) RemoveTag(tag TagBoolTrue, config Config) {
 
 // TagBug writes an empty tag file.
 func (b *Bug) TagBug(tag TagBoolTrue, config Config) {
-	if dir := b.GetDirectory(); dir != "" {
+	if dir := b.Direr(); dir != "" {
 		if config.TagKeyValue == true {
 			ioutil.WriteFile(string(dir)+"/tag_"+string(tag), []byte(""), 0644)
 		} else {
@@ -214,7 +214,7 @@ func (b *Bug) TagBug(tag TagBoolTrue, config Config) {
 
 // RemoveComment deletes a comment file of an issue.
 func (b *Bug) RemoveComment(comment Comment) {
-	if dir := b.GetDirectory(); dir != "" {
+	if dir := b.Direr(); dir != "" {
 		os.Remove(string(dir) + "/comment-" + string(ShortTitleToDir(string(comment.Body))))
 	} else {
 		fmt.Printf("Error removing comment: %s", comment.Body)
@@ -223,7 +223,7 @@ func (b *Bug) RemoveComment(comment Comment) {
 
 // CommentBug writes a text file for an issue.
 func (b *Bug) CommentBug(comment Comment, config Config) {
-	if dir := b.GetDirectory(); dir != "" {
+	if dir := b.Direr(); dir != "" {
 		//os.Mkdir(string(dir)+"/", 0755)
 		commenttext := []byte(comment.Body + "\n")
 		if config.ImportCommentsTogether { // not efficient but ok for now
@@ -288,13 +288,13 @@ func (b Bug) HasTag(tag TagBoolTrue) bool {
 	return false
 }
 
-// created b.getTag for similar needs of {bugs/Bug.go:Tags, bugs/Bug.go:setField}, also bugs/Bug.go:getLines
+// created b.tager for similar needs of {bugs/Bug.go:Tags, bugs/Bug.go:setField}, also bugs/Bug.go:liners
 
-// getTag takes a file name, returns the key, value,
+// tager takes a file name, returns the key, value,
 // bool if value in name,
 // bool if value in file contents, error
-func (b Bug) getTag(abspath string) (string, string, bool, bool, error) {
-	dir := b.GetDirectory()
+func (b Bug) tager(abspath string) (string, string, bool, bool, error) {
+	dir := b.Direr()
 	//hit := withtagsubdirfile.Name() // simple for tags subdir
 	//   aka abspath
 	key := ""
@@ -330,11 +330,11 @@ func (b Bug) getTag(abspath string) (string, string, bool, bool, error) {
 
 // Tags returns a bug's array of tags.
 func (b Bug) Tags() []TagBoolTrue {
-	dir := b.GetDirectory()
+	dir := b.Direr()
 	tags := []string{}
 	// fields
 	for _, k := range []string{"Status", "Priority", "Milestone", "Identifier"} {
-		if v := b.getField(k); v != "" {
+		if v := b.fielder(k); v != "" {
 			keyvalue := strings.ToLower(k) + ":" + strings.ToLower(v)
 			if !findArrayString(tags, keyvalue) {
 				//fmt.Printf("keyvalue 1 %v\n", keyvalue)
@@ -358,7 +358,7 @@ func (b Bug) Tags() []TagBoolTrue {
 	}
 	//fmt.Printf("withtagfile %v\n", withtagfile)
 	for _, withtagfilefile := range withtagfile {
-		k, v, _, _, err := b.getTag(withtagfilefile)
+		k, v, _, _, err := b.tager(withtagfilefile)
 		key := strings.ToLower(k)
 		value := strings.ToLower(v)
 		//fmt.Printf("key %v value %v e %v\n", key, value, err)
@@ -412,9 +412,9 @@ func findArrayString(arr []string, looking string) bool {
 	return false
 }
 
-// getField reads and returns the string value from the file of an issue.
-func (b Bug) getField(fieldName string) string {
-	lines := b.getLines(fieldName)
+// fielder reads and returns the string value from the file of an issue.
+func (b Bug) fielder(fieldName string) string {
+	lines := b.liners(fieldName)
 	if len(lines) > 0 {
 		return strings.TrimSpace(lines[0])
 	} else {
@@ -422,10 +422,10 @@ func (b Bug) getField(fieldName string) string {
 	}
 }
 
-// created b.getLines for similar needs of {bugs/Bug.go:getField, bugs/Bug.go:setField}
-// getLines does the work for getField with extra lines.
-func (b Bug) getLines(fieldName string) []string {
-	dirr := b.GetDirectory()
+// created b.liners for similar needs of {bugs/Bug.go:fielder, bugs/Bug.go:setField}
+// liners does the work for fielder with extra lines.
+func (b Bug) liners(fieldName string) []string {
+	dirr := b.Direr()
 	dir := string(dirr)
 	lines := []string{}
 	// try (F)ieldName
@@ -441,13 +441,13 @@ func (b Bug) getLines(fieldName string) []string {
 		return lines
 	}
 	// try tag_(K)ey_value
-	_, value, _, _, err := b.getTag(dir + "/tag_" + fieldName)
+	_, value, _, _, err := b.tager(dir + "/tag_" + fieldName)
 	if err == nil {
 		lines = []string{value}
 		return lines
 	}
 	// try tag_(k)ey_value
-	_, value, _, _, err = b.getTag(dir + "/tag_" + strings.ToLower(fieldName))
+	_, value, _, _, err = b.tager(dir + "/tag_" + strings.ToLower(fieldName))
 	if err == nil {
 		lines = []string{value}
 		return lines
@@ -467,18 +467,18 @@ func (b Bug) getLines(fieldName string) []string {
 	return lines
 }
 
-//key, value, _, _, err := getField(withtagfile[withtagfilefile], string(dir))
+//key, value, _, _, err := fielder(withtagfile[withtagfilefile], string(dir))
 
 // setField writes the string value to the file of an issue.
 func (b Bug) setField(fieldName string, value string, config Config) error { // TODO: complete func for config tag files : paused with tag_name, tag_contents, file_contents
 	// using Status for fielName string example in comments
-	dir := b.GetDirectory()
+	dir := b.Direr()
 	//possible locations
 	tag_name := false
 	tag_contents := false
 	file_contents := false
 	// try "Status" file
-	presentLines := b.getLines(fieldName) // var presentLines []string
+	presentLines := b.liners(fieldName) // var presentLines []string
 	if len(presentLines) > 0 {
 		file_contents = true
 	}
@@ -489,7 +489,7 @@ func (b Bug) setField(fieldName string, value string, config Config) error { // 
 	if errtagfile == nil {
 		for _, withtagfilefile := range withtagfile {
 			presentvalue := ""
-			_, presentvalue, tag_name, tag_contents, errfind = b.getTag(withtagfilefile)
+			_, presentvalue, tag_name, tag_contents, errfind = b.tager(withtagfilefile)
 			if errfind == nil {
 				presentLines = []string{presentvalue}
 			}
@@ -539,7 +539,7 @@ func (b Bug) setField(fieldName string, value string, config Config) error { // 
 
 // Status returns the string from the Status file of an issue.
 func (b Bug) Status() string {
-	return b.getField("Status")
+	return b.fielder("Status")
 }
 
 // SetStatus writes the Status file to an issue.
@@ -549,7 +549,7 @@ func (b Bug) SetStatus(newStatus string, config Config) error {
 
 // Priority returns the string from the Priority file of an issue.
 func (b Bug) Priority() string {
-	return b.getField("Priority")
+	return b.fielder("Priority")
 }
 
 // SetPriority writes the Priority file to an issue.
@@ -559,7 +559,7 @@ func (b Bug) SetPriority(newValue string, config Config) error {
 
 // Milestone returns the string from the Milestone file of an issue.
 func (b Bug) Milestone() string {
-	return b.getField("Milestone")
+	return b.fielder("Milestone")
 }
 
 // SetMilestone writes the Milestone file to an issue.
@@ -569,11 +569,11 @@ func (b Bug) SetMilestone(newValue string, config Config) error {
 
 // Identifier returns the string from the Identifier file of an issue.
 func (b Bug) Identifier() string {
-	i := b.getField("Identifier")
+	i := b.fielder("Identifier")
 	if i != "" {
 		return i
 	} else {
-		return b.getField("Id")
+		return b.fielder("Id")
 	}
 }
 
@@ -584,7 +584,7 @@ func (b Bug) SetIdentifier(newValue string, config Config) error {
 
 // New assigns and writes an issue.
 func New(title string, config Config) (*Bug, error) {
-	expectedDir := GetIssuesDir(config) + TitleToDir(title)
+	expectedDir := IssuesDirer(config) + "/" + TitleToDir(title)
 	err := os.Mkdir(string(expectedDir), 0755)
 	if err != nil {
 		return nil, err

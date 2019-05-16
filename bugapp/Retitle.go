@@ -21,8 +21,8 @@ func Relabel(Args argumentList, config bugs.Config) {
 		return
 	}
 
-	currentDir := b.GetDirectory()
-	newDir := bugs.GetIssuesDir(config) + bugs.TitleToDir(strings.Join(Args[1:], " "))
+	currentDir := b.Direr()
+	newDir := bugs.IssuesDirer(config) + "/" + bugs.TitleToDir(strings.Join(Args[1:], " "))
 	fmt.Printf("Moving %s to %s\n", currentDir, newDir)
 	err = os.Rename(string(currentDir), string(newDir))
 	if err != nil {

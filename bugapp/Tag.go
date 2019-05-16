@@ -31,7 +31,7 @@ func getAllTags(config bugs.Config) []string {
 
 // TagsNone is a subcommand to print issues with no assigned tags.
 func TagsNone(config bugs.Config) {
-	issuesroot := bugs.GetIssuesDir(config)
+	issuesroot := bugs.IssuesDirer(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot)) // TODO: should be a method elsewhere
 	sort.Sort(byDir(issues))
 	var wantTags bool = false
@@ -40,7 +40,7 @@ func TagsNone(config bugs.Config) {
 	tagMap := make(map[string]int, 0)
 	for _, bug := range allbugs {
 		if len(bug.Tags()) == 0 {
-			title := bug.Dir.GetShortName()
+			title := bug.Dir.ShortNamer()
 			tagMap[string(title)] += 1
 		}
 	}
@@ -48,7 +48,7 @@ func TagsNone(config bugs.Config) {
 	//keys := make([]string, 0, len(tagMap))
 	/*for k, _ := range tagMap {
 		//fmt.Printf("%v\n", k)
-		name := getBugName(b, idx) // Issue x:
+		name := bugNamer(b, idx) // Issue x:
 		fmt.Printf("%v\n", k)
 		//keys = append(keys, k) // TODO: should just append not tagmap intermediary
 	} */
@@ -60,10 +60,10 @@ func TagsNone(config bugs.Config) {
 		for k, _ := range tagMap {
 			if issue.Name() == k {
 				//fmt.Printf("1in: %v\n2tm: %v\n", issue.Name(), k)
-				var dir bugs.Directory = issuesroot + bugs.Directory(issue.Name()) //issuesroot + issue.Dir
+				var dir bugs.Directory = issuesroot + "/" + bugs.Directory(issue.Name())
 				//fmt.Printf("dir %v\n", dir)
 				b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName}
-				name := getBugName(b, idx) // Issue x:
+				name := bugNamer(b, idx) // Issue x:
 				//fmt.Printf("name %v\n", name)
 				if wantTags == false { // always
 					fmt.Printf("%s: %s\n", name, b.Title(""))

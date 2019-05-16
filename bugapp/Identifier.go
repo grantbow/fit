@@ -27,7 +27,7 @@ func getAllIds(config bugs.Config) []string {
 
 // IdsNone is a subcommand to print issues with no assigned tags.
 func IdsNone(config bugs.Config) {
-	issuesroot := bugs.GetIssuesDir(config)
+	issuesroot := bugs.IssuesDirer(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot)) // TODO: should be a method elsewhere
 	sort.Sort(byDir(issues))
 	var wantTags bool = false
@@ -36,7 +36,7 @@ func IdsNone(config bugs.Config) {
 	idMap := make(map[string]int, 0)
 	for _, bug := range allbugs {
 		if bug.Identifier() == "" {
-			title := bug.Dir.GetShortName()
+			title := bug.Dir.ShortNamer()
 			idMap[string(title)] += 1
 		}
 	}
@@ -46,10 +46,10 @@ func IdsNone(config bugs.Config) {
 		for k, _ := range idMap {
 			if issue.Name() == k {
 				//fmt.Printf("1in: %v\n2tm: %v\n", issue.Name(), k)
-				var dir bugs.Directory = issuesroot + bugs.Directory(issue.Name()) //issuesroot + issue.Dir
+				var dir bugs.Directory = issuesroot + "/" + bugs.Directory(issue.Name())
 				//fmt.Printf("dir %v\n", dir)
 				b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName}
-				name := getBugName(b, idx) // Issue x:
+				name := bugNamer(b, idx) // Issue x:
 				//fmt.Printf("name %v\n", name)
 				if wantTags == false { // always
 					fmt.Printf("%s: %s\n", name, b.Title(""))

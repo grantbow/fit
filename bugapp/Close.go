@@ -19,7 +19,7 @@ func Close(args argumentList, config bugs.Config) {
 	var bugsToClose []string
 	for _, bugID := range args {
 		if bug, err := bugs.LoadBugByHeuristic(bugID, config); err == nil {
-			dir := bug.GetDirectory()
+			dir := bug.Direr()
 			bugsToClose = append(bugsToClose, string(dir))
 		} else {
 			fmt.Fprintf(os.Stderr, "Could not close bug %s: %s\n", bugID, err)

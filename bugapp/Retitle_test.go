@@ -26,10 +26,9 @@ func TestRelabel(t *testing.T) {
 	test := tester{}          // from Bug_test.go
 	test.Setup()
 	defer test.Teardown()
-	//config.BugDir = bugs.GetRootDir(config)
-	//bugDir := bugs.GetIssuesDir(config) + bugs.TitleToDir(args[0])
-	rootDir := bugs.GetIssuesDir(config)
-	//bugDir := rootDir + bugs.TitleToDir("Test Bug")
+	//bugDir := bugs.IssuesDirer(config) + bugs.TitleToDir(args[0])
+	issuesDir := bugs.IssuesDirer(config)
+	//bugDir := issuesDir + bugs.TitleToDir("Test Bug")
 	//fmt.Print("bugDir ", bugDir, "\n")
 
 	expected := "Usage: .*"
@@ -41,26 +40,26 @@ func TestRelabel(t *testing.T) {
 
 	args = argumentList{"1", "Error Bug"} // rename err
 	// before chmod
-	//fi, _ := os.Open(string(rootDir))
+	//fi, _ := os.Open(string(issuesDir))
 	//stat, _ := fi.Stat()
 	//fmt.Println(dirDumpFI([]os.FileInfo{stat}))
-	//fmt.Println(dirDump(string(rootDir)))
+	//fmt.Println(dirDump(string(issuesDir)))
 	//fmt.Printf("mode %v\n", stat.Mode())
 	// chmod 500 temp parent directory, read and execute
-	err := os.Chmod(string(rootDir), 0500) // change
+	err := os.Chmod(string(issuesDir), 0500) // change
 	check(err)
 	// after chmod
-	//fi, _ = os.Open(string(rootDir))
+	//fi, _ = os.Open(string(issuesDir))
 	//stat, _ = fi.Stat()
 	//fmt.Println(dirDumpFI([]os.FileInfo{stat}))
-	//fmt.Println(dirDump(string(rootDir)))
+	//fmt.Println(dirDump(string(issuesDir)))
 	//fmt.Printf("mode %v\n", stat.Mode())
 	expected = "Moving .*\\nError moving directory\\n"
 	runrelabel("rename err", args, config, expected, t)
 
 	args = argumentList{"1", "Success Bug"} // good
 	// chmod 700 temp parent directory
-	err = os.Chmod(string(rootDir), 0700) // change
+	err = os.Chmod(string(issuesDir), 0700) // change
 	check(err)
 	expected = "Moving .*"
 	runrelabel("good", args, config, expected, t)

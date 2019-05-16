@@ -20,7 +20,7 @@ type GitManager struct {
 
 // Purge runs git clean -fd on the directory containing the issues directory.
 func (mgr GitManager) Purge(dir bugs.Directory) error {
-	cmd := exec.Command("git", "clean", "-fd", string(dir))
+	cmd := exec.Command("git", "clean", "-fd", string(dir)+"/")
 
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -203,13 +203,13 @@ func (mgr GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config 
 	return nil
 }
 
-// GetSCMType returns "git".
-func (mgr GitManager) GetSCMType() string {
+// SCMTyper returns "git".
+func (mgr GitManager) SCMTyper() string {
 	return "git"
 }
 
-// GetSCMIssuesUpdates returns uncommitted files including staged and working directory
-func (mgr GitManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Config
+// SCMIssuesUpdaters returns uncommitted files including staged and working directory
+func (mgr GitManager) SCMIssuesUpdaters() ([]byte, error) { // config bugs.Config
 	cmd := exec.Command("git", "status", "--porcelain", "-u", "--", ":/issues")
 	// --porcelain output format
 	// -u shows all unstaged files, not just directories
@@ -224,8 +224,8 @@ func (mgr GitManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Con
 	}
 }
 
-// GetSCMIssuesCached returns uncommitted files only staged not working directory
-func (mgr GitManager) GetSCMIssuesCached() ([]byte, error) { // config bugs.Config
+// SCMIssuesCacher returns uncommitted files only staged not working directory
+func (mgr GitManager) SCMIssuesCacher() ([]byte, error) { // config bugs.Config
 	cmd := exec.Command("git", "diff", "--name-status", "--cached", "HEAD", "--", ":/issues")
 	// whitespace differs from output of git status - darn
 	co, _ := cmd.CombinedOutput()

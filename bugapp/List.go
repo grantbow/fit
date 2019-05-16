@@ -9,8 +9,8 @@ import (
 	"sort"
 )
 
-// getBugName takes a bug and an int index then outputs a string.
-func getBugName(b bugs.Bug, idx int) string {
+// bugNamer takes a bug and an int index then outputs a string.
+func bugNamer(b bugs.Bug, idx int) string {
 	if id := b.Identifier(); id != "" {
 		return fmt.Sprintf("Issue %s", id)
 	}
@@ -21,11 +21,11 @@ func getBugName(b bugs.Bug, idx int) string {
 func listTags(files []os.FileInfo, args argumentList, config bugs.Config) {
 	b := bugs.Bug{}
 	for idx := range files {
-		b.LoadBug(bugs.Directory(bugs.GetIssuesDir(config) + bugs.Directory(files[idx].Name())))
+		b.LoadBug(bugs.Directory(bugs.IssuesDirer(config) + "/" + bugs.Directory(files[idx].Name())))
 
 		for _, tag := range args {
 			if b.HasTag(bugs.TagBoolTrue(tag)) {
-				fmt.Printf("%s: %s\n", getBugName(b, idx), b.Title("tags"))
+				fmt.Printf("%s: %s\n", bugNamer(b, idx), b.Title("tags"))
 			}
 		}
 	}
@@ -48,7 +48,7 @@ func (t byDir) Less(i, j int) bool {
 
 // List is a subcommand to print issues.
 func List(args argumentList, config bugs.Config) {
-	issuesroot := bugs.GetIssuesDir(config)
+	issuesroot := bugs.IssuesDirer(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot))
 	sort.Sort(byDir(issues))
 
@@ -133,9 +133,9 @@ func List(args argumentList, config bugs.Config) {
 
 func printIssueByDir(idx int, issue os.FileInfo, issuesroot bugs.Directory, config bugs.Config, wantTags bool) {
 	// TODO: same next eight lines func (idx, issue)
-	var dir bugs.Directory = issuesroot + bugs.Directory(issue.Name())
+	var dir bugs.Directory = issuesroot + "/" + bugs.Directory(issue.Name())
 	b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName} // assumes DescriptionFileName
-	name := getBugName(b, idx)                                               // Issue idx: b.Title
+	name := bugNamer(b, idx)                                                 // Issue idx: b.Title
 	if wantTags == false {
 		fmt.Printf("%s: %s\n", name, b.Title(""))
 	} else {

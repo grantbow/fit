@@ -127,7 +127,7 @@ func Roadmap(args argumentList, config bugs.Config) {
 	}
 	sort.Sort(BugListByMilestone(bgs))
 
-	fmt.Printf("# Roadmap for %s\n", bugs.GetRootDir(config).GetShortName().ToTitle())
+	fmt.Printf("# Roadmap for %s\n", bugs.RootDirer(config).ShortNamer().ToTitle())
 	milestone := ""
 	for i := len(bgs) - 1; i >= 0; i -= 1 {
 		b := bgs[i]

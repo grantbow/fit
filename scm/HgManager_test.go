@@ -30,7 +30,7 @@ type HgTester struct {
 	workdir string
 }
 
-func (h HgTester) GetLogs() ([]Commit, error) {
+func (h HgTester) Loggers() ([]Commit, error) {
 	logs, err := runCmd("hg", "log", "-r", ":", "--template", "{node} {desc}\\n")
 	if err != nil {
 		return nil, err
@@ -103,7 +103,7 @@ func (h HgTester) TearDown() {
 	os.RemoveAll(h.workdir)
 }
 
-func (h HgTester) GetWorkDir() string {
+func (h HgTester) WorkDir() string {
 	return h.workdir
 }
 func (h HgTester) AssertCleanTree(t *testing.T) {
@@ -117,7 +117,7 @@ func (h HgTester) AssertCleanTree(t *testing.T) {
 	}
 }
 
-func (h HgTester) GetManager() SCMHandler {
+func (h HgTester) Manager() SCMHandler {
 	return h.handler
 }
 
@@ -149,10 +149,10 @@ func TestHgFilesOutsideOfBugNotCommited(t *testing.T) {
 	runtestCommitDirtyTree(&h, t)
 }
 
-func TestHgGetType(t *testing.T) {
+func TestHgTyper(t *testing.T) {
 	h := HgManager{}
 
-	if h.GetSCMType() != "hg" {
+	if h.SCMTyper() != "hg" {
 		t.Error("Incorrect type for HgManager")
 	}
 }

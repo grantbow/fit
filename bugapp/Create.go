@@ -71,17 +71,17 @@ func Create(Args argumentList, config bugs.Config) {
 		fmt.Fprintf(os.Stderr, "\nNo Bug Description provided.\n")
 		return
 	}
-	var bgid = bugs.GetIssuesDir(config)
+	var bgid = bugs.IssuesDirer(config)
 	if bgid == "" {
 		os.MkdirAll("issues", 0700)
-		bgid = bugs.GetIssuesDir(config)
+		bgid = bugs.IssuesDirer(config)
 	}
 	var bug = bugs.Bug{
-		Dir:                 bgid + bugs.TitleToDir(strings.Join(Args, " ")),
+		Dir:                 bgid + "/" + bugs.TitleToDir(strings.Join(Args, " ")),
 		DescriptionFileName: config.DescriptionFileName,
 	}
 
-	dir := bug.GetDirectory()
+	dir := bug.Direr()
 
 	var mode os.FileMode
 	mode = 0775

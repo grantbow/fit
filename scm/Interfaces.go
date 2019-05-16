@@ -2,13 +2,13 @@ package scm
 
 import "github.com/driusan/bug/bugs"
 
-// SCMHandler interface defines how to call Commit, Purge and GetSCMType.
+// SCMHandler interface defines how to call Commit, Purge and SCMTyper.
 type SCMHandler interface {
 	Commit(dir bugs.Directory, commitMsg string, config bugs.Config) error
 	Purge(bugs.Directory) error
-	GetSCMType() string
-	GetSCMIssuesUpdates() ([]byte, error)
-	GetSCMIssuesCached() ([]byte, error)
+	SCMTyper() string
+	SCMIssuesUpdaters() ([]byte, error)
+	SCMIssuesCacher() ([]byte, error)
 }
 
 // FileStatus type holds information about a file.

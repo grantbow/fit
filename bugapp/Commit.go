@@ -22,7 +22,7 @@ func Commit(args argumentList, config bugs.Config) {
 		return
 	}
 
-	err = scm.Commit(bugs.GetIssuesDir(config), "Added or removed issues with the tool \"bug\"", config)
+	err = scm.Commit(bugs.IssuesDirer(config)+"/", "Added or removed issues with the tool \"bug\"", config)
 
 	if err != nil {
 		fmt.Printf("Could not commit: %s\n", err.Error())

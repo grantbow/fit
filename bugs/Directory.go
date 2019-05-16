@@ -10,12 +10,11 @@ import (
 // Directory type is a string path name.
 type Directory string
 
-// GetRootDir returns the directory usually containing the issues subdirectory.
-// TODO: should be GetIssuesDir ! no wonder !! fix here and everywhere called
-func GetRootDir(config Config) Directory {
+// RootDirer returns the directory usually containing the issues subdirectory.
+func RootDirer(config Config) Directory {
 	dir := os.Getenv("PMIT")
 	if dir != "" {
-		// TODO: that PMIT dir exists is a bad assumption
+		// TODO: assumes PMIT dir exists, bad assumption
 		if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
 			config.BugDir = dir
 			os.Chdir(dir)
@@ -49,15 +48,15 @@ func GetRootDir(config Config) Directory {
 	return "" // out of luck
 }
 
-// GetIssuesDir returns the directory containing the issues.
+// IssuesDirer returns the directory containing the issues.
 // The root directory contains the issues directory.
-func GetIssuesDir(config Config) Directory {
-	root := GetRootDir(config)
+func IssuesDirer(config Config) Directory {
+	root := RootDirer(config)
 	if root == "" {
 		return root
 	}
-	return Directory(root + "/issues/") // TODO: remove trailing /
-	/* then edit these $ grep -ils getissuesdir ...
+	return Directory(root + "/issues")
+	/* edited these $ grep -ils issuesdirer ...
 	bug-import/be.go
 	bug-import/github.go
 	bugapp/Commit.go
@@ -76,8 +75,8 @@ func GetIssuesDir(config Config) Directory {
 	*/
 }
 
-// GetShortName returns the directory name of a bug
-func (d Directory) GetShortName() Directory {
+// ShortNamer returns the directory name of a bug
+func (d Directory) ShortNamer() Directory {
 	pieces := strings.Split(string(d), "/")
 	return Directory(pieces[len(pieces)-1])
 }

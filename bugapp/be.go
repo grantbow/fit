@@ -80,7 +80,7 @@ func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
 	bugdir := bugs.TitleToDir(beBug.Summary)
 
 	b := bugs.Bug{Dir: bugs.Directory(issuesDir) + bugdir}
-	if dir := b.GetDirectory(); dir != "" {
+	if dir := b.Direr(); dir != "" {
 		os.Mkdir(string(dir), 0755)
 	}
 	if beBug.Status != "" && beBug.Severity != "" {
@@ -152,7 +152,7 @@ func beImport(config bugs.Config) {
 			os.Exit(4)
 		}
 
-		issuesDir := bugs.GetIssuesDir(config)
+		issuesDir := bugs.IssuesDirer(config)
 		lastIdentifier := ""
 		nextIdentifier := ""
 		for idx, file := range files {

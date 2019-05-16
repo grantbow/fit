@@ -39,7 +39,7 @@ func Edit(args argumentList, config bugs.Config) {
 			return
 		}
 
-		dir := b.GetDirectory()
+		dir := b.Direr()
 
 		switch title := strings.Title(file); title {
 		case "Milestone", "Status", "Priority", "Identifier":

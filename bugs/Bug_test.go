@@ -40,7 +40,7 @@ func (t *tester) Teardown() {
 func TestTitleToDirectory(t *testing.T) {
 	var assertDirectory = func(title, directory string) {
 		titleStr := TitleToDir(title)
-		dirStr := Directory(directory).GetShortName()
+		dirStr := Directory(directory).ShortNamer()
 
 		if titleStr != dirStr {
 			t.Error(fmt.Sprintf("Failed on %s: got %s but expected %s\n", title, titleStr, dirStr))
@@ -79,7 +79,7 @@ func TestNewBug(t *testing.T) {
 	if err != nil || b == nil {
 		t.Error("Unexpected error when creating New bug" + err.Error())
 	}
-	if b.Dir != GetIssuesDir(config)+TitleToDir("I am a test") {
+	if b.Dir != IssuesDirer(config)+"/"+TitleToDir("I am a test") {
 		t.Error("Unexpected directory when creating New bug")
 	}
 }
@@ -94,7 +94,7 @@ func TestSetDescription(t *testing.T) {
 	b := test.bug
 
 	b.SetDescription("Hello, I am a bug.", config)
-	val, err := ioutil.ReadFile(string(b.GetDirectory()) + "/Description")
+	val, err := ioutil.ReadFile(string(b.Direr()) + "/Description")
 	if err != nil {
 		t.Error("Could not read Description file")
 	}

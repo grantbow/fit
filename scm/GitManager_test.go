@@ -34,7 +34,7 @@ type GitTester struct {
 	workdir string
 }
 
-func (g GitTester) GetLogs() ([]Commit, error) {
+func (g GitTester) Loggers() ([]Commit, error) {
 	logs, err := runCmd("git", "log", "--oneline", "--reverse", "-z")
 	if err != nil {
 		wd, _ := os.Getwd()
@@ -112,7 +112,7 @@ func init() {
 func (g GitTester) TearDown() {
 	os.RemoveAll(g.workdir)
 }
-func (g GitTester) GetWorkDir() string {
+func (g GitTester) WorkDir() string {
 	return g.workdir
 }
 
@@ -126,7 +126,7 @@ func (g GitTester) AssertCleanTree(t *testing.T) {
 	}
 }
 
-func (g GitTester) GetManager() SCMHandler {
+func (g GitTester) Manager() SCMHandler {
 	return g.handler
 }
 
@@ -161,10 +161,10 @@ func TestGitFilesOutsideOfBugNotCommited(t *testing.T) {
 	runtestCommitDirtyTree(&g, t)
 }
 
-func TestGitManagerGetType(t *testing.T) {
+func TestGitManagerTyper(t *testing.T) {
 	manager := GitManager{}
 
-	if getType := manager.GetSCMType(); getType != "git" {
+	if getType := manager.SCMTyper(); getType != "git" {
 		t.Error("Incorrect SCM Type for GitManager. Got " + getType)
 	}
 }
@@ -194,7 +194,7 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 		panic("Something went wrong trying to initialize git:" + err.Error())
 	}
 	defer tester.TearDown()
-	m := tester.GetManager()
+	m := tester.Manager()
 	if m == nil {
 		t.Error("Could not get manager")
 		return
@@ -216,13 +216,13 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 	}
 
 	// Commit the file, so that we can close it..
-	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Adding commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Adding commit", config)
 	// Delete the bug
-	os.RemoveAll(tester.GetWorkDir() + "/issues/Test-bug")
-	os.RemoveAll(tester.GetWorkDir() + "/issues/Test-Another-bug")
-	m.Commit(bugs.Directory(tester.GetWorkDir()+"/issues"), "Removal commit", config)
+	os.RemoveAll(tester.WorkDir() + "/issues/Test-bug")
+	os.RemoveAll(tester.WorkDir() + "/issues/Test-Another-bug")
+	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Removal commit", config)
 
-	commits, err := tester.GetLogs()
+	commits, err := tester.Loggers()
 	if len(commits) != 2 || err != nil {
 		t.Error("Error getting git logs while attempting to test GitHub autoclosing")
 		return

@@ -18,12 +18,12 @@ func main() {
 
 	rootPresent := false
 	bugYml := ".bug.yml"
-	if bugsgetrootdir := bugs.GetRootDir(config); bugsgetrootdir != "" {
+	if bugsgetrootdir := bugs.RootDirer(config); bugsgetrootdir != "" {
 		rootPresent = true
 		config.BugDir = string(bugsgetrootdir)
 		// now try to read config
-		cerr := bugs.ConfigRead(bugYml, &config, bugapp.ProgramVersion())
-		if cerr == nil {
+		ErrC := bugs.ConfigRead(bugYml, &config, bugapp.ProgramVersion())
+		if ErrC == nil {
 			config.BugYml = config.BugDir + "/" + bugYml
 		}
 	}
@@ -37,19 +37,19 @@ func main() {
 		os.Exit(2)
 	}
 
-	bugs.GetIssuesDir(config) // from bugs/Directory.go, uses config.BugDir
+	bugs.IssuesDirer(config) // from bugs/Directory.go, uses config.BugDir
 
 	scmoptions := make(map[string]bool)
-	handler, _, herr := scm.DetectSCM(scmoptions, config)
-	if herr != nil {
-		if _, uerr := handler.GetSCMIssuesUpdates(); uerr != nil {
-			if _, cerr := handler.GetSCMIssuesCached(); cerr != nil {
-				fmt.Printf("Warn: %s\n", cerr)
+	handler, _, ErrH := scm.DetectSCM(scmoptions, config)
+	if ErrH != nil {
+		if _, ErrU := handler.SCMIssuesUpdaters(); ErrU != nil {
+			if _, ErrCa := handler.SCMIssuesCacher(); ErrCa != nil {
+				fmt.Printf("Warn: %s\n", ErrCa)
 			} else {
-				fmt.Printf("Warn: %s\n", uerr)
+				fmt.Printf("Warn: %s\n", ErrU)
 			}
 		} else {
-			fmt.Printf("Warn: %s\n", herr)
+			fmt.Printf("Warn: %s\n", ErrH)
 		}
 	}
 
@@ -94,9 +94,9 @@ func main() {
 		case "version", "about", "--version", "-v":
 			bugapp.PrintVersion()
 		case "staging", "staged", "cached", "cache", "index":
-			if b, err := handler.GetSCMIssuesUpdates(); err != nil {
+			if b, err := handler.SCMIssuesUpdaters(); err != nil {
 				fmt.Printf("Files in issues/ need committing, see $ git status --porcelain -u -- :/issues\nand for files already in index see $ git diff --name-status --cached HEAD -- :/issues\n")
-				if _, errc := handler.GetSCMIssuesCached(); errc != nil {
+				if _, ErrCach := handler.SCMIssuesCacher(); ErrCach != nil {
 					for _, bline := range strings.Split(string(b), "\n") {
 						//if bline in c {
 						//} else {

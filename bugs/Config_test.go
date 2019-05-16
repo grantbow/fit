@@ -44,7 +44,7 @@ func TestConfigRead(t *testing.T) {
 	test := tester{}   // from Bug_test.go
 	test.Setup()
 	defer test.Teardown()
-	rootDir := GetRootDir(config)
+	rootDir := RootDirer(config)
 
 	doconfigteststring(t, string(rootDir),
 		"DefaultDescriptionFile: issues/bug-template.txt\n",

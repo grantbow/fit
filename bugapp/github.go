@@ -47,7 +47,7 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 				// add issue.Number to title
 				//b := bugs.Bug{Dir: bugs.Directory(config.BugDir+"issues/" + string(bugs.TitleToDir(*issue.Title)))}
 				b := bugs.Bug{Dir: bugs.Directory(config.BugDir + "/issues/" + ititle)}
-				if dir := b.GetDirectory(); dir != "" {
+				if dir := b.Direr(); dir != "" {
 					os.Mkdir(string(dir), 0755)
 				}
 				if issue.Body != nil {
@@ -61,7 +61,7 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 				if config.ImportXmlDump == true {
 					// b.SetXml()
 					xml, _ := json.MarshalIndent(issue, "", "    ")
-					err = ioutil.WriteFile(string(b.GetDirectory())+"/issue.xml", append(xml, '\n'), 0644)
+					err = ioutil.WriteFile(string(b.Direr())+"/issue.xml", append(xml, '\n'), 0644)
 					check(err)
 				}
 				// Don't set a bug identifier, but put an empty line and
@@ -91,7 +91,7 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 						if config.ImportXmlDump == true {
 							// b.SetXml()
 							comname := "comment-" + string(bugs.ShortTitleToDir(string(*co.Body))) + "-" + fmt.Sprintf("%v", j)
-							err = ioutil.WriteFile(string(b.GetDirectory())+"/"+comname+".xml", append(xml, '\n'), 0644)
+							err = ioutil.WriteFile(string(b.Direr())+"/"+comname+".xml", append(xml, '\n'), 0644)
 							check(err)
 						}
 						j += 1
@@ -156,7 +156,7 @@ func githubImportProjects(user, repo string, config bugs.Config) {
 			projname := "proj-" + string(bugs.TitleToDir(fmt.Sprintf("%v%s%s", *project.Number, "-", *project.Name)))
 			fmt.Printf("Importing %s\n", projname)
 			b := bugs.Bug{Dir: bugs.Directory(config.BugDir + "/issues/" + projname)}
-			if dir := b.GetDirectory(); dir != "" {
+			if dir := b.Direr(); dir != "" {
 				os.Mkdir(string(dir), 0755)
 			}
 			if project.Body != nil {
@@ -201,7 +201,7 @@ func githubImportProjects(user, repo string, config bugs.Config) {
 				if config.ImportXmlDump == true {
 					colname := "col-" + fmt.Sprintf("%v", j) + "-" + string(bugs.ShortTitleToDir(string(*pc.Name)))
 					fmt.Printf("\nImporting %v\n", colname)
-					err = ioutil.WriteFile(string(b.GetDirectory())+"/"+colname+".xml", xmlbytes.Bytes(), 0644)
+					err = ioutil.WriteFile(string(b.Direr())+"/"+colname+".xml", xmlbytes.Bytes(), 0644)
 					check(err)
 				}
 				j += 1
@@ -209,7 +209,7 @@ func githubImportProjects(user, repo string, config bugs.Config) {
 			if config.ImportXmlDump == true {
 				// b.SetXml()
 				xml, _ := json.MarshalIndent(*project, "", "    ")
-				err = ioutil.WriteFile(string(b.GetDirectory())+"/project.xml", append(xml, '\n'), 0644)
+				err = ioutil.WriteFile(string(b.Direr())+"/project.xml", append(xml, '\n'), 0644)
 				check(err)
 			}
 

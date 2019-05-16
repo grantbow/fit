@@ -11,17 +11,17 @@ import (
 func Env(config bugs.Config) {
 	vcs, scmdir, scmerr := scm.DetectSCM(make(map[string]bool), config)
 	fmt.Printf("Settings:\n\nEditor: %s\nRoot Directory: %s\nIssues Directory: %s\nSettings file: %s\n\n",
-		getEditor(), config.BugDir, bugs.GetIssuesDir(config), config.BugYml)
+		getEditor(), config.BugDir, bugs.IssuesDirer(config), config.BugYml)
 
 	if scmerr != nil {
 		fmt.Printf("VCS Type: <missing> (purge and commit commands unavailable)\n\n")
 	} else {
-		t := vcs.GetSCMType()
+		t := vcs.SCMTyper()
 		fmt.Printf("VCS Type:    %s\n", t)
 		fmt.Printf("%s Directory:    %s\n", t, scmdir)
 		//
 		fmt.Printf("Need Staging:    ")
-		if b, err := vcs.GetSCMIssuesUpdates(); err == nil {
+		if b, err := vcs.SCMIssuesUpdaters(); err == nil {
 			fmt.Printf("(nothing)\n\n")
 		} else {
 			fmt.Printf("%v\n\n", string(b))

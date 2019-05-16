@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestGetRootDirWithGoodEnvironmentVariable(t *testing.T) {
+func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 	var gdir string
 	gdir, err := ioutil.TempDir("", "rootdirbug")
 	if err == nil {
@@ -30,13 +30,13 @@ func TestGetRootDirWithGoodEnvironmentVariable(t *testing.T) {
 	defer os.Unsetenv("PMIT")
 	// PMIT exists and overrides wd
 	config := Config{}
-	dir := GetRootDir(config)
+	dir := RootDirer(config)
 	if dir != expected {
 		t.Errorf("Expected directory %s from environment variable, got %s", expected, string(dir))
 	}
 }
 
-func TestMissingGetRootDirWithEnvironmentVariable(t *testing.T) {
+func TestMissingRootDirerWithEnvironmentVariable(t *testing.T) {
 	var gdir string
 	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
@@ -56,13 +56,13 @@ func TestMissingGetRootDirWithEnvironmentVariable(t *testing.T) {
 	//os.Mkdir("../pmit/issues", 0755)
 	os.Setenv("PMIT", gdir+"../pmit")
 	defer os.Unsetenv("PMIT")
-	dir := GetRootDir(config)
+	dir := RootDirer(config)
 	if dir != "" {
-		t.Errorf("GetRootDir %s environment variable %s", dir, gdir+"../pmit")
+		t.Errorf("RootDirer %s environment variable %s", dir, gdir+"../pmit")
 	}
 }
 
-func TestGetRootDirFromDirectoryTree(t *testing.T) {
+func TestRootDirerFromDirectoryTree(t *testing.T) {
 	var gdir string
 	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
@@ -79,7 +79,7 @@ func TestGetRootDirFromDirectoryTree(t *testing.T) {
 	}
 	// Make sure we get the right directory from the top level
 	os.Mkdir("issues", 0755)
-	dir := GetRootDir(config)
+	dir := RootDirer(config)
 	if dir != Directory(gdir) {
 		t.Error("Did not get proper directory according to walking the tree: " + dir)
 	}
@@ -92,7 +92,7 @@ func TestGetRootDirFromDirectoryTree(t *testing.T) {
 	if err != nil {
 		t.Error("Could not change directory for testing")
 	}
-	dir = GetRootDir(config)
+	dir = RootDirer(config)
 	if dir != Directory(gdir) {
 		t.Error("Did not get proper directory according to walking the tree: " + dir)
 	}
@@ -113,15 +113,15 @@ func TestNoRoot(t *testing.T) {
 		return
 	}
 	// Don't create an issues directory. Just try and get the directory
-	if dir := GetRootDir(config); dir != "" {
+	if dir := RootDirer(config); dir != "" {
 		t.Error("Found unexpected issues directory." + string(dir))
 	}
 
 }
 
-// TestGetIssuesDir was deprecated
+// TestIssuesDirer was deprecated
 
-func TestGetNoIssuesDir(t *testing.T) {
+func TestNoIssuesDirer(t *testing.T) {
 	var gdir string
 	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
@@ -137,14 +137,14 @@ func TestGetNoIssuesDir(t *testing.T) {
 	}
 	// Don't create an issues directory. Just try and get the directory.
 	// empty is accepted! why?
-	if dir := GetIssuesDir(config); dir != "" {
+	if dir := IssuesDirer(config); dir != "" {
 		t.Error("Found unexpected issues directory." + string(dir))
 	}
 
 }
 func TestShortName(t *testing.T) {
 	var dir Directory = "/hello/i/am/a/test"
-	if short := dir.GetShortName(); short != Directory("test") {
+	if short := dir.ShortNamer(); short != Directory("test") {
 		t.Error("Unexpected short name: " + string(short))
 	}
 }

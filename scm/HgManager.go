@@ -32,17 +32,17 @@ func (mgr HgManager) Commit(dir bugs.Directory, commitMsg string, config bugs.Co
 	return nil
 }
 
-// GetSCMType returns hg.
-func (mgr HgManager) GetSCMType() string {
+// SCMTyper returns hg.
+func (mgr HgManager) SCMTyper() string {
 	return "hg"
 }
 
-// GetSCMIssuesUpdates returns in error
-func (mgr HgManager) GetSCMIssuesUpdates() ([]byte, error) { // config bugs.Config
+// SCMIssuesUpdaters returns in error
+func (mgr HgManager) SCMIssuesUpdaters() ([]byte, error) { // config bugs.Config
 	return []byte(""), nil
 }
 
-// GetSCMIssuesCached returns in error
-func (mgr HgManager) GetSCMIssuesCached() ([]byte, error) { // config bugs.Config
+// SCMIssuesCacher returns in error
+func (mgr HgManager) SCMIssuesCacher() ([]byte, error) { // config bugs.Config
 	return []byte(""), nil
 }
