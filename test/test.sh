@@ -5,12 +5,12 @@
 # You probably just want to use "go test ./..." instead of
 # this script
 set -e
-echo "" > coverage.txt
+echo "" > ../coverage.txt
 export GO111MODULE=on # for forks
 
 echo "testing main"
 #go build
-cd cmd/bug
+cd ../cmd/bug
 go test -v -coverprofile=profile.out -covermode=atomic
 if [ -f profile.out ]; then
     cat profile.out >> ../../coverage.txt
