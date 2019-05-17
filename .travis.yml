@@ -22,6 +22,6 @@ before_install:
     - hg --version
 
 script:
-    - env GO111MODULE=on bash test.sh
+    - env GO111MODULE=on bash cd test;test.sh
 after_success:
     - bash <(curl -s https://codecov.io/bash) || echo "Codecov coverage report upload error"
