@@ -12,8 +12,29 @@ A: Different people may have different reasons. Bootstrapping project
    your own extensions/conventions to add to this since arbitrary files are
    permited.
 
-Q: Why change the name from PMIT to [FIT](FIT.md)?
+Q: What is different from [git-bug](https://github.com/michaelmure/git-bug)?
 
+A: That project stores "Operation"s editing each bug/issue. This has advantages
+   but simplicity isn't one. The trees are also not readily visible. Despite
+   no lock-in of vendors that particular way git is used makes getting the
+   information less than trivial. Hashes are not user-friendly either.
+   This project keeps it simple when simple still fulfills all requirements.
+
+   That project keeps issues "from polluting your project".
+   This project keeps issues and plain text files in (by default) a top level
+   directory "issues". We feel that if you are already working with code and/or
+   command line editors then it seems more natural to work with issues/bugs the
+   same way.
+
+   That project has a nice interactive terminal UI to make up for the fact
+   that a computer's filesystem is already has many tools users are already
+   familiar with to create and edit issues.
+
+   Git-bug has nice graphql and a bridge system for importing github and
+   launchpad issues. We have focused on github (issues and projects) with some
+   bugseverywhere support.
+
+Q: Why change the name from PMIT to [FIT](FIT.md)?
 A: bug is the program written in Go. PMIT is the old name of the storage
    system. [FIT](FIT.md) is the new name for the system that stores the
    issues. Dave MacFarlane (driusan) created bug and PMIT. The combination
