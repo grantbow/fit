@@ -13,7 +13,7 @@ func runlist(args argumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
 	config.DescriptionFileName = "Description"
 	stdout, stderr := captureOutput(func() {
-		List(args, config)
+		List(args, config, true)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)

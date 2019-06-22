@@ -1,11 +1,12 @@
 package bugapp
 
 import (
-	"fmt"
+	//"fmt"
 	//	"io"
 	//"io/ioutil"
-	"os"
-	"runtime"
+	//"os"
+	"regexp"
+	//"runtime"
 	"testing"
 )
 
@@ -24,7 +25,12 @@ func TestVersionOutput(t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected output on stderr.")
 	}
-	if stdout != fmt.Sprintf("%s version %s built using %s\n", os.Args[0], ProgramVersion(), runtime.Version()) {
+
+	expected := "version .* built using .*"
+	// was == fmt.Sprintf("%s version %s built using %s\n", os.Args[0], ProgramVersion(), runtime.Version())
+	re := regexp.MustCompile(expected)
+	matched := re.MatchString(string(stdout))
+	if !matched {
 		t.Error("Unexpected output on stdout.")
 	}
 }
