@@ -20,19 +20,19 @@ type Config struct {
 	BugYml string `json:"BugYml"`
 	// Description contents for new issue or empty file (default)
 	DefaultDescriptionFile string `json:"DefaultDescriptionFile"`
-	// saves raw json files of import (true) or don't save (false default)
+	// saves raw json files of import (true) or don't save (false, default)
 	ImportXmlDump bool `json:"ImportXmlDump"`
-	// import comments together (true) or separate files (false default)
+	// import comments together (true) or separate files (false, default)
 	ImportCommentsTogether bool `json:"ImportCommentsTogether"`
 	// append to the program version ** runtime + append
 	ProgramVersion string `json:"ProgramVersion"`
-	// file name (Description default)
+	// file name (Description is the default) set in main.go
 	DescriptionFileName string `json:"DescriptionFileName"`
-	// tag_key_value (true) or tag subdir (false default)
+	// tag_key_value (true) or tag subdir (false, default)
 	TagKeyValue bool `json:"TagKeyValue"`
-	// tag_Field_value (true) or Field file and contents (false default)
+	// tag_Field_value (true) or Field file and contents (false, default)
 	NewFieldAsTag bool `json:"NewFieldAsTag"`
-	// tag_field_value (true) or tag_Field_value (false default)
+	// tag_field_value (true) or tag_Field_value (false, default)
 	NewFieldLowerCase bool `json:"NewFieldLowerCase"`
 	// github.com/settings/tokens
 	GithubPersonalAccessToken string `json:"GithubPersonalAccessToken"`

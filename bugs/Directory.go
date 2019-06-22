@@ -56,7 +56,9 @@ func IssuesDirer(config Config) Directory {
 		return root
 	}
 	return Directory(root + "/issues")
-	/* edited these $ grep -ils issuesdirer ...
+	/* edited the following
+	   when changed from /issues/ to /issues
+	   $ grep -ils issuesdirer ...
 	bug-import/be.go
 	bug-import/github.go
 	bugapp/Commit.go

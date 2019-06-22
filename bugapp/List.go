@@ -47,7 +47,7 @@ func (t byDir) Less(i, j int) bool {
 }
 
 // List is a subcommand to print issues.
-func List(args argumentList, config bugs.Config) {
+func List(args argumentList, config bugs.Config, topRecurse bool) {
 	issuesroot := bugs.IssuesDirer(config)
 	issues, _ := ioutil.ReadDir(string(issuesroot))
 	sort.Sort(byDir(issues))
@@ -60,15 +60,21 @@ func List(args argumentList, config bugs.Config) {
 	if args.HasArgument("--match") || args.HasArgument("-m") {
 		matchRegex = true
 	}
+	var wantRecursive bool = false
+	if args.HasArgument("--recursive") || args.HasArgument("-r") {
+		wantRecursive = true
+	}
 
+	fmt.Printf("\n===== list %s\n", config.BugDir+"/issues")
 	if matchRegex && (len(args) > 1) {
 		for i, length := 0, len(args); i < length; i += 1 {
 			// TODO for _, tag := range args { // idx not needed
 			if args[i] == "--match" || args[i] == "-m" ||
-				args[i] == "--tags" || args[i] == "-t" {
+				args[i] == "--tags" || args[i] == "-t" ||
+				args[i] == "--recursive" || args[i] == "-r" {
 				continue
 			}
-			fmt.Printf("\n===== matching (?i)%s\n", args[i])
+			fmt.Printf("===== matching (?i)%s\n", args[i])
 			for idx, issue := range issues {
 				if issue.IsDir() != true {
 					continue
@@ -83,7 +89,9 @@ func List(args argumentList, config bugs.Config) {
 
 			}
 		}
-	} else if len(args) == 0 || (wantTags && len(args) == 1) { // --regex alone makes no sense
+	} else if len(args) == 0 || (wantTags && len(args) == 1) || // --regex alone makes no sense
+		(wantRecursive && len(args) == 1) ||
+		(wantTags && wantRecursive && len(args) == 2) {
 		// No parameters, print a list of all bugs
 		//os.Stdout = stdout
 		for idx, issue := range issues {
@@ -91,6 +99,13 @@ func List(args argumentList, config bugs.Config) {
 				continue
 			}
 			printIssueByDir(idx, issue, issuesroot, config, wantTags)
+		}
+		if wantRecursive && topRecurse == true {
+			fi, fierr := os.Stat(config.BugDir)
+			if fierr != nil {
+				panic(fierr)
+			}
+			checkDirTree(args, config, fi, false)
 		}
 		return
 	} else {
@@ -106,7 +121,8 @@ func List(args argumentList, config bugs.Config) {
 		for i, length := 0, len(args); i < length; i += 1 {
 			// TODO for _, tag := range args { // idx not needed
 			if args[i] == "--match" || args[i] == "-m" ||
-				args[i] == "--tags" || args[i] == "-t" {
+				args[i] == "--tags" || args[i] == "-t" ||
+				args[i] == "--recursive" || args[i] == "-r" {
 				continue
 			}
 			b, err := bugs.LoadBugByHeuristic(args[i], config)
@@ -129,6 +145,51 @@ func List(args argumentList, config bugs.Config) {
 		}
 	}
 	//fmt.Printf("\n")
+
+	if wantRecursive && topRecurse == true {
+		// the first readdir is special so as to not find the same/regular issues dir
+		fi, fierr := os.Stat(config.BugDir)
+		if fierr != nil {
+			panic(fierr)
+		}
+		checkDirTree(args, config, fi, false)
+		//fileinfos, _ := ioutil.ReadDir(config.BugDir) // BugRootDir
+		//for _, node := range fileinfos {
+		//	// search for a non-"issues" dir containing an "issues" subdir
+		//	if node.Name() != "issues" &&
+		//		node.IsDir() == true {
+		//		os.Chdir(node.Name())
+		//		checkDirTree(args, config, node, true)
+		//		os.Chdir(wd) // go back
+		//	}
+		//}
+	}
+}
+
+func checkDirTree(args argumentList, config bugs.Config, node os.FileInfo, allowHits bool) {
+	// check pwd
+	topwd, _ := os.Getwd()
+	//fmt.Printf("/////  debug checkDirTree issues dir %s\n", topwd)
+	if dirinfo, err := os.Stat(topwd + "/issues"); err == nil && dirinfo.IsDir() && allowHits {
+		//fmt.Printf("\n/////  issues in dir %s\n", topwd+"/issues")
+		newConfig := config
+		newConfig.BugDir = string(topwd) // BugRootDir
+		List(args, newConfig, false)     // process
+	}
+
+	// recursively check subdirs
+	fileinfos, _ := ioutil.ReadDir(topwd)
+	//fmt.Printf("/////  debug checkDirTree subdir %s\n", topwd) // +"/"+node.Name())
+	for _, nodee := range fileinfos {
+		if nodee.Name() != "issues" &&
+			nodee.IsDir() == true {
+			wd, _ := os.Getwd() // save for go back
+			// candidate
+			os.Chdir(nodee.Name()) // go down
+			checkDirTree(args, config, nodee, true)
+			os.Chdir(wd) // go back
+		}
+	}
 }
 
 func printIssueByDir(idx int, issue os.FileInfo, issuesroot bugs.Directory, config bugs.Config, wantTags bool) {

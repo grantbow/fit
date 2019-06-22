@@ -17,14 +17,14 @@ func main() {
 	config.DescriptionFileName = "Description"
 
 	rootPresent := false
-	bugYml := ".bug.yml"
+	bugYmlFileName := ".bug.yml"
 	if bugsgetrootdir := bugs.RootDirer(config); bugsgetrootdir != "" {
 		rootPresent = true
-		config.BugDir = string(bugsgetrootdir)
+		config.BugDir = string(bugsgetrootdir) // BugRootDir
 		// now try to read config
-		ErrC := bugs.ConfigRead(bugYml, &config, bugapp.ProgramVersion())
+		ErrC := bugs.ConfigRead(bugYmlFileName, &config, bugapp.ProgramVersion())
 		if ErrC == nil {
-			config.BugYml = config.BugDir + "/" + bugYml
+			config.BugYml = config.BugDir + "/" + bugYmlFileName
 		}
 	}
 
@@ -37,19 +37,24 @@ func main() {
 		os.Exit(2)
 	}
 
-	bugs.IssuesDirer(config) // from bugs/Directory.go, uses config.BugDir
+	bugs.IssuesDirer(config) // from bugs/Directory.go, uses config.BugDir from bugs/Bug.go
 
 	scmoptions := make(map[string]bool)
 	handler, _, ErrH := scm.DetectSCM(scmoptions, config)
+	//a, b, c := scm.DetectSCM(scmoptions, config)
+	//fmt.Printf("%+v %+v %+v\n", a, b, c)
 	if ErrH != nil {
-		if _, ErrU := handler.SCMIssuesUpdaters(); ErrU != nil {
-			if _, ErrCa := handler.SCMIssuesCacher(); ErrCa != nil {
-				fmt.Printf("Warn: %s\n", ErrCa)
-			} else {
-				fmt.Printf("Warn: %s\n", ErrU)
+		fmt.Printf("Warn: %s\n", ErrH)
+		//a, b := handler.SCMIssuesUpdaters()
+		//fmt.Printf("%+v %+v\n", a, b)
+		if handler != nil {
+			if _, ErrU := handler.SCMIssuesUpdaters(); ErrU != nil {
+				if _, ErrCa := handler.SCMIssuesCacher(); ErrCa != nil {
+					fmt.Printf("Warn: %s\n", ErrCa)
+				} else {
+					fmt.Printf("Warn: %s\n", ErrU)
+				}
 			}
-		} else {
-			fmt.Printf("Warn: %s\n", ErrH)
 		}
 	}
 
@@ -60,7 +65,7 @@ func main() {
 	//fmt.Printf("A %s %#v\n", "osArgs: ", osArgs)
 	if len(osArgs) <= 1 {
 		if rootPresent {
-			bugapp.List([]string{}, config)
+			bugapp.List([]string{}, config, true)
 		} else {
 			fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
 			fmt.Printf("\nUse \"bug help\" or \"bug help <command>\" for details.\n")
@@ -116,7 +121,7 @@ func main() {
 			// bug list with no parameters shouldn't autopage,
 			// bug list with bugs to view should. So the original
 			// stdout is passed as a parameter.
-			bugapp.List(osArgs[2:], config)
+			bugapp.List(osArgs[2:], config, true)
 		case "find":
 			bugapp.Find(osArgs[2:], config)
 		case "create", "add", "new":
@@ -154,7 +159,7 @@ func main() {
 				buglist, _ := bugs.LoadBugByHeuristic(osArgs[1], config)
 				//fmt.Printf("%+v\n", buglist)
 				if buglist != nil { // || ae, ok := bugerr.(bugs.ErrNotFound); ! ok { // bug list when possible, not help
-					bugapp.List(osArgs[1:], config)
+					bugapp.List(osArgs[1:], config, true)
 				} else {
 					bugapp.Help(osArgs[1:]...)
 				}

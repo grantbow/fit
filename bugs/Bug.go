@@ -248,20 +248,20 @@ func (b Bug) ViewBug() {
 		fmt.Printf("Identifier: %s\n", identifier)
 	}
 
-	fmt.Printf("Title: %s\n\n", b.Title(""))
-	fmt.Printf("Description:\n%s", b.Description())
+	fmt.Printf("Title: %s\n", b.Title(""))
+	fmt.Printf("Description:%s\n", b.Description())
 
 	if status := b.Status(); status != "" {
-		fmt.Printf("\nStatus: %s", status)
+		fmt.Printf("Status: %s\n", status)
 	}
 	if priority := b.Priority(); priority != "" {
-		fmt.Printf("\nPriority: %s", priority)
+		fmt.Printf("Priority: %s\n", priority)
 	}
 	if milestone := b.Milestone(); milestone != "" {
-		fmt.Printf("\nMilestone: %s", milestone)
+		fmt.Printf("Milestone: %s\n", milestone)
 	}
-	if tags := b.StringTags(); tags != nil {
-		fmt.Printf("\nTags: %s", strings.Join([]string(tags), ", "))
+	if tags := b.StringTags(); len(tags) > 0 {
+		fmt.Printf("Tags: %s\n", strings.Join([]string(tags), ", "))
 	}
 
 }

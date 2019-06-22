@@ -35,7 +35,7 @@ func FindBugsByTag(tags []string, config Config) []Bug {
 		}
 	}
 	//fmt.Printf("c %+v\n", bugs)
-	sort.Sort(byBug(bugs))
+	sort.Sort(byBug(bugs)) // allowed by byBug defined in Bug.go
 	//fmt.Printf("d %+v\n", bugs)
 	return bugs
 }
@@ -147,7 +147,7 @@ func GetAllBugs(config Config) []Bug {
 	}
 
 	//fmt.Printf("a %+v\n", bugs)
-	sort.Sort(byBug(bugs))
+	sort.Sort(byBug(bugs)) // allowed by byBug defined in Bug.go
 	//fmt.Printf("b %+v\n", bugs)
 	return bugs
 }

@@ -1,0 +1,9 @@
+$ bug list -r
+or
+$ bug list --recursive
+
+lists bugs in present issues directory and
+all subdirectories of .. that also have an issues directory
+
+I changed a few printing specifics to make it look better
+
