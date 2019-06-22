@@ -48,13 +48,14 @@ aliases for create: add new
 		fmt.Printf("       " + os.Args[0] + " list <-m|--match> <regex>...\n")
 		fmt.Printf("       " + os.Args[0] + " list <-t|--tags> <BugID>...\n")
 		fmt.Printf("       " + os.Args[0] + " list <tag>...\n\n")
+		fmt.Printf("       " + os.Args[0] + " list <-r|--recursive>...\n")
 		fmt.Printf(
 			`This will list the issues found in the current environment
 
 With no arguments, issue number and titles will be printed.
 Issue numbers can reference this issue on the command line.
 
-The [-m|--match] option tells list you are providing  a regular
+The [-m|--match] option tells list you are providing a regular
 expression. Matching issues are listed.
 
 All unix shell parameters that contain special characters, which many
@@ -71,6 +72,8 @@ If 1 or more <tag>s are provided, matching issues are listed.
 
 Note that BugIDs may change as you create, edit, and close other
 issues. Details are provided by "bug help ids."
+
+The [-r|--recursive] option lists matching issues in subdirectories.
 
 aliases for list: view show display ls
 `)
