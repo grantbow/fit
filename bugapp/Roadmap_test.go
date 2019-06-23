@@ -23,7 +23,7 @@ func TestRoadmapLess(t *testing.T) {
 	// On MacOS, /tmp is a symlink, which causes GetDirectory() to return
 	// a different path than expected in these tests, so make the issues
 	// directory explicit with an environment variable
-	err = os.Setenv("PMIT", dir)
+	err = os.Setenv("FIT", dir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
 		return

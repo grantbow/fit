@@ -14,7 +14,7 @@ type Config struct {
 	// storage of location of root dir with .bug.yml
 	// if we are reading the config file we already found the root
 	// auto-find root dir
-	// overridden by PMIT environment variable? ** runtime only
+	// overridden by FIT/PMIT environment variable? ** runtime only
 	BugDir string `json:"BugDir"`
 	// BugDir+"/.bug.yml" * if present ** runtime only
 	BugYml string `json:"BugYml"`

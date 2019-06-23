@@ -12,9 +12,8 @@ type Directory string
 
 // RootDirer returns the directory usually containing the issues subdirectory.
 func RootDirer(config Config) Directory {
-	dir := os.Getenv("PMIT")
+	dir := os.Getenv("FIT") // new first
 	if dir != "" {
-		// TODO: assumes PMIT dir exists, bad assumption
 		if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
 			config.BugDir = dir
 			os.Chdir(dir)
@@ -22,6 +21,15 @@ func RootDirer(config Config) Directory {
 			// better to start looking rather than
 			//} else {
 			//	return ""
+		}
+	} else {
+		dir := os.Getenv("PMIT") // for backwards compatibility
+		if dir != "" {
+			if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
+				config.BugDir = dir
+				os.Chdir(dir)
+				return Directory(dir)
+			}
 		}
 	}
 

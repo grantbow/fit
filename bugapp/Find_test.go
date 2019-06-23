@@ -57,7 +57,7 @@ func TestFindSubcommands(t *testing.T) {
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
 	os.Mkdir("issues", 0755)
-	err = os.Setenv("PMIT", gdir)
+	err = os.Setenv("FIT", gdir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
 		return

@@ -42,7 +42,7 @@ func TestCloseByIndex(t *testing.T) {
 	// On MacOS, /tmp is a symlink, which causes GetDirectory() to return
 	// a different path than expected in these tests, so make the issues
 	// directory explicit with an environment variable
-	err = os.Setenv("PMIT", dir)
+	err = os.Setenv("FIT", dir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
 		return
@@ -103,7 +103,7 @@ func TestCloseBugByIdentifier(t *testing.T) {
 	// On MacOS, /tmp is a symlink, which causes GetDirectory() to return
 	// a different path than expected in these tests, so make the issues
 	// directory explicit with an environment variable
-	err = os.Setenv("PMIT", dir)
+	err = os.Setenv("FIT", dir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
 		return
@@ -145,7 +145,7 @@ func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
 		return
 	}
 	os.Chdir(dir)
-	os.Setenv("PMIT", dir)
+	os.Setenv("FIT", dir)
 	os.MkdirAll("issues/Test", 0700)
 	os.MkdirAll("issues/Test2", 0700)
 	os.MkdirAll("issues/Test3", 0700)
@@ -183,7 +183,7 @@ func TestCloseMultipleIndexesAtOnce(t *testing.T) {
 		return
 	}
 	os.Chdir(dir)
-	os.Setenv("PMIT", dir)
+	os.Setenv("FIT", dir)
 	os.MkdirAll("issues/Test", 0700)
 	os.MkdirAll("issues/Test2", 0700)
 	os.MkdirAll("issues/Test3", 0700)

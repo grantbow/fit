@@ -47,7 +47,7 @@ func TestCreateWithoutIssues(t *testing.T) {
 	// I added t.Skip above.
 	os.MkdirAll("issues", 0700) // the real test
 	defer os.RemoveAll(dir)
-	err = os.Setenv("PMIT", dir)
+	err = os.Setenv("FIT", dir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
 		return
@@ -94,7 +94,7 @@ func TestCreateNoEditor(t *testing.T) {
 	// On MacOS, /tmp is a symlink, which causes GetDirectory() to return
 	// a different path than expected in these tests, so make the issues
 	// directory explicit with an environment variable
-	err = os.Setenv("PMIT", dir)
+	err = os.Setenv("FIT", dir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
 		return
@@ -149,7 +149,7 @@ func TestCreateNoIssuesDir(t *testing.T) {
 	// This is what we are testing for
 	//os.MkdirAll("issues", 0700)
 	//defer os.RemoveAll(dir)
-	err = os.Setenv("PMIT", string(dir))
+	err = os.Setenv("FIT", string(dir))
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
 		return

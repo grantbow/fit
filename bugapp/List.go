@@ -195,7 +195,7 @@ func checkDirTree(args argumentList, config bugs.Config, node os.FileInfo, allow
 func printIssueByDir(idx int, issue os.FileInfo, issuesroot bugs.Directory, config bugs.Config, wantTags bool) {
 	// TODO: same next eight lines func (idx, issue)
 	var dir bugs.Directory = issuesroot + "/" + bugs.Directory(issue.Name())
-	b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName} // assumes DescriptionFileName
+	b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName} // usually Description
 	name := bugNamer(b, idx)                                                 // Issue idx: b.Title
 	if wantTags == false {
 		fmt.Printf("%s: %s\n", name, b.Title(""))

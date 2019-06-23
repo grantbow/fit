@@ -46,7 +46,7 @@ func TestPriority(t *testing.T) {
 	// Make an issues Directory
 	os.Mkdir("issues", 0755)
 
-	err = os.Setenv("PMIT", gdir)
+	err = os.Setenv("FIT", gdir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
 		return

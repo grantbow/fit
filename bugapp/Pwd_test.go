@@ -21,7 +21,7 @@ func (t *tester) Setup() {
 	if err == nil {
 		os.Chdir(gdir)
 		t.dir = gdir
-		os.Unsetenv("PMIT")
+		os.Unsetenv("FIT")
 		// Hack to get around the fact that /tmp is a symlink on
 		// OS X, and it causes the directory checks to fail..
 		//gdir, _ = os.Getwd() // gdir not used later

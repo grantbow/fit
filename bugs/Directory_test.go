@@ -26,9 +26,9 @@ func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 	}
 	//os.Mkdir("issues", 0755)
 	expected := Directory(gdir + "/abc")
-	os.Setenv("PMIT", string(expected))
-	defer os.Unsetenv("PMIT")
-	// PMIT exists and overrides wd
+	os.Setenv("FIT", string(expected))
+	defer os.Unsetenv("FIT")
+	// FIT exists and overrides wd
 	config := Config{}
 	dir := RootDirer(config)
 	if dir != expected {
@@ -50,15 +50,15 @@ func TestMissingRootDirerWithEnvironmentVariable(t *testing.T) {
 		t.Error("Failed creating temporary directory")
 		return
 	}
-	// PMIT/issues missing so doesn't override wd
-	os.Mkdir("../pmit", 0755) // missing issues directory
-	defer os.RemoveAll(gdir + "../pmit")
-	//os.Mkdir("../pmit/issues", 0755)
-	os.Setenv("PMIT", gdir+"../pmit")
-	defer os.Unsetenv("PMIT")
+	// FIT/issues missing so doesn't override wd
+	os.Mkdir("../fit", 0755) // missing issues directory
+	defer os.RemoveAll(gdir + "../fit")
+	//os.Mkdir("../fit/issues", 0755)
+	os.Setenv("FIT", gdir+"../fit")
+	defer os.Unsetenv("FIT")
 	dir := RootDirer(config)
 	if dir != "" {
-		t.Errorf("RootDirer %s environment variable %s", dir, gdir+"../pmit")
+		t.Errorf("RootDirer %s environment variable %s", dir, gdir+"../fit")
 	}
 }
 
@@ -68,7 +68,7 @@ func TestRootDirerFromDirectoryTree(t *testing.T) {
 	gdir, err := ioutil.TempDir("", "rootdirbug")
 	if err == nil {
 		os.Chdir(gdir)
-		os.Unsetenv("PMIT")
+		os.Unsetenv("FIT")
 		// Hack to get around the fact that /tmp is a symlink on
 		// OS X, and it causes the directory checks to fail..
 		gdir, _ = os.Getwd()

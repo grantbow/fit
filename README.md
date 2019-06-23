@@ -53,8 +53,9 @@ found linked from the golang.org home page.
 
 ### Layout
 
-Filesystem Issue Tracker ([FIT.md](FIT.md)) conventions/format are a set of suggestions for
-storing issues, one directory/folder per issue with plain text file details.
+Filesystem Issue Tracker ([FIT.md](FIT.md)) conventions/format are a set of
+suggestions for storing issues, one directory/folder per issue with plain text
+file details.
 
 An `issues/` directory holds one (descriptively titled) directory per issue.
 The "Description" file is the only text needed providing the details. Optional
@@ -62,8 +63,11 @@ tag_key_value files assign meta data.
 
 bug maintains the nearest `issues/` directory to your current working directory
 or it's parent directories. There can be more than one. bug can commit (or
-remove) issues from versioning. Unlike many other issue systems, bug issues
-naturally branch and merge along with the rest of your versioned files.
+remove) issues from versioning or this can be done manually without bug. Unlike
+many other issue systems, bug issues naturally branch and merge along with the
+rest of your versioned files. Using branches or related repos is optional.
+
+Some support is available to import and/or reference other issue trackers.
 
 ### Installation
 
@@ -137,30 +141,38 @@ issues directory. Current options include:
           Set one at github.com/settings/tokens
           for import of private projects that need authentication
           
-The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue system that can
-still work. It differs from other distributed, versioned, filesystem issue
-tracking tools in several ways. Human readable plain text files are still
-easily viewed, edited and understood. Standard tools are used and further
-minimize context switching between systems. bug also supports multiple
-`issues/` directories throughout the directory tree.
+The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue
+system that can still work. It differs from other distributed, versioned,
+filesystem based issue tracking tools in several ways. Human readable plain
+text files are still easily viewed, edited and understood. Standard tools are
+used and further minimize context switching between coding and issue tracking
+systems. bug also supports multiple `issues/` directories throughout the
+directory tree for stronger coordination of coding and issue tracking.
 
-Other issue systems use databases, hidden directories or hidden branches. While
-these may be useful techniques in certain circumstances they do not seem
-necessary and obfuscate how to access the valuable data.
+Other issue systems may use databases, hidden directories or hidden branches.
+While these may be useful techniques in certain circumstances this seems to
+unnecessarily obfuscate access.
 
 ### Hooks
 
 Event based automation can be added through git or mercurial. We created a
 hooks directory and look forward to seeing what code teams use and contribute.
-Contributed work to adapt all hooks for both git and hg would be appreciated.
+Work to help adapt hooks to both git and hg would be appreciated.
 
 ### Example Use
 
-If an environment variable named PMIT is set, that directory will be used to
-create and maintain issues as an 'issues' directory, otherwise the bug command
-will walk up the tree until it finds an "issues" subdirectory. Examples assume
-you are already in a directory tracked by git. To get started simply `mkdir
-issues`.
+To get started in the top of an existing git repo simply `mkdir issues` then
+add and commit to the repo issues/_issue name_/Description files. Create and
+maintain issues by editing the files inside issues/_issue names_/.
+
+If an environment variable named FIT is set that value will be used as a directory name used to
+find the 'issues' directory. All bug commands will use FIT no matter your present working
+directory.
+
+If an 'issues' directory/folder is not found bug will walk up the tree toward
+the root until it finds an "issues" subdirectory similar to how git looks for
+.git or hg looks for .hg. A warning is provided if no issues directory is
+found.
 
 ```
 $ mkdir foo && cd foo
@@ -172,7 +184,8 @@ Usage: help <command>
 
 Use "bug help <command>" or "bug <command> help" for
 more information about any command below.
-bug version 0.4.1 built using go1.12.5
+bug version 0.6 built using go1.12.6 GOOS android
+executable: -rwx------ 8749028 Sat Jun 22 10:19:54 PDT 2019 /data/data/com.termux/files/home/go/bin/bug
 
 Status/reading commands:
     list       List issues
@@ -213,11 +226,14 @@ $ bug create Need better help
 Created issue: Need better help
 
 $ bug list
+
+===== list /...
 Issue 1: Need better help
 
 $ bug list 1
-Title: Need better help
 
+===== list /...
+Title: Need better help
 Description:
 <the entered description>
 
@@ -232,13 +248,14 @@ Issue 2: Need better formating for README
 
 ## History
 
-bug is the program written in Go who was first developed by
-Dave MacFarlane (driusan). Filesystem Issue Tracker ([FIT.md](FIT.md))
-is the new name for the Poor Man's Issue Tracker (PMIT) storage system also
-first developed by driusan. For his demo from 2016, see [driusan's talk](https://www.youtube.com/watch?v=ysgMlGHtDMo)
-at the first GolangMontreal.org conference, GoMTL-01. The program and
-storage system have had additions while trying to remain backward compatible.
-See the [FAQ.md](FAQ.md) for more information.
+bug is the golang program first developed by Dave MacFarlane (driusan).
+Filesystem Issue Tracker ([FIT.md](FIT.md)) is the new name for the Poor Man's
+Issue Tracker (PMIT) storage system also first developed by driusan. For his
+demo from 2016, see [driusan's
+talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
+GolangMontreal.org conference, GoMTL-01. The program and storage system have
+had additions while trying to remain backward compatible.  See the
+[FAQ.md](FAQ.md) for more information.
 
 ## Next Steps
 

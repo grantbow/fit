@@ -1,5 +1,4 @@
 #     Filesystem Issue Tracker - FIT
-# aka Poor Man's Issue Tracker - PMIT
 
 Filesystem Issue Tracker (FIT) conventions/format are a set of suggestions for
 storing issues, one directory/folder per issue with plain text file details.
