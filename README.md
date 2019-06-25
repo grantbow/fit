@@ -272,13 +272,16 @@ use and setup systems to track or manage issues, software bugs, trouble
 tickets, support tickets, incident tickets or requests.
 
 How to Report Bugs Effectively by Simon Tatham
-    https://www.chiark.greenend.org.uk/~sgtatham/bugs.html
 
-While I hesitate to include this URL because it uses very colloquial
-terminology not fully undestood by everyone that might read it the content
-is carefully written and can help many people understand open source support
-perspectives they may not have thought of before.
-    http://www.catb.org/esr/faqs/smart-questions.html
+    [www.chiark.greenend.org.uk/~sgtatham/bugs.html](https://www.chiark.greenend.org.uk/~sgtatham/bugs.html)
+
+While I hesitate to include the following URL the content is carefully written
+and can help people better understand the perspectives of people involved in
+the lifecycle of open source software. Many people have never tried to code a
+fix to a software bug. Be prepared to accept language and/or terminology that
+may feel very colloquial, informal or casual.
+
+    [www.catb.org/esr/faqs/smart-questions.html](http://www.catb.org/esr/faqs/smart-questions.html)
 
 ### Feedback
 
