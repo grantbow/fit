@@ -30,9 +30,12 @@ func main() {
 
 	if bugapp.SkipRootCheck(&os.Args) && !rootPresent {
 		//bugapp.PrintVersion()
+		fmt.Printf("bug manages plain text issues with git or hg.")
+		fmt.Printf("You need an issues directory, a directory named for an issue and a Description text file.")
+		fmt.Printf("Use \"bug help\" for details.")
 		fmt.Printf("Error: Could not find `issues` directory. You probably want to create one.\n")
 		fmt.Printf("    Make sure the current directory or a parent directory has an issues folder\n")
-		fmt.Printf("    or set the PMIT environment variable.\n")
+		fmt.Printf("    or set the FIT environment variable.\n")
 		fmt.Printf("Aborting.\n")
 		os.Exit(2)
 	}
@@ -44,7 +47,8 @@ func main() {
 	//a, b, c := scm.DetectSCM(scmoptions, config)
 	//fmt.Printf("%+v %+v %+v\n", a, b, c)
 	if ErrH != nil {
-		fmt.Printf("Warn: %s\n", ErrH)
+		fmt.Printf("Warn: to commit your issues first use {git|hg} init\n", ErrH)
+		//fmt.Printf("Warn: %s\n", ErrH) // No SCM found
 		//a, b := handler.SCMIssuesUpdaters()
 		//fmt.Printf("%+v %+v\n", a, b)
 		if handler != nil {

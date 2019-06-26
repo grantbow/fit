@@ -326,12 +326,13 @@ in the current directory.
 	default:
 		fmt.Printf(`Usage: help <command>
 
+bug manages plain text issues with git or hg.
 Use "bug help <command>" or "bug <command> help" for
 more information about any command below.
 `)
 		PrintVersion()
 		fmt.Printf(`
-Status/reading commands:
+Commands for status/reading:
     list       List issues
     find       Search for tag of fields: id, status, priority, or milestone
     tagslist   List assigned tags
@@ -343,7 +344,7 @@ Status/reading commands:
     help       Show this screen
     version    Print the version of this software
 
-Editing commands:
+Commands for editing:
     create     Open new issue
     edit       Edit an issue
     retitle    Rename an issue
@@ -355,11 +356,11 @@ Editing commands:
     milestone  View or set milestone
     import     Download from github or bugseverywhere repository
 
-Version control commands:
+Commands for version control:
     commit     Commit any new, changed or deleted issues
     purge      Remove all issues not tracked
 
-Processing commands:
+Commands for processing:
     roadmap    Print list of open issues sorted by milestone
 
 aliases for help: --help -h
