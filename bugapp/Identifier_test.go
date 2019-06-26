@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func rungenid(t *testing.T, expected string, input string) {
+func rungenid(input string, expected string, t *testing.T) {
 	out := generateID(input)
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(out)
@@ -33,8 +33,38 @@ func runid(t *testing.T, expected string, args argumentList) {
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
 }
+func runidsassigned(args argumentList, expected string, t *testing.T) {
+	config := bugs.Config{}
+	stdout, stderr := captureOutput(func() {
+		IdsAssigned(config)
+	}, t)
+	if stderr != "" {
+		t.Error("Unexpected error: " + stderr)
+	}
+	re := regexp.MustCompile(expected)
+	matched := re.MatchString(stdout)
+	if !matched {
+		t.Error("Unexpected output on STDOUT for bugapp/IdsAssigned_test")
+		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
+	}
+}
+func runidsnone(args argumentList, expected string, t *testing.T) {
+	config := bugs.Config{}
+	stdout, stderr := captureOutput(func() {
+		IdsNone(config)
+	}, t)
+	if stderr != "" {
+		t.Error("Unexpected error: " + stderr)
+	}
+	re := regexp.MustCompile(expected)
+	matched := re.MatchString(stdout)
+	if !matched {
+		t.Error("Unexpected output on STDOUT for bugapp/IdsNone_test")
+		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
+	}
+}
 func TestIdGen(t *testing.T) {
-	rungenid(t, "b6612", "test string")
+	rungenid("test string", "b6612", t)
 }
 func TestIdUsage(t *testing.T) {
 	runid(t, "Usage: .* identifier BugID \\[value\\]\n", argumentList{})
@@ -78,4 +108,10 @@ func TestIdGenerate(t *testing.T) {
 	if len(file) == 0 {
 		t.Error("Expected an Identifier file")
 	}
+}
+func TestIdsAssigned(t *testing.T) {
+	runidsassigned(argumentList{""}, "Ids used in current tree", t)
+}
+func TestIdNone(t *testing.T) {
+	runidsnone(argumentList{""}, "No ids assigned", t)
 }

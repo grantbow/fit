@@ -47,7 +47,7 @@ func main() {
 	//a, b, c := scm.DetectSCM(scmoptions, config)
 	//fmt.Printf("%+v %+v %+v\n", a, b, c)
 	if ErrH != nil {
-		fmt.Printf("Warn: to commit your issues first use {git|hg} init\n", ErrH)
+		fmt.Printf("Warn: to commit your issues first use {git|hg} init\n")
 		//fmt.Printf("Warn: %s\n", ErrH) // No SCM found
 		//a, b := handler.SCMIssuesUpdaters()
 		//fmt.Printf("%+v %+v\n", a, b)

@@ -12,6 +12,38 @@ import (
 //func getAllTags() []string {
 //func Tag(Args argumentList) {
 
+func runtagsassigned(args argumentList, expected string, t *testing.T) {
+	config := bugs.Config{}
+	stdout, stderr := captureOutput(func() {
+		TagsAssigned(config)
+	}, t)
+	if stderr != "" {
+		t.Error("Unexpected error: " + stderr)
+	}
+	re := regexp.MustCompile(expected)
+	matched := re.MatchString(stdout)
+	if !matched {
+		t.Error("Unexpected output on STDOUT for bugapp/Tag_test")
+		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
+	}
+}
+
+func runtagsnone(args argumentList, expected string, t *testing.T) {
+	config := bugs.Config{}
+	stdout, stderr := captureOutput(func() {
+		TagsNone(config)
+	}, t)
+	if stderr != "" {
+		t.Error("Unexpected error: " + stderr)
+	}
+	re := regexp.MustCompile(expected)
+	matched := re.MatchString(stdout)
+	if !matched {
+		t.Error("Unexpected output on STDOUT for bugapp/Tag_test")
+		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
+	}
+}
+
 func runtag(args argumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
@@ -81,4 +113,10 @@ func TestTag(t *testing.T) {
 	if err != nil {
 		t.Error("Could not load tags/bar file" + err.Error())
 	}
+}
+func TestTagsAssigned(t *testing.T) {
+	runtagsassigned(argumentList{""}, "Tags used in current tree", t)
+}
+func TestTagsNone(t *testing.T) {
+	runtagsnone(argumentList{""}, "No tags assigned", t)
 }

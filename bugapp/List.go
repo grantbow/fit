@@ -101,10 +101,10 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 			printIssueByDir(idx, issue, issuesroot, config, wantTags)
 		}
 		if wantRecursive && topRecurse == true {
-			fi, fierr := os.Stat(config.BugDir)
-			if fierr != nil {
-				panic(fierr)
-			}
+			fi, _ := os.Stat(config.BugDir)
+			//if fierr != nil {
+			//	panic(fierr)
+			//}
 			checkDirTree(args, config, fi, false)
 		}
 		return
@@ -146,24 +146,24 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 	}
 	//fmt.Printf("\n")
 
-	if wantRecursive && topRecurse == true {
-		// the first readdir is special so as to not find the same/regular issues dir
-		fi, fierr := os.Stat(config.BugDir)
-		if fierr != nil {
-			panic(fierr)
-		}
-		checkDirTree(args, config, fi, false)
-		//fileinfos, _ := ioutil.ReadDir(config.BugDir) // BugRootDir
-		//for _, node := range fileinfos {
-		//	// search for a non-"issues" dir containing an "issues" subdir
-		//	if node.Name() != "issues" &&
-		//		node.IsDir() == true {
-		//		os.Chdir(node.Name())
-		//		checkDirTree(args, config, node, true)
-		//		os.Chdir(wd) // go back
-		//	}
-		//}
-	}
+	//if wantRecursive && topRecurse == true {
+	// the first readdir is special so as to not find the same/regular issues dir
+	//	fi, _ := os.Stat(config.BugDir)
+	//if fierr != nil {
+	//	panic(fierr)
+	//}
+	//	checkDirTree(args, config, fi, false)
+	//fileinfos, _ := ioutil.ReadDir(config.BugDir) // BugRootDir
+	//for _, node := range fileinfos {
+	//	// search for a non-"issues" dir containing an "issues" subdir
+	//	if node.Name() != "issues" &&
+	//		node.IsDir() == true {
+	//		os.Chdir(node.Name())
+	//		checkDirTree(args, config, node, true)
+	//		os.Chdir(wd) // go back
+	//	}
+	//}
+	//}
 }
 
 func checkDirTree(args argumentList, config bugs.Config, node os.FileInfo, allowHits bool) {
