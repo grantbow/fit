@@ -59,16 +59,16 @@ func TestList(t *testing.T) {
 		Create(argumentList{"-n", "no_list_bug"}, config)
 	}, t)
 	// after
-	fmt.Println("a")
+	//fmt.Println("a")
 	runlist(argumentList{""}, "no_list_bug", t)
 
-	fmt.Println("b")
+	//fmt.Println("b")
 	runlist(argumentList{"1"}, "no_list_bug", t)
 
-	fmt.Println("c")
+	//fmt.Println("c")
 	runlist(argumentList{"-t"}, "no_list_bug", t)
 
-	fmt.Println("d")
+	//fmt.Println("d")
 	runlist(argumentList{"-m", "list"}, "no_list_bug", t)
 
 	//fmt.Println("e")

@@ -9,22 +9,25 @@ import (
 	"testing"
 )
 
-// Captures stdout and stderr to ensure that
-// a usage line gets printed to Stderr when
-// no parameters are specified
-func TestCreateHelpOutput(t *testing.T) {
+func runCreateOutput(args argumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		Create(argumentList{}, config)
+		Create(args, config)
 	}, t)
-
-	if stdout != "" {
-		t.Error("Unexpected output on stdout.\nwanted nil\ngot: " + stdout)
+	if stdout != expected {
+		t.Error("Unexpected output on STDOUT for bugapp/Create_test")
+		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
 	if stderr[:7] != "Usage: " {
 		t.Error("Expected usage information with no arguments")
 	}
+}
 
+// Captures stdout and stderr to ensure that
+// a usage line gets printed to Stderr when
+// no parameters are specified
+func TestCreateHelpOutput(t *testing.T) {
+	runCreateOutput(argumentList{}, "", t)
 }
 
 // Test "Create" without an issues directory
@@ -78,7 +81,7 @@ func TestCreateWithoutIssues(t *testing.T) {
 }
 
 // Test a very basic invocation of "Create" with the -n
-// argument. We can't try it without -n, since it means
+// argument. We can't yet try it without -n, since it means
 // an editor will be spawned..
 func TestCreateNoEditor(t *testing.T) {
 	config := bugs.Config{}
@@ -100,6 +103,10 @@ func TestCreateNoEditor(t *testing.T) {
 		return
 	}
 
+	///// without an issue
+	runCreateOutput(argumentList{"-n"}, "", t)
+
+	///// first issue
 	stdout, stderr := captureOutput(func() {
 		Create(argumentList{"-n", "Test", "bug"}, config)
 	}, t)
@@ -133,6 +140,45 @@ func TestCreateNoEditor(t *testing.T) {
 	}
 	if len(file) != 0 {
 		t.Error("Expected empty file for Test bug")
+	}
+
+	///// second issue
+	ioutil.WriteFile(dir+"/ddf", []byte("content"), 0755)
+	config.DefaultDescriptionFile = dir + "/ddf"
+
+	stdout, stderr = captureOutput(func() {
+		Create(argumentList{"-n", "--generate-id", "Test2", "bug"}, config)
+	}, t)
+	if stderr != "" {
+		t.Error("Unexpected output on STDERR for Test2-bug")
+	}
+	if stdout != "Created issue: Test2 bug\n" {
+		t.Error("Unexpected output on STDOUT for Test2-bug")
+	}
+	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	if err != nil {
+		t.Error("Could not read issues directory")
+		return
+	}
+	if len(issuesDir) != 2 {
+		t.Error("Unexpected number of issues in issues dir\n")
+	}
+
+	bugDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/Test2-bug", dir))
+	if len(bugDir) != 2 {
+		t.Error("Unexpected number of files found in Test2-bug dir\n")
+	}
+	if err != nil {
+		t.Error("Could not read Test2-bug directory")
+		return
+	}
+
+	file, err = ioutil.ReadFile(fmt.Sprintf("%s/issues/Test2-bug/Description", dir))
+	if err != nil {
+		t.Error("Could not load description file for Test2 bug" + err.Error())
+	}
+	if len(file) == 0 {
+		t.Error("Unexpected empty file for Test2 bug")
 	}
 }
 
