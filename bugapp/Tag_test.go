@@ -90,6 +90,9 @@ func TestTag(t *testing.T) {
 	}, t)
 	// before
 	runfind(argumentList{"tags", "foo"}, "", t) // find uses tags but tag uses tag
+	runtagsnone(argumentList{""}, "No tags assigned", t)
+	// add with too few args
+	runtag(argumentList{}, "", t) // no cmd as argument
 	// add
 	runtag(argumentList{"1", "foo"}, "", t) // no cmd as argument
 	// force it to test when runmiles doesn't work
@@ -113,6 +116,10 @@ func TestTag(t *testing.T) {
 	if err != nil {
 		t.Error("Could not load tags/bar file" + err.Error())
 	}
+	// non existent bug
+	runtag(argumentList{"3", "baz"}, "", t) // no cmd as argument
+	// --rm a tag
+	runtag(argumentList{"--rm", "1", "bar"}, "", t) // no cmd as argument
 }
 func TestTagsAssigned(t *testing.T) {
 	runtagsassigned(argumentList{""}, "Tags used in current tree", t)
