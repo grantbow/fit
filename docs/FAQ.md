@@ -393,6 +393,23 @@ A: The alternatives to good IT project practices are are all too common, in IT
    provided to project team members are not appropriate for collecting all
    possible project knowledge.
 
+Q: How do I write a good bug report?
+A: How to Report Bugs Effectively by Simon Tatham
+
+    [sgtatham bugs.html](https://www.chiark.greenend.org.uk/~sgtatham/bugs.html)
+
+   While I hesitate to include the following URL the content is carefully written
+   and can help people better understand the perspectives of people involved in
+   the lifecycle of open source software. Many people have never tried to code a
+   fix to a software bug. Be prepared to accept language and/or terminology that
+   may feel very colloquial, informal or casual.
+
+    [catb.org smart-questions.html](http://www.catb.org/esr/faqs/smart-questions.html)
+
+   Many pages on this site may be of help researching these types of systems.
+
+    [softwaretestinghelp howto](https://www.softwaretestinghelp.com/how-to-write-good-bug-report/)
+
 Q: This can never work because [...]
 A: Okay, so use something that works better for you.
 

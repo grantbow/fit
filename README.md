@@ -269,19 +269,7 @@ had additions while trying to remain backward compatible.  See the
 
 Your system is the beginning, not the end. Much has been written about how to
 use and setup systems to track or manage issues, software bugs, trouble
-tickets, support tickets, incident tickets or requests.
-
-How to Report Bugs Effectively by Simon Tatham
-
-    [www.chiark.greenend.org.uk/~sgtatham/bugs.html](https://www.chiark.greenend.org.uk/~sgtatham/bugs.html)
-
-While I hesitate to include the following URL the content is carefully written
-and can help people better understand the perspectives of people involved in
-the lifecycle of open source software. Many people have never tried to code a
-fix to a software bug. Be prepared to accept language and/or terminology that
-may feel very colloquial, informal or casual.
-
-    [www.catb.org/esr/faqs/smart-questions.html](http://www.catb.org/esr/faqs/smart-questions.html)
+tickets, support tickets, incident tickets or requests. See the FAQ.md
 
 ### Feedback
 

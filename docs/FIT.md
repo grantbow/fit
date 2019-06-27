@@ -3,13 +3,13 @@
 Filesystem Issue Tracker (FIT) conventions/format are a set of suggestions for
 storing issues, one directory/folder per issue with plain text file details.
 
-Use the editors, devices and shared file storage of your choice.
+Use your choice of editors, devices and shared file storage.
+
+The FIT format can evolve to meet changing team needs. Data can be imported
+or exported from other issue systems.
 
 bug is a program that implements the FIT conventions and helps manage issues
 versioned in git or mercurial.
-
-The FIT format can evolve to meet changing team needs. When adapted data from
-other issue systems can be imported and exported.
 
 bug is the program written in Go developed by Dave MacFarlane (driusan).
 Filesystem Issue Tracker (FIT) is the new name for the Poor Man's Issue Tracker
@@ -120,16 +120,17 @@ may be named:
     Epic                 Saga                 Mind Map
 
 
-The FIT system is powerful because it has few requirements.
+The FIT system is powerful because it has few technical requirements.
 
-Sorting and listings are useful but often very context sensitive. Very
-elaborate systems that include dashboards, email notifications, mobile apps,
-integrations, various views, charts, filters and sorting may be useful. List
-management features may also be very context sensitive.
+List management and sorting can be useful. Very purpose-suited systems can
+include dashboards, email notifications, mobile apps, integrations, views,
+charts, filters and sorting. List management features may be very context
+sensitive.
 
 For the specific set of issues within the context of programming code a TODO:
 or BUG: comment has long been used to record issues with code. Spreading issues
-across code files is awkward.
+across code files is awkward, especially when adding screenshot attachments
+and emailing them around.
 
 Using paper has advantages. Paper doesn't crash. Notes can be reorganized
 easily. Some things are more difficult like searching, copying or keeping track
@@ -150,6 +151,10 @@ description or comments.
 
 Version control like git tracks changes very well. git versions file contents
 and filesystem attributes such as directories, permissions and symbolic links.
+
+Centralized lists can provide status quickly and show some relation between the
+issues, but without a way to make a copy locally you can not access the system
+when on the go.
 
 A little more structure, just enough, makes a huge difference.
 
@@ -236,15 +241,15 @@ things to remember.
 
 People like to rename things. So to prevent technical dependency problems
 requiring the renaming of subdirectories the title of the issue should be
-located on the first line of the "Description" file.  It will usually match the
+located on the first line of the "Description" file. It will usually match the
 directory name. i.e. an issue dir-name should have it's first line "title: sub
 dir name"
 
 If the first line does not begin with the letters "title" or if renaming is not
 a problem for your system then the directory name is used as the title.
 
-The rest of the file contains free form text describing the issue.  There is an
-art and science to what an issue can and should contain.  It can be interpreted
+The rest of the file contains free form text describing the issue. There is an
+art and science to what an issue can and should contain. It can be interpreted
 as markdown format. This is the only logically required file in the directory
 and the only file with a fixed file name. Contents depend upon how the system
 is used but descriptions often contain the context of an issue, how to
@@ -389,7 +394,7 @@ Some anticipated tags might include:
 `tag_follows_previous-issue`
 `tag_preceeds_next-issue`
 
-    Tags may reference other issues and relationships between them.  Symbolic
+    Tags may reference other issues and relationships between them. Symbolic
     links are possible. The file may contain details about how these issue are
     related. Dependency tracking can be very useful in certain circumstances.
 
@@ -456,7 +461,7 @@ provide, but when needed issues can and should be parsed into a database.
 Things like querying and reporting can be more efficient using something like
 Berkeley DB, Sqlite, MariaDB, Postgres, MongoDB, CouchDB, etc.
 
-For end user access an http front end would be a good logical next step.  For
+For end user access an http front end would be a good logical next step. For
 the additionally types of summaries (like BUGS.txt), reports, html files and
 other files in the system exclusions can be specified so they are not checked
 into the version control system.

@@ -3,10 +3,7 @@
 # Script to run go test on multiple packages with a single
 # coverage report for codecov.io.
 
-# invoked from github the repo as ./test/test.sh
-
-# You might just want to use "go test ./..." instead of
-# this script
+# invoked from the github repo as ./test/test.sh
 set -e
 echo "" > coverage.txt
 export GO111MODULE=on # for forks
