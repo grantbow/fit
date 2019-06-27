@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
+	"time"
 )
 
 type tester struct {
@@ -37,6 +38,7 @@ func (t *tester) Setup() {
 func (t *tester) Teardown() {
 	os.RemoveAll(t.dir)
 }
+
 func TestTitleToDirectory(t *testing.T) {
 	var assertDirectory = func(title, directory string) {
 		titleStr := TitleToDir(title)
@@ -57,6 +59,19 @@ func TestTitleToDirectory(t *testing.T) {
 	assertDirectory("Test ? What", "Test-_-What")
 	assertDirectory("Test / What", "Test-_-What")
 	assertDirectory("Test . What", "Test-_-What")
+}
+
+func TestShortTitleToDir(t *testing.T) {
+	var assertDirectory = func(title, directory string) {
+		titleStr := ShortTitleToDir(title)
+		dirStr := Directory(directory).ShortNamer()
+
+		if titleStr != dirStr {
+			t.Error(fmt.Sprintf("Failed on %s: got %s but expected %s\n", title, titleStr, dirStr))
+		}
+	}
+	assertDirectory("123456789012345678901234567", "1234567890123456789012345")
+
 }
 
 func TestNewBug(t *testing.T) {
@@ -102,6 +117,51 @@ func TestSetDescription(t *testing.T) {
 	if string(val) != "Hello, I am a bug.\n" {
 		t.Error("Unexpected description after SetDescription")
 	}
+}
+
+func TestTitle(t *testing.T) {
+	config := Config{}
+	config.DescriptionFileName = "Description"
+	test := tester{}
+	test.Setup()
+	defer test.Teardown()
+
+	b := test.bug
+
+	expected := "Test Bug"
+	val := b.Title("")
+	if string(val) != expected {
+		t.Error(fmt.Sprintf("Failed on %s: got %s but expected %s\n", "TestTitle", val, expected))
+	}
+}
+
+//type Comment struct {
+//	Author string
+//	Time   time.Time
+//	Body   string
+//	Order  int
+//	Xml    []byte
+//}
+
+func TestCommentStatusPriorityMilestone(t *testing.T) {
+	config := Config{}
+	config.DescriptionFileName = "Description"
+	test := tester{}
+	test.Setup()
+	defer test.Teardown()
+
+	b := test.bug
+
+	expected := "Test Bug Comment"
+	//b.CommentBug(Comment("Author", time.Now(), expected, 0, []byte("")), config)
+	b.CommentBug(Comment{Author: "Author", Time: time.Now(), Body: expected, Order: 0, Xml: []byte("")}, config)
+	b.RemoveComment(Comment{Author: "Author", Time: time.Now(), Body: expected, Order: 0, Xml: []byte("")})
+	_ = b.SetStatus("do", config)
+	_ = b.Status()
+	_ = b.SetPriority("urgent", config)
+	_ = b.Priority()
+	_ = b.SetMilestone("release", config)
+	_ = b.Milestone()
 }
 
 func TestDescription(t *testing.T) {
