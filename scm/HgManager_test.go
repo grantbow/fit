@@ -127,7 +127,7 @@ func TestHgBugRenameCommits(t *testing.T) {
 	}
 	h := HgTester{}
 
-	t.Skip("TODO: fix HgBugRenameCommits changed output in some (hg version?) conditions")
+	//t.Skip("TODO: fix HgBugRenameCommits changed output in some (hg version?) conditions")
 	expectedDiffs := []string{
 		`diff --git a/issues/Test-bug/Description b/issues/Test-bug/Description
 new file mode 100644

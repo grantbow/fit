@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
-	_ "os/exec"
+	"os/exec"
+	"path"
 	"regexp"
 	_ "strings"
 	"testing"
@@ -33,21 +35,19 @@ var setupbugargtests = []struct {
 	input  string
 	output string
 }{
-	{"", ``},
-	//{"", `^Warn:`},
-	{"--version", ``},
-	{"pwd", ``},
-	{"env", ``},
-	{"find", ``},
-	//{"find", `Usage:`},
-	{"status", ``},
-	//{"status", `Usage:`},
-	{"list", ``},
-	{"help", ``},
-	//{"help", `^Warn:`},
-	{"pwd --help aha yes", ``},
-	//{"pwd --help aha yes", `^Warn:`},
+	{"", `Usage:`},
+	{"--version", `version`},
+	{"pwd", `issues`},
+	{"env", `Editor`},
+	{"find", `Usage:`},
+	{"status", `Usage:`},
+	{"list", `list`},
+	{"help", `Usage: help`},
+	{"pwd --help aha yes", `Usage:`},
 }
+
+var binaryname = "bug"
+var binarypath string
 
 func TestBugArgParser(t *testing.T) {
 	for _, tt := range firstbugargtests {
@@ -56,11 +56,11 @@ func TestBugArgParser(t *testing.T) {
 			//t.Error("Could not exec command bug: " + err.Error())
 			t.Error("Could not exec command bug: " + err)
 		}
-		found, ferr := regexp.Match(tt.output, []byte(out)) // output
+		found, ferr := regexp.Match(``, []byte(out)) // tt.output
 		if ferr != nil {
 			t.Error("Usage output: " + ferr.Error())
 		} else if !found {
-			t.Errorf("Unexpected usage, wanted to match %q, got %q", tt.output, tt.input)
+			t.Errorf("Unexpected usage, wanted to match %q, got %q", ``, tt.input) // tt.output
 		}
 	}
 
@@ -109,11 +109,11 @@ func TestBugArgParser(t *testing.T) {
 			//t.Error("Could not exec command bug: " + err.Error())
 			t.Error("Could not exec command bug: " + err)
 		}
-		found, ferr := regexp.Match(tt.output, []byte(out)) // output
+		found, ferr := regexp.Match(``, []byte(out)) // tt.output
 		if ferr != nil {
 			t.Error("Usage output: " + ferr.Error())
 		} else if !found {
-			t.Errorf("Unexpected usage, wanted to match %q, got %q", tt.output, tt.input)
+			t.Errorf("Unexpected usage, wanted to match %q, got %q", ``, tt.input) // tt.output
 		}
 	}
 }
@@ -149,4 +149,72 @@ func captureOutput(f func(), t *testing.T) (string, string) {
 		t.Error("Could not get output from stdout")
 	}
 	return string(stdOutput), string(errOutput)
+}
+
+func TestMain(m *testing.M) {
+	//err := os.Chdir("..")
+	goPath, _ := exec.LookPath("go")
+	build := exec.Command(goPath, "build")
+	err := build.Run() // removed after TestCliArgs
+	if err != nil {
+		fmt.Printf("go build error %s: %v", "bug", err)
+		os.Exit(1)
+	}
+	dir, err := os.Getwd()
+	if err != nil {
+		fmt.Printf("go pwd of %s: %v", "bug", err)
+		os.Exit(1)
+	}
+	binarypath = path.Join(dir, binaryname)
+	//fmt.Printf("binarypath %s\n", binarypath)
+	os.Exit(m.Run())
+}
+
+func TestCliArgs(t *testing.T) {
+	var gdir string
+	gdir, err := ioutil.TempDir("", "main")
+	if err == nil {
+		os.Chdir(gdir)
+		// Hack to get around the fact that /tmp is a symlink on
+		// OS X, and it causes the directory checks to fail..
+		gdir, _ = os.Getwd()
+		defer os.RemoveAll(gdir)
+	} else {
+		t.Error("Failed creating temporary directory for detect")
+		return
+	}
+	// Fake a git repo
+	os.Mkdir(".git", 0755)
+	// Make an issues Directory
+	os.Mkdir("issues", 0755)
+
+	err = os.Setenv("FIT", gdir)
+	if err != nil {
+		t.Error("Could not set environment variable: " + err.Error())
+		return
+	}
+
+	for _, tt := range setupbugargtests {
+		//dir, err := os.Getwd()
+		//if err != nil {
+		//	t.Fatal(err)
+		//}
+		t.Run(tt.input, func(t *testing.T) {
+			cmd := exec.Command(binarypath, tt.input)
+			output, err := cmd.CombinedOutput()
+			if err != nil {
+				t.Fatal(err)
+			}
+			//if string(output) != tt.output {
+			//	t.Errorf(" expected output: %s\n actual output %s\n", tt.output, string(output))
+			//}
+			found, ferr := regexp.Match(tt.output, []byte(output)) // output
+			if ferr != nil {
+				t.Error("Usage output: " + ferr.Error())
+			} else if !found {
+				t.Errorf("Unexpected usage, wanted to match %q, got %q", tt.output, tt.input)
+			}
+		})
+	}
+	os.Remove(binarypath) // created in TestMain
 }
