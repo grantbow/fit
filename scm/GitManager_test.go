@@ -6,6 +6,7 @@ import (
 	"github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -69,6 +70,7 @@ func (g GitTester) AssertStagingIndex(t *testing.T, f []FileStatus) {
 			t.Error("Got" + out + " not " + expected)
 		}
 	}
+	// extra FileStatus entries not asserted yet
 }
 
 func (g GitTester) StageFile(file string) error {
@@ -150,6 +152,15 @@ rename to issues/Renamed-bug/Description
 `}
 
 	runtestRenameCommitsHelper(&g, t, expectedDiffs)
+}
+
+func TestGitIssueStatus(t *testing.T) {
+	i := issueStatus{true, true, true}
+	if i.a != true || i.d != true || i.m != true {
+		t.Error("issueStatus are not all true, a " + strconv.FormatBool(i.a) +
+			", d " + strconv.FormatBool(i.d) +
+			", m " + strconv.FormatBool(i.m))
+	}
 }
 
 func TestGitFilesOutsideOfBugNotCommited(t *testing.T) {

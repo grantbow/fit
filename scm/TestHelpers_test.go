@@ -126,6 +126,8 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		t.Error("Could not get manager")
 		return
 	}
+	//
+	//
 	os.MkdirAll("issues/Test-bug", 0755)
 	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
 	if err = ioutil.WriteFile("donotcommit.txt", []byte(""), 0644); err != nil {
@@ -148,14 +150,86 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	})
 	//fmt.Print("pre  2 runtestCommitDirtyTree\n")
 	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
-	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit")
+	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
 	//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", errCommit) // nil here
-	//    running test shows output here. actually HgManager.go Commit() returns *expected* error not fully handled.
+	//    running test shows output here. actually HgManager.go Commit() returns *expected* error
+	//        not fully handled by Hg though
+	//        scm/GitManager.go#func SCMIssuesCacher() was implemented later and
+	//        used with scm/GitManager.go#func SCMIssuesUpdaters in cmd/bug/main.go.
 	//    stdout not captured this time.
 	//fmt.Print("post 2 runtestCommitDirtyTree\n")
 	tester.AssertStagingIndex(t, []FileStatus{
 		FileStatus{"donotcommit.txt", "A", " "},
 	})
+	//
+	os.MkdirAll("issues/Fresh-bug", 0755)
+	ioutil.WriteFile("issues/Fresh-bug/Description", []byte(""), 0644)
+	tester.AssertStagingIndex(t, []FileStatus{
+		FileStatus{"donotcommit.txt", "A", " "},
+		FileStatus{"issues/Fresh-bug/Description", "?", "?"},
+	})
+	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
+	//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", errCommit) // shouldn't be nil
+	scmoptions := make(map[string]bool)
+	handler, _, _ := DetectSCM(scmoptions, config)
+	if b, err := handler.SCMIssuesUpdaters(); err != nil {
+		for _, bline := range strings.Split(string(b), "\n") {
+			fmt.Printf("1 Warn Updaters: %v\n", string(bline))
+		}
+		//if _, ErrCa := handler.SCMIssuesCacher(); ErrCa != nil {
+		//	fmt.Printf("1 Warn cacher: %s\n", ErrCa)
+		//}
+		if c, ErrCa := handler.SCMIssuesCacher(); ErrCa != nil {
+			for _, bline := range strings.Split(string(c), "\n") {
+				fmt.Printf("2 Warn cacher: %v\n", string(bline))
+			}
+		}
+	}
+	tester.StageFile("issues/Fresh-bug/Description")
+	handler, _, _ = DetectSCM(scmoptions, config)
+	if b, err := handler.SCMIssuesUpdaters(); err != nil {
+		for _, bline := range strings.Split(string(b), "\n") {
+			fmt.Printf("2 Warn Updaters: %v\n", string(bline))
+		}
+		if c, ErrCa := handler.SCMIssuesCacher(); ErrCa != nil {
+			for _, bline := range strings.Split(string(c), "\n") {
+				fmt.Printf("2 Warn cacher: %v\n", string(bline))
+			}
+		}
+	}
+	/*
+		if b, err := handler.SCMIssuesUpdaters(); err != nil {
+			fmt.Printf("Files in issues/ need committing, see $ git status --porcelain -u -- :/issues\nand for files already in index see $ git diff --name-status --cached HEAD -- :/issues\n")
+			if _, ErrCach := handler.SCMIssuesCacher(); ErrCach != nil {
+				for _, bline := range strings.Split(string(b), "\n") {
+					//if bline in c {
+					//} else {
+					fmt.Printf("%v\n", string(bline))
+					//}
+				}
+			} else {
+				fmt.Printf("%v\n", string(b))
+			}
+		} else {
+			fmt.Printf("No files in issues/ need committing, see $ git status --porcelain -u issues \":top\"\n")
+		}
+
+		if ErrH != nil {
+			fmt.Printf("Warn: to commit your issues first use {git|hg} init\n")
+			//fmt.Printf("Warn: %s\n", ErrH) // No SCM found
+			//a, b := handler.SCMIssuesUpdaters()
+			//fmt.Printf("%+v %+v\n", a, b)
+			if handler != nil {
+				if _, ErrU := handler.SCMIssuesUpdaters(); ErrU != nil {
+					if _, ErrCa := handler.SCMIssuesCacher(); ErrCa != nil {
+						fmt.Printf("Warn: %s\n", ErrCa)
+					} else {
+						fmt.Printf("Warn: %s\n", ErrU)
+					}
+				}
+			}
+		}
+	*/
 }
 
 func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
