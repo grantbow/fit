@@ -268,6 +268,10 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	if len(issuesDir) > 0 && issuesDir[0].Name() != "Test-bug" {
 		t.Error("Expected Test-bug to remain.")
 	}
+	err = m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "", config) // no changes
+	if err != nil {                                                        // should NOT be a nil
+		t.Error("Expected no commit error.")
+	}
 }
 
 func runretitle(label string, args argumentList, config bugs.Config, expected string, t *testing.T) {
