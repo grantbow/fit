@@ -1,0 +1,6 @@
+what it does now: warn of changed files
+
+what it needs to do: identified changed issues (not files)
+
+next: use the list of changes with a notification system for email and/or twilio texts.
+

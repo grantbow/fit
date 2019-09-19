@@ -235,3 +235,9 @@ func (mgr GitManager) SCMIssuesCacher() ([]byte, error) { // config bugs.Config
 		return co, errors.New("Files In issues/ Staged and Need Committing")
 	}
 }
+
+//func (mgr GitManager) SCMChangedIssues() ([]byte, error) {
+//output from SCMIssuesCacher(), accept unique first directory level of the file list
+//then check if updates should be sent for these issues
+//    then send the updates
+//}
