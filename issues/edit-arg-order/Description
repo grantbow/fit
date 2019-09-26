@@ -1,0 +1,15 @@
+#### What did you do?
+bug edit 42
+
+#### What did you expect to see?
+edit the description file of bugid 42
+
+#### What did you see instead?
+editing some other bug
+
+arguments are in the wrong order "bug edit [filename] bugid"
+should be bug edit bugid [filename]
+
+#### What version?
+0.6
+

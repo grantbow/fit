@@ -120,6 +120,8 @@ func main() {
 			}
 		case "purge":
 			bugapp.Purge(config)
+		case "twilio":
+			bugapp.Twilio(config)
 		// subcommands with osArgs next
 		case "list", "view", "show", "display", "ls":
 			// bug list with no parameters shouldn't autopage,

@@ -1,0 +1,8 @@
+driusan/bugs has osx and linux binaries : https://github.com/driusan/bug/releases/
+
+https://docs.travis-ci.com/user/deployment/releases/
+
+doesn't seem right unless I publish an API key.
+
+I release 0.5 https://github.com/grantbow/bug/releases/ but didn't append binary files.
+

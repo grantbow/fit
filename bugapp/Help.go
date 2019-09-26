@@ -187,6 +187,11 @@ The matching bugs will be printed.
 			`This will delete any bugs that are not currently tracked by
 git.
 `)
+	case "twilio":
+		fmt.Printf("Usage: " + os.Args[0] + " twilio\n\n")
+		fmt.Printf(
+			`This will send via twilio notifications of modified bugs.
+`)
 	case "commit", "save":
 		fmt.Printf("Usage: " + os.Args[0] + " commit [--no-autoclose]\n\n")
 		fmt.Printf(`This will commit any new, modified, or removed issues to

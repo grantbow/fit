@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# An example hook script to automatically send changes
+# seen in the issues/ directories via
+# that also have tag_twilio_4155551212 phone numbers
+# via twilio sms if it is configured in the repository's .bug.yml
+#
+# To use this file, move and rename it like
+# cp -p post-commit.changes-twilio <rep>/.git/hooks/
+bug twilio > $(bug pwd)/../.bug.log 2>&1

@@ -11,9 +11,9 @@ import (
 	"testing"
 )
 
-func TestPurgeNoEditor(t *testing.T) {
+func TestTwilio(t *testing.T) {
 	config := bugs.Config{}
-	dir, err := ioutil.TempDir("", "purgetest")
+	dir, err := ioutil.TempDir("", "twiliotest")
 	if err != nil {
 		t.Error("Could not create temporary dir for test")
 		return

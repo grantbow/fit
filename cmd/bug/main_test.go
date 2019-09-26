@@ -23,6 +23,10 @@ type Config struct {
 	NewFieldAsTag             bool   `json:"NewFieldAsTag"`
 	NewFieldLowerCase         bool   `json:"NewFieldLowerCase"`
 	GithubPersonalAccessToken string `json:"GithubPersonalAccessToken"`
+	TwilioAccountSid          string `json:"TwilioAccountSid"`
+	TwilioAuthToken           string `json:"TwilioAuthToken"`
+	TwilioPhoneNumberFrom     string `json:"TwilioPhoneNumberFrom"`
+	IssuesSite                string `json:"IssuesSite"`
 }
 
 var firstbugargtests = []struct {

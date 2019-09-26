@@ -1,0 +1,14 @@
+#### What did you do?
+bug issue create autoid
+
+#### What did you expect to see?
+automatic, incrementing identifier number
+
+#### What did you see instead?
+autoid was created but no identifier
+configuration should default correctly to not provide one
+but it should be clear how to enable this feature
+
+#### Does this issue reproduce with the latest release?
+
+

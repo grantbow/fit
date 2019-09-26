@@ -19,7 +19,7 @@ fi
 cd ../..
 
 for d in $(find ./* -maxdepth 0 -type d); do
-    if ls $d/*.go &> /dev/null; then
+    if ls $d/*_test.go &> /dev/null; then
         if [[ $d = *issues* ]] ; then
             continue
         fi

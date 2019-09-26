@@ -92,7 +92,7 @@ var hg bool
 
 func init() {
 	flag.BoolVar(&hg, "hg", true, "Mercurial (hg) presence")
-	flag.Parse()
+	//flag.Parse()
 	_, err := runCmd("hg")
 	if err != nil {
 		hg = false

@@ -36,6 +36,14 @@ type Config struct {
 	NewFieldLowerCase bool `json:"NewFieldLowerCase"`
 	// github.com/settings/tokens
 	GithubPersonalAccessToken string `json:"GithubPersonalAccessToken"`
+	//* twilio.com/console "Dashboard" has the "account sid" public acct identifier
+	TwilioAccountSid string `json:"TwilioAccountSid"`
+	//* twilio "Auth Token" is the "Rest API Key" is for access
+	TwilioAuthToken string `json:"TwilioAuthToken"`
+	//* your twilio number
+	TwilioPhoneNumberFrom string `json:"TwilioPhoneNumberFrom"`
+	//* your issues site url for notifications
+	IssuesSite string `json:"IssuesSite"`
 }
 
 /*
@@ -137,6 +145,30 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 			c.GithubPersonalAccessToken = temp.GithubPersonalAccessToken
 		} else {
 			c.GithubPersonalAccessToken = ""
+		}
+		//* twilio.com/console "Dashboard" has the "account sid" public acct identifier
+		if temp.TwilioAccountSid != "" {
+			c.TwilioAccountSid = temp.TwilioAccountSid
+		} else {
+			c.TwilioAccountSid = ""
+		}
+		//* twilio "Auth Token" is the "Rest API Key" is for access
+		if temp.TwilioAuthToken != "" {
+			c.TwilioAuthToken = temp.TwilioAuthToken
+		} else {
+			c.TwilioAuthToken = ""
+		}
+		//* your twilio number
+		if temp.TwilioPhoneNumberFrom != "" {
+			c.TwilioPhoneNumberFrom = temp.TwilioPhoneNumberFrom
+		} else {
+			c.TwilioPhoneNumberFrom = ""
+		}
+		//* your issues site url for notifications
+		if temp.IssuesSite != "" {
+			c.IssuesSite = temp.IssuesSite
+		} else {
+			c.IssuesSite = ""
 		}
 		return nil
 	}

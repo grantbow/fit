@@ -109,7 +109,7 @@ func TestSetDescription(t *testing.T) {
 	b := test.bug
 
 	b.SetDescription("Hello, I am a bug.", config)
-	val, err := ioutil.ReadFile(string(b.Direr()) + "/Description")
+	val, err := ioutil.ReadFile(string(b.Direr()) + "/" + config.DescriptionFileName)
 	if err != nil {
 		t.Error("Could not read Description file")
 	}

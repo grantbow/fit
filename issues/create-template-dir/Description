@@ -1,0 +1,12 @@
+#### What did you do?
+bug create btd
+
+#### What did you expect to see?
+template files created automatically, not just the Description
+
+#### What did you see instead?
+no files were created automatically
+limited use cases that may conflict with bug-template and identifier-automatic
+this feature should be disabled by default
+but it should be clear how to enable it when desired
+
