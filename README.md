@@ -23,31 +23,60 @@ bug manages plain text issues with git or mercurial.
 
 ## Goal
 
-The goal is to use human readable issue directories and files so all issues are
-are captured, surfaced and addressed, whether they are actual problems or some
-other kind of question or idea.
+Keep your code close and your issues closer.
+
+Expandable with issue key/value pair metadata without reconfiguring anything.
+
+The goal is to quickly capture issues using human readable issue directories
+and files. This can supplement more comprehensive issue and bug systems or act
+in their place.
 
 This is how people naturally keep track of issues after single text files and
 spreadsheets fail to meet all project needs. (see [FAQ.md](FAQ.md)) 
 
-Using bug and FIT helps implementers streamline working with
+bug manages issues using Filesystem Issue Tracker (see [FIT.md](FIT.md))
+conventions/format.
+An `issues/` directory holds one (descriptively titled) directory per issue.
+
+The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue
+system that can still work. It differs from other distributed, versioned,
+filesystem based issue tracking tools in several ways. Human readable plain
+text files are still easily viewed, edited and understood. Standard tools are
+used and further minimize context switching between coding and issue tracking
+systems. This context is valuable. bug also supports multiple `issues/`
+directories throughout the directory tree for stronger coordination of coding
+and issue tracking.
+
+Using bug and FIT help implementers streamline working with
 [issues](https://en.wikipedia.org/wiki/Issue_tracking_system) and [version
-control](https://en.wikipedia.org/wiki/Version_control)
+control](https://en.wikipedia.org/wiki/Version_control). bug works well with
+both git and mercurial distributed version control though the git features are
+more well exercised.
 
 The alternative is all too common in IT projects or other projects:
 intentionally disregard issues and hope problems will not attract attention due
 to lack of project budget, time, scope, quality or other resources.
+Beyond spreadsheets and without a separate issue system there is FIT.
 
-bug manages issues using Filesystem Issue Tracker (see [FIT.md](FIT.md))
-conventions/format. bug works well with both git and mercurial distributed
-version control. The git features are now more developed.
+All issues are are captured, surfaced and addressed, whether they are actual
+problems or some other kind of question or idea by those familiar with the
+project but who may be less code savvy.
+
+Software Development LifeCycles (SDLCs) involve more than just the source code.
+Over time needs may change from hacking/coding, just getting something working,
+to implementing more disciplined software engineering best practices. Code can
+start small as grow gradually as users, use cases and developers are added.
+This issue system can help at each stage.
 
 bug can be aliased as a git subcommand such as `bug` or `issue`.
+Security concerns are handled like any other git repository.
+
+Generally one issue set is used for one git repository but recursive issues directories are being supported.
 
 bug software is written using [golang](https://golang.org) to make things easy,
 simple and reliable. Why go? [This video](https://vimeo.com/69237265) from a
-2013 Ruby conference by Andrew Gerrand of Google seems a good explanation,
-found linked from the golang.org home page.
+2013 Ruby conference by Andrew Gerrand of Google seems a good explanation. It
+was linked from the golang.org home page.
 
 ## Getting Started
 
@@ -141,14 +170,6 @@ issues directory. Current options include:
           Set one at github.com/settings/tokens
           for import of private projects that need authentication
           
-The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue
-system that can still work. It differs from other distributed, versioned,
-filesystem based issue tracking tools in several ways. Human readable plain
-text files are still easily viewed, edited and understood. Standard tools are
-used and further minimize context switching between coding and issue tracking
-systems. bug also supports multiple `issues/` directories throughout the
-directory tree for stronger coordination of coding and issue tracking.
-
 Other issue systems may use databases, hidden directories or hidden branches.
 While these may be useful techniques in certain circumstances this seems to
 unnecessarily obfuscate access.
@@ -254,8 +275,14 @@ Issue Tracker (PMIT) storage system also first developed by driusan. For his
 demo from 2016, see [driusan's
 talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
 GolangMontreal.org conference, GoMTL-01. The program and storage system have
-had additions while trying to remain backward compatible.  See the
+had additions while trying to remain backward compatible. See the
 [FAQ.md](FAQ.md) for more information.
+
+Engineers know that there is more to code than the source itself. For some this
+is enough context. For most people new to a code base context is extremely
+helpful. Refactoring history, code reviews and notes can be important to grok
+the code. These may originate from research after a user reported problems or
+may arise while coding.
 
 ## Next Steps
 

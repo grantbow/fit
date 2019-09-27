@@ -1,0 +1,19 @@
+#### What did you do?
+
+
+#### What did you expect to see?
+a restful json web service api HAL discoverable via HATEOAS
+    https://en.wikipedia.org/wiki/Representational_state_transfer
+    https://en.wikipedia.org/wiki/JSON
+    https://en.wikipedia.org/wiki/Web_service
+    https://en.wikipedia.org/wiki/Web_API
+    https://tools.ietf.org/html/draft-kelly-json-hal-08
+    https://en.wikipedia.org/wiki/HATEOAS
+        https://restfulapi.net/hateoas/
+
+#### What did you see instead?
+nothing yet
+
+#### What version?
+
+

@@ -1,8 +1,11 @@
 #### What did you do?
-bug feedback
+bug feedback-bug
 
 #### What did you expect to see?
-some way to send feedback (perhaps a bug) or a non-bug to the git repo maintainers
+and/or some way to send feedback (perhaps a bug) about *bug* itself
+
+this is handled by the *bug* README and other docs but
+having a simple way to send an email may be helpful
 
 #### What did you see instead?
 nothing yet
