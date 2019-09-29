@@ -29,8 +29,8 @@ func Edit(args argumentList, config bugs.Config) {
 		// statement, so set them, but everything else
 		// is the same
 		if len(args) == 2 {
-			bugID = args[1]
-			file = args[0]
+			bugID = args[0]
+			file = args[1]
 		}
 
 		b, err := bugs.LoadBugByHeuristic(bugID, config)
@@ -43,8 +43,9 @@ func Edit(args argumentList, config bugs.Config) {
 
 		switch title := strings.Title(file); title {
 		case "Description", "Milestone", "Status", "Priority", "Identifier":
+			// enforces Title case
 			file = title
-		}
+		} // else falls through
 		fmt.Printf("Editing %s/%s\n", dir, file)
 		cmd := exec.Command(getEditor(), string(dir)+"/"+file)
 

@@ -35,8 +35,8 @@ This is how people naturally keep track of issues after single text files and
 spreadsheets fail to meet all project needs. (see [FAQ.md](FAQ.md)) 
 
 bug manages issues using Filesystem Issue Tracker (see [FIT.md](FIT.md))
-conventions/format.
-An `issues/` directory holds one (descriptively titled) directory per issue.
+conventions/format. An `issues/` directory holds one (descriptively titled)
+directory per issue.
 
 The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue
 system that can still work. It differs from other distributed, versioned,
@@ -55,8 +55,8 @@ more well exercised.
 
 The alternative is all too common in IT projects or other projects:
 intentionally disregard issues and hope problems will not attract attention due
-to lack of project budget, time, scope, quality or other resources.
-Beyond spreadsheets and without a separate issue system there is FIT.
+to lack of project budget, time, scope, quality or other resources. Beyond
+spreadsheets and without a separate issue system there is FIT.
 
 All issues are are captured, surfaced and addressed, whether they are actual
 problems or some other kind of question or idea by those familiar with the
@@ -68,10 +68,20 @@ to implementing more disciplined software engineering best practices. Code can
 start small as grow gradually as users, use cases and developers are added.
 This issue system can help at each stage.
 
-bug can be aliased as a git subcommand such as `bug` or `issue`.
-Security concerns are handled like any other git repository.
+Generally one issue set is used for one git repository but recursive issues
+directories are being supported. As complexity increases adding multiple
+`issues/` directories in different parts of your git repo helps keep things
+focused. Features are being added to comprehensively manage a hierarchy of
+`issues/` directories.
 
-Generally one issue set is used for one git repository but recursive issues directories are being supported.
+As the number of past issues grows closed issues can simply be deleted or an
+archive can hold the inactive issues. While deleting issues helps keep things
+uncluttered issues still have value over time. A compromise may be to delete
+them and retain an index of deleted `issues/` files so that they can still be
+found and processed as needed.
+
+bug can be aliased as a git subcommand such as `bug` or `issue`. Security
+concerns are handled like any other git repository.
 
 bug software is written using [golang](https://golang.org) to make things easy,
 simple and reliable. Why go? [This video](https://vimeo.com/69237265) from a

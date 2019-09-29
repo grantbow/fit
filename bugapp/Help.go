@@ -79,7 +79,7 @@ aliases for list: view show display ls
 `)
 
 	case "edit":
-		fmt.Printf("Usage: " + os.Args[0] + " edit <Filename> <BugID>\n\n")
+		fmt.Printf("Usage: " + os.Args[0] + " edit <BugID> <Filename>\n\n")
 		fmt.Printf(
 			`This will launch your standard editor to edit the Description 
 of the bug identified by BugID.  See "bug help ids" for

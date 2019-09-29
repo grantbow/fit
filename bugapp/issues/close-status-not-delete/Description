@@ -10,3 +10,8 @@ What should happen:
 
 bug status close foo
 
+new command 
+bug archive
+could `git mv 1` to another subfolder like issues/archive/1
+      or to prevent being read as an issue issues-archive/1
+
