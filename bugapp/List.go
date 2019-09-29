@@ -91,7 +91,8 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 		}
 	} else if len(args) == 0 || (wantTags && len(args) == 1) || // --regex alone makes no sense
 		(wantRecursive && len(args) == 1) ||
-		(wantTags && wantRecursive && len(args) == 2) {
+		(wantTags && wantRecursive && len(args) == 2) ||
+		config.MultipleIssuesDirs == true {
 		// No parameters, print a list of all bugs
 		//os.Stdout = stdout
 		for idx, issue := range issues {
@@ -100,7 +101,7 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 			}
 			printIssueByDir(idx, issue, issuesroot, config, wantTags)
 		}
-		if wantRecursive && topRecurse == true {
+		if topRecurse == true && (wantRecursive || config.MultipleIssuesDirs == true) {
 			fi, _ := os.Stat(config.BugDir)
 			//if fierr != nil {
 			//	panic(fierr)

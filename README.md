@@ -144,7 +144,7 @@ issues directory. Current options include:
           Default is ""
           when doing bug {add|new|create}
           first copy this file name to Description
-          recommended: issues/Default
+          recommended: issues/DescriptionDefault.txt
     * ImportXmlDump: true or false, 
           Default is false.
           during import, save raw xml files
@@ -179,6 +179,21 @@ issues directory. Current options include:
           Default is empty.
           Set one at github.com/settings/tokens
           for import of private projects that need authentication
+    * TwilioAccountSid: string
+          Default is empty.
+          Needed for twilio use.
+    * TwilioAuthToken: string
+          Default is empty.
+          Needed for twilio use.
+    * TwilioPhoneNumberFrom: string
+          Default is empty.
+          Needed for twilio use.
+    * TwilioIssuesSite: string
+          Default is empty.
+          base url for notifications
+    * MultipleIssuesDirs: true or false
+          Default is false.
+          always recursive when possible
           
 Other issue systems may use databases, hidden directories or hidden branches.
 While these may be useful techniques in certain circumstances this seems to

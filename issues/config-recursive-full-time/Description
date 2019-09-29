@@ -14,3 +14,10 @@ add a configuration to .bug.yml
 #### What version?
 
 
+#### fix
+
+added config.MultipleIssuesDirs
+currently only bug lists
+uses has recursive but it will be added to other commands as well.
+this feature will grow as I start using it with the bug git repo.
+

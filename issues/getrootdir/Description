@@ -3,3 +3,9 @@ is not named correctly
 it and all that call it should be renamed to
 something like GetIssuesRootDir
 
+naming vs. GetBugDir in code cleanup.
+
+solution was to change to RootDirer and IssuesDirer
+
+change was done in previous commits.
+

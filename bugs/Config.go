@@ -18,7 +18,7 @@ type Config struct {
 	BugDir string `json:"BugDir"`
 	// BugDir+"/.bug.yml" * if present ** runtime only
 	BugYml string `json:"BugYml"`
-	// Description contents for new issue or empty file (default)
+	// Description contents for new issue or empty file (empty default)
 	DefaultDescriptionFile string `json:"DefaultDescriptionFile"`
 	// saves raw json files of import (true) or don't save (false, default)
 	ImportXmlDump bool `json:"ImportXmlDump"`
@@ -42,12 +42,16 @@ type Config struct {
 	TwilioAuthToken string `json:"TwilioAuthToken"`
 	//* your twilio number
 	TwilioPhoneNumberFrom string `json:"TwilioPhoneNumberFrom"`
-	//* your issues site url for notifications
+	//* base url for notifications
 	IssuesSite string `json:"IssuesSite"`
+	// issues directories always recursive (true) or need -r cli option (false, default)
+	MultipleIssuesDirs bool `json:"MultipleIssuesDirs"`
 }
 
 /*
-create list of places for help:
+list of places for
+creating new commands
+and where the help output is modeled:
     * bugapp/Help.go   // case lines
                        // alias line at bottom of each long description
                        // help output at bottom of the file
@@ -56,7 +60,8 @@ create list of places for help:
     * FIT.md
     * FAQ.md
 
-create list of places for config:
+list of places for
+creating new configs:
     * bugs/Config.go   // bugs.Config struct
                        // ConfigRead for reading values of config file
     * README.md        // includes config descriptions
@@ -164,11 +169,18 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 		} else {
 			c.TwilioPhoneNumberFrom = ""
 		}
-		//* your issues site url for notifications
+		//* base url for notifications
 		if temp.IssuesSite != "" {
 			c.IssuesSite = temp.IssuesSite
 		} else {
 			c.IssuesSite = ""
+		}
+		//* MultipleIssuesDirs: true or false,
+		//      Default need to use -r cli option
+		if temp.MultipleIssuesDirs {
+			c.MultipleIssuesDirs = true
+		} else {
+			c.MultipleIssuesDirs = false
 		}
 		return nil
 	}
