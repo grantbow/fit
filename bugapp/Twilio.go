@@ -13,36 +13,14 @@ import (
 var TwilioUrlHttp = "https://api.twilio.com/2010-04-01/Accounts/"
 var TwilioUrlMessages = "/Messages.json"
 
-/*
-// getAllTags returns all the tags
-func getAllTags(config bugs.Config) []string {
-	bugs := bugs.GetAllBugs(config)
-	//fmt.Printf("%+v\n", bugs)
-	tagMap := make(map[string]int, 0)
-	// Put all the tags in a map, then iterate over
-	// the tags so that only unique tags are included
-	for _, bug := range bugs {
-		for _, tag := range bug.Tags() {
-			tagMap[strings.ToLower(string(tag))] += 1
-		}
-	}
-	var tags []string
-	for k := range tagMap {
-		tags = append(tags, k)
-	}
-	sort.Strings(tags)
-	return tags
-}
-*/
-
-// TwilioSend is a subcommand to send to the assigned tags.
+// Twilio is a subcommand to send to changed isssues with tag_twilio_4155551212
 func Twilio(config bugs.Config) {
 	var hasPart = func(target string, part string) bool {
 		return strings.Contains(target, part)
 	}
 
 	buglist := bugs.GetAllBugs(config)
-	//tagMap := make(map[string]int, 0)
+	//fmt.Printf("getallbugs: %q\n", buglist)
 	if len(buglist) > 0 {
 		// from buglist and
 		// from scm get added, changed and removed
@@ -50,14 +28,16 @@ func Twilio(config bugs.Config) {
 		scmoptions := map[string]bool{}
 		handler, _, ErrH := scm.DetectSCM(scmoptions, config)
 		if ErrH == nil {
-			//fmt.Printf("debug 1.5\n")
+			// scm exists
 			if b, err := handler.SCMIssuesUpdaters(); err != nil {
+				// uncommitted files including staged AND working directory
 				//fmt.Printf("debug 2\n")
 				if _, ErrCach := handler.SCMIssuesCacher(); ErrCach != nil {
+					// uncommitted files staged only NOT working directory
 					//fmt.Printf("debug 3\n")
-					updatedissues := map[string]bool{}
-					twiliorecipients := map[string]string{}
-					fmt.Printf("updated issues with twilio:\n")
+					updatedissues := map[string]bool{}      // issues staged no duplicates
+					twiliorecipients := map[string]string{} // one or more per issue staged
+					//fmt.Printf("updated issues:\n")
 					for _, bline := range strings.Split(string(b), "\n") {
 						if len(bline) > 0 {
 							i := strings.Split(string(bline), "/")
@@ -70,33 +50,29 @@ func Twilio(config bugs.Config) {
 					//for key, _ := range updatedissues {
 					//	fmt.Printf("bug dirname: %v\n", key)
 					//}
-					//fmt.Printf("allbugs: %q\n", buglist)
 					bug := bugs.Bug{}
 
-					// twilio tag must exist
+					// build message for each recipient from updated issues and twilio tags
 					for key, _ := range updatedissues {
 						//fmt.Printf("twilio bug dirname: %v\n", key)
-						//bug := buglist[string(bugs.IssuesDirer(config))+"/"+key]
 						expectedbugdir := string(bugs.IssuesDirer(config)) + "/" + key
 						bug.LoadBug(bugs.Directory(expectedbugdir))
 						tags := bug.Tags()
-						//fmt.Printf("tags: %v\n", tags)
+						//fmt.Printf("debug %v tags %v\n", key, tags)
 						for _, k := range tags {
 							//fmt.Printf("k: %v\n", k)
-							if hasPart(string(k), "twilio") {
-								a := strings.Split(string(k), ":")
-								fmt.Printf("twilio bug dirname: %v tag %v : %v\n", key, a[0], a[1])
+							if hasPart(string(k), "twilio") { // local function returns bool
+								a := strings.Split(string(k), ":") // : separated from bug.Tags
 								recip := a[1]
+								//fmt.Printf("twilio bug dirname: %v tag %v : %v\n", key, a[0], recip)
 								//	if strings.ToLower(string(tag)) == "twilio" {
 								if _, ok := twiliorecipients[recip]; ok {
+									// recipient exists, append
 									twiliorecipients[recip] = twiliorecipients[recip] + ", " + key
 								} else {
 									// new recipient
 									twiliorecipients[recip] = "site " + config.IssuesSite + "\nupdated " + key
 								}
-								//fmt.Printf("twilio %v tags %v\n", key, )
-								//fmt.Printf("twilio %v tags %v\n", key, bug.Tags())
-								//		// get value for sending
 							}
 						}
 					}
@@ -117,33 +93,13 @@ func Twilio(config bugs.Config) {
 	}
 }
 
-/*
-	issuesroot := bugs.IssuesDirer(config)
-	issues, _ := ioutil.ReadDir(string(issuesroot)) // TODO: should be a method elsewhere
-	sort.Sort(byDir(issues))
-	var wantTags bool = false
-
-	allbugs := bugs.GetAllBugs(config)
-	tagMap := make(map[string]int, 0)
-	for _, bug := range allbugs {
-		if len(bug.Tags()) == 0 {
-			title := bug.Dir.ShortNamer()
-			tagMap[string(title)] += 1
-		}
-	}
-*/
-
-// data comes from tags
-//var PNTo = "+14153752752" // Phone Number To
-//var BodyStr = "more new issues"
-
 func TwilioDoSend(config bugs.Config, PNTo string, BodyStr string) {
 	urlStr := TwilioUrlHttp + config.TwilioAccountSid + TwilioUrlMessages
 	fmt.Println(urlStr)
 	msgData := url.Values{}
-	msgData.Set("To", PNTo)
+	msgData.Set("To", PNTo) // Phone Number To
 	msgData.Set("From", config.TwilioPhoneNumberFrom)
-	msgData.Set("Body", BodyStr)
+	msgData.Set("Body", BodyStr) // text message body
 	msgDataReader := *strings.NewReader(msgData.Encode())
 	//
 	client := &http.Client{}

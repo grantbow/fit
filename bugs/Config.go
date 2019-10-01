@@ -10,11 +10,12 @@ import (
 
 // Config type holds .bug.yml configured values.
 type Config struct {
-	// aka RootDir
-	// storage of location of root dir with .bug.yml
-	// if we are reading the config file we already found the root
-	// auto-find root dir
-	// overridden by FIT/PMIT environment variable? ** runtime only
+	// aka RootDir or RepoDir
+	// storage of location of dir containing:
+	//     issues directory
+	//     .bug.yml
+	//     likely .git
+	// overridden by FIT/PMIT environment variable ** runtime only
 	BugDir string `json:"BugDir"`
 	// BugDir+"/.bug.yml" * if present ** runtime only
 	BugYml string `json:"BugYml"`

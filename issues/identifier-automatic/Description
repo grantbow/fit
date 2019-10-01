@@ -9,6 +9,13 @@ autoid was created but no identifier
 configuration should default correctly to not provide one
 but it should be clear how to enable this feature
 
+once the setting is enabled two features are needed.
+
+First is the happy path, bug add, assign and increment.
+
+Second is to check that all bugs added, via bug or manually
+have an id assigned already. If not, ask to add it.
+
 #### Does this issue reproduce with the latest release?
 
 
