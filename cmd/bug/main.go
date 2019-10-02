@@ -7,6 +7,7 @@ import (
 	"github.com/driusan/bug/bugs"
 	"github.com/driusan/bug/scm"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -24,7 +25,7 @@ func main() {
 		// now try to read config
 		ErrC := bugs.ConfigRead(bugYmlFileName, &config, bugapp.ProgramVersion())
 		if ErrC == nil {
-			config.BugYml = config.BugDir + "/" + bugYmlFileName
+			config.BugYml = filepath.FromSlash(config.BugDir + "/" + bugYmlFileName)
 		}
 	}
 

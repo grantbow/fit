@@ -2,6 +2,7 @@ package bugs
 
 import (
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
@@ -35,7 +36,7 @@ func RootDirer(config Config) Directory {
 
 	wd, _ := os.Getwd()
 
-	if dirinfo, err := os.Stat(wd + "/issues"); err == nil && dirinfo.IsDir() {
+	if dirinfo, err := os.Stat(filepath.FromSlash(wd + "/issues")); err == nil && dirinfo.IsDir() {
 		config.BugDir = string(wd)
 		//os.Chdir(dir) // already there
 		return Directory(wd)
@@ -43,11 +44,11 @@ func RootDirer(config Config) Directory {
 
 	// There's no environment variable and no issues
 	// directory, so walk up the tree until we find one
-	pieces := strings.Split(wd, "/")
+	pieces := strings.Split(wd, string(os.PathSeparator))
 
 	for i := len(pieces); i > 0; i -= 1 {
-		dir := strings.Join(pieces[0:i], "/")
-		if dirinfo, err := os.Stat(dir + "/issues"); err == nil && dirinfo.IsDir() {
+		dir := strings.Join(pieces[0:i], string(os.PathSeparator))
+		if dirinfo, err := os.Stat(filepath.FromSlash(dir + "/issues")); err == nil && dirinfo.IsDir() {
 			config.BugDir = dir
 			os.Chdir(dir)
 			return Directory(dir)
@@ -63,7 +64,7 @@ func IssuesDirer(config Config) Directory {
 	if root == "" {
 		return root
 	}
-	return Directory(root + "/issues")
+	return Directory(root + Directory(os.PathSeparator) + "issues")
 	/* edited the following
 	   when changed from /issues/ to /issues
 	   $ grep -ils issuesdirer ...
@@ -87,14 +88,14 @@ func IssuesDirer(config Config) Directory {
 
 // ShortNamer returns the directory name of a bug
 func (d Directory) ShortNamer() Directory {
-	pieces := strings.Split(string(d), "/")
+	pieces := strings.Split(string(d), string(os.PathSeparator))
 	return Directory(pieces[len(pieces)-1])
 }
 
 // ToTitle decodes the human string from the filesystem directory name.
 func (d Directory) ToTitle() string {
 	multidash := regexp.MustCompile("([_]*)-([-_]*)")
-	dashReplacement := strings.Replace(string(d), " ", "/", -1)
+	dashReplacement := strings.Replace(string(d), " ", string(os.PathSeparator), -1)
 	return multidash.ReplaceAllStringFunc(dashReplacement, func(match string) string {
 		if match == "-" {
 			return " "
@@ -125,7 +126,7 @@ func (d Directory) ModTime() time.Time {
 	}
 	for _, file := range files {
 		if file.IsDir() {
-			mtime := (d + "/" + Directory(file.Name())).ModTime()
+			mtime := (d + Directory(os.PathSeparator) + Directory(file.Name())).ModTime()
 			if mtime.After(t) {
 				t = mtime
 			}

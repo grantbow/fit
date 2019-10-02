@@ -3,6 +3,7 @@ package bugs
 import (
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -19,13 +20,13 @@ func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 		t.Error("Failed creating TempDir")
 		return
 	}
-	err = os.MkdirAll("abc/issues", 0755)
+	err = os.MkdirAll(filepath.FromSlash("abc/issues"), 0755)
 	if err != nil {
 		t.Error("Failed creating abc/issues")
 		return
 	}
 	//os.Mkdir("issues", 0755)
-	expected := Directory(gdir + "/abc")
+	expected := Directory(gdir + string(os.PathSeparator) + "abc")
 	os.Setenv("FIT", string(expected))
 	defer os.Unsetenv("FIT")
 	// FIT exists and overrides wd
@@ -51,14 +52,15 @@ func TestMissingRootDirerWithEnvironmentVariable(t *testing.T) {
 		return
 	}
 	// FIT/issues missing so doesn't override wd
-	os.Mkdir("../fit", 0755) // missing issues directory
-	defer os.RemoveAll(gdir + "../fit")
+	fitdir := ".." + string(os.PathSeparator) + "fit"
+	os.Mkdir(fitdir, 0755) // missing issues directory
+	defer os.RemoveAll(gdir + fitdir)
 	//os.Mkdir("../fit/issues", 0755)
-	os.Setenv("FIT", gdir+"../fit")
+	os.Setenv("FIT", gdir+fitdir)
 	defer os.Unsetenv("FIT")
 	dir := RootDirer(config)
 	if dir != "" {
-		t.Errorf("RootDirer %s environment variable %s", dir, gdir+"../fit")
+		t.Errorf("RootDirer %s environment variable %s", dir, gdir+fitdir)
 	}
 }
 

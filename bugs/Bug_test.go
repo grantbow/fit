@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 	"time"
 )
@@ -94,7 +95,7 @@ func TestNewBug(t *testing.T) {
 	if err != nil || b == nil {
 		t.Error("Unexpected error when creating New bug" + err.Error())
 	}
-	if b.Dir != IssuesDirer(config)+"/"+TitleToDir("I am a test") {
+	if b.Dir != IssuesDirer(config)+Directory(os.PathSeparator)+TitleToDir("I am a test") {
 		t.Error("Unexpected directory when creating New bug")
 	}
 }
@@ -109,7 +110,7 @@ func TestSetDescription(t *testing.T) {
 	b := test.bug
 
 	b.SetDescription("Hello, I am a bug.", config)
-	val, err := ioutil.ReadFile(string(b.Direr()) + "/" + config.DescriptionFileName)
+	val, err := ioutil.ReadFile(filepath.FromSlash(string(b.Direr()) + "/" + config.DescriptionFileName))
 	if err != nil {
 		t.Error("Could not read Description file")
 	}

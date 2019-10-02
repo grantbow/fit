@@ -5,13 +5,16 @@ import (
 	"os"
 )
 
+//var dops = Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 func (b *Bug) Read(p []byte) (int, error) {
 	if b.DescriptionFileName == "" {
 		return 0, ErrNoDescription
 	}
 	if b.descFile == nil {
 		dir := b.Direr()
-		fp, err := os.OpenFile(string(dir)+"/"+b.DescriptionFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+		fp, err := os.OpenFile(string(dir)+sops+b.DescriptionFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 		b.descFile = fp
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "err: %s", err.Error())
@@ -29,7 +32,7 @@ func (b *Bug) Write(data []byte) (n int, err error) {
 	if b.descFile == nil {
 		dir := b.Direr()
 		os.MkdirAll(string(dir), 0755)
-		fp, err := os.OpenFile(string(dir)+"/"+b.DescriptionFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+		fp, err := os.OpenFile(string(dir)+sops+b.DescriptionFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error writing to bug: %s", err.Error())
 			return 0, err

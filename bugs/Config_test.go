@@ -3,12 +3,13 @@ package bugs
 import (
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"testing"
 )
 
 func doconfigteststring(t *testing.T, rootDir string, bugymlfile string, config *Config, configstr *string, expected string) {
 	// write
-	err := ioutil.WriteFile(string(rootDir)+"/.bug.yml", []byte(bugymlfile), 0644)
+	err := ioutil.WriteFile(filepath.FromSlash(string(rootDir)+"/.bug.yml"), []byte(bugymlfile), 0644)
 	if err != nil {
 		t.Error(err)
 	}
@@ -24,7 +25,7 @@ func doconfigteststring(t *testing.T, rootDir string, bugymlfile string, config 
 
 func doconfigtestbool(t *testing.T, rootDir string, bugymlfile string, config *Config, configbool *bool, expected bool) {
 	// write
-	err := ioutil.WriteFile(string(rootDir)+"/.bug.yml", []byte(bugymlfile), 0644)
+	err := ioutil.WriteFile(filepath.FromSlash(string(rootDir)+"/.bug.yml"), []byte(bugymlfile), 0644)
 	if err != nil {
 		t.Error(err)
 	}
@@ -47,10 +48,10 @@ func TestConfigRead(t *testing.T) {
 	rootDir := RootDirer(config)
 
 	doconfigteststring(t, string(rootDir),
-		"DefaultDescriptionFile: issues/bug-template.txt\n",
+		"DefaultDescriptionFile: issues.bug-template.txt\n",
 		&config,
 		&config.DefaultDescriptionFile,
-		"issues/bug-template.txt")
+		"issues.bug-template.txt")
 	config = Config{} //// clears
 	doconfigtestbool(t, string(rootDir),
 		"ImportXmlDump: true\n",

@@ -10,6 +10,9 @@ import (
 	"testing"
 )
 
+var dops = bugs.Directory(os.PathSeparator)
+var sops = string(os.PathSeparator)
+
 type argumentList []string
 
 // HasArgument checks pkg global argumentList for an argument parameter. Returns true or false.
