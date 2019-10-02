@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"testing"
 	"time"
 )
@@ -110,7 +109,7 @@ func TestSetDescription(t *testing.T) {
 	b := test.bug
 
 	b.SetDescription("Hello, I am a bug.", config)
-	val, err := ioutil.ReadFile(filepath.FromSlash(string(b.Direr()) + "/" + config.DescriptionFileName))
+	val, err := ioutil.ReadFile(string(b.Direr()) + sops + config.DescriptionFileName)
 	if err != nil {
 		t.Error("Could not read Description file")
 	}

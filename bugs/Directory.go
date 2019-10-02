@@ -2,7 +2,6 @@ package bugs
 
 import (
 	"os"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
@@ -36,7 +35,7 @@ func RootDirer(config Config) Directory {
 
 	wd, _ := os.Getwd()
 
-	if dirinfo, err := os.Stat(filepath.FromSlash(wd + "/issues")); err == nil && dirinfo.IsDir() {
+	if dirinfo, err := os.Stat(wd + sops + "issues"); err == nil && dirinfo.IsDir() {
 		config.BugDir = string(wd)
 		//os.Chdir(dir) // already there
 		return Directory(wd)
@@ -48,7 +47,7 @@ func RootDirer(config Config) Directory {
 
 	for i := len(pieces); i > 0; i -= 1 {
 		dir := strings.Join(pieces[0:i], string(os.PathSeparator))
-		if dirinfo, err := os.Stat(filepath.FromSlash(dir + "/issues")); err == nil && dirinfo.IsDir() {
+		if dirinfo, err := os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
 			config.BugDir = dir
 			os.Chdir(dir)
 			return Directory(dir)

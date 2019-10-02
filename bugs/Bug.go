@@ -14,6 +14,9 @@ import (
 	"time"
 )
 
+//var dops = Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 type TagKeyValue struct {
 	key  string
 	file string
@@ -149,7 +152,8 @@ func (b Bug) Title(options string) string {
 
 // Description returns a string of an issue.
 func (b Bug) Description() string {
-	df := filepath.FromSlash(string(b.Dir) + "/" + b.DescriptionFileName)
+	//does filepath.FromSlash() really work?
+	df := string(b.Dir) + sops + b.DescriptionFileName
 	value := ""
 	if _, staterr := os.Stat(df); staterr == nil {
 		v, readerr := ioutil.ReadFile(df)
@@ -177,13 +181,15 @@ func (b *Bug) SetDescription(val string, config Config) error {
 	//fmt.Printf("aha %s\n", config.DescriptionFileName)
 	b.DescriptionFileName = config.DescriptionFileName
 
-	return ioutil.WriteFile(filepath.FromSlash(string(dir)+"/"+b.DescriptionFileName), []byte(val+"\n"), 0644)
+	//return ioutil.WriteFile(filepath.FromSlash(string(dir)+"/"+b.DescriptionFileName), []byte(val+"\n"), 0644)
+	return ioutil.WriteFile(string(dir)+sops+b.DescriptionFileName, []byte(val+"\n"), 0644)
 }
 
 // RemoveTag deletes a tag file of an issue.
 func (b *Bug) RemoveTag(tag TagBoolTrue, config Config) {
 	if dir := b.Direr(); dir != "" {
-		os.Remove(filepath.FromSlash(string(dir) + "/tags/" + string(tag)))
+		//os.Remove(filepath.FromSlash(string(dir) + "/tags/" + string(tag)))
+		os.Remove(string(dir) + sops + "tags" + sops + string(tag))
 		files, err := filepath.Glob(string(dir) + "tag_" + string(tag) + "")
 		if err == nil {
 			for _, x := range files {
@@ -202,10 +208,13 @@ func (b *Bug) RemoveTag(tag TagBoolTrue, config Config) {
 func (b *Bug) TagBug(tag TagBoolTrue, config Config) {
 	if dir := b.Direr(); dir != "" {
 		if config.TagKeyValue == true {
-			ioutil.WriteFile(filepath.FromSlash(string(dir)+"/tag_"+string(tag)), []byte(""), 0644)
+			//ioutil.WriteFile(filepath.FromSlash(string(dir)+"/tag_"+string(tag)), []byte(""), 0644)
+			ioutil.WriteFile(string(dir)+sops+"tag_"+string(tag), []byte(""), 0644)
 		} else {
-			os.Mkdir(filepath.FromSlash(string(dir)+"/tags/"), 0755)
-			ioutil.WriteFile(filepath.FromSlash(string(dir)+"/tags/"+string(tag)), []byte(""), 0644)
+			//os.Mkdir(filepath.FromSlash(string(dir)+"/tags/"), 0755)
+			os.Mkdir(string(dir)+sops+"tags"+sops, 0755)
+			//ioutil.WriteFile(filepath.FromSlash(string(dir)+"/tags/"+string(tag)), []byte(""), 0644)
+			ioutil.WriteFile(string(dir)+sops+"tags"+sops+string(tag), []byte(""), 0644)
 		}
 	} else {
 		fmt.Printf("Error tagging bug: %s", tag)
@@ -215,7 +224,8 @@ func (b *Bug) TagBug(tag TagBoolTrue, config Config) {
 // RemoveComment deletes a comment file of an issue.
 func (b *Bug) RemoveComment(comment Comment) {
 	if dir := b.Direr(); dir != "" {
-		os.Remove(filepath.FromSlash(string(dir) + "/comment-" + string(ShortTitleToDir(string(comment.Body)))))
+		//os.Remove(filepath.FromSlash(string(dir) + "/comment-" + string(ShortTitleToDir(string(comment.Body)))))
+		os.Remove(string(dir) + sops + "comment-" + string(ShortTitleToDir(string(comment.Body))))
 	} else {
 		fmt.Printf("Error removing comment: %s", comment.Body)
 	}
@@ -227,13 +237,16 @@ func (b *Bug) CommentBug(comment Comment, config Config) {
 		//os.Mkdir(filepath.FromSlash(string(dir)+"/"), 0755)
 		commenttext := []byte(comment.Body + "\n")
 		if config.ImportCommentsTogether { // not efficient but ok for now
-			data, err := ioutil.ReadFile(filepath.FromSlash(string(dir) + "/comments"))
+			//data, err := ioutil.ReadFile(filepath.FromSlash(string(dir) + "/comments"))
+			data, err := ioutil.ReadFile(string(dir) + sops + "comments")
 			check(err)
 			commentappend := []byte(fmt.Sprintf("%s%s%s", data, "\n", commenttext))
-			werr := ioutil.WriteFile(filepath.FromSlash(string(dir)+"/comments"), commentappend, 0644)
+			//werr := ioutil.WriteFile(filepath.FromSlash(string(dir)+"/comments"), commentappend, 0644)
+			werr := ioutil.WriteFile(string(dir)+sops+"comments", commentappend, 0644)
 			check(werr)
 		} else {
-			werr := ioutil.WriteFile(filepath.FromSlash(string(dir)+"/comment-")+string(ShortTitleToDir(string(comment.Body))), commenttext, 0644)
+			//werr := ioutil.WriteFile(filepath.FromSlash(string(dir)+"/comment-")+string(ShortTitleToDir(string(comment.Body))), commenttext, 0644)
+			werr := ioutil.WriteFile(string(dir)+sops+"comment-"+string(ShortTitleToDir(string(comment.Body))), commenttext, 0644)
 			check(werr)
 		}
 	} else {
@@ -308,7 +321,8 @@ func (b Bug) tager(abspath string) (string, string, bool, bool, error) {
 		return key, value, tag_name, tag_contents, errors.New("tag has no key or value")
 	} else if len(parts) == 2 {
 		key = parts[1]
-		field, err := ioutil.ReadFile(filepath.FromSlash(string(dir) + "/tag_"))
+		//field, err := ioutil.ReadFile(filepath.FromSlash(string(dir) + "/tag_"))
+		field, err := ioutil.ReadFile(string(dir) + sops + "tag_")
 		if err == nil {
 			value = ([]string(strings.Split(string(field), "\n")))[0] // tag_Status file contents overrides "Status" file contents
 			// assumes value is ok, not false
@@ -342,8 +356,9 @@ func (b Bug) Tags() []TagBoolTrue {
 			}
 		}
 	}
-	withtagsubdir, errsubdir := ioutil.ReadDir(filepath.FromSlash(string(dir) + "/tags/")) // returns []os.FileInfo
-	withtagfile, errtagfile := filepath.Glob(filepath.FromSlash(string(dir) + "/tag_*"))   // returns []string
+	//withtagsubdir, errsubdir := ioutil.ReadDir(filepath.FromSlash(string(dir) + "/tags/")) // returns []os.FileInfo
+	withtagsubdir, errsubdir := ioutil.ReadDir(string(dir) + sops + "tags" + sops) // returns []os.FileInfo
+	withtagfile, errtagfile := filepath.Glob(string(dir) + sops + "tag_*")         // returns []string
 	if len(tags) == 0 && errsubdir != nil && errtagfile != nil {
 		return nil
 	}
@@ -384,12 +399,16 @@ func (b Bug) Tags() []TagBoolTrue {
 	return tagtags
 }
 
+//byBug allows sort.Sort(byBug(bugs)). Requirements are
+//     func (bug) Len() int,
+//     type
+//     and the (byBug) {Len, Swap, Less} functions
+// see also List.go for type byDir
+
 func (t Bug) Len() int {
 	return t.modtime // time.Format(time.UnixNano(t.modtime).UnixNano())
 }
 
-//byBug allows sort.Sort(byBug(bugs))
-// type, Len, and three functions are needed - see also List.go for type byDir
 type byBug []Bug
 
 func (t byBug) Len() int {
@@ -429,37 +448,37 @@ func (b Bug) liners(fieldName string) []string {
 	dir := string(dirr)
 	lines := []string{}
 	// try (F)ieldName
-	field, err := ioutil.ReadFile(filepath.FromSlash(dir + "/" + fieldName))
+	field, err := ioutil.ReadFile(dir + sops + fieldName)
 	if err == nil {
 		lines = strings.Split(string(field), "\n")
 		return lines
 	}
 	// try lower (f)ieldname
-	field, err = ioutil.ReadFile(filepath.FromSlash(dir + "/" + strings.ToLower(fieldName)))
+	field, err = ioutil.ReadFile(dir + sops + strings.ToLower(fieldName))
 	if err == nil {
 		lines = strings.Split(string(field), "\n")
 		return lines
 	}
 	// try tag_(K)ey_value
-	_, value, _, _, err := b.tager(filepath.FromSlash(dir + "/tag_" + fieldName))
+	_, value, _, _, err := b.tager(dir + sops + "tag_" + fieldName)
 	if err == nil {
 		lines = []string{value}
 		return lines
 	}
 	// try tag_(k)ey_value
-	_, value, _, _, err = b.tager(filepath.FromSlash(dir + "/tag_" + strings.ToLower(fieldName)))
+	_, value, _, _, err = b.tager(dir + sops + "tag_" + strings.ToLower(fieldName))
 	if err == nil {
 		lines = []string{value}
 		return lines
 	}
 	// try tag_(K)ey file contents
-	field, err = ioutil.ReadFile(filepath.FromSlash(dir + "/tag_" + fieldName))
+	field, err = ioutil.ReadFile(dir + sops + "tag_" + fieldName)
 	if err == nil {
 		lines = strings.Split(string(field), "\n")
 		return lines
 	}
 	// try tag_(k)ey file contents
-	field, err = ioutil.ReadFile(filepath.FromSlash(dir + "/tag_" + strings.ToLower(fieldName)))
+	field, err = ioutil.ReadFile(dir + sops + "tag_" + strings.ToLower(fieldName))
 	if err == nil {
 		lines = strings.Split(string(field), "\n")
 		return lines
@@ -483,7 +502,7 @@ func (b Bug) setField(fieldName string, value string, config Config) error { // 
 		file_contents = true
 	}
 	// try tag_Status* files
-	withtagfile, errtagfile := filepath.Glob(filepath.FromSlash(string(dir) + "/tag_" + fieldName + "*")) // returns []string
+	withtagfile, errtagfile := filepath.Glob(string(dir) + sops + "tag_" + fieldName + "*") // returns []string
 	errfind := errtagfile
 	// two cases, ie tag_Status_closed or tag_Status contains closed
 	if errtagfile == nil {
@@ -523,12 +542,12 @@ func (b Bug) setField(fieldName string, value string, config Config) error { // 
 	var err error
 	if config.NewFieldAsTag == true {
 		if config.NewFieldLowerCase == true {
-			err = ioutil.WriteFile(filepath.FromSlash(string(dir)+"/tag_"+fieldName+"_"+strings.ToLower(TitleToDirString(newValue))), []byte(""), 0644)
+			err = ioutil.WriteFile(string(dir)+sops+"tag_"+fieldName+"_"+strings.ToLower(TitleToDirString(newValue)), []byte(""), 0644)
 		} else {
-			err = ioutil.WriteFile(filepath.FromSlash(string(dir)+"/tag_"+fieldName+"_"+TitleToDirString(newValue)), []byte(""), 0644)
+			err = ioutil.WriteFile(string(dir)+sops+"tag_"+fieldName+"_"+TitleToDirString(newValue), []byte(""), 0644)
 		}
 	} else {
-		err = ioutil.WriteFile(filepath.FromSlash(string(dir)+"/"+fieldName), []byte(newValue), 0644)
+		err = ioutil.WriteFile(string(dir)+sops+fieldName, []byte(newValue), 0644)
 	}
 	if err != nil {
 		return err

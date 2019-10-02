@@ -3,13 +3,12 @@ package bugs
 import (
 	"fmt"
 	"io/ioutil"
-	"path/filepath"
 	"testing"
 )
 
 func doconfigteststring(t *testing.T, rootDir string, bugymlfile string, config *Config, configstr *string, expected string) {
 	// write
-	err := ioutil.WriteFile(filepath.FromSlash(string(rootDir)+"/.bug.yml"), []byte(bugymlfile), 0644)
+	err := ioutil.WriteFile(string(rootDir)+sops+".bug.yml", []byte(bugymlfile), 0644)
 	if err != nil {
 		t.Error(err)
 	}
@@ -25,7 +24,7 @@ func doconfigteststring(t *testing.T, rootDir string, bugymlfile string, config 
 
 func doconfigtestbool(t *testing.T, rootDir string, bugymlfile string, config *Config, configbool *bool, expected bool) {
 	// write
-	err := ioutil.WriteFile(filepath.FromSlash(string(rootDir)+"/.bug.yml"), []byte(bugymlfile), 0644)
+	err := ioutil.WriteFile(string(rootDir)+sops+".bug.yml", []byte(bugymlfile), 0644)
 	if err != nil {
 		t.Error(err)
 	}

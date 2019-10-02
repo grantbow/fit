@@ -11,6 +11,9 @@ go:
     - 1.12
 git:
     depth: 3
+matrix:
+    allow_failures:
+        - os: windows
 addons:
     apt:
         packages:
