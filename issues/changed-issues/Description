@@ -4,3 +4,23 @@ what it needs to do: identified changed issues (not files)
 
 next: use the list of changes with a notification system for email and/or twilio texts.
 
+functions output []byte of command output with an error.
+
+// scm/GitManager.go
+// SCMIssuesUpdaters() ([]byte, error) {
+uses
+$ git status --porcelain -u -- :/issues
+M  issues/changed-issues/Description
+
+// scm/GitManager.go
+// SCMIssuesCacher() ([]byte, error) {
+uses
+$ git diff --name-status --cached HEAD -- :/issues
+M       issues/changed-issues/Description
+
+in both cases splitting on / is ok as issues is a known quantity anyway.
+
+should use the same as path/filepath 
+constant os.PathSeparator
+and not hard code the / of unix.
+

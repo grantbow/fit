@@ -208,7 +208,7 @@ func (mgr GitManager) SCMTyper() string {
 	return "git"
 }
 
-// SCMIssuesUpdaters returns uncommitted files including staged and working directory
+// SCMIssuesUpdaters returns []byte of uncommitted files staged AND working directory
 func (mgr GitManager) SCMIssuesUpdaters() ([]byte, error) { // config bugs.Config
 	cmd := exec.Command("git", "status", "--porcelain", "-u", "--", ":/issues")
 	// --porcelain output format
@@ -224,7 +224,7 @@ func (mgr GitManager) SCMIssuesUpdaters() ([]byte, error) { // config bugs.Confi
 	}
 }
 
-// SCMIssuesCacher returns uncommitted files only staged not working directory
+// SCMIssuesCacher returns []byte of uncommitted files staged NOT working directory
 func (mgr GitManager) SCMIssuesCacher() ([]byte, error) { // config bugs.Config
 	cmd := exec.Command("git", "diff", "--name-status", "--cached", "HEAD", "--", ":/issues")
 	// whitespace differs from output of git status - darn

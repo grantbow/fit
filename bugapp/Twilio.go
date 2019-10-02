@@ -29,10 +29,12 @@ func Twilio(config bugs.Config) {
 		handler, _, ErrH := scm.DetectSCM(scmoptions, config)
 		if ErrH == nil {
 			// scm exists
-			if b, err := handler.SCMIssuesUpdaters(); err != nil {
+			if _, err := handler.SCMIssuesUpdaters(); err != nil {
+				// []byte and err
 				// uncommitted files including staged AND working directory
 				//fmt.Printf("debug 2\n")
-				if _, ErrCach := handler.SCMIssuesCacher(); ErrCach != nil {
+				if b, ErrCach := handler.SCMIssuesCacher(); ErrCach != nil {
+					// []byte and ErrCach
 					// uncommitted files staged only NOT working directory
 					//fmt.Printf("debug 3\n")
 					updatedissues := map[string]bool{}      // issues staged no duplicates

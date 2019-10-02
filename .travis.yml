@@ -3,6 +3,7 @@ dist: xenial
 os:
     - linux
     - osx
+    - windows
 env:
     global:
       - GO111MODULE=on
