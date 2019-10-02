@@ -76,7 +76,7 @@ func TestList(t *testing.T) {
 
 	// after
 	//fmt.Println("after")
-	//file, err := ioutil.ReadFile(fmt.Sprintf("%s/issues/no_list_bug/Milestone", gdir))
+	//file, err := ioutil.ReadFile(fmt.Sprintf("%s%sissues%sno_list_bug%sMilestone", gdir, sops, sops, sops))
 	//if err != nil {
 	//	t.Error("Could not load milestone file" + err.Error())
 	//}

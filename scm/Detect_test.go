@@ -30,7 +30,7 @@ func TestDetectGit(t *testing.T) {
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
-	if dir != bugs.Directory(gdir+"/.git") {
+	if dir != bugs.Directory(gdir+sops+".git") {
 		t.Error("Unexpected directory found when trying to detect git repo" + dir)
 	}
 	switch handler.(type) {
@@ -42,13 +42,13 @@ func TestDetectGit(t *testing.T) {
 	}
 
 	// Go somewhere higher in the tree and do it again
-	os.MkdirAll("tmp/abc/hello", 0755)
-	os.Chdir("tmp/abc/hello")
+	os.MkdirAll("tmp"+sops+"abc"+sops+"hello", 0755)
+	os.Chdir("tmp" + sops + "abc" + sops + "hello")
 	handler, dir, err = DetectSCM(options, config)
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
-	if dir != bugs.Directory(gdir+"/.git") {
+	if dir != bugs.Directory(gdir+sops+".git") {
 		t.Error("Unexpected directory found when trying to detect git repo" + dir)
 	}
 	switch handler.(type) {
@@ -83,7 +83,7 @@ func TestDetectHg(t *testing.T) {
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
-	if dir != bugs.Directory(gdir+"/.hg") {
+	if dir != bugs.Directory(gdir+sops+".hg") {
 		t.Error("Unexpected directory found when trying to detect hg repo" + dir)
 	}
 	switch handler.(type) {
@@ -95,13 +95,13 @@ func TestDetectHg(t *testing.T) {
 	}
 
 	// Go somewhere higher in the tree and do it again
-	os.MkdirAll("tmp/abc/hello", 0755)
-	os.Chdir("tmp/abc/hello")
+	os.MkdirAll("tmp"+sops+"abc"+sops+"hello", 0755)
+	os.Chdir("tmp" + sops + "abc" + sops + "hello")
 	handler, dir, err = DetectSCM(options, config)
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
-	if dir != bugs.Directory(gdir+"/.hg") {
+	if dir != bugs.Directory(gdir+sops+".hg") {
 		t.Error("Unexpected directory found when trying to detect hg repo" + dir)
 	}
 	switch handler.(type) {

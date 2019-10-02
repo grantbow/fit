@@ -10,8 +10,11 @@ import (
 	"strings"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 func beImportComments(b bugs.Bug, directory string, includeHeaders bool) string {
-	file := directory + "/body"
+	file := directory + sops + "body"
 	data, _ := ioutil.ReadFile(file)
 	if includeHeaders == false {
 		return string(data)
@@ -30,7 +33,7 @@ func beImportComments(b bugs.Bug, directory string, includeHeaders bool) string 
 		ContentType string `json:"Content-type"`
 		Date        string `json:"Date"`
 	}
-	file = directory + "/values"
+	file = directory + sops + "values"
 	jsonVal, _ := ioutil.ReadFile(file)
 	var beComment BeValues
 	json.Unmarshal([]byte(jsonVal), &beComment)
@@ -65,7 +68,7 @@ func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
 		Summary  string `json:"summary"`
 		Time     string `json:"time"`
 	}
-	file := fullbepath + "/values"
+	file := fullbepath + sops + "values"
 
 	fmt.Printf("File: %s\n", file)
 	data, _ := ioutil.ReadFile(file)
@@ -87,7 +90,7 @@ func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
 		b.SetStatus(beBug.Status+":"+beBug.Severity, config)
 	}
 
-	comments := fullbepath + "/comments/"
+	comments := fullbepath + sops + "comments" + sops
 	dir, err := os.Open(comments)
 
 	files, err := dir.Readdir(-1)
@@ -104,7 +107,7 @@ func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
 	b.SetIdentifier(identifier, config)
 }
 func beImportBugs(prefix, issuesdir, bedir, dirname string, config bugs.Config) {
-	bugsdir := bedir + "/" + dirname + "/bugs"
+	bugsdir := bedir + sops + dirname + sops + "bugs"
 	dir, err := os.Open(bugsdir)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not open bug directory %s\n", bugsdir)
@@ -120,8 +123,8 @@ func beImportBugs(prefix, issuesdir, bedir, dirname string, config bugs.Config) 
 				nextIdentifier = files[idx+1].Name()
 			}
 			name := shortestPrefix(file.Name(), nextIdentifier, lastIdentifier, 3)
-			identifier := fmt.Sprintf("%s/%s", prefix, name)
-			beImportBug(identifier, issuesdir, bugsdir+"/"+file.Name(), config)
+			identifier := fmt.Sprintf("%s%s%s", prefix, sops, name)
+			beImportBug(identifier, issuesdir, bugsdir+sops+file.Name(), config)
 			lastIdentifier = file.Name()
 		}
 	}
@@ -171,8 +174,8 @@ func beImport(config bugs.Config) {
 
 func walkAndSearch(startpath string, dirnames []string) *os.File {
 	for _, dirname := range dirnames {
-		if dirinfo, err := os.Stat(startpath + "/" + dirname); err == nil && dirinfo.IsDir() {
-			file, err := os.Open(startpath + "/" + dirname)
+		if dirinfo, err := os.Stat(startpath + sops + dirname); err == nil && dirinfo.IsDir() {
+			file, err := os.Open(startpath + sops + dirname)
 			if err != nil {
 				return nil
 			}
@@ -180,13 +183,13 @@ func walkAndSearch(startpath string, dirnames []string) *os.File {
 		}
 	}
 
-	pieces := strings.Split(startpath, "/")
+	pieces := strings.Split(startpath, sops)
 
 	for i := len(pieces); i > 0; i -= 1 {
-		dir := strings.Join(pieces[0:i], "/")
+		dir := strings.Join(pieces[0:i], sops)
 		for _, dirname := range dirnames {
-			if dirinfo, err := os.Stat(dir + "/" + dirname); err == nil && dirinfo.IsDir() {
-				file, err := os.Open(dir + "/" + dirname)
+			if dirinfo, err := os.Stat(dir + sops + dirname); err == nil && dirinfo.IsDir() {
+				file, err := os.Open(dir + sops + dirname)
 				if err != nil {
 					return nil
 				}

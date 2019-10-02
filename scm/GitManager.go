@@ -12,6 +12,9 @@ import (
 	"strings"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // GitManager type has fields Autoclose and UseBugPrefix.
 type GitManager struct {
 	Autoclose    bool
@@ -20,7 +23,7 @@ type GitManager struct {
 
 // Purge runs git clean -fd on the directory containing the issues directory.
 func (mgr GitManager) Purge(dir bugs.Directory) error {
-	cmd := exec.Command("git", "clean", "-fd", string(dir)+"/")
+	cmd := exec.Command("git", "clean", "-fd", string(dir)+sops)
 
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -71,8 +74,8 @@ func (mgr GitManager) currentStatus(dir bugs.Directory, config bugs.Config) (clo
 		return "", false
 	}
 	short := func(path string) string {
-		beg := strings.Index(path, "/")
-		end := strings.LastIndex(path, "/")
+		beg := strings.Index(path, sops)
+		end := strings.LastIndex(path, sops)
 		if beg+1 >= end {
 			return "???"
 		}
@@ -93,7 +96,7 @@ func (mgr GitManager) currentStatus(dir bugs.Directory, config bugs.Config) (clo
 
 		path := file[3:]
 		op := file[0]
-		desc := strings.HasSuffix(path, "/"+config.DescriptionFileName)
+		desc := strings.HasSuffix(path, sops+config.DescriptionFileName)
 		name := short(path)
 		issue := issues[name]
 
@@ -210,12 +213,12 @@ func (mgr GitManager) SCMTyper() string {
 
 // SCMIssuesUpdaters returns []byte of uncommitted files staged AND working directory
 func (mgr GitManager) SCMIssuesUpdaters() ([]byte, error) { // config bugs.Config
-	cmd := exec.Command("git", "status", "--porcelain", "-u", "--", ":/issues")
+	cmd := exec.Command("git", "status", "--porcelain", "-u", "--", ":"+sops+"issues")
 	// --porcelain output format
 	// -u shows all unstaged files, not just directories
 	// issues is the directory off of the git repo to show
 	// the ":(top)" shows full paths when not at the git root directory
-	// the shorthand is ":/issues"
+	// the shorthand is ":"+sops+"issues"
 	co, _ := cmd.CombinedOutput()
 	if string(co) == "" {
 		return []byte(""), nil
@@ -226,8 +229,8 @@ func (mgr GitManager) SCMIssuesUpdaters() ([]byte, error) { // config bugs.Confi
 
 // SCMIssuesCacher returns []byte of uncommitted files staged NOT working directory
 func (mgr GitManager) SCMIssuesCacher() ([]byte, error) { // config bugs.Config
-	cmd := exec.Command("git", "diff", "--name-status", "--cached", "HEAD", "--", ":/issues")
-	// whitespace differs from output of git status - darn
+	cmd := exec.Command("git", "diff", "--name-status", "--cached", "HEAD", "--", ":"+sops+"issues")
+	// only whitespace differs from output of git status
 	co, _ := cmd.CombinedOutput()
 	if string(co) == "" {
 		return []byte(""), nil

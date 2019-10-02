@@ -11,6 +11,9 @@ import (
 	"testing"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 type Commit interface {
 	CommitID() string
 	LogMsg() string
@@ -91,13 +94,13 @@ func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiff
 		t.Error("Could not get manager")
 		return
 	}
-	os.MkdirAll("issues/Test-bug", 0755)
-	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
+	os.MkdirAll("issues"+sops+"Test-bug", 0755)
+	ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
 	m.Commit(bugs.Directory(tester.WorkDir()), "Initial commit", config)
 	//runCmd("bug", "retitle", "1", "Renamed", "bug")
 	args := argumentList{"1", "Renamed bug"}
 	expected := "Moving .*"
-	runretitle("scm/TestHelpers_test runtestRenameCommitsHelper", args, config, expected, t)
+	runretitle("scm"+sops+"TestHelpers_test runtestRenameCommitsHelper", args, config, expected, t)
 	m.Commit(bugs.Directory(tester.WorkDir()), "This is a test rename", config)
 
 	tester.AssertCleanTree(t)
@@ -128,8 +131,8 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	}
 	//
 	//
-	os.MkdirAll("issues/Test-bug", 0755)
-	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
+	os.MkdirAll("issues"+sops+"Test-bug", 0755)
+	ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
 	if err = ioutil.WriteFile("donotcommit.txt", []byte(""), 0644); err != nil {
 		t.Error("Could not write file")
 		return
@@ -139,7 +142,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	})
 
 	//fmt.Print("pre  1 runtestCommitDirtyTree\n")
-	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Initial commit", config)
 	//fmt.Print("post 1 runtestCommitDirtyTree\n")
 	tester.AssertStagingIndex(t, []FileStatus{
 		FileStatus{"donotcommit.txt", "?", "?"},
@@ -149,8 +152,8 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		FileStatus{"donotcommit.txt", "A", " "},
 	})
 	//fmt.Print("pre  2 runtestCommitDirtyTree\n")
-	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
-	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Initial commit", config)
+	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Initial commit", config)
 	//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", errCommit) // nil here
 	//    running test shows output here. actually HgManager.go Commit() returns *expected* error
 	//        not fully handled by Hg though
@@ -162,13 +165,13 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		FileStatus{"donotcommit.txt", "A", " "},
 	})
 	//
-	os.MkdirAll("issues/Fresh-bug", 0755)
-	ioutil.WriteFile("issues/Fresh-bug/Description", []byte(""), 0644)
+	os.MkdirAll("issues"+sops+"Fresh-bug", 0755)
+	ioutil.WriteFile("issues"+sops+"Fresh-bug"+sops+"Description", []byte(""), 0644)
 	tester.AssertStagingIndex(t, []FileStatus{
 		FileStatus{"donotcommit.txt", "A", " "},
-		FileStatus{"issues/Fresh-bug/Description", "?", "?"},
+		FileStatus{"issues" + sops + "Fresh-bug" + sops + "Description", "?", "?"},
 	})
-	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
+	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Initial commit", config)
 	//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", errCommit) // shouldn't be nil
 	scmoptions := make(map[string]bool)
 	handler, _, _ := DetectSCM(scmoptions, config)
@@ -185,7 +188,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 			}
 		}
 	}
-	tester.StageFile("issues/Fresh-bug/Description")
+	tester.StageFile("issues" + sops + "Fresh-bug" + sops + "Description")
 	handler, _, _ = DetectSCM(scmoptions, config)
 	if b, err := handler.SCMIssuesUpdaters(); err != nil {
 		for _, bline := range strings.Split(string(b), "\n") {
@@ -247,14 +250,14 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	}
 	// Commit a bug which should stay around after the purge
 	//runCmd("bug", "create", "-n", "Test", "bug")
-	os.MkdirAll("issues/Test-bug", 0755)
-	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
-	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Initial commit", config)
+	os.MkdirAll("issues"+sops+"Test-bug", 0755)
+	ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Initial commit", config)
 
 	// Create another bug to elimate with purge
 	//runCmd("bug", "create", "-n", "Test", "Purge", "bug")
-	os.MkdirAll("issues/Test-Purge-Bug", 0755)
-	err = m.Purge(bugs.Directory(tester.WorkDir() + "/issues"))
+	os.MkdirAll("issues"+sops+"Test-Purge-Bug", 0755)
+	err = m.Purge(bugs.Directory(tester.WorkDir() + "" + sops + "issues"))
 	if err != nil {
 		t.Error("Error purging bug directory: " + err.Error())
 	}
@@ -268,8 +271,8 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	if len(issuesDir) > 0 && issuesDir[0].Name() != "Test-bug" {
 		t.Error("Expected Test-bug to remain.")
 	}
-	err = m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "", config) // no changes
-	if err != nil {                                                        // should NOT be a nil
+	err = m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "", config) // no changes
+	if err != nil {                                                            // should NOT be a nil
 		t.Error("Expected no commit error.")
 	}
 }
@@ -333,7 +336,7 @@ func scmRetitle(Args argumentList, config bugs.Config) {
 	}
 
 	currentDir := b.Direr()
-	newDir := bugs.IssuesDirer(config) + "/" + bugs.TitleToDir(strings.Join(Args[1:], " "))
+	newDir := bugs.IssuesDirer(config) + dops + bugs.TitleToDir(strings.Join(Args[1:], " "))
 	fmt.Printf("Moving %s to %s\n", currentDir, newDir)
 	err = os.Rename(string(currentDir), string(newDir))
 	if err != nil {

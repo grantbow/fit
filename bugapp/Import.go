@@ -7,6 +7,9 @@ import (
 	"strings"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // Import is a subcommand to read from a bugsEverywhere.org or github.com systems and create identical issues.
 func Import(args argumentList, config bugs.Config) {
 	if len(args) < 1 {
@@ -17,8 +20,8 @@ func Import(args argumentList, config bugs.Config) {
 	switch args[0] {
 	case "--github":
 		if githubRepo := args.GetArgument("--github", ""); githubRepo != "" {
-			numStrings := strings.Count(githubRepo, "/")
-			pieces := strings.Split(githubRepo, "/")
+			numStrings := strings.Count(githubRepo, sops)
+			pieces := strings.Split(githubRepo, sops)
 			//fmt.Printf("ns %v\np %v\n", numStrings, pieces)
 			if numStrings == 1 {
 				githubImportIssues(pieces[0], pieces[1], config)

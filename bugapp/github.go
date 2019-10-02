@@ -12,6 +12,9 @@ import (
 	"os"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 func fetchIssues(owner string, repo string, opt *github.IssueListByRepoOptions, client *github.Client) ([]*github.Issue, *github.Response, error) {
 	issues, response, err := client.Issues.ListByRepo(context.Background(), owner, repo, opt)
 	return issues, response, err
@@ -45,8 +48,7 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 				ititle := string(bugs.TitleToDir(fmt.Sprintf("%s%s%v", *issue.Title, "-", *issue.Number)))
 				fmt.Printf("Importing issue %s\n", ititle)
 				// add issue.Number to title
-				//b := bugs.Bug{Dir: bugs.Directory(config.BugDir+"issues/" + string(bugs.TitleToDir(*issue.Title)))}
-				b := bugs.Bug{Dir: bugs.Directory(config.BugDir + "/issues/" + ititle)}
+				b := bugs.Bug{Dir: bugs.Directory(config.BugDir + sops + "issues" + sops + ititle)}
 				if dir := b.Direr(); dir != "" {
 					os.Mkdir(string(dir), 0755)
 				}
@@ -61,13 +63,13 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 				if config.ImportXmlDump == true {
 					// b.SetXml()
 					xml, _ := json.MarshalIndent(issue, "", "    ")
-					err = ioutil.WriteFile(string(b.Direr())+"/issue.xml", append(xml, '\n'), 0644)
+					err = ioutil.WriteFile(string(b.Direr())+sops+"issue.xml", append(xml, '\n'), 0644)
 					check(err)
 				}
 				// Don't set a bug identifier, but put an empty line and
 				// then a GitHub identifier, so that bug commit can include
 				// "Closes ..." in the commit message.
-				b.SetIdentifier(fmt.Sprintf("GitHub:%s/%s%s%d", user, repo, "#", *issue.Number), config)
+				b.SetIdentifier(fmt.Sprintf("GitHub:%s%s%s%s%d", user, sops, repo, "#", *issue.Number), config)
 				for _, lab := range issue.Labels {
 					b.TagBug(bugs.TagBoolTrue(*lab.Name), config)
 				}
@@ -91,7 +93,7 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 						if config.ImportXmlDump == true {
 							// b.SetXml()
 							comname := "comment-" + string(bugs.ShortTitleToDir(string(*co.Body))) + "-" + fmt.Sprintf("%v", j)
-							err = ioutil.WriteFile(string(b.Direr())+"/"+comname+".xml", append(xml, '\n'), 0644)
+							err = ioutil.WriteFile(string(b.Direr())+sops+comname+".xml", append(xml, '\n'), 0644)
 							check(err)
 						}
 						j += 1
@@ -155,7 +157,7 @@ func githubImportProjects(user, repo string, config bugs.Config) {
 			i += 1
 			projname := "proj-" + string(bugs.TitleToDir(fmt.Sprintf("%v%s%s", *project.Number, "-", *project.Name)))
 			fmt.Printf("Importing %s\n", projname)
-			b := bugs.Bug{Dir: bugs.Directory(config.BugDir + "/issues/" + projname)}
+			b := bugs.Bug{Dir: bugs.Directory(config.BugDir + sops + "issues" + sops + projname)}
 			if dir := b.Direr(); dir != "" {
 				os.Mkdir(string(dir), 0755)
 			}
@@ -164,7 +166,7 @@ func githubImportProjects(user, repo string, config bugs.Config) {
 			} else {
 				b.SetDescription("", config)
 			}
-			b.SetIdentifier(fmt.Sprintf("GitHub:%s/%s%s%v", user, repo, "/projects/", *project.Number), config)
+			b.SetIdentifier(fmt.Sprintf("GitHub:%s%s%s%s%v", user, sops, repo, sops+"projects"+sops, *project.Number), config)
 
 			j := 1
 			projectcolumns, _, err := fetchProjectColumns(int64(*project.ID), nil, client)
@@ -201,7 +203,7 @@ func githubImportProjects(user, repo string, config bugs.Config) {
 				if config.ImportXmlDump == true {
 					colname := "col-" + fmt.Sprintf("%v", j) + "-" + string(bugs.ShortTitleToDir(string(*pc.Name)))
 					fmt.Printf("\nImporting %v\n", colname)
-					err = ioutil.WriteFile(string(b.Direr())+"/"+colname+".xml", xmlbytes.Bytes(), 0644)
+					err = ioutil.WriteFile(string(b.Direr())+sops+colname+".xml", xmlbytes.Bytes(), 0644)
 					check(err)
 				}
 				j += 1
@@ -209,7 +211,7 @@ func githubImportProjects(user, repo string, config bugs.Config) {
 			if config.ImportXmlDump == true {
 				// b.SetXml()
 				xml, _ := json.MarshalIndent(*project, "", "    ")
-				err = ioutil.WriteFile(string(b.Direr())+"/project.xml", append(xml, '\n'), 0644)
+				err = ioutil.WriteFile(string(b.Direr())+sops+"project.xml", append(xml, '\n'), 0644)
 				check(err)
 			}
 

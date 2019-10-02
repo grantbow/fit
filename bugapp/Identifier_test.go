@@ -9,6 +9,9 @@ import (
 	"testing"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 func rungenid(input string, expected string, t *testing.T) {
 	out := generateID(input)
 	re := regexp.MustCompile(expected)
@@ -101,7 +104,7 @@ func TestIdGenerate(t *testing.T) {
 	runid(t, "Identifier not defined\n", argumentList{"1"})
 
 	runid(t, "Generated id .* for bug\n", argumentList{"1", "--generate-id"})
-	file, err := ioutil.ReadFile(fmt.Sprintf("%s/issues/no_id_bug/Identifier", gdir))
+	file, err := ioutil.ReadFile(fmt.Sprintf("%s%sissues%sno_id_bug%sIdentifier", gdir, sops, sops, sops))
 	if err != nil {
 		t.Error("Could not load an Identifier file for Test bug" + err.Error())
 	}

@@ -9,6 +9,9 @@ import (
 	"testing"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 //func Testfind(t *testing.T) {
 //	// find(string, []string)
 //}

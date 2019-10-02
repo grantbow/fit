@@ -7,6 +7,9 @@ import (
 	"strings"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // Relabel is a subcommand to change an issue title.
 func Relabel(Args argumentList, config bugs.Config) {
 	if len(Args) < 2 {
@@ -22,7 +25,7 @@ func Relabel(Args argumentList, config bugs.Config) {
 	}
 
 	currentDir := b.Direr()
-	newDir := bugs.IssuesDirer(config) + "/" + bugs.TitleToDir(strings.Join(Args[1:], " "))
+	newDir := bugs.IssuesDirer(config) + dops + bugs.TitleToDir(strings.Join(Args[1:], " "))
 	fmt.Printf("Moving %s to %s\n", currentDir, newDir)
 	err = os.Rename(string(currentDir), string(newDir))
 	if err != nil {

@@ -7,6 +7,9 @@ import (
 	"strings"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 type SCMNotFound struct {
 	s string
 }
@@ -25,18 +28,18 @@ func (e *SCMDirty) Error() string {
 
 func walkAndSearch(startpath string, dirnames []string) (fullpath, scmtype string) {
 	for _, scmtype := range dirnames {
-		if dirinfo, err := os.Stat(startpath + "/" + scmtype); err == nil && dirinfo.IsDir() {
-			return startpath + "/" + scmtype, scmtype
+		if dirinfo, err := os.Stat(startpath + sops + scmtype); err == nil && dirinfo.IsDir() {
+			return startpath + sops + scmtype, scmtype
 		}
 	}
 
-	pieces := strings.Split(startpath, "/")
+	pieces := strings.Split(startpath, sops)
 
 	for i := len(pieces); i > 0; i -= 1 {
-		dir := strings.Join(pieces[0:i], "/")
+		dir := strings.Join(pieces[0:i], sops)
 		for _, scmtype := range dirnames {
-			if dirinfo, err := os.Stat(dir + "/" + scmtype); err == nil && dirinfo.IsDir() {
-				return dir + "/" + scmtype, scmtype
+			if dirinfo, err := os.Stat(dir + sops + scmtype); err == nil && dirinfo.IsDir() {
+				return dir + sops + scmtype, scmtype
 			}
 		}
 	}

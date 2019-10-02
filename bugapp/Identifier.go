@@ -10,6 +10,9 @@ import (
 	"strings"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // getAllIds returns all the ids
 func getAllIds(config bugs.Config) []string {
 	bugs := bugs.GetAllBugs(config)
@@ -46,7 +49,7 @@ func IdsNone(config bugs.Config) {
 		for k, _ := range idMap {
 			if issue.Name() == k {
 				//fmt.Printf("1in: %v\n2tm: %v\n", issue.Name(), k)
-				var dir bugs.Directory = issuesroot + "/" + bugs.Directory(issue.Name())
+				var dir bugs.Directory = issuesroot + dops + bugs.Directory(issue.Name())
 				//fmt.Printf("dir %v\n", dir)
 				b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName}
 				name := bugNamer(b, idx) // Issue x:

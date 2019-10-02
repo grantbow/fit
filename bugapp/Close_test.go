@@ -9,6 +9,9 @@ import (
 	"testing"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // ensure that
 // a usage line gets printed to Stderr when
 // no parameters are specified
@@ -48,9 +51,9 @@ func TestCloseByIndex(t *testing.T) {
 		return
 	}
 
-	ioutil.WriteFile(dir+"/issues/Test/Identifier", []byte("TestBug\n"), 0600)
+	ioutil.WriteFile(dir+sops+"issues"+sops+"Test"+sops+"Identifier", []byte("TestBug\n"), 0600)
 
-	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	// Assert that there's 1 bug to start, otherwise what are we closing?
 	if err != nil || len(issuesDir) != 1 {
 		t.Error("Could not read issues directory")
@@ -74,11 +77,11 @@ func TestCloseByIndex(t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected output on STDERR for Test-bug")
 	}
-	if stdout != fmt.Sprintf("Removing %s/issues/Test\n", dir) {
+	if stdout != fmt.Sprintf("Removing %s%sissues%sTest\n", dir, sops, sops) {
 		t.Error("Unexpected output on STDOUT for Test-bug")
-		fmt.Printf("Got %s\nExpected%s", stdout, fmt.Sprintf("Removing %s/issues/Test\n", dir))
+		fmt.Printf("Got %s\nExpected%s", stdout, fmt.Sprintf("Removing %s%sissues%sTest\n", dir, sops, sops))
 	}
-	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	if err != nil {
 		t.Error("Could not read issues directory")
 		return
@@ -97,7 +100,7 @@ func TestCloseBugByIdentifier(t *testing.T) {
 		return
 	}
 	os.Chdir(dir)
-	os.MkdirAll("issues/Test", 0700)
+	os.MkdirAll("issues"+sops+"Test", 0700)
 	defer os.RemoveAll(dir)
 
 	// On MacOS, /tmp is a symlink, which causes GetDirectory() to return
@@ -109,7 +112,7 @@ func TestCloseBugByIdentifier(t *testing.T) {
 		return
 	}
 
-	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	// Assert that there's 1 bug to start, otherwise what are we closing?
 	if err != nil || len(issuesDir) != 1 {
 		t.Error("Could not read issues directory")
@@ -121,11 +124,11 @@ func TestCloseBugByIdentifier(t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected output on STDERR for Test-bug")
 	}
-	if stdout != fmt.Sprintf("Removing %s/issues/Test\n", dir) {
+	if stdout != fmt.Sprintf("Removing %s%sissues%sTest\n", dir, sops, sops) {
 		t.Error("Unexpected output on STDOUT for Test-bug")
 		fmt.Printf("Got %s\nExpected: %s\n", stdout, dir)
 	}
-	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	if err != nil {
 		t.Error("Could not read issues directory")
 		return
@@ -146,10 +149,10 @@ func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
 	}
 	os.Chdir(dir)
 	os.Setenv("FIT", dir)
-	os.MkdirAll("issues/Test", 0700)
-	os.MkdirAll("issues/Test2", 0700)
-	os.MkdirAll("issues/Test3", 0700)
-	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	os.MkdirAll("issues"+sops+"Test", 0700)
+	os.MkdirAll("issues"+sops+"Test2", 0700)
+	os.MkdirAll("issues"+sops+"Test3", 0700)
+	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	if err != nil {
 		t.Error("Could not read issues directory")
 		return
@@ -160,7 +163,7 @@ func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
 	_, stderr := captureOutput(func() {
 		Close(argumentList{"1", "3"}, config)
 	}, t)
-	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	if err != nil {
 		t.Error("Could not read issues directory")
 		return
@@ -184,10 +187,10 @@ func TestCloseMultipleIndexesAtOnce(t *testing.T) {
 	}
 	os.Chdir(dir)
 	os.Setenv("FIT", dir)
-	os.MkdirAll("issues/Test", 0700)
-	os.MkdirAll("issues/Test2", 0700)
-	os.MkdirAll("issues/Test3", 0700)
-	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	os.MkdirAll("issues"+sops+"Test", 0700)
+	os.MkdirAll("issues"+sops+"Test2", 0700)
+	os.MkdirAll("issues"+sops+"Test3", 0700)
+	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	if err != nil {
 		t.Error("Could not read issues directory")
 		return
@@ -198,7 +201,7 @@ func TestCloseMultipleIndexesAtOnce(t *testing.T) {
 	_, _ = captureOutput(func() {
 		Close(argumentList{"1", "2"}, config)
 	}, t)
-	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	if err != nil {
 		t.Error("Could not read issues directory")
 		return

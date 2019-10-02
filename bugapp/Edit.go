@@ -9,6 +9,9 @@ import (
 	"strings"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // Edit is a subcommand to modify an issue.
 func Edit(args argumentList, config bugs.Config) {
 
@@ -46,8 +49,8 @@ func Edit(args argumentList, config bugs.Config) {
 			// enforces Title case
 			file = title
 		} // else falls through
-		fmt.Printf("Editing %s/%s\n", dir, file)
-		cmd := exec.Command(getEditor(), string(dir)+"/"+file)
+		fmt.Printf("Editing %s%s%s\n", dir, sops, file)
+		cmd := exec.Command(getEditor(), string(dir)+sops+file)
 
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout

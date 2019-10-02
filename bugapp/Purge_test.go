@@ -11,6 +11,9 @@ import (
 	"testing"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 func TestPurgeNoEditor(t *testing.T) {
 	config := bugs.Config{}
 	dir, err := ioutil.TempDir("", "purgetest")
@@ -45,7 +48,7 @@ func TestPurgeNoEditor(t *testing.T) {
 		t.Error("Unexpected output on STDOUT")
 		fmt.Printf("Expected: %s\nGot %s\n", "", stdout)
 	}
-	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	if err != nil {
 		t.Error("Could not read issues directory")
 		return
@@ -57,7 +60,7 @@ func TestPurgeNoEditor(t *testing.T) {
 	stdout, stderr = captureOutput(func() {
 		Purge(config)
 	}, t)
-	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	if err != nil {
 		t.Error("Could not purge issues directory")
 		return
@@ -65,7 +68,7 @@ func TestPurgeNoEditor(t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-	expected := "Removing issues/Test-bug/\n"
+	expected := "Removing issues" + sops + "Test-bug" + sops + "\n"
 	if stdout != expected {
 		t.Error("Unexpected output on STDOUT")
 		fmt.Printf("Expected: %s\nGot %s\n", expected, stdout)

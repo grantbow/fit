@@ -8,6 +8,9 @@ import (
 	"sort"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // find does the work of finding bugs.
 func find(findType string, findValues []string, config bugs.Config) {
 	issuesroot := bugs.IssuesDirer(config)
@@ -17,7 +20,7 @@ func find(findType string, findValues []string, config bugs.Config) {
 		if issue.IsDir() != true {
 			continue
 		}
-		var dir bugs.Directory = issuesroot + "/" + bugs.Directory(issue.Name())
+		var dir bugs.Directory = issuesroot + dops + bugs.Directory(issue.Name())
 		b := bugs.Bug{Dir: dir}
 		name := bugNamer(b, idx)
 		var values []string

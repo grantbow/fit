@@ -9,6 +9,9 @@ import (
 	"testing"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 func runCreateOutput(args argumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
@@ -68,7 +71,7 @@ func TestCreateWithoutIssues(t *testing.T) {
 		t.Error("Unexpected output on STDOUT for Test-bug: " + stdout)
 	}
 	//fmt.Print("2")
-	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	//fmt.Print("3")
 	if err != nil {
 		t.Error("Could not read issues directory")
@@ -116,7 +119,7 @@ func TestCreateNoEditor(t *testing.T) {
 	if stdout != "Created issue: Test bug\n" {
 		t.Error("Unexpected output on STDOUT for Test-bug")
 	}
-	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	if err != nil {
 		t.Error("Could not read issues directory")
 		return
@@ -125,7 +128,7 @@ func TestCreateNoEditor(t *testing.T) {
 		t.Error("Unexpected number of issues in issues dir\n")
 	}
 
-	bugDir, err := ioutil.ReadDir(fmt.Sprintf("%s/issues/Test-bug", dir))
+	bugDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%sTest-bug", dir, sops, sops))
 	if len(bugDir) != 1 {
 		t.Error("Unexpected number of files found in Test-bug dir\n")
 	}
@@ -134,7 +137,7 @@ func TestCreateNoEditor(t *testing.T) {
 		return
 	}
 
-	file, err := ioutil.ReadFile(fmt.Sprintf("%s/issues/Test-bug/Description", dir))
+	file, err := ioutil.ReadFile(fmt.Sprintf("%s%sissues%sTest-bug%sDescription", dir, sops, sops, sops))
 	if err != nil {
 		t.Error("Could not load description file for Test bug" + err.Error())
 	}
@@ -143,8 +146,8 @@ func TestCreateNoEditor(t *testing.T) {
 	}
 
 	///// second issue
-	ioutil.WriteFile(dir+"/ddf", []byte("content"), 0755)
-	config.DefaultDescriptionFile = dir + "/ddf"
+	ioutil.WriteFile(dir+sops+"ddf", []byte("content"), 0755)
+	config.DefaultDescriptionFile = dir + sops + "ddf"
 
 	stdout, stderr = captureOutput(func() {
 		Create(argumentList{"-n", "--generate-id", "Test2", "bug"}, config)
@@ -155,7 +158,7 @@ func TestCreateNoEditor(t *testing.T) {
 	if stdout != "Created issue: Test2 bug\n" {
 		t.Error("Unexpected output on STDOUT for Test2-bug")
 	}
-	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/", dir))
+	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	if err != nil {
 		t.Error("Could not read issues directory")
 		return
@@ -164,7 +167,7 @@ func TestCreateNoEditor(t *testing.T) {
 		t.Error("Unexpected number of issues in issues dir\n")
 	}
 
-	bugDir, err = ioutil.ReadDir(fmt.Sprintf("%s/issues/Test2-bug", dir))
+	bugDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%sTest2-bug", dir, sops, sops))
 	if len(bugDir) != 2 {
 		t.Error("Unexpected number of files found in Test2-bug dir\n")
 	}
@@ -173,7 +176,7 @@ func TestCreateNoEditor(t *testing.T) {
 		return
 	}
 
-	file, err = ioutil.ReadFile(fmt.Sprintf("%s/issues/Test2-bug/Description", dir))
+	file, err = ioutil.ReadFile(fmt.Sprintf("%s%sissues%sTest2-bug%sDescription", dir, sops, sops, sops))
 	if err != nil {
 		t.Error("Could not load description file for Test2 bug" + err.Error())
 	}

@@ -9,6 +9,9 @@ import (
 	"testing"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 //func getAllTags() []string {
 //func Tag(Args argumentList) {
 
@@ -97,22 +100,22 @@ func TestTag(t *testing.T) {
 	runtag(argumentList{"1", "foo"}, "", t) // no cmd as argument
 	// force it to test when runmiles doesn't work
 	//val := []byte("foo\n")
-	//fmt.Println(ioutil.WriteFile(string(gdir)+"/issues/no_tag_bug/Tag", []byte(val), 0644))
+	//fmt.Println(ioutil.WriteFile(string(gdir)+sops+"issues"+sops+"no_tag_bug"+sops+"Tag", []byte(val), 0644))
 	// check
-	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s/issues/no_tag_bug/tags", gdir))
+	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s%sissues%sno_tag_bug%stags", gdir, sops, sops, sops))
 	//fmt.Printf("readdir len %#v\n", len(bugDir))
 	//fmt.Printf("readdir %#v\n", bugDir[0])
 	//fmt.Printf("readdir %#v\n", bugDir[1])
 	// after
-	runfind(argumentList{"tags", "foo"}, "Issue 1: no_tag_bug \\(foo\\)\n", t)   // boolean flags not tags
-	_, err = ioutil.ReadFile(fmt.Sprintf("%s/issues/no_tag_bug/tags/foo", gdir)) // file is empty
+	runfind(argumentList{"tags", "foo"}, "Issue 1: no_tag_bug \\(foo\\)\n", t)                               // boolean flags not tags
+	_, err = ioutil.ReadFile(fmt.Sprintf("%s%sissues%sno_tag_bug%stags%sfoo", gdir, sops, sops, sops, sops)) // file is empty
 	if err != nil {
 		t.Error("Could not load tags/foo file" + err.Error())
 	}
 	// tags can have more than one
-	runtag(argumentList{"1", "bar"}, "", t)                                         // no cmd as argument
-	runfind(argumentList{"tags", "foo"}, "Issue 1: no_tag_bug \\(bar, foo\\)\n", t) // boolean flags not tags
-	_, err = ioutil.ReadFile(fmt.Sprintf("%s/issues/no_tag_bug/tags/bar", gdir))    // file is empty
+	runtag(argumentList{"1", "bar"}, "", t)                                                                  // no cmd as argument
+	runfind(argumentList{"tags", "foo"}, "Issue 1: no_tag_bug \\(bar, foo\\)\n", t)                          // boolean flags not tags
+	_, err = ioutil.ReadFile(fmt.Sprintf("%s%sissues%sno_tag_bug%stags%sbar", gdir, sops, sops, sops, sops)) // file is empty
 	if err != nil {
 		t.Error("Could not load tags/bar file" + err.Error())
 	}

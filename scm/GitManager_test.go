@@ -11,6 +11,9 @@ import (
 	"testing"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 type GitCommit struct {
 	commit string
 	log    string
@@ -211,27 +214,27 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 		return
 	}
 	//runCmd("bug", "create", "-n", "Test", "bug")
-	os.MkdirAll("issues/Test-bug", 0755)
-	ioutil.WriteFile("issues/Test-bug/Description", []byte(""), 0644)
-	if err = ioutil.WriteFile("issues/Test-bug/Identifier", []byte("\n\nGitHub:#TestBug"), 0644); err != nil {
-		t.Error("Could not write Test-bug/Identifier file")
+	os.MkdirAll("issues"+sops+"Test-bug", 0755)
+	ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
+	if err = ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Identifier", []byte("\n\nGitHub:#TestBug"), 0644); err != nil {
+		t.Error("Could not write Test-bug" + sops + "Identifier file")
 		return
 	}
 
 	//runCmd("bug", "create", "-n", "Test", "Another", "bug")
-	os.MkdirAll("issues/Test-Another-bug", 0755)
-	ioutil.WriteFile("issues/Test-Another-bug/Description", []byte(""), 0644)
-	if err = ioutil.WriteFile("issues/Test-Another-bug/Identifier", []byte("\n\nGITHuB:  #Whitespace   "), 0644); err != nil {
-		t.Error("Could not write Test-Another-bug/Identifier file")
+	os.MkdirAll("issues"+sops+"Test-Another-bug", 0755)
+	ioutil.WriteFile("issues"+sops+"Test-Another-bug"+sops+"Description", []byte(""), 0644)
+	if err = ioutil.WriteFile("issues"+sops+"Test-Another-bug"+sops+"Identifier", []byte("\n\nGITHuB:  #Whitespace   "), 0644); err != nil {
+		t.Error("Could not write Test-Another-bug" + sops + "Identifier file")
 		return
 	}
 
 	// Commit the file, so that we can close it..
-	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Adding commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Adding commit", config)
 	// Delete the bug
-	os.RemoveAll(tester.WorkDir() + "/issues/Test-bug")
-	os.RemoveAll(tester.WorkDir() + "/issues/Test-Another-bug")
-	m.Commit(bugs.Directory(tester.WorkDir()+"/issues"), "Removal commit", config)
+	os.RemoveAll(tester.WorkDir() + sops + "issues" + sops + "Test-bug")
+	os.RemoveAll(tester.WorkDir() + sops + "issues" + sops + "Test-Another-bug")
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Removal commit", config)
 
 	commits, err := tester.Loggers()
 	if len(commits) != 2 || err != nil {

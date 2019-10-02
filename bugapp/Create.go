@@ -10,6 +10,9 @@ import (
 	"strings"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // filecp copies files.
 // see https://opensource.com/article/18/6/copying-files-go
 func filecp(sourceFile string, destinationFile string) {
@@ -77,7 +80,7 @@ func Create(Args argumentList, config bugs.Config) {
 		bgid = bugs.IssuesDirer(config)
 	}
 	var bug = bugs.Bug{
-		Dir:                 bgid + "/" + bugs.TitleToDir(strings.Join(Args, " ")),
+		Dir:                 bgid + dops + bugs.TitleToDir(strings.Join(Args, " ")),
 		DescriptionFileName: config.DescriptionFileName,
 	}
 
@@ -90,7 +93,7 @@ func Create(Args argumentList, config bugs.Config) {
 		fmt.Fprintf(os.Stderr, "\n%s error: mkdir\n", os.Args[0])
 		log.Fatal(err)
 	}
-	DescriptionFile := string(dir) + "/" + config.DescriptionFileName
+	DescriptionFile := string(dir) + sops + config.DescriptionFileName
 	if noDesc {
 		txt := []byte("")
 		if config.DefaultDescriptionFile != "" {

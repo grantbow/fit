@@ -7,9 +7,13 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"testing"
 )
+
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
 
 func runcommit(expected string, t *testing.T) {
 	config := bugs.Config{}
@@ -42,7 +46,7 @@ func TestCommit(t *testing.T) {
 		return
 	}
 	os.Chdir(dir)
-	os.MkdirAll("issues/Test", 0700)
+	os.MkdirAll("issues"+sops+"Test", 0700)
 	defer os.RemoveAll(dir)
 
 	// On MacOS, /tmp is a symlink, which causes GetDirectory() to return
@@ -59,15 +63,15 @@ func TestCommit(t *testing.T) {
 		log.Fatal(err)
 	}
 	// create
-	ioutil.WriteFile(dir+"/issues/Test/Description", []byte("TestBug\n"), 0600)
+	ioutil.WriteFile(filepath.FromSlash(dir+"/issues/Test/Description"), []byte("TestBug\n"), 0600)
 	expected := "bug. Create issue .Test."
 	runcommit(expected, t)
 	// update
-	ioutil.WriteFile(dir+"/issues/Test/Description", []byte("TestBug-changed\n"), 0600)
+	ioutil.WriteFile(filepath.FromSlash(dir+"/issues/Test/Description"), []byte("TestBug-changed\n"), 0600)
 	expected = "bug. Update issue .Test."
 	runcommit(expected, t)
 	// close
-	os.RemoveAll(dir + "/issues/Test")
+	os.RemoveAll(filepath.FromSlash(dir + "/issues/Test"))
 	expected = "bug. Close issue .Test."
 	runcommit(expected, t)
 }

@@ -6,6 +6,9 @@ import (
 	"github.com/driusan/bug/scm"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // Commit is a subcommand to save issues to the git or mercurial (hg) SCMs.
 func Commit(args argumentList, config bugs.Config) {
 	options := make(map[string]bool)
@@ -22,7 +25,7 @@ func Commit(args argumentList, config bugs.Config) {
 		return
 	}
 
-	err = scm.Commit(bugs.IssuesDirer(config)+"/", "Added or removed issues with the tool \"bug\"", config)
+	err = scm.Commit(bugs.IssuesDirer(config)+dops, "Added or removed issues with the tool \"bug\"", config)
 
 	if err != nil {
 		fmt.Printf("Could not commit: %s\n", err.Error())

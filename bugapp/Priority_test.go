@@ -9,6 +9,9 @@ import (
 	"testing"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // Priority and Status are treated specially in runfind
 
 func runpriority(args argumentList, expected string, t *testing.T) {
@@ -61,15 +64,15 @@ func TestPriority(t *testing.T) {
 	runpriority(argumentList{"1", "foo"}, "", t) // no cmd as argument
 	// force it to test when runmiles doesn't work
 	//val := []byte("foo\n")
-	//fmt.Println(ioutil.WriteFile(string(gdir)+"/issues/no_pri_bug/Priority", []byte(val), 0644))
+	//fmt.Println(ioutil.WriteFile(string(gdir)+sops+"issues"+sops+"no_pri_bug"+sops+"Priority", []byte(val), 0644))
 	// check
-	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s/issues/no_pri_bug", gdir))
+	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s%sissues%sno_pri_bug", gdir, sops, sops))
 	//fmt.Printf("readdir len %#v\n", len(bugDir))
 	//fmt.Printf("readdir %#v\n", bugDir[0])
 	//fmt.Printf("readdir %#v\n", bugDir[1])
 	// after
 	runfind(argumentList{"priority", "foo"}, "Issue 1: no_pri_bug \\(Priority: foo\\)\n", t)
-	file, err := ioutil.ReadFile(fmt.Sprintf("%s/issues/no_pri_bug/Priority", gdir))
+	file, err := ioutil.ReadFile(fmt.Sprintf("%s%sissues%sno_pri_bug%sPriority", gdir, sops, sops, sops))
 	if err != nil {
 		t.Error("Could not load Priority file" + err.Error())
 	}

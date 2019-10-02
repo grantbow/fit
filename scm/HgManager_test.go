@@ -166,7 +166,7 @@ func TestHgPurge(t *testing.T) {
 	// but since the current behaviour is to return a not
 	// supported error, that would evidently fail..
 	m := HgManager{}
-	err := m.Purge("/tmp/imaginaryHgRepo")
+	err := m.Purge(dops + "tmp" + dops + "imaginaryHgRepo")
 
 	switch err.(type) {
 	case UnsupportedType:

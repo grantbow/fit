@@ -10,6 +10,9 @@ import (
 	"strings"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 var TwilioUrlHttp = "https://api.twilio.com/2010-04-01/Accounts/"
 var TwilioUrlMessages = "/Messages.json"
 
@@ -42,7 +45,7 @@ func Twilio(config bugs.Config) {
 					//fmt.Printf("updated issues:\n")
 					for _, bline := range strings.Split(string(b), "\n") {
 						if len(bline) > 0 {
-							i := strings.Split(string(bline), "/")
+							i := strings.Split(string(bline), sops)
 							if len(i) > 2 {
 								updatedissues[i[1]] = true
 							}
@@ -57,7 +60,7 @@ func Twilio(config bugs.Config) {
 					// build message for each recipient from updated issues and twilio tags
 					for key, _ := range updatedissues {
 						//fmt.Printf("twilio bug dirname: %v\n", key)
-						expectedbugdir := string(bugs.IssuesDirer(config)) + "/" + key
+						expectedbugdir := string(bugs.IssuesDirer(config)) + sops + key
 						bug.LoadBug(bugs.Directory(expectedbugdir))
 						tags := bug.Tags()
 						//fmt.Printf("debug %v tags %v\n", key, tags)

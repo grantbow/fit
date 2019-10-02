@@ -9,6 +9,9 @@ import (
 	"testing"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 func TestRoadmapLess(t *testing.T) {
 	// func (a BugListByMilestone) Less(i, j int) bool {
 	config := bugs.Config{}
@@ -63,8 +66,8 @@ func TestRoadmapLess(t *testing.T) {
 	re := regexp.MustCompile(expected)
 	//d, _   := os.Open(dir)
 	//dd, _  := d.Readdir(0)
-	//dd, _ := ioutil.ReadDir(dir+"/issues")
-	//fmt.Printf("dirdump %s\n", dirDump(fmt.Sprintf("%s/%s",dir,"issues")))
+	//dd, _ := ioutil.ReadDir(dir+sops+"issues")
+	//fmt.Printf("dirdump %s\n", dirDump(fmt.Sprintf("%s%s%s",dir, sops,"issues")))
 	stdout, stderr = captureOutput(func() {
 		Roadmap(argumentList{}, bugs.Config{})
 	}, t)

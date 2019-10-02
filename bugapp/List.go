@@ -9,6 +9,9 @@ import (
 	"sort"
 )
 
+//var dops = bugs.Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
+
 // bugNamer takes a bug and an int index then outputs a string.
 func bugNamer(b bugs.Bug, idx int) string {
 	if id := b.Identifier(); id != "" {
@@ -21,7 +24,7 @@ func bugNamer(b bugs.Bug, idx int) string {
 func listTags(files []os.FileInfo, args argumentList, config bugs.Config) {
 	b := bugs.Bug{}
 	for idx := range files {
-		b.LoadBug(bugs.Directory(bugs.IssuesDirer(config) + "/" + bugs.Directory(files[idx].Name())))
+		b.LoadBug(bugs.Directory(bugs.IssuesDirer(config) + dops + bugs.Directory(files[idx].Name())))
 
 		for _, tag := range args {
 			if b.HasTag(bugs.TagBoolTrue(tag)) {
@@ -65,7 +68,7 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 		wantRecursive = true
 	}
 
-	fmt.Printf("\n===== list %s\n", config.BugDir+"/issues")
+	fmt.Printf("\n===== list %s\n", config.BugDir+sops+"issues")
 	if matchRegex && (len(args) > 1) {
 		for i, length := 0, len(args); i < length; i += 1 {
 			// TODO for _, tag := range args { // idx not needed
@@ -171,8 +174,8 @@ func checkDirTree(args argumentList, config bugs.Config, node os.FileInfo, allow
 	// check pwd
 	topwd, _ := os.Getwd()
 	//fmt.Printf("/////  debug checkDirTree issues dir %s\n", topwd)
-	if dirinfo, err := os.Stat(topwd + "/issues"); err == nil && dirinfo.IsDir() && allowHits {
-		//fmt.Printf("\n/////  issues in dir %s\n", topwd+"/issues")
+	if dirinfo, err := os.Stat(topwd + sops + "issues"); err == nil && dirinfo.IsDir() && allowHits {
+		//fmt.Printf("\n/////  issues in dir %s\n", topwd+sops+"issues")
 		newConfig := config
 		newConfig.BugDir = string(topwd) // BugRootDir
 		List(args, newConfig, false)     // process
@@ -180,7 +183,7 @@ func checkDirTree(args argumentList, config bugs.Config, node os.FileInfo, allow
 
 	// recursively check subdirs
 	fileinfos, _ := ioutil.ReadDir(topwd)
-	//fmt.Printf("/////  debug checkDirTree subdir %s\n", topwd) // +"/"+node.Name())
+	//fmt.Printf("/////  debug checkDirTree subdir %s\n", topwd) // +sops+node.Name())
 	for _, nodee := range fileinfos {
 		if nodee.Name() != "issues" &&
 			nodee.IsDir() == true {
@@ -195,7 +198,7 @@ func checkDirTree(args argumentList, config bugs.Config, node os.FileInfo, allow
 
 func printIssueByDir(idx int, issue os.FileInfo, issuesroot bugs.Directory, config bugs.Config, wantTags bool) {
 	// TODO: same next eight lines func (idx, issue)
-	var dir bugs.Directory = issuesroot + "/" + bugs.Directory(issue.Name())
+	var dir bugs.Directory = issuesroot + dops + bugs.Directory(issue.Name())
 	b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName} // usually Description
 	name := bugNamer(b, idx)                                                 // Issue idx: b.Title
 	if wantTags == false {
