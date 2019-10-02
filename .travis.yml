@@ -23,6 +23,7 @@ before_install:
     - |
       if [ $TRAVIS_OS_NAME == "windows" ]; then
         choco install hg
+        export PATH="$PATH:/c/Program Files/Mercurial/"
       fi
     - hg --version
 
