@@ -3,9 +3,11 @@ package bugs
 import (
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"testing"
 )
+
+//var dops = Directory(os.PathSeparator)
+//var sops = string(os.PathSeparator)
 
 func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 	var gdir string
@@ -20,7 +22,7 @@ func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 		t.Error("Failed creating TempDir")
 		return
 	}
-	err = os.MkdirAll(filepath.FromSlash("abc/issues"), 0755)
+	err = os.MkdirAll("abc"+sops+"issues", 0755)
 	if err != nil {
 		t.Error("Failed creating abc/issues")
 		return

@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"regexp"
 	"testing"
 )
@@ -63,15 +62,15 @@ func TestCommit(t *testing.T) {
 		log.Fatal(err)
 	}
 	// create
-	ioutil.WriteFile(filepath.FromSlash(dir+"/issues/Test/Description"), []byte("TestBug\n"), 0600)
+	ioutil.WriteFile(dir+sops+"issues"+sops+"Test"+sops+"Description", []byte("TestBug\n"), 0600)
 	expected := "bug. Create issue .Test."
 	runcommit(expected, t)
 	// update
-	ioutil.WriteFile(filepath.FromSlash(dir+"/issues/Test/Description"), []byte("TestBug-changed\n"), 0600)
+	ioutil.WriteFile(dir+sops+"issues"+sops+"Test"+sops+"Description", []byte("TestBug-changed\n"), 0600)
 	expected = "bug. Update issue .Test."
 	runcommit(expected, t)
 	// close
-	os.RemoveAll(filepath.FromSlash(dir + "/issues/Test"))
+	os.RemoveAll(dir + sops + "issues" + sops + "Test")
 	expected = "bug. Close issue .Test."
 	runcommit(expected, t)
 }

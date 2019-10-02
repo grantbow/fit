@@ -88,7 +88,7 @@ func TestCloseByIndex(t *testing.T) {
 	}
 	// After closing, there should be 0 bugs.
 	if len(issuesDir) != 0 {
-		t.Error(fmt.Sprintf("Unexpected number %v not %v of issues in issues dir\n", len(issuesDir), 0))
+		t.Error(fmt.Sprintf("Unexpected number %v is not %v issues in issues dir\n", len(issuesDir), 0))
 	}
 }
 
@@ -135,7 +135,7 @@ func TestCloseBugByIdentifier(t *testing.T) {
 	}
 	// After closing, there should be 0 bugs.
 	if len(issuesDir) != 0 {
-		t.Error(fmt.Sprintf("Unexpected number %v not %v of issues in issues dir\n", len(issuesDir), 0))
+		t.Error(fmt.Sprintf("Unexpected number %v is not %v issues in issues dir\n", len(issuesDir), 0))
 	}
 }
 
@@ -158,7 +158,7 @@ func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
 		return
 	}
 	if len(issuesDir) != 3 {
-		t.Error(fmt.Sprintf("Unexpected number %v not %v of issues in issues dir\n", len(issuesDir), 3))
+		t.Error(fmt.Sprintf("Unexpected number %v is not %v issues in issues dir\n", len(issuesDir), 3))
 	}
 	_, stderr := captureOutput(func() {
 		Close(argumentList{"1", "3"}, config)
@@ -173,7 +173,7 @@ func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
 	// were renumbered after closing the first bug.
 	if len(issuesDir) != 1 {
 		fmt.Printf("%s\n\n", stderr)
-		t.Error(fmt.Sprintf("Unexpected number %v not %v of issues in issues dir\n", len(issuesDir), 1))
+		t.Error(fmt.Sprintf("Unexpected number %v is not %v issues in issues dir\n", len(issuesDir), 1))
 	}
 }
 
@@ -196,7 +196,7 @@ func TestCloseMultipleIndexesAtOnce(t *testing.T) {
 		return
 	}
 	if len(issuesDir) != 3 {
-		t.Error(fmt.Sprintf("Unexpected number %v not %v of issues in issues dir\n", len(issuesDir), 3))
+		t.Error(fmt.Sprintf("Unexpected number %v is not %v issues in issues dir\n", len(issuesDir), 3))
 	}
 	_, _ = captureOutput(func() {
 		Close(argumentList{"1", "2"}, config)
@@ -207,7 +207,7 @@ func TestCloseMultipleIndexesAtOnce(t *testing.T) {
 		return
 	}
 	if len(issuesDir) != 1 {
-		t.Error(fmt.Sprintf("Unexpected number %v not %v of issues in issues dir\n", len(issuesDir), 1))
+		t.Error(fmt.Sprintf("Unexpected number %v is not %v issues in issues dir\n", len(issuesDir), 1))
 		return
 	}
 
