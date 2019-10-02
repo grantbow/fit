@@ -16,18 +16,15 @@ addons:
         packages:
             - git
             - mercurial
-    chocolatey:
-        packages:
-            - hg
     
 before_install:
     - git config -l
     - git --version
-    - hg --version
     - |
       if [ $TRAVIS_OS_NAME == "windows" ]; then
         choco install hg
       fi
+    - hg --version
 
 script:
     - env GO111MODULE=on bash ./test/test.sh
