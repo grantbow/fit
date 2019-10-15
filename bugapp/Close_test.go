@@ -39,6 +39,7 @@ func TestCloseByIndex(t *testing.T) {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
+    pwd, _ := os.Getwd() // used with proper cleanup alternative to defer os.RemoveAll(dir)
 	os.Chdir(dir)
 	os.MkdirAll("issues"+sops+"Test", 0700)
 
@@ -50,8 +51,6 @@ func TestCloseByIndex(t *testing.T) {
 		t.Error("Could not set environment variable: " + err.Error())
 		return
 	}
-
-	ioutil.WriteFile(dir+sops+"issues"+sops+"Test"+sops+"Identifier", []byte("TestBug\n"), 0600)
 
 	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	// Assert that there's 1 bug to start, otherwise what are we closing?
@@ -70,38 +69,52 @@ func TestCloseByIndex(t *testing.T) {
 	if stdout != "" {
 		t.Error("Unexpected output on STDOUT for Foo-bug")
 	}
+
 	// now success
 	stdout, stderr = captureOutput(func() {
-		Close(argumentList{"TestBug"}, config)
+		Close(argumentList{"1"}, config) // by index not id
 	}, t)
 	if stderr != "" {
-		t.Error("Unexpected output on STDERR for Test-bug")
+		t.Error("Unexpected output on STDERR for Close 1")
 	}
 	if stdout != fmt.Sprintf("Removing %s%sissues%sTest\n", dir, sops, sops) {
-		t.Error("Unexpected output on STDOUT for Test-bug")
-		fmt.Printf("Got %s\nExpected%s", stdout, fmt.Sprintf("Removing %s%sissues%sTest\n", dir, sops, sops))
+		t.Error("Unexpected output on STDOUT for Close 1")
+        fmt.Printf("Got: %s\nExpected: %s\n", stdout, fmt.Sprintf("Removing %s%sissues%sTest\n", dir, sops, sops))
 	}
-	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
-	if err != nil {
-		t.Error("Could not read issues directory")
+    //fmt.Printf("debug readdir %s\n", fmt.Sprintf("%s%sissues%s", dir, sops, sops)) // debug
+    issuesDirb, errb := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
+	if errb != nil {
+		t.Error("Error reading issues directory")
 		return
 	}
 	// After closing, there should be 0 bugs.
-	if len(issuesDir) != 0 {
-		t.Error(fmt.Sprintf("Unexpected number %v is not %v issues in issues dir\n", len(issuesDir), 0))
+	if len(issuesDirb) != 0 {
+		t.Error(fmt.Sprintf("Unexpected number %v is not %v issues in issues dir\n", len(issuesDirb), 0))
+        // debug
+	    /* for _, finfo := range issuesDir {
+            fmt.Printf("debug %v\n", finfo.Name())
+            //fmt.Printf("debug %s\n", bugID)
+        } */
 	}
+    // cleanup more properly replaces defer os.RemoveAll(dir)
+    os.Chdir(pwd)
+    //err = os.RemoveAll(dir)
+	//if err != nil {
+	//	t.Error("Could not RemoveAll("+string(dir)+") : " + err.Error())
+    //}
 }
 
 func TestCloseBugByIdentifier(t *testing.T) {
 	config := bugs.Config{}
 	dir, err := ioutil.TempDir("", "close")
+	defer os.RemoveAll(dir)
 	if err != nil {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
+    pwd, _ := os.Getwd()
 	os.Chdir(dir)
 	os.MkdirAll("issues"+sops+"Test", 0700)
-	defer os.RemoveAll(dir)
 
 	// On MacOS, /tmp is a symlink, which causes GetDirectory() to return
 	// a different path than expected in these tests, so make the issues
@@ -111,6 +124,10 @@ func TestCloseBugByIdentifier(t *testing.T) {
 		t.Error("Could not set environment variable: " + err.Error())
 		return
 	}
+    err = ioutil.WriteFile(dir+sops+"issues"+sops+"Test"+sops+"Identifier", []byte("TestBug\n"), 0660) // not needed for this test
+	if err != nil {
+        t.Error("Error writing Identifier: " + err.Error())
+	}
 
 	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
 	// Assert that there's 1 bug to start, otherwise what are we closing?
@@ -119,13 +136,13 @@ func TestCloseBugByIdentifier(t *testing.T) {
 		return
 	}
 	stdout, stderr := captureOutput(func() {
-		Close(argumentList{"1"}, config)
+		Close(argumentList{"TestBug"}, config)
 	}, t)
 	if stderr != "" {
-		t.Error("Unexpected output on STDERR for Test-bug")
+		t.Error("Unexpected output on STDERR for TestBug")
 	}
 	if stdout != fmt.Sprintf("Removing %s%sissues%sTest\n", dir, sops, sops) {
-		t.Error("Unexpected output on STDOUT for Test-bug")
+		t.Error("Unexpected output on STDOUT for TestBug")
 		fmt.Printf("Got %s\nExpected: %s\n", stdout, dir)
 	}
 	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
@@ -137,6 +154,7 @@ func TestCloseBugByIdentifier(t *testing.T) {
 	if len(issuesDir) != 0 {
 		t.Error(fmt.Sprintf("Unexpected number %v is not %v issues in issues dir\n", len(issuesDir), 0))
 	}
+    os.Chdir(pwd)
 }
 
 func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
@@ -147,6 +165,7 @@ func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
+    pwd, _ := os.Getwd()
 	os.Chdir(dir)
 	os.Setenv("FIT", dir)
 	os.MkdirAll("issues"+sops+"Test", 0700)
@@ -175,6 +194,7 @@ func TestCloseMultipleIndexesWithLastIndex(t *testing.T) {
 		fmt.Printf("%s\n\n", stderr)
 		t.Error(fmt.Sprintf("Unexpected number %v is not %v issues in issues dir\n", len(issuesDir), 1))
 	}
+    os.Chdir(pwd)
 }
 
 func TestCloseMultipleIndexesAtOnce(t *testing.T) {
@@ -185,6 +205,7 @@ func TestCloseMultipleIndexesAtOnce(t *testing.T) {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
+    pwd, _ := os.Getwd()
 	os.Chdir(dir)
 	os.Setenv("FIT", dir)
 	os.MkdirAll("issues"+sops+"Test", 0700)
@@ -216,4 +237,5 @@ func TestCloseMultipleIndexesAtOnce(t *testing.T) {
 	if issuesDir[0].Name() != "Test3" {
 		t.Error("Closed incorrect issue when closing multiple issues.")
 	}
+    os.Chdir(pwd)
 }

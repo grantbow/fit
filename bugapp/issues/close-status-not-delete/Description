@@ -8,10 +8,14 @@ rm -rf foo
 
 What should happen:
 
-bug status close foo
+Default behavior of deleting doesn't support historical lookup.
+The issues system may be used as a supplement, not a replacement
+for some other issue tracking system.
 
-new command 
-bug archive
-could `git mv 1` to another subfolder like issues/archive/1
-      or to prevent being read as an issue issues-archive/1
+optionally: bug status close foo
+
+    and/or add a new command 
+    bug archive
+    could `git mv 1` to another subfolder like issues-archive/1
+        to prevent being read as an issue
 

@@ -79,6 +79,7 @@ func TestIdGenerate(t *testing.T) {
 	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "idgit")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -111,6 +112,7 @@ func TestIdGenerate(t *testing.T) {
 	if len(file) == 0 {
 		t.Error("Expected an Identifier file")
 	}
+    os.Chdir(pwd)
 }
 func TestIdsAssigned(t *testing.T) {
 	runidsassigned(argumentList{""}, "Ids used in current tree", t)

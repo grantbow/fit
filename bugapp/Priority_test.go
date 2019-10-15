@@ -34,6 +34,7 @@ func TestPriority(t *testing.T) {
 	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "prioritygit")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -79,4 +80,5 @@ func TestPriority(t *testing.T) {
 	if len(file) == 0 {
 		t.Error("Expected a Priority file")
 	}
+    os.Chdir(pwd)
 }

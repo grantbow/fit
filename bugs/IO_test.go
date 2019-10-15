@@ -14,6 +14,7 @@ func TestBugWrite(t *testing.T) {
 	config := Config{}
 	config.DescriptionFileName = "Description"
 	var b *Bug
+    pwd, _ := os.Getwd()
 	if dir, err := ioutil.TempDir("", "BugWrite"); err == nil {
 		os.Chdir(dir)
 		b = &Bug{Dir: Directory(dir + sops + "issues" + sops + "Test-bug"), DescriptionFileName: config.DescriptionFileName}
@@ -43,6 +44,7 @@ func TestBugWrite(t *testing.T) {
 	if string(desc) != string("Hello there, Mr. Test") {
 		t.Error("Incorrect description file after writing to bug")
 	}
+    os.Chdir(pwd)
 }
 
 /*

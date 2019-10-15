@@ -13,11 +13,14 @@ type tester struct {
 	// copied and slightly modified from Bugs.go
 	dir string
 	bug *bugs.Bug
+	pwd string
 }
 
 func (t *tester) Setup() {
 	config := bugs.Config{}
-	gdir, err := ioutil.TempDir("", "issuetest")
+	gdir, err := ioutil.TempDir("", "issuetestsetup")
+    pwd, _ := os.Getwd()
+    t.pwd = pwd
 	if err == nil {
 		os.Chdir(gdir)
 		t.dir = gdir
@@ -37,6 +40,7 @@ func (t *tester) Setup() {
 	t.bug = b
 }
 func (t *tester) Teardown() {
+    os.Chdir(t.pwd)
 	os.RemoveAll(t.dir)
 }
 

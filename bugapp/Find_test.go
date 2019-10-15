@@ -46,6 +46,7 @@ func TestFindSubcommands(t *testing.T) {
 	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "findgit")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -77,4 +78,5 @@ func TestFindSubcommands(t *testing.T) {
 	}, t)
 	runfind(argumentList{"tags", "foo"}, "Issue 1: no_id_bug \\(foo\\)\n", t)
 	runfind(argumentList{"tags", "matchstring"}, "", t) // still not found
+    os.Chdir(pwd)
 }

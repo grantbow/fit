@@ -43,6 +43,7 @@ func TestCreateWithoutIssues(t *testing.T) {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
+    pwd, _ := os.Getwd()
 	os.Chdir(dir)
 	// this test should comment MkdirAll.
 	// Oddly that causes a test halt with "exit status 1".
@@ -81,6 +82,7 @@ func TestCreateWithoutIssues(t *testing.T) {
 		t.Error("Unexpected number of issues in issues dir\n")
 	}
 	//fmt.Print("4")
+	os.Chdir(pwd)
 }
 
 // Test a very basic invocation of "Create" with the -n
@@ -94,6 +96,7 @@ func TestCreateNoEditor(t *testing.T) {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
+    pwd, _ := os.Getwd()
 	os.Chdir(dir)
 	os.MkdirAll("issues", 0700)
 	defer os.RemoveAll(dir)
@@ -146,8 +149,9 @@ func TestCreateNoEditor(t *testing.T) {
 	}
 
 	///// second issue
-	ioutil.WriteFile(dir+sops+"ddf", []byte("content"), 0755)
-	config.DefaultDescriptionFile = dir + sops + "ddf"
+	config.DefaultDescriptionFile = dir + sops + "ddf" // put ABOVE issues so len(issuesDir) check later is unaltered
+	ioutil.WriteFile(config.DefaultDescriptionFile,
+        []byte("text used in default description file (ddf) issue template"), 0755)
 
 	stdout, stderr = captureOutput(func() {
 		Create(argumentList{"-n", "--generate-id", "Test2", "bug"}, config)
@@ -183,6 +187,7 @@ func TestCreateNoEditor(t *testing.T) {
 	if len(file) == 0 {
 		t.Error("Unexpected empty file for Test2 bug")
 	}
+	os.Chdir(pwd)
 }
 
 /* currently hangs spawning editor

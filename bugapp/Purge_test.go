@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"regexp"
 	"testing"
 )
 
@@ -21,6 +22,7 @@ func TestPurgeNoEditor(t *testing.T) {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
+    pwd, _ := os.Getwd()
 	os.Chdir(dir)
 	os.MkdirAll("issues", 0700)
 	defer os.RemoveAll(dir)
@@ -68,12 +70,15 @@ func TestPurgeNoEditor(t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-	expected := "Removing issues" + sops + "Test-bug" + sops + "\n"
-	if stdout != expected {
+	expected := "Removing issues.Test-bug."
+	re := regexp.MustCompile(expected)
+	matched := re.MatchString(stdout)
+	if !matched {
 		t.Error("Unexpected output on STDOUT")
 		fmt.Printf("Expected: %s\nGot %s\n", expected, stdout)
 	}
 	if len(issuesDir) != 0 {
 		t.Errorf("Expected 0 issues : %v\n", dirDumpFI(issuesDir))
 	}
+    os.Chdir(pwd)
 }

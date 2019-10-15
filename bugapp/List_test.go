@@ -31,6 +31,7 @@ func TestList(t *testing.T) {
 	config.DescriptionFileName = "Description"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "listgit")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -84,4 +85,5 @@ func TestList(t *testing.T) {
 	//	t.Error("Expected a Milestone file")
 	//}
 	//runfind(argumentList{"milestone", "foo"}, "Issue 1: no_list_bug\n", t)
+    os.Chdir(pwd)
 }

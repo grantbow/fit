@@ -21,6 +21,7 @@ func TestTwilio(t *testing.T) {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
+    pwd, _ := os.Getwd()
 	os.Chdir(dir)
 	os.MkdirAll("issues", 0700)
 	defer os.RemoveAll(dir)
@@ -56,24 +57,7 @@ func TestTwilio(t *testing.T) {
 	if len(issuesDir) != 1 {
 		t.Errorf("Expected 1 issue  : %v\n", dirDumpFI(issuesDir))
 	}
+    // TODO: test
 
-	stdout, stderr = captureOutput(func() {
-		Purge(config)
-	}, t)
-	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
-	if err != nil {
-		t.Error("Could not purge issues directory")
-		return
-	}
-	if stderr != "" {
-		t.Error("Unexpected error: " + stderr)
-	}
-	expected := "Removing issues/Test-bug/\n"
-	if stdout != expected {
-		t.Error("Unexpected output on STDOUT")
-		fmt.Printf("Expected: %s\nGot %s\n", expected, stdout)
-	}
-	if len(issuesDir) != 0 {
-		t.Errorf("Expected 0 issues : %v\n", dirDumpFI(issuesDir))
-	}
+    os.Chdir(pwd)
 }

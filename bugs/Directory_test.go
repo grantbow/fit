@@ -12,6 +12,7 @@ import (
 func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 	var gdir string
 	gdir, err := ioutil.TempDir("", "rootdirbug")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -37,12 +38,14 @@ func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 	if dir != expected {
 		t.Errorf("Expected directory %s from environment variable, got %s", expected, string(dir))
 	}
+    os.Chdir(pwd)
 }
 
 func TestMissingRootDirerWithEnvironmentVariable(t *testing.T) {
 	var gdir string
 	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -64,12 +67,14 @@ func TestMissingRootDirerWithEnvironmentVariable(t *testing.T) {
 	if dir != "" {
 		t.Errorf("RootDirer %s environment variable %s", dir, gdir+fitdir)
 	}
+    os.Chdir(pwd)
 }
 
 func TestRootDirerFromDirectoryTree(t *testing.T) {
 	var gdir string
 	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		os.Unsetenv("FIT")
@@ -100,12 +105,14 @@ func TestRootDirerFromDirectoryTree(t *testing.T) {
 	if dir != Directory(gdir) {
 		t.Error("Did not get proper directory according to walking the tree: " + dir)
 	}
+    os.Chdir(pwd)
 }
 
 func TestNoRoot(t *testing.T) {
 	var gdir string
 	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -120,7 +127,7 @@ func TestNoRoot(t *testing.T) {
 	if dir := RootDirer(config); dir != "" {
 		t.Error("Found unexpected issues directory." + string(dir))
 	}
-
+    os.Chdir(pwd)
 }
 
 // TestIssuesDirer was deprecated
@@ -129,6 +136,7 @@ func TestNoIssuesDirer(t *testing.T) {
 	var gdir string
 	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -144,10 +152,10 @@ func TestNoIssuesDirer(t *testing.T) {
 	if dir := IssuesDirer(config); dir != "" {
 		t.Error("Found unexpected issues directory." + string(dir))
 	}
-
+    os.Chdir(pwd)
 }
 func TestShortName(t *testing.T) {
-	var dir Directory = "/hello/i/am/a/test"
+	var dir Directory = dops + "hello"+dops+"i"+dops+"am"+dops+"a"+dops+"test"
 	if short := dir.ShortNamer(); short != Directory("test") {
 		t.Error("Unexpected short name: " + string(short))
 	}

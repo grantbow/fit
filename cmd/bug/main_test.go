@@ -72,13 +72,13 @@ func TestBugArgParser(t *testing.T) {
 	config := Config{}
 	config.DescriptionFileName = "Description"
 	var gdir string
+    pwd, _ := os.Getwd()
 	gdir, err := ioutil.TempDir("", "main")
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
-		// OS X, and it causes the directory checks to fail..
+		// OS X, and it causes the directory checks to fail.
 		gdir, _ = os.Getwd()
-		defer os.RemoveAll(gdir)
 	} else {
 		t.Error("Failed creating temporary directory for detect")
 		return
@@ -120,6 +120,12 @@ func TestBugArgParser(t *testing.T) {
 			t.Errorf("Unexpected usage, wanted to match %q, got %q", ``, tt.input) // tt.output
 		}
 	}
+    // cleanup
+    os.Chdir(pwd)
+    err = os.RemoveAll(gdir)
+	if err != nil {
+		t.Error("Could not RemoveAll("+string(gdir)+") : " + err.Error())
+    }
 }
 
 func captureOutput(f func(), t *testing.T) (string, string) {
@@ -176,13 +182,13 @@ func TestMain(m *testing.M) {
 
 func TestCliArgs(t *testing.T) {
 	var gdir string
+    pwd, _ := os.Getwd()
 	gdir, err := ioutil.TempDir("", "main")
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
 		// OS X, and it causes the directory checks to fail..
 		gdir, _ = os.Getwd()
-		defer os.RemoveAll(gdir)
 	} else {
 		t.Error("Failed creating temporary directory for detect")
 		return
@@ -220,5 +226,11 @@ func TestCliArgs(t *testing.T) {
 			}
 		})
 	}
+    // cleanup
 	os.Remove(binarypath) // created in TestMain
+    os.Chdir(pwd)
+    err = os.RemoveAll(gdir)
+	if err != nil {
+		t.Error("Could not RemoveAll("+string(gdir)+") : " + err.Error())
+    }
 }

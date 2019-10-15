@@ -22,11 +22,14 @@ func Close(args argumentList, config bugs.Config) {
 			dir := bug.Direr()
 			bugsToClose = append(bugsToClose, string(dir))
 		} else {
-			fmt.Fprintf(os.Stderr, "Could not close bug %s: %s\n", bugID, err)
+			fmt.Fprintf(os.Stderr, "Could not close bug %s: %s\n", bugID, err.Error())
 		}
 	}
 	for _, dir := range bugsToClose {
 		fmt.Printf("Removing %s\n", dir)
-		os.RemoveAll(dir)
+        err := os.RemoveAll(dir)
+        if err != nil {
+            fmt.Fprintf(os.Stderr, "Error removing %s : %s\n", dir, err.Error())
+        }
 	}
 }

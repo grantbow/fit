@@ -20,6 +20,7 @@ func TestRoadmapLess(t *testing.T) {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
+    pwd, _ := os.Getwd()
 	os.Chdir(dir)
 	os.MkdirAll("issues", 0700)
 	defer os.RemoveAll(dir)
@@ -77,6 +78,7 @@ func TestRoadmapLess(t *testing.T) {
 		fmt.Printf("Expected stdout: %s\nGot: %s\n", expected, stdout)
 		fmt.Printf("Expected stderr: %s\nGot: %s\n", "", stderr)
 	}
+    os.Chdir(pwd)
 }
 
 //func TestRoadmap(t *testing.T) {

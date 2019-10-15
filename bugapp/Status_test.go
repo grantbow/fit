@@ -34,6 +34,7 @@ func TestStatus(t *testing.T) {
 	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "statusgit")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -79,4 +80,5 @@ func TestStatus(t *testing.T) {
 	if len(file) == 0 {
 		t.Error("Expected a Status file")
 	}
+    os.Chdir(pwd)
 }

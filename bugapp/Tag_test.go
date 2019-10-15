@@ -67,6 +67,7 @@ func TestTag(t *testing.T) {
 	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "taggit")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -123,6 +124,7 @@ func TestTag(t *testing.T) {
 	runtag(argumentList{"3", "baz"}, "", t) // no cmd as argument
 	// --rm a tag
 	runtag(argumentList{"--rm", "1", "bar"}, "", t) // no cmd as argument
+    os.Chdir(pwd)
 }
 func TestTagsAssigned(t *testing.T) {
 	runtagsassigned(argumentList{""}, "Tags used in current tree", t)

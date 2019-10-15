@@ -13,6 +13,7 @@ func TestEnvGit(t *testing.T) {
 	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "envgit")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -42,4 +43,5 @@ func TestEnvGit(t *testing.T) {
 		t.Error("Unexpected output on STDOUT for bugapp/Env_test")
 		fmt.Printf("Expected: %s\nGot: %s\n", expected, stdout)
 	}
+	os.Chdir(pwd)
 }

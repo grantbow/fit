@@ -11,12 +11,15 @@ import (
 type tester struct {
 	dir string
 	bug *Bug
+	pwd string
 }
 
 func (t *tester) Setup() {
 	config := Config{}
 	config.DescriptionFileName = "Description"
 	gdir, err := ioutil.TempDir("", "issuetest")
+    pwd, _ := os.Getwd()
+    t.pwd = pwd
 	if err == nil {
 		os.Chdir(gdir)
 		t.dir = gdir
@@ -36,6 +39,7 @@ func (t *tester) Setup() {
 	t.bug = b
 }
 func (t *tester) Teardown() {
+    os.Chdir(t.pwd)
 	os.RemoveAll(t.dir)
 }
 
@@ -79,6 +83,7 @@ func TestNewBug(t *testing.T) {
 	config := Config{}
 	config.DescriptionFileName = "Description"
 	gdir, err := ioutil.TempDir("", "newbug")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -97,6 +102,7 @@ func TestNewBug(t *testing.T) {
 	if b.Dir != IssuesDirer(config)+Directory(os.PathSeparator)+TitleToDir("I am a test") {
 		t.Error("Unexpected directory when creating New bug")
 	}
+    os.Chdir(pwd)
 }
 
 func TestSetDescription(t *testing.T) {

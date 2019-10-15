@@ -43,10 +43,10 @@ func RootDirer(config Config) Directory {
 
 	// There's no environment variable and no issues
 	// directory, so walk up the tree until we find one
-	pieces := strings.Split(wd, string(os.PathSeparator))
+	pieces := strings.Split(wd, sops) // sops is string(os.PathSeparator)
 
 	for i := len(pieces); i > 0; i -= 1 {
-		dir := strings.Join(pieces[0:i], string(os.PathSeparator))
+		dir := strings.Join(pieces[0:i], sops)
 		if dirinfo, err := os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
 			config.BugDir = dir
 			os.Chdir(dir)
@@ -63,7 +63,7 @@ func IssuesDirer(config Config) Directory {
 	if root == "" {
 		return root
 	}
-	return Directory(root + Directory(os.PathSeparator) + "issues")
+	return Directory(root + dops + "issues") // dops is Directory(string(os.PathSeparator))
 	/* edited the following
 	   when changed from /issues/ to /issues
 	   $ grep -ils issuesdirer ...
@@ -87,14 +87,14 @@ func IssuesDirer(config Config) Directory {
 
 // ShortNamer returns the directory name of a bug
 func (d Directory) ShortNamer() Directory {
-	pieces := strings.Split(string(d), string(os.PathSeparator))
+	pieces := strings.Split(string(d), sops)
 	return Directory(pieces[len(pieces)-1])
 }
 
 // ToTitle decodes the human string from the filesystem directory name.
 func (d Directory) ToTitle() string {
 	multidash := regexp.MustCompile("([_]*)-([-_]*)")
-	dashReplacement := strings.Replace(string(d), " ", string(os.PathSeparator), -1)
+	dashReplacement := strings.Replace(string(d), " ", sops, -1)
 	return multidash.ReplaceAllStringFunc(dashReplacement, func(match string) string {
 		if match == "-" {
 			return " "
@@ -111,7 +111,7 @@ func (d Directory) ModTime() time.Time {
 	var t time.Time
 	stat, err := os.Stat(string(d))
 	if err != nil {
-		panic("Directory " + string(d) + " is not a directory.")
+		panic("Directory " + string(d) + " stat error : " + err.Error())
 	}
 
 	if stat.IsDir() == false {
@@ -119,13 +119,14 @@ func (d Directory) ModTime() time.Time {
 	}
 
 	dir, _ := os.Open(string(d))
+    defer dir.Close() // discards error for now
 	files, _ := dir.Readdir(-1)
 	if len(files) == 0 {
 		t = stat.ModTime()
 	}
 	for _, file := range files {
 		if file.IsDir() {
-			mtime := (d + Directory(os.PathSeparator) + Directory(file.Name())).ModTime()
+			mtime := (d + dops + Directory(file.Name())).ModTime()
 			if mtime.After(t) {
 				t = mtime
 			}

@@ -32,6 +32,7 @@ func TestMilestone(t *testing.T) {
 	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "milestonegit")
+    pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -77,4 +78,5 @@ func TestMilestone(t *testing.T) {
 		t.Error("Expected a Milestone file")
 	}
 	runfind(argumentList{"milestone", "foo"}, "Issue 1: no_miles_bug\n", t)
+    os.Chdir(pwd)
 }

@@ -18,6 +18,7 @@ if [ -f profile.out ]; then
 fi
 cd ../..
 
+#for d in scm; do # bugapp bugs scm
 for d in $(find ./* -maxdepth 0 -type d); do
     if ls $d/*_test.go &> /dev/null; then
         if [[ $d = *issues* ]] ; then
@@ -25,7 +26,7 @@ for d in $(find ./* -maxdepth 0 -type d); do
         fi
         echo "testing in $d"
         cd $d
-        go test -v -coverprofile=profile.out -covermode=atomic
+        go test -v -race -coverprofile=profile.out -covermode=atomic
         if [ -f profile.out ]; then
             cat profile.out >> ../coverage.txt
             rm profile.out
