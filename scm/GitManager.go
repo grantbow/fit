@@ -195,12 +195,11 @@ func (mgr GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config 
 	}
 	cmd = exec.Command("git", "commit", "-o", string(dir), "-F", file.Name(), "-q")
 	if err := cmd.Run(); err != nil {
-		// If nothing was added commit will have an error,
-		// but we don't care it just means there's nothing
-		// to commit.
-		// but the stdout to test could be captured
-		//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", err) // $?
-		fmt.Printf("No new issues committed.\n") // assumes this error, same for HgManager
+		// If nothing was added commit will have an error.
+		// in some cases we didn't care, it just meant there's nothing to commit.
+		// the stdout to test could be captured
+		//fmt.Printf("No new issues committed.\n") // assumed this error incorrectly, same for HgManager
+		fmt.Printf("git commit error %v\n", err.Error()) // $?
 		return nil
 	}
 	return nil

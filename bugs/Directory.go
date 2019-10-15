@@ -15,10 +15,13 @@ func RootDirer(config Config) Directory {
 	dir := os.Getenv("FIT") // new first
 	if dir != "" {
 		if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
-			config.BugDir = dir
-			os.Chdir(dir)
-			return Directory(dir)
-			// better to start looking rather than
+	        if dirinfo, err = os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
+                // has an issues dir
+			    config.BugDir = dir
+			    os.Chdir(dir)
+			    return Directory(dir)
+            }
+			// better to fall through and start looking rather than
 			//} else {
 			//	return ""
 		}

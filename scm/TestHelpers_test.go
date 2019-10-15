@@ -43,7 +43,7 @@ func runCmd(cmd string, options ...string) (string, error) {
 func assertLogs(tester ManagerTester, t *testing.T, titles []map[string]bool, diffs []string) {
 	logs, err := tester.Loggers()
 	if err != nil {
-		t.Error("Could not get scm logs" + err.Error())
+        t.Error("scm Loggers error : " + err.Error())
 		return
 	}
 
@@ -85,7 +85,7 @@ func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiff
 	err := tester.Setup()
 	defer tester.TearDown()
 	if err != nil {
-		t.Error("Could not initialize repo")
+		t.Error("Could not ihnitialize repo")
 		return
 	}
 
@@ -121,7 +121,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	config.DescriptionFileName = "Description"
 	err := tester.Setup()
 	if err != nil {
-		panic("Something went wrong trying to initialize git:" + err.Error())
+		panic("Something went wrong trying to initialize the scm : " + err.Error())
 	}
 	defer tester.TearDown()
 	m := tester.Manager()
@@ -339,6 +339,8 @@ func scmRetitle(Args argumentList, config bugs.Config) {
 	newDir := bugs.IssuesDirer(config) + dops + bugs.TitleToDir(strings.Join(Args[1:], " "))
 	fmt.Printf("Moving %s to %s\n", currentDir, newDir)
 	err = os.Rename(string(currentDir), string(newDir))
+        // uses os.rename
+        // not git-mv and/or hg rename
 	if err != nil {
 		fmt.Printf("Error moving directory\n")
 	}

@@ -29,7 +29,7 @@ func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 		return
 	}
 	//os.Mkdir("issues", 0755)
-	expected := Directory(gdir + string(os.PathSeparator) + "abc")
+	expected := Directory(gdir + sops + "abc")
 	os.Setenv("FIT", string(expected))
 	defer os.Unsetenv("FIT")
 	// FIT exists and overrides wd
@@ -57,16 +57,18 @@ func TestMissingRootDirerWithEnvironmentVariable(t *testing.T) {
 		return
 	}
 	// FIT/issues missing so doesn't override wd
-	fitdir := ".." + string(os.PathSeparator) + "fit"
+	fitdir := ".." + sops + "fit"
 	os.Mkdir(fitdir, 0755) // missing issues directory
-	defer os.RemoveAll(gdir + fitdir)
 	//os.Mkdir("../fit/issues", 0755)
-	os.Setenv("FIT", gdir+fitdir)
+	os.Setenv("FIT", gdir + sops + fitdir)
 	defer os.Unsetenv("FIT")
 	dir := RootDirer(config)
 	if dir != "" {
-		t.Errorf("RootDirer %s environment variable %s", dir, gdir+fitdir)
+		t.Errorf("RootDirer %s should be empty from environment variable %s", 
+            dir, 
+            gdir + sops + fitdir)
 	}
+	os.RemoveAll(fitdir)
     os.Chdir(pwd)
 }
 
