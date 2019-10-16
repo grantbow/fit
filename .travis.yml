@@ -21,6 +21,8 @@ addons:
             - mercurial
     
 before_install:
+    - git config user.name 'Example User' 
+    - git config user.email 'example@example.com'
     - git config -l
     - git --version
     - |

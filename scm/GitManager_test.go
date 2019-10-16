@@ -84,7 +84,7 @@ func (g GitTester) StageFile(file string) error {
 func (g *GitTester) Setup() error {
     pwd, _ := os.Getwd()
     g.pwd = pwd
-	if gdir, err := ioutil.TempDir("", "gitbug"); err == nil {
+	if gdir, err := ioutil.TempDir("", "gitmanager"); err == nil {
 		g.workdir = gdir
 		os.Chdir(g.workdir)
 		os.Unsetenv("FIT")
@@ -140,7 +140,7 @@ func (g GitTester) Manager() SCMHandler {
 }
 
 func TestGitBugRenameCommits(t *testing.T) {
-	t.Skip("windows failure - see scm/GitManager_test.go+139")
+	t.Skip("windows failure - see scm/GitManager_test.go+143")
     // TODO: finish making tests on Windows pass then redo this test
     // This test fakes output of the main bug command then tries to rename
     // what looks like with os.rename and not hg rename. Maybe scrap the test
@@ -199,7 +199,7 @@ func TestGitManagerPurge(t *testing.T) {
 	if git == false {
 		t.Skip("WARN git executable not found")
 	}
-	t.Skip("windows failure - see scm/GitManager_test.go+202")
+	t.Skip("windows failure - see scm/GitManager_test.go+182")
     // TODO: finish making tests on Windows pass then redo this test
     // the error codes need handling
 	g := GitTester{}
@@ -220,7 +220,7 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 
 	err := tester.Setup()
 	if err != nil {
-		panic("Something went wrong trying to initialize git:" + err.Error())
+		panic("Something went wrong trying to initialize git : " + err.Error())
 	}
 	defer tester.TearDown()
 	m := tester.Manager()
@@ -230,7 +230,7 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 	}
 	//runCmd("bug", "create", "-n", "Test", "bug")
 	os.MkdirAll("issues"+sops+"Test-bug", 0755)
-	ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
+	ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Description", []byte("desc1"), 0644)
 	if err = ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Identifier", []byte("\n\nGitHub:#TestBug"), 0644); err != nil {
 		t.Error("Could not write Test-bug" + sops + "Identifier file")
 		return
@@ -238,15 +238,15 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 
 	//runCmd("bug", "create", "-n", "Test", "Another", "bug")
 	os.MkdirAll("issues"+sops+"Test-Another-bug", 0755)
-	ioutil.WriteFile("issues"+sops+"Test-Another-bug"+sops+"Description", []byte(""), 0644)
+	ioutil.WriteFile("issues"+sops+"Test-Another-bug"+sops+"Description", []byte("desc2"), 0644)
 	if err = ioutil.WriteFile("issues"+sops+"Test-Another-bug"+sops+"Identifier", []byte("\n\nGITHuB:  #Whitespace   "), 0644); err != nil {
 		t.Error("Could not write Test-Another-bug" + sops + "Identifier file")
 		return
 	}
 
-	// Commit the file, so that we can close it..
+	// Add and commit the file, so that we can close it..
 	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Adding commit", config)
-	// Delete the bug
+	// Delete the bugs
 	os.RemoveAll(tester.WorkDir() + sops + "issues" + sops + "Test-bug")
 	os.RemoveAll(tester.WorkDir() + sops + "issues" + sops + "Test-Another-bug")
 	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Removal commit", config)

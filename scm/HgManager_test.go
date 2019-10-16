@@ -75,7 +75,7 @@ func (h HgTester) StageFile(file string) error {
 func (h *HgTester) Setup() error {
     pwd, _ := os.Getwd()
     h.pwd = pwd
-	if dir, err := ioutil.TempDir("", "hgbug"); err == nil {
+	if dir, err := ioutil.TempDir("", "hgmanager"); err == nil {
 		h.workdir = dir
 		os.Chdir(h.workdir)
 	} else {

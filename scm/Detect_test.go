@@ -4,6 +4,7 @@ import (
 	"github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
+	"reflect"
 	"testing"
 )
 
@@ -120,24 +121,7 @@ func TestDetectHg(t *testing.T) {
 func TestDetectNone(t *testing.T) {
 	t.Skip("windows failure - see scm/Detect_test.go+121")
     // TODO: finish making tests on Windows pass then redo this test
-    // --- FAIL: TestDetectNone (0.00s)
-    //panic: runtime error: invalid memory address or nil pointer dereference [recovered]
-    //        panic: runtime error: invalid memory address or nil pointer dereference
-    //        [signal 0xc0000005 code=0x0 addr=0x18 pc=0x5db701]
-    //
-    //goroutine 10 [running]:
-    //testing.tRunner.func1(0xc0000a4800)
-    //  c:/go/src/testing/testing.go:874 +0x6a6
-    //  panic(0x614ae0, 0x798c30)
-    //  c:/go/src/runtime/panic.go:679 +0x1c0
-    //  scm.TestDetectNone(0xc0000a4800)
-    //  (...)/bug/scm/Detect_test.go:142 +0x2a1   <--- moved down now after these comments
-    //  testing.tRunner(0xc0000a4800, 0x6530e8)
-    //  c:/go/src/testing/testing.go:909 +0x1a1
-    //  created by testing.(*T).Run
-    //  c:/go/src/testing/testing.go:960 +0x659
-    //  exit status 2
-    //  FAIL    scm     0.488s
+    // seems to be run below a directory with a .git
 
 	var config bugs.Config
 	config.DescriptionFileName = "Description"
@@ -160,14 +144,14 @@ func TestDetectNone(t *testing.T) {
 	options := make(map[string]bool)
 	handler, _, err := DetectSCM(options, config)
 	if err == nil {
-		t.Error("Unexpected success detecting repo type: " + err.Error())
+		t.Error("Unexpected success detecting repo type, no error.")
 	}
 	switch handler.(type) {
 	case nil:
 		// nil is what we expect, don't fall through
 		// to the error
 	default:
-		t.Error("Unexpected SCMHandler found")
+        t.Error("Unexpected SCMHandler found, type : " + reflect.TypeOf(handler).String())
 	}
     os.Chdir(pwd)
 }

@@ -273,7 +273,7 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	}
 	err = m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "", config) // no changes
 	if err != nil {                                                            // should NOT be a nil
-		t.Error("Expected no commit error.")
+        t.Error("Expected no commit error : " + err.Error())
 	}
 }
 

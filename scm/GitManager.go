@@ -193,6 +193,7 @@ func (mgr GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config 
 		}
 		fmt.Fprintf(file, "%s%s\n", pref, msg)
 	}
+    //fmt.Print("debug commit : git", "commit", "-o", string(dir), "-F", file.Name(), "-q\n")
 	cmd = exec.Command("git", "commit", "-o", string(dir), "-F", file.Name(), "-q")
 	if err := cmd.Run(); err != nil {
 		// If nothing was added commit will have an error.
@@ -200,9 +201,10 @@ func (mgr GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config 
 		// the stdout to test could be captured
 		//fmt.Printf("No new issues committed.\n") // assumed this error incorrectly, same for HgManager
 		fmt.Printf("git commit error %v\n", err.Error()) // $?
-		return nil
-	}
-	return nil
+		return err
+	} else {
+	    return nil
+    }
 }
 
 // SCMTyper returns "git".
