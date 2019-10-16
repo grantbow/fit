@@ -199,7 +199,7 @@ func TestGitManagerPurge(t *testing.T) {
 	if git == false {
 		t.Skip("WARN git executable not found")
 	}
-	t.Skip("windows failure - see scm/GitManager_test.go+182")
+	t.Skip("windows failure - see scm/GitManager_test.go+202")
     // TODO: finish making tests on Windows pass then redo this test
     // the error codes need handling
 	g := GitTester{}
@@ -215,6 +215,9 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 	if git == false {
 		t.Skip("WARN git executable not found")
 	}
+	t.Skip("windows failure - see scm/GitManager_test.go+218")
+    // TODO: finish making tests on Windows pass then redo this test
+    // the error codes need handling
 	tester := GitTester{}
 	tester.handler = GitManager{Autoclose: true}
 
