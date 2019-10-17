@@ -110,9 +110,10 @@ func (b Bug) Direr() Directory {
 }
 
 // LoadBug assigns a directory to an issue.
-func (b *Bug) LoadBug(dir Directory) {
+func (b *Bug) LoadBug(dir Directory, config Config) {
 	b.Dir = dir
 	b.modtime = int((dir.ModTime()).Unix())
+	b.DescriptionFileName = config.DescriptionFileName
 }
 
 // Title returns a string with the name of an issue and optionally present Status and Priority.
@@ -157,6 +158,7 @@ func (b Bug) Description() string {
 	value := ""
 	if _, staterr := os.Stat(df); staterr == nil {
 		v, readerr := ioutil.ReadFile(df)
+		//fmt.Printf("debug %v %v \n", b.DescriptionFileName, v)
 		if readerr == nil {
 			value = string(v)
 		} else if perr, ok := staterr.(*os.PathError); ok {
@@ -262,7 +264,7 @@ func (b Bug) ViewBug() {
 	}
 
 	fmt.Printf("Title: %s\n", b.Title(""))
-	fmt.Printf("Description:%s\n", b.Description())
+	fmt.Printf("Description: %s\n", b.Description())
 
 	if status := b.Status(); status != "" {
 		fmt.Printf("Status: %s\n", status)

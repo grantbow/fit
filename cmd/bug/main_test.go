@@ -39,15 +39,15 @@ var setupbugargtests = []struct {
 	input  string
 	output string
 }{
-	{"", `Usage:`},
+	{"", `usage:`},
 	{"--version", `version`},
 	{"pwd", `issues`},
 	{"env", `Editor`},
 	{"find", `Usage:`},
-	{"status", `Usage:`},
+	//{"status", `Usage:`},
 	{"list", `list`},
-	{"help", `Usage: help`},
-	{"pwd --help aha yes", `Usage:`},
+	{"help", `usage:`},
+	{"pwd --help aha yes", `usage:`},
 }
 
 var binaryname = "bug"
@@ -72,7 +72,7 @@ func TestBugArgParser(t *testing.T) {
 	config := Config{}
 	config.DescriptionFileName = "Description"
 	var gdir string
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	gdir, err := ioutil.TempDir("", "main")
 	if err == nil {
 		os.Chdir(gdir)
@@ -120,12 +120,12 @@ func TestBugArgParser(t *testing.T) {
 			t.Errorf("Unexpected usage, wanted to match %q, got %q", ``, tt.input) // tt.output
 		}
 	}
-    // cleanup
-    os.Chdir(pwd)
-    err = os.RemoveAll(gdir)
+	// cleanup
+	os.Chdir(pwd)
+	err = os.RemoveAll(gdir)
 	if err != nil {
-		t.Error("Could not RemoveAll("+string(gdir)+") : " + err.Error())
-    }
+		t.Error("Could not RemoveAll(" + string(gdir) + ") : " + err.Error())
+	}
 }
 
 func captureOutput(f func(), t *testing.T) (string, string) {
@@ -182,7 +182,7 @@ func TestMain(m *testing.M) {
 
 func TestCliArgs(t *testing.T) {
 	var gdir string
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	gdir, err := ioutil.TempDir("", "main")
 	if err == nil {
 		os.Chdir(gdir)
@@ -226,11 +226,11 @@ func TestCliArgs(t *testing.T) {
 			}
 		})
 	}
-    // cleanup
+	// cleanup
 	os.Remove(binarypath) // created in TestMain
-    os.Chdir(pwd)
-    err = os.RemoveAll(gdir)
+	os.Chdir(pwd)
+	err = os.RemoveAll(gdir)
 	if err != nil {
-		t.Error("Could not RemoveAll("+string(gdir)+") : " + err.Error())
-    }
+		t.Error("Could not RemoveAll(" + string(gdir) + ") : " + err.Error())
+	}
 }

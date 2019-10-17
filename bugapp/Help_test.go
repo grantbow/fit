@@ -24,37 +24,37 @@ func runhelp(t *testing.T, expected string, args ...string) {
 }
 
 func TestHelpNilArg(t *testing.T) {
-	runhelp(t, "Usage:.*")
+	runhelp(t, "usage:.*")
 }
 func TestHelpEmptyArg(t *testing.T) {
-	runhelp(t, "Usage:.*", "")
+	runhelp(t, "usage:.*", "")
 }
 func TestHelpAnyArg(t *testing.T) {
-	runhelp(t, "Usage:.*", "any")
+	runhelp(t, "usage:.*", "any")
 }
 func TestHelpHelpArg(t *testing.T) {
-	runhelp(t, "Usage:.*", "help")
+	runhelp(t, "usage:.*", "help")
 }
 func TestHelpValidArg(t *testing.T) {
-	runhelp(t, "Usage:.*", "help", "create")
-	runhelp(t, "Usage:.*", "help", "list")
-	runhelp(t, "Usage:.*", "help", "edit")
-	runhelp(t, "Usage:.*", "help", "status")
-	runhelp(t, "Usage:.*", "help", "priority")
-	runhelp(t, "Usage:.*", "help", "milestone")
-	runhelp(t, "Usage:.*", "help", "retitle")
-	runhelp(t, "Usage:.*", "help", "rm")
-	runhelp(t, "Usage:.*", "help", "find")
-	runhelp(t, "Usage:.*", "help", "purge")
-	runhelp(t, "Usage:.*", "help", "commit")
-	runhelp(t, "Usage:.*", "help", "env")
-	runhelp(t, "Usage:.*", "help", "dir")
-	runhelp(t, "Usage:.*", "help", "tag")
-	runhelp(t, "Usage:.*", "help", "roadmap")
-	runhelp(t, "Usage:.*", "help", "id")
-	runhelp(t, "Usage:.*", "help", "about")
+	runhelp(t, "usage:.*", "help", "create")
+	runhelp(t, "usage:.*", "help", "list")
+	runhelp(t, "usage:.*", "help", "edit")
+	runhelp(t, "usage:.*", "help", "status")
+	runhelp(t, "usage:.*", "help", "priority")
+	runhelp(t, "usage:.*", "help", "milestone")
+	runhelp(t, "usage:.*", "help", "retitle")
+	runhelp(t, "usage:.*", "help", "rm")
+	runhelp(t, "usage:.*", "help", "find")
+	runhelp(t, "usage:.*", "help", "purge")
+	runhelp(t, "usage:.*", "help", "commit")
+	runhelp(t, "usage:.*", "help", "env")
+	runhelp(t, "usage:.*", "help", "dir")
+	runhelp(t, "usage:.*", "help", "tag")
+	runhelp(t, "usage:.*", "help", "roadmap")
+	runhelp(t, "usage:.*", "help", "id")
+	runhelp(t, "usage:.*", "help", "about")
 	runhelp(t, "Bugs can be.*", "help", "identifiers")
 }
 func TestHelpValidArgs(t *testing.T) {
-	runhelp(t, "Usage:.*", "create", "list")
+	runhelp(t, "usage:.*", "create", "list")
 }

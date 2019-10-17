@@ -18,10 +18,10 @@ func Help(args ...string) {
 	} else {
 		cmd = args[1]
 	}
-	fmt.Printf("cmd: %v\n", cmd)
+	//fmt.Printf("cmd: %v\n", cmd) // debug
 	switch cmd {
 	case "create", "add", "new":
-		fmt.Printf("Usage: " + os.Args[0] + " create [-n] [options] Issue Title\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " create [-n] [options] Issue Title\n\n")
 		fmt.Printf(
 			`This will create an issue with the title Issue Title.  An editor 
 will be opened on Description automatically.  If your EDITOR
@@ -43,7 +43,7 @@ time as creating it. Valid options are:
 aliases for create: add new
 `, os.Args[0])
 	case "list", "view", "show", "display", "ls":
-		fmt.Printf("Usage: " + os.Args[0] + " list \n")
+		fmt.Printf("usage: " + os.Args[0] + " list \n")
 		fmt.Printf("       " + os.Args[0] + " list <BugID>...\n")
 		fmt.Printf("       " + os.Args[0] + " list <-m|--match> <regex>...\n")
 		fmt.Printf("       " + os.Args[0] + " list <-t|--tags> <BugID>...\n")
@@ -79,7 +79,7 @@ aliases for list: view show display ls
 `)
 
 	case "edit":
-		fmt.Printf("Usage: " + os.Args[0] + " edit <BugID> <Filename>\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " edit <BugID> <Filename>\n\n")
 		fmt.Printf(
 			`This will launch your standard editor to edit the Description 
 of the bug identified by BugID.  See "bug help ids" for
@@ -92,7 +92,7 @@ treated in a case insensitive manner, otherwise the filename is passed
 directly to your editor.
 `)
 	case "status":
-		fmt.Printf("Usage: " + os.Args[0] + " status <BugID> <NewStatus>\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " status <BugID> <NewStatus>\n\n")
 		fmt.Printf(
 			`This will edit or display the status of the bug identified by BugID.
 See "bug help ids" for what constitutes a BugID.
@@ -108,7 +108,7 @@ after the first line when editing a status. You can use this to provide
 further context on a status (for instance, why that status is setup.)
 `, os.Args[0])
 	case "priority":
-		fmt.Printf("Usage: " + os.Args[0] + " priority <BugID> <New Priority>\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " priority <BugID> <New Priority>\n\n")
 		fmt.Printf(
 			`This will edit or display the priority of BugID. See "bug help ids"
 for what constitutes a BugID.
@@ -127,7 +127,7 @@ instance, why that priority is set.) This command will preserve the
 explanation when updating a priority.
 `, os.Args[0])
 	case "milestone":
-		fmt.Printf("Usage: " + os.Args[0] + " milestone <BugID> <New Milestone>\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " milestone <BugID> <New Milestone>\n\n")
 		fmt.Printf(
 			`This will edit or display the milestone of the identified by BugID.
 See "%s help ids" for what constitutes a BugID.
@@ -149,7 +149,7 @@ milestone is set) with the command "bug edit milestone BugID"
 This command will preserve the explanation when updating a priority.
 `, os.Args[0], os.Args[0])
 	case "retitle", "mv", "rename", "relabel":
-		fmt.Printf("Usage: " + os.Args[0] + " retitle <BugID> <New Title>\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " retitle <BugID> <New Title>\n\n")
 		fmt.Printf(
 			`This will change the title of BugID to <New Title>. Use this
 to rename an issue.
@@ -157,7 +157,7 @@ to rename an issue.
 aliases for retitle: mv rename relabel
 `)
 	case "rm", "close":
-		fmt.Printf("Usage: " + os.Args[0] + " close <BugID>\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " close <BugID>\n\n")
 		fmt.Printf(
 			`This will delete the issue identifier by BugID. See
 "help ids" for details on what constitutes a BugID.
@@ -173,27 +173,27 @@ remove the bug from version control.
 alias for close: rm
 `)
 	case "find":
-		fmt.Printf("Usage: " + os.Args[0] + " find tag <value1> [value2 ...]\n")
-		fmt.Printf("Usage: " + os.Args[0] + " find status <value1> [value2 ...]\n")
-		fmt.Printf("Usage: " + os.Args[0] + " find priority <value1> [value2 ...]\n")
-		fmt.Printf("Usage: " + os.Args[0] + " find milestone <value1> [value2 ...]\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " find tag <value1> [value2 ...]\n")
+		fmt.Printf("usage: " + os.Args[0] + " find status <value1> [value2 ...]\n")
+		fmt.Printf("usage: " + os.Args[0] + " find priority <value1> [value2 ...]\n")
+		fmt.Printf("usage: " + os.Args[0] + " find milestone <value1> [value2 ...]\n\n")
 		fmt.Printf(
 			`This will search all bugs for multiple tags, statuses, priorities, or milestone.
 The matching bugs will be printed.
 `)
 	case "purge":
-		fmt.Printf("Usage: " + os.Args[0] + " purge\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " purge\n\n")
 		fmt.Printf(
 			`This will delete any bugs that are not currently tracked by
 git.
 `)
 	case "twilio":
-		fmt.Printf("Usage: " + os.Args[0] + " twilio\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " twilio\n\n")
 		fmt.Printf(
 			`This will send via twilio notifications of modified bugs.
 `)
 	case "commit", "save":
-		fmt.Printf("Usage: " + os.Args[0] + " commit [--no-autoclose]\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " commit [--no-autoclose]\n\n")
 		fmt.Printf(`This will commit any new, modified, or removed issues to
 git or hg.
 
@@ -209,7 +209,7 @@ will autoclose them when the changes are pushed upstream.
 alias for commit: save
 `)
 	case "env":
-		fmt.Printf("Usage: " + os.Args[0] + " env\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " env\n\n")
 		fmt.Printf(`This will print the environment used by the bug command to stdout.
 
 Use this command if you want to see what directory bug create is
@@ -217,7 +217,7 @@ using to store bugs, or what editor will be invoked by bug create/edit.
 `)
 
 	case "pwd", "dir", "cwd":
-		fmt.Printf("Usage: " + os.Args[0] + " pwd\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " pwd\n\n")
 		fmt.Printf(
 			`This will print the undecorated bug directory to stdout, 
 so you can use it as a subcommand for arguments to any 
@@ -226,7 +226,7 @@ arbitrary shell commands. For example "cd $(bug dir)"
 aliases for pwd: dir cwd
 `)
 	case "tag":
-		fmt.Printf("Usage: " + os.Args[0] + " tag [--rm] <BugID> <tag>...\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " tag [--rm] <BugID> <tag>...\n\n")
 		fmt.Printf(`This will tag the given BugID with the tags
 given as parameters. At least one tag is required.
 
@@ -236,7 +236,7 @@ If the --rm option is provided before the BugID, all tags provided will
 be removed instead of added.
 `)
 	case "roadmap":
-		fmt.Printf("Usage: " + os.Args[0] + " roadmap [options]\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " roadmap [options]\n\n")
 		fmt.Printf(
 			`This will print a markdown formatted list of all open
 issues, grouped by milestone.
@@ -254,7 +254,7 @@ Valid options are:
 
 `)
 	case "id", "identifier":
-		fmt.Printf("Usage: " + os.Args[0] + " id <BugID> [--generate-id] <value>\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " id <BugID> [--generate-id] <value>\n\n")
 		fmt.Printf(
 			`This will either set of retrieve the identifier for the bug
 currently identified by BugID.
@@ -305,7 +305,7 @@ also try and look up the bug by a substring match on all the valid
 IDs in the system before giving up.
 `, os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0])
 	case "version", "about", "--version", "-v":
-		fmt.Printf("Usage: " + os.Args[0] + " version\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " version\n\n")
 		fmt.Printf(
 			`This will print information about the version of %s being
 invoked.
@@ -313,7 +313,7 @@ invoked.
 aliases for version: about --version -v
 `, os.Args[0])
 	case "import":
-		fmt.Printf("Usage: " + os.Args[0] + " import <--github|--be> <repo>\n\n")
+		fmt.Printf("usage: " + os.Args[0] + " import <--github|--be> <repo>\n\n")
 		fmt.Printf(
 			`This will read from github <user/repository> issues 
 or a local BugsEverywhere bug database to the issues/ directory.
@@ -329,7 +329,7 @@ in the current directory.
 	case "help", "--help", "-h":
 		fallthrough
 	default:
-		fmt.Printf(`Usage: help <command>
+		fmt.Printf("usage: " + os.Args[0] + ` help <command>
 
 bug manages plain text issues with git or hg.
 Use "bug help <command>" or "bug <command> help" for

@@ -18,9 +18,10 @@ func main() {
 
 	rootPresent := false
 	bugYmlFileName := ".bug.yml"
-	if bugsgetrootdir := bugs.RootDirer(config); bugsgetrootdir != "" {
+	skip := bugapp.SkipRootCheck(&os.Args) // too few args or help or env
+	if rd := bugs.RootDirer(config); rd != "" {
 		rootPresent = true
-		config.BugDir = string(bugsgetrootdir) // BugRootDir
+		config.BugDir = string(rd) // BugRootDir
 		// now try to read config
 		ErrC := bugs.ConfigRead(bugYmlFileName, &config, bugapp.ProgramVersion())
 		if ErrC == nil {
@@ -30,16 +31,21 @@ func main() {
 		}
 	}
 
-	if bugapp.SkipRootCheck(&os.Args) && !rootPresent {
-		//bugapp.PrintVersion()
-		fmt.Printf("bug manages plain text issues with git or hg.")
-		fmt.Printf("You need an issues directory, a directory named for an issue and a Description text file.")
-		fmt.Printf("Use \"bug help\" for details.")
-		fmt.Printf("Error: Could not find `issues` directory. You probably want to create one.\n")
-		fmt.Printf("    Make sure the current directory or a parent directory has an issues folder\n")
-		fmt.Printf("    or set the FIT environment variable.\n")
-		fmt.Printf("Aborting.\n")
-		os.Exit(2)
+	if !rootPresent {
+		if skip {
+			fmt.Printf("Warn: no `issues` directory\n")
+		} else { // !skip
+			//bugapp.PrintVersion()
+			fmt.Printf("bug manages plain text issues with git or hg.\n")
+			fmt.Printf("Error: Could not find `issues` directory.\n")
+			fmt.Printf("    Check that the current or a parent directory has an issues directory\n")
+			fmt.Printf("    or set the FIT environment variable.\n")
+			//fmt.Printf("Each issues directory contains issues.\n")
+			//fmt.Printf("Each issue directory contains a text file named Description.\n")
+			fmt.Printf("Use \"bug help\" or \"bug help help\" for details.\n")
+			fmt.Printf("Aborting.\n")
+			os.Exit(2)
+		}
 	}
 
 	bugs.IssuesDirer(config) // from bugs/Directory.go, uses config.BugDir from bugs/Bug.go
@@ -49,7 +55,7 @@ func main() {
 	//a, b, c := scm.DetectSCM(scmoptions, config)
 	//fmt.Printf("%+v %+v %+v\n", a, b, c)
 	if ErrH != nil {
-		fmt.Printf("Warn: to commit your issues first use {git|hg} init\n")
+		fmt.Printf("Warn: no .git or .hg directory. Use \"{git|hg} init\".\n")
 		//fmt.Printf("Warn: %s\n", ErrH) // No SCM found
 		//a, b := handler.SCMIssuesUpdaters()
 		//fmt.Printf("%+v %+v\n", a, b)
@@ -66,7 +72,7 @@ func main() {
 
 	// flags package is nice but this seemed more direct at the time
 	// because of subcommands and
-	// arguments that are space separated names
+	// arguments that can be space separated names
 	osArgs := os.Args // TODO: use an env var and assign to osArgs to setup for testing
 	//fmt.Printf("A %s %#v\n", "osArgs: ", osArgs)
 	if len(osArgs) <= 1 {
@@ -147,7 +153,13 @@ func main() {
 		case "id", "identifier":
 			bugapp.Identifier(osArgs[2:], config)
 		case "status":
-			bugapp.Status(osArgs[2:], config)
+			if len(osArgs) == 2 {
+				// overview like a git status
+				bugapp.Env(config)
+			} else {
+				// get or set the status of an issue
+				bugapp.Status(osArgs[2:], config)
+			}
 		case "priority":
 			bugapp.Priority(osArgs[2:], config)
 		case "milestone":

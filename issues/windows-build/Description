@@ -1,0 +1,8 @@
+#### What did you do?
+added windows to .travis.yml
+
+involves os.PathSeparator.
+I removed use of filepath.FromSlash()because it didn't seem to work on Windows
+
+tests now pass but many in scm are disabled.
+

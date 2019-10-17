@@ -31,7 +31,7 @@ func FindBugsByTag(tags []string, config Config) []Bug {
 	for _, issue := range issues { // idx not needed
 		if issue.IsDir() == true {
 			bug := Bug{}
-			bug.LoadBug(root + dops + Directory("issues") + dops + Directory(issue.Name()))
+			bug.LoadBug(root+dops+Directory("issues")+dops+Directory(issue.Name()), config)
 			for _, tag := range tags {
 				if bug.HasTag(TagBoolTrue(tag)) {
 					bugs = append(bugs, bug)
@@ -54,7 +54,7 @@ func LoadBugByDirectory(dir string, config Config) (*Bug, error) {
 		return nil, BugNotFoundError("Not found " + dir)
 	}
 	bug := Bug{}
-	bug.LoadBug(IssuesDirer(config) + dops + Directory(dir))
+	bug.LoadBug(IssuesDirer(config)+dops+Directory(dir), config)
 	return &bug, nil
 }
 
@@ -72,7 +72,7 @@ func LoadBugByHeuristic(id string, config Config) (*Bug, error) {
 	for _, issue := range issues { // idx not needed
 		if issue.IsDir() == true {
 			bug := Bug{}
-			bug.LoadBug(root + dops + Directory("issues") + dops + Directory(issue.Name()))
+			bug.LoadBug(root+dops+Directory("issues")+dops+Directory(issue.Name()), config)
 			if bugid := bug.Identifier(); bugid == id {
 				return &bug, nil
 			} else if strings.Index(bugid, id) >= 0 {
@@ -102,7 +102,7 @@ func LoadBugByStringIndex(i string, config Config) (*Bug, error) {
 
 	b := Bug{}
 	directoryString := fmt.Sprintf("%s%s%s%s%s", root, sops, "issues", sops, issues[idx-1].Name())
-	b.LoadBug(Directory(directoryString))
+	b.LoadBug(Directory(directoryString), config)
 	return &b, nil
 }
 
@@ -114,7 +114,7 @@ func LoadBugByIdentifier(id string, config Config) (*Bug, error) {
 	for _, issue := range issues { // idx not needed
 		if issue.IsDir() == true {
 			bug := Bug{}
-			bug.LoadBug(root + dops + Directory("issues") + dops + Directory(issue.Name()))
+			bug.LoadBug(root+dops+Directory("issues")+dops+Directory(issue.Name()), config)
 			if bug.Identifier() == id {
 				return &bug, nil
 			}
@@ -133,7 +133,7 @@ func LoadBugByIndex(idx int, config Config) (*Bug, error) {
 
 	b := Bug{}
 	directoryString := fmt.Sprintf("%s%s%s%s%s", root, sops, "issues", sops, issues[idx-1].Name())
-	b.LoadBug(Directory(directoryString))
+	b.LoadBug(Directory(directoryString), config)
 	return &b, nil
 }
 
@@ -147,7 +147,7 @@ func GetAllBugs(config Config) []Bug {
 	for _, issue := range issues { // idx not needed
 		if issue.IsDir() == true {
 			bug := Bug{}
-			bug.LoadBug(root + dops + Directory("issues") + dops + Directory(issue.Name()))
+			bug.LoadBug(root+dops+Directory("issues")+dops+Directory(issue.Name()), config)
 			bugs = append(bugs, bug)
 		}
 	}

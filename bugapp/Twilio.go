@@ -61,7 +61,7 @@ func Twilio(config bugs.Config) {
 					for key, _ := range updatedissues {
 						//fmt.Printf("twilio bug dirname: %v\n", key)
 						expectedbugdir := string(bugs.IssuesDirer(config)) + sops + key
-						bug.LoadBug(bugs.Directory(expectedbugdir))
+						bug.LoadBug(bugs.Directory(expectedbugdir), config)
 						tags := bug.Tags()
 						//fmt.Printf("debug %v tags %v\n", key, tags)
 						for _, k := range tags {

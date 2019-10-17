@@ -24,7 +24,7 @@ func bugNamer(b bugs.Bug, idx int) string {
 func listTags(files []os.FileInfo, args argumentList, config bugs.Config) {
 	b := bugs.Bug{}
 	for idx := range files {
-		b.LoadBug(bugs.Directory(bugs.IssuesDirer(config) + dops + bugs.Directory(files[idx].Name())))
+		b.LoadBug(bugs.Directory(bugs.IssuesDirer(config)+dops+bugs.Directory(files[idx].Name())), config)
 
 		for _, tag := range args {
 			if b.HasTag(bugs.TagBoolTrue(tag)) {
