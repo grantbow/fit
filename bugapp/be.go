@@ -42,7 +42,7 @@ func beImportComments(b bugs.Bug, directory string, includeHeaders bool) string 
 
 func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
 	/* BE appears to store the top level data of a bug
-	   ins a json file named values with the format:
+	   in a json file with the format:
 	    {
 	        "creator": "Dave MacFarlane <driusan@gmail.com>",
 	        "reporter": "Dave MacFarlane <driusan@gmail.com>",

@@ -88,4 +88,15 @@ func TestConfigRead(t *testing.T) {
 		&config,
 		&config.TagKeyValue,
 		true)
+	doconfigtestbool(t, string(rootDir),
+		"\n",
+		&config,
+		&config.CloseStatusTag,
+		false)
+	config = Config{} //// clears
+	doconfigtestbool(t, string(rootDir),
+		"CloseStatusTag: true\n",
+		&config,
+		&config.CloseStatusTag,
+		true)
 }

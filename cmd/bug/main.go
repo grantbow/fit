@@ -98,11 +98,11 @@ func main() {
 		// subcommands without osArgs first
 		case "tagslist", "tagsassigned", "tags":
 			bugapp.TagsAssigned(config)
-		case "notags":
+		case "notags", "notag":
 			bugapp.TagsNone(config)
 		case "idslist", "idsassigned", "ids", "identifiers":
 			bugapp.IdsAssigned(config)
-		case "noids", "noidentifiers":
+		case "noids", "noid", "noidentifiers", "noidentifier":
 			bugapp.IdsNone(config)
 		case "env":
 			bugapp.Env(config)
@@ -149,7 +149,7 @@ func main() {
 		case "close", "rm":
 			bugapp.Close(osArgs[2:], config)
 		case "tag":
-			bugapp.Tag(osArgs[2:], config)
+			bugapp.Tag(osArgs[2:], config) // boolean only
 		case "id", "identifier":
 			bugapp.Identifier(osArgs[2:], config)
 		case "status":

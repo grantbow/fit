@@ -191,7 +191,8 @@ func SkipRootCheck(args *[]string) bool {
 			ret = true
 		}
 	case 3:
-		if (*args)[2] == "--help" {
+		if (*args)[2] == "--help" ||
+			(*args)[1] == "help" {
 			ret = true
 		}
 	}

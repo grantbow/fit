@@ -303,7 +303,7 @@ func (b Bug) HasTag(tag TagBoolTrue) bool {
 	return false
 }
 
-// created b.tager for similar needs of {bugs/Bug.go:Tags, bugs/Bug.go:setField}, also bugs/Bug.go:liners
+// created b.tager for similar needs of {bugs/Bug.go:Tags, bugs/Bug.go:SetField}, also bugs/Bug.go:liners
 
 // tager takes a file name, returns the key, value,
 // bool if value in name,
@@ -443,7 +443,7 @@ func (b Bug) fielder(fieldName string) string {
 	}
 }
 
-// created b.liners for similar needs of {bugs/Bug.go:fielder, bugs/Bug.go:setField}
+// created b.liners for similar needs of {bugs/Bug.go:fielder, bugs/Bug.go:SetField}
 // liners does the work for fielder with extra lines.
 func (b Bug) liners(fieldName string) []string {
 	dirr := b.Direr()
@@ -490,8 +490,8 @@ func (b Bug) liners(fieldName string) []string {
 
 //key, value, _, _, err := fielder(withtagfile[withtagfilefile], string(dir))
 
-// setField writes the string value to the file of an issue.
-func (b Bug) setField(fieldName string, value string, config Config) error { // TODO: complete func for config tag files : paused with tag_name, tag_contents, file_contents
+// SetField writes the string value to the file of an issue.
+func (b Bug) SetField(fieldName string, value string, config Config) error { // TODO: complete func for config tag files : paused with tag_name, tag_contents, file_contents
 	// using Status for fielName string example in comments
 	dir := b.Direr()
 	//possible locations
@@ -544,7 +544,7 @@ func (b Bug) setField(fieldName string, value string, config Config) error { // 
 	var err error
 	if config.NewFieldAsTag == true {
 		if config.NewFieldLowerCase == true {
-			err = ioutil.WriteFile(string(dir)+sops+"tag_"+fieldName+"_"+strings.ToLower(TitleToDirString(newValue)), []byte(""), 0644)
+			err = ioutil.WriteFile(string(dir)+sops+"tag_"+strings.ToLower(fieldName)+"_"+strings.ToLower(TitleToDirString(newValue)), []byte(""), 0644)
 		} else {
 			err = ioutil.WriteFile(string(dir)+sops+"tag_"+fieldName+"_"+TitleToDirString(newValue), []byte(""), 0644)
 		}
@@ -565,7 +565,7 @@ func (b Bug) Status() string {
 
 // SetStatus writes the Status file to an issue.
 func (b Bug) SetStatus(newStatus string, config Config) error {
-	return b.setField("Status", newStatus, config)
+	return b.SetField("Status", newStatus, config)
 }
 
 // Priority returns the string from the Priority file of an issue.
@@ -575,7 +575,7 @@ func (b Bug) Priority() string {
 
 // SetPriority writes the Priority file to an issue.
 func (b Bug) SetPriority(newValue string, config Config) error {
-	return b.setField("Priority", newValue, config)
+	return b.SetField("Priority", newValue, config)
 }
 
 // Milestone returns the string from the Milestone file of an issue.
@@ -585,7 +585,7 @@ func (b Bug) Milestone() string {
 
 // SetMilestone writes the Milestone file to an issue.
 func (b Bug) SetMilestone(newValue string, config Config) error {
-	return b.setField("Milestone", newValue, config)
+	return b.SetField("Milestone", newValue, config)
 }
 
 // Identifier returns the string from the Identifier file of an issue.
@@ -600,7 +600,7 @@ func (b Bug) Identifier() string {
 
 // SetIdentifier writes the Identifier file to an issue.
 func (b Bug) SetIdentifier(newValue string, config Config) error {
-	return b.setField("Identifier", newValue, config)
+	return b.SetField("Identifier", newValue, config)
 }
 
 // New assigns and writes an issue.

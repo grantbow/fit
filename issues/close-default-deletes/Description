@@ -1,0 +1,34 @@
+#### What did you do?
+bug close 1
+
+
+#### What did you expect to see?
+create file Status with closed or
+create file tag_status_closed
+
+
+#### What did you see instead?
+bug close command deletes issues.
+
+
+#### What version?
+0.6
+
+
+#### Resolution
+I added a config value CloseStatusTag.
+Default is false, current behavior of removing the issue.
+Configured value of true will instead set status to closed.
+
+in the code
+     bug.setField wasn't exposed yet.  so I changed it to
+     bug.SetField and call it from bugapp/Close.go
+
+     SetField now applies NewFieldLowerCase to keys as well as values
+
+there is no ui for a command to set a "field" value yet.
+Tags were originally just present or not.
+
+Tags are now keys and values which are read
+but not yet written by the bug command.
+

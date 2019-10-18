@@ -20,16 +20,26 @@ func Close(args argumentList, config bugs.Config) {
 	for _, bugID := range args {
 		if bug, err := bugs.LoadBugByHeuristic(bugID, config); err == nil {
 			dir := bug.Direr()
-			bugsToClose = append(bugsToClose, string(dir))
+			if config.CloseStatusTag {
+				fmt.Printf("Tag status closed %s\n", dir)
+				err = bug.SetField("Status", "closed", config)
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Error setting %s %s : %s\n", "Status", "closed", err.Error())
+				}
+			} else {
+				bugsToClose = append(bugsToClose, string(dir))
+			}
 		} else {
 			fmt.Fprintf(os.Stderr, "Could not close bug %s: %s\n", bugID, err.Error())
 		}
 	}
 	for _, dir := range bugsToClose {
-		fmt.Printf("Removing %s\n", dir)
-        err := os.RemoveAll(dir)
-        if err != nil {
-            fmt.Fprintf(os.Stderr, "Error removing %s : %s\n", dir, err.Error())
-        }
+		if !config.CloseStatusTag {
+			fmt.Printf("Removing %s\n", dir)
+			err := os.RemoveAll(dir)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error removing %s : %s\n", dir, err.Error())
+			}
+		}
 	}
 }

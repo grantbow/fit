@@ -47,6 +47,8 @@ type Config struct {
 	IssuesSite string `json:"IssuesSite"`
 	// issues directories always recursive (true) or need -r cli option (false, default)
 	MultipleIssuesDirs bool `json:"MultipleIssuesDirs"`
+	// close will add tag_status_close (true) or deletes issue (false, default)
+	CloseStatusTag bool `json:"CloseStatusTag"`
 }
 
 /*
@@ -183,7 +185,14 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 		} else {
 			c.MultipleIssuesDirs = false
 		}
-		return nil
+		//* CloseStatusTag: true or false,
+		//      Default delete
+		if temp.CloseStatusTag {
+			c.CloseStatusTag = true
+		} else {
+			c.CloseStatusTag = false
+		}
+		return nil // success
 	}
 	return ErrNoConfig
 }

@@ -20,15 +20,18 @@ func Import(args argumentList, config bugs.Config) {
 	switch args[0] {
 	case "--github":
 		if githubRepo := args.GetArgument("--github", ""); githubRepo != "" {
-			numStrings := strings.Count(githubRepo, sops)
-			pieces := strings.Split(githubRepo, sops)
+			numStrings := strings.Count(githubRepo, "/")
+			pieces := strings.Split(githubRepo, "/")
 			//fmt.Printf("ns %v\np %v\n", numStrings, pieces)
 			if numStrings == 1 {
 				githubImportIssues(pieces[0], pieces[1], config)
 			} else if numStrings == 2 &&
-				pieces[2] == "projects" &&
-				config.GithubPersonalAccessToken != "" {
-				githubImportProjects(pieces[0], pieces[1], config)
+				pieces[2] == "projects" {
+				if config.GithubPersonalAccessToken != "" {
+					githubImportProjects(pieces[0], pieces[1], config)
+				} else {
+					fmt.Fprintf(os.Stderr, "GithubPersonalAccessToken missing for %s\n", githubRepo)
+				}
 			} else {
 				fmt.Fprintf(os.Stderr, "GitHub invalid: %s\n", githubRepo)
 				return
@@ -40,15 +43,17 @@ func Import(args argumentList, config bugs.Config) {
 		}
 		beImport(config)
 	default:
-		fmt.Fprintf(os.Stderr, "Usage: %s import --github user/repo\n", os.Args[0])
-		//fmt.Fprintf(os.Stderr, "Usage: %s import github.com/user/repo\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "usage: %s import --github user/repo\n", os.Args[0])
+		//fmt.Fprintf(os.Stderr, "usage: %s import github.com/user/repo\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "       %s import --be\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, `
 Use this command to import an external bug database into the local
 issues/ directory.
 
-Either "--github user/repo" is required to import GitHub issues
-or "--be" is required to import a local BugsEverywhere database.
+Either "--github <user>/repo>" is required to import issues
+or  "--github <user>/<repo>/projects" to import projects
+or "--be" found relative to the current path to import a local BugsEverywhere database.
+GitHub projects require a configured GithubPersonalAccessToken value.
 `)
 	}
 	return

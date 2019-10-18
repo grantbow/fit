@@ -315,12 +315,13 @@ aliases for version: about --version -v
 	case "import":
 		fmt.Printf("usage: " + os.Args[0] + " import <--github|--be> <repo>\n\n")
 		fmt.Printf(
-			`This will read from github <user/repository> issues 
+			`This will read from github <user>/<repository> issues 
 or a local BugsEverywhere bug database to the issues/ directory.
 
-Either "--github user/repo" is required to import GitHub issues
-or "--be" is required to import a BugsEverywhere database
-in the current directory.
+Either "--github <user>/repo>" is required to import GitHub issues
+or  "--github <user>/<repo>/projects/<num>" to import a GitHub project
+or "--be <path>" is required to import a local BugsEverywhere database.
+GitHub projects require a configured GithubPersonalAccessToken value.
 `)
 		//ids aliases: idlist idsassigned identifiers
 		//noids alias: noidentifiers

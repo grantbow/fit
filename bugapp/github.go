@@ -33,7 +33,9 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 	}
 	client := github.NewClient(nil)
 	// https://api.github.com/repos/<user>/<repo>/issues
+	//fmt.Printf("debug fetch args\n    user : %+v\n    repo : %+v\n    opt : %+v\n    client : %+v\n", user, repo, opt, client)
 	issues, resp, err := fetchIssues(user, repo, opt, client)
+	//fmt.Printf("debug fetch resp : %+v\n", resp)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
@@ -41,6 +43,8 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 
 	for lastPage := false; lastPage != true; {
 		i = 0
+		//fmt.Printf("debug issues : %+v\n", issues)
+		fmt.Printf("api.github.com/repos/%s/%s/issues fetch count : %v\n", user, repo, len(issues))
 		for _, issue := range issues {
 			i += 1
 			// issues includes pull requests, so skip each pull request
@@ -69,7 +73,7 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 				// Don't set a bug identifier, but put an empty line and
 				// then a GitHub identifier, so that bug commit can include
 				// "Closes ..." in the commit message.
-				b.SetIdentifier(fmt.Sprintf("GitHub:%s%s%s%s%d", user, sops, repo, "#", *issue.Number), config)
+				b.SetIdentifier(fmt.Sprintf("GitHub:%s%s%s%s%d", user, "/", repo, "#", *issue.Number), config)
 				for _, lab := range issue.Labels {
 					b.TagBug(bugs.TagBoolTrue(*lab.Name), config)
 				}
@@ -166,7 +170,7 @@ func githubImportProjects(user, repo string, config bugs.Config) {
 			} else {
 				b.SetDescription("", config)
 			}
-			b.SetIdentifier(fmt.Sprintf("GitHub:%s%s%s%s%v", user, sops, repo, sops+"projects"+sops, *project.Number), config)
+			b.SetIdentifier(fmt.Sprintf("GitHub:%s%s%s%s%v", user, "/", repo, sops+"projects"+sops, *project.Number), config)
 
 			j := 1
 			projectcolumns, _, err := fetchProjectColumns(int64(*project.ID), nil, client)

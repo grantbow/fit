@@ -194,6 +194,10 @@ issues directory. Current options include:
     * MultipleIssuesDirs: true or false
           Default is false.
           always recursive when possible
+    * CloseStatusTag: true or false
+          Default is false.
+	      bug close will delete (false) or
+          bug close will tag_status_close (true)
           
 Other issue systems may use databases, hidden directories or hidden branches.
 While these may be useful techniques in certain circumstances this seems to

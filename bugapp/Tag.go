@@ -94,7 +94,7 @@ func TagsAssigned(config bugs.Config) {
 	}
 }
 
-// Tag is a subcommand to assign a tag to an issue.
+// Tag is a subcommand to assign a bool true/false tag to an issue.
 func Tag(Args argumentList, config bugs.Config) {
 	if len(Args) < 2 {
 		fmt.Printf("Usage: %s tag [--rm] BugID tagname [more tagnames]\n", os.Args[0])

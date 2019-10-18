@@ -1,0 +1,15 @@
+#### What did you do?
+bug tag 1 Status closed
+
+#### What did you expect to see?
+create file Status with closed or
+create file tag_status_closed
+
+
+#### What did you see instead?
+bug tag command adds true values
+and with --rm removes boolean tags.
+
+#### What version?
+0.6
+
