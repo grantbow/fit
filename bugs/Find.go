@@ -87,24 +87,24 @@ func LoadBugByHeuristic(id string, config Config) (*Bug, error) {
 	return nil, BugNotFoundError("Not found " + id)
 }
 
-// LoadBugByStringIndex returns an issue from a string index.
-func LoadBugByStringIndex(i string, config Config) (*Bug, error) {
-	root := RootDirer(config)
-	issues, _ := ioutil.ReadDir(string(root) + sops + "issues")
-
-	idx, err := strconv.Atoi(i)
-	if err != nil {
-		return nil, BugNotFoundError("Index not a number")
-	}
-	if idx < 1 || idx > len(issues) {
-		return nil, BugNotFoundError("Invalid Index")
-	}
-
-	b := Bug{}
-	directoryString := fmt.Sprintf("%s%s%s%s%s", root, sops, "issues", sops, issues[idx-1].Name())
-	b.LoadBug(Directory(directoryString), config)
-	return &b, nil
-}
+//// LoadBugByStringIndex returns an issue from a string index.
+//func LoadBugByStringIndex(i string, config Config) (*Bug, error) {
+//	root := RootDirer(config)
+//	issues, _ := ioutil.ReadDir(string(root) + sops + "issues")
+//
+//	idx, err := strconv.Atoi(i)
+//	if err != nil {
+//		return nil, BugNotFoundError("Index not a number")
+//	}
+//	if idx < 1 || idx > len(issues) {
+//		return nil, BugNotFoundError("Invalid Index")
+//	}
+//
+//	b := Bug{}
+//	directoryString := fmt.Sprintf("%s%s%s%s%s", root, sops, "issues", sops, issues[idx-1].Name())
+//	b.LoadBug(Directory(directoryString), config)
+//	return &b, nil
+//}
 
 // LoadBugByIdentifier returns an issue from a string Identifier
 func LoadBugByIdentifier(id string, config Config) (*Bug, error) {
@@ -133,6 +133,7 @@ func LoadBugByIndex(idx int, config Config) (*Bug, error) {
 
 	b := Bug{}
 	directoryString := fmt.Sprintf("%s%s%s%s%s", root, sops, "issues", sops, issues[idx-1].Name())
+	// TODO: fix, can return files that are non-issues located in the issues directory
 	b.LoadBug(Directory(directoryString), config)
 	return &b, nil
 }

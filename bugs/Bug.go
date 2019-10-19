@@ -17,13 +17,7 @@ import (
 //var dops = Directory(os.PathSeparator)
 //var sops = string(os.PathSeparator)
 
-type TagKeyValue struct {
-	key  string
-	file string
-}
-
-// Bug is the type of an issue.
-// The fields are Dir and descFile.
+// An issue
 type Bug struct {
 	Dir                 Directory
 	modtime             int
@@ -32,14 +26,22 @@ type Bug struct {
 	TagArray            []TagKeyValue
 }
 
-// Tag is the first type of an issue identifier.
-// There is only a string key.
-// Values were not supported originally
-// so there is an implied true/present false/absent value.
+// TagBoolTrue only has a string key.
+// Implied values are true/present and false/absent.
 type TagBoolTrue string
 
+// TagKeyValue were added after type Tag (renamed to TagBoolTrue)
+type TagKeyValue struct {
+	key  string
+	file string
+}
+
+// Four hard coded "fields" were allowed to have the four specific keys
+// and values. These files were originally kept in a "tags" subdirectory.
+//     []string{"Status", "Priority", "Milestone", "Identifier"}
+//     (optionally Id for Identifier)
+
 // Comment is the struct type of a unit of discussion about an issue.
-// The fields are Author, Time, Body, Order and Xml.
 type Comment struct {
 	Author string
 	Time   time.Time
@@ -118,6 +120,8 @@ func (b *Bug) LoadBug(dir Directory, config Config) {
 
 // Title returns a string with the name of an issue and optionally present Status and Priority.
 func (b Bug) Title(options string) string {
+	// options indicate if Status or Priority should be
+	// formatted and returned with the title.
 	var hasOption = func(o string) bool {
 		return strings.Contains(options, o)
 	}
@@ -190,7 +194,6 @@ func (b *Bug) SetDescription(val string, config Config) error {
 // RemoveTag deletes a tag file of an issue.
 func (b *Bug) RemoveTag(tag TagBoolTrue, config Config) {
 	if dir := b.Direr(); dir != "" {
-		//os.Remove(filepath.FromSlash(string(dir) + "/tags/" + string(tag)))
 		os.Remove(string(dir) + sops + "tags" + sops + string(tag))
 		files, err := filepath.Glob(string(dir) + "tag_" + string(tag) + "")
 		if err == nil {
@@ -199,23 +202,19 @@ func (b *Bug) RemoveTag(tag TagBoolTrue, config Config) {
 			}
 		}
 	} else {
+		// no b.Dir - should not happen any more
+		// still good to check just in case
 		fmt.Printf("Error removing tag: %s", tag)
-		// no b.Dir?
-		// this was added during debugging when this happened sometimes
-		// it's still a good idea to check just in case
 	}
 }
 
-// TagBug writes an empty tag file.
+// TagBug writes an empty boolean tag file.
 func (b *Bug) TagBug(tag TagBoolTrue, config Config) {
 	if dir := b.Direr(); dir != "" {
 		if config.TagKeyValue == true {
-			//ioutil.WriteFile(filepath.FromSlash(string(dir)+"/tag_"+string(tag)), []byte(""), 0644)
 			ioutil.WriteFile(string(dir)+sops+"tag_"+string(tag), []byte(""), 0644)
 		} else {
-			//os.Mkdir(filepath.FromSlash(string(dir)+"/tags/"), 0755)
 			os.Mkdir(string(dir)+sops+"tags"+sops, 0755)
-			//ioutil.WriteFile(filepath.FromSlash(string(dir)+"/tags/"+string(tag)), []byte(""), 0644)
 			ioutil.WriteFile(string(dir)+sops+"tags"+sops+string(tag), []byte(""), 0644)
 		}
 	} else {
@@ -239,15 +238,12 @@ func (b *Bug) CommentBug(comment Comment, config Config) {
 		//os.Mkdir(filepath.FromSlash(string(dir)+"/"), 0755)
 		commenttext := []byte(comment.Body + "\n")
 		if config.ImportCommentsTogether { // not efficient but ok for now
-			//data, err := ioutil.ReadFile(filepath.FromSlash(string(dir) + "/comments"))
 			data, err := ioutil.ReadFile(string(dir) + sops + "comments")
 			check(err)
 			commentappend := []byte(fmt.Sprintf("%s%s%s", data, "\n", commenttext))
-			//werr := ioutil.WriteFile(filepath.FromSlash(string(dir)+"/comments"), commentappend, 0644)
 			werr := ioutil.WriteFile(string(dir)+sops+"comments", commentappend, 0644)
 			check(werr)
 		} else {
-			//werr := ioutil.WriteFile(filepath.FromSlash(string(dir)+"/comment-")+string(ShortTitleToDir(string(comment.Body))), commenttext, 0644)
 			werr := ioutil.WriteFile(string(dir)+sops+"comment-"+string(ShortTitleToDir(string(comment.Body))), commenttext, 0644)
 			check(werr)
 		}
@@ -306,8 +302,8 @@ func (b Bug) HasTag(tag TagBoolTrue) bool {
 // created b.tager for similar needs of {bugs/Bug.go:Tags, bugs/Bug.go:SetField}, also bugs/Bug.go:liners
 
 // tager takes a file name, returns the key, value,
-// bool if value in name,
-// bool if value in file contents, error
+// bool if value is located in the name,
+// bool if value is located in file contents, error
 func (b Bug) tager(abspath string) (string, string, bool, bool, error) {
 	dir := b.Direr()
 	//hit := withtagsubdirfile.Name() // simple for tags subdir
@@ -323,7 +319,6 @@ func (b Bug) tager(abspath string) (string, string, bool, bool, error) {
 		return key, value, tag_name, tag_contents, errors.New("tag has no key or value")
 	} else if len(parts) == 2 {
 		key = parts[1]
-		//field, err := ioutil.ReadFile(filepath.FromSlash(string(dir) + "/tag_"))
 		field, err := ioutil.ReadFile(string(dir) + sops + "tag_")
 		if err == nil {
 			value = ([]string(strings.Split(string(field), "\n")))[0] // tag_Status file contents overrides "Status" file contents
@@ -358,9 +353,10 @@ func (b Bug) Tags() []TagBoolTrue {
 			}
 		}
 	}
-	//withtagsubdir, errsubdir := ioutil.ReadDir(filepath.FromSlash(string(dir) + "/tags/")) // returns []os.FileInfo
+	// look in the <issue>/tags subdir
 	withtagsubdir, errsubdir := ioutil.ReadDir(string(dir) + sops + "tags" + sops) // returns []os.FileInfo
-	withtagfile, errtagfile := filepath.Glob(string(dir) + sops + "tag_*")         // returns []string
+	// look in the <issue> dir for tag_<key> and tag_<key>_<value> files
+	withtagfile, errtagfile := filepath.Glob(string(dir) + sops + "tag_*") // returns []string
 	if len(tags) == 0 && errsubdir != nil && errtagfile != nil {
 		return nil
 	}
@@ -491,6 +487,7 @@ func (b Bug) liners(fieldName string) []string {
 //key, value, _, _, err := fielder(withtagfile[withtagfilefile], string(dir))
 
 // SetField writes the string value to the file of an issue.
+// NewFieldAsTag and NewFieldLowerCase are respected
 func (b Bug) SetField(fieldName string, value string, config Config) error { // TODO: complete func for config tag files : paused with tag_name, tag_contents, file_contents
 	// using Status for fielName string example in comments
 	dir := b.Direr()

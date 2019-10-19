@@ -73,21 +73,21 @@ func TestFindBugsByTag(t *testing.T) {
 			t.Error(fmt.Sprintf("Failed %s: expected %v but got %v", "LoadBugByHeuristic", c.Dir, x.Dir))
 		}
 	}
-	// LOAD
-	//tests: func LoadBugByStringIndex(i string, config Config) (*Bug, error)
-	x, errx = LoadBugByStringIndex("2", config) // c is 2 String
-	if errx != nil {
-		y, booly := errx.(BugNotFoundError)
-		if booly {
-			t.Error(fmt.Sprintf("Failed %s: got type %v %v", "LoadBugByStringIndex", "BugNotFoundError", errx))
-		} else {
-			t.Error(fmt.Sprintf("Failed %s: got %v", "LoadBugByStringIndex", y))
-		}
-	} else {
-		if string(x.Dir) != string(c.Dir) {
-			t.Error(fmt.Sprintf("Failed %s: expected %v but got %v", "LoadBugByStringIndex", c.Dir, x.Dir))
-		}
-	}
+	//// LOAD
+	////tests: func LoadBugByStringIndex(i string, config Config) (*Bug, error)
+	//x, errx = LoadBugByStringIndex("2", config) // c is 2 String
+	//if errx != nil {
+	//	y, booly := errx.(BugNotFoundError)
+	//	if booly {
+	//		t.Error(fmt.Sprintf("Failed %s: got type %v %v", "LoadBugByStringIndex", "BugNotFoundError", errx))
+	//	} else {
+	//		t.Error(fmt.Sprintf("Failed %s: got %v", "LoadBugByStringIndex", y))
+	//	}
+	//} else {
+	//	if string(x.Dir) != string(c.Dir) {
+	//		t.Error(fmt.Sprintf("Failed %s: expected %v but got %v", "LoadBugByStringIndex", c.Dir, x.Dir))
+	//	}
+	//}
 	// LOAD
 	//tests: func LoadBugByIndex(idx int, config Config) (*Bug, error)
 	x, errx = LoadBugByIndex(2, config) // c is 2 Int
