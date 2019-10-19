@@ -20,7 +20,7 @@ func TestRoadmapLess(t *testing.T) {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	os.Chdir(dir)
 	os.MkdirAll("issues", 0700)
 	defer os.RemoveAll(dir)
@@ -78,7 +78,7 @@ func TestRoadmapLess(t *testing.T) {
 		fmt.Printf("Expected stdout: %s\nGot: %s\n", expected, stdout)
 		fmt.Printf("Expected stderr: %s\nGot: %s\n", "", stderr)
 	}
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }
 
 //func TestRoadmap(t *testing.T) {
@@ -132,7 +132,7 @@ func Roadmap(args argumentList, config bugs.Config) {
 	}
 	sort.Sort(BugListByMilestone(bgs))
 
-	fmt.Printf("# Roadmap for %s\n", bugs.RootDirer(config).ShortNamer().ToTitle())
+	fmt.Printf("# Roadmap for %s\n", bugs.RootDirer(&config).ShortNamer().ToTitle())
 	milestone := ""
 	for i := len(bgs) - 1; i >= 0; i -= 1 {
 		b := bgs[i]

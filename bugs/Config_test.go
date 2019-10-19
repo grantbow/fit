@@ -44,7 +44,7 @@ func TestConfigRead(t *testing.T) {
 	test := tester{}   // from Bug_test.go
 	test.Setup()
 	defer test.Teardown()
-	rootDir := RootDirer(config)
+	rootDir := RootDirer(&config)
 
 	doconfigteststring(t, string(rootDir),
 		"DefaultDescriptionFile: issues.bug-template.txt\n",
@@ -88,6 +88,7 @@ func TestConfigRead(t *testing.T) {
 		&config,
 		&config.TagKeyValue,
 		true)
+	config = Config{} //// clears
 	doconfigtestbool(t, string(rootDir),
 		"\n",
 		&config,
@@ -98,5 +99,29 @@ func TestConfigRead(t *testing.T) {
 		"CloseStatusTag: true\n",
 		&config,
 		&config.CloseStatusTag,
+		true)
+	config = Config{} //// clears
+	doconfigtestbool(t, string(rootDir),
+		"\n",
+		&config,
+		&config.IdAbbreviate,
+		false)
+	config = Config{} //// clears
+	doconfigtestbool(t, string(rootDir),
+		"IdAbbreviate: true\n",
+		&config,
+		&config.IdAbbreviate,
+		true)
+	config = Config{} //// clears
+	doconfigtestbool(t, string(rootDir),
+		"\n",
+		&config,
+		&config.IdAutomatic,
+		false)
+	config = Config{} //// clears
+	doconfigtestbool(t, string(rootDir),
+		"IdAutomatic: true\n",
+		&config,
+		&config.IdAutomatic,
 		true)
 }

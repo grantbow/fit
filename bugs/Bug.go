@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -111,17 +112,64 @@ func (b Bug) Direr() Directory {
 	return b.Dir
 }
 
-// LoadBug assigns a directory to an issue.
+// LoadBug sets an issue's directory, modtime and DescriptionFileName
+// and enforces IdAutomatic.
 func (b *Bug) LoadBug(dir Directory, config Config) {
 	b.Dir = dir
 	b.modtime = int((dir.ModTime()).Unix())
 	b.DescriptionFileName = config.DescriptionFileName
+	if config.IdAutomatic {
+		if id := b.Identifier(); id != "" {
+			//fmt.Printf("debug id : (%v)\n", id)
+			i := getIdNext(config)
+			if i != -1 {
+				b.SetIdentifier(strconv.Itoa(i), config)
+				removeIdNext(i, config)
+				writeIdNext(i+1, config)
+			}
+		}
+	}
 }
 
-// Title returns a string with the name of an issue and optionally present Status and Priority.
+func getIdNext(config Config) int {
+	// config.BugDir/.bug_idnext_1001
+	files, err := filepath.Glob(config.BugDir + sops + ".bug_idnext_*")
+	//fmt.Printf("debug Found %v files: %v\n", len(files), strings.Join(files, ", "))
+	if err == nil && len(files) > 1 {
+		os.Exit(1)
+	} else if err == nil && len(files) == 1 {
+		parts := strings.Split(files[0], "_")
+		val := parts[len(parts)-1]
+		i, _ := strconv.Atoi(val)
+		return i
+	} else if err != nil && len(files) == 0 {
+		// missing
+		i := 1001
+		writeIdNext(i+1, config)
+		return i
+	} else {
+		fmt.Printf("Found %v files: %v\nError : %v\n", len(files), strings.Join(files, ", "), err.Error())
+		return -1
+		//errors.New("file %s%s.bug_idnext_<i>", config.BugDir, sops)
+	}
+	return -1
+}
+
+func writeIdNext(j int, config Config) {
+	content := ""
+	ioutil.WriteFile(config.BugDir+sops+".bug_idnext_"+strconv.Itoa(j), []byte(content+"\n"), 0644)
+	// TODO: scm.add
+}
+
+func removeIdNext(k int, config Config) {
+	os.Remove(config.BugDir + sops + ".bug_idnext_" + strconv.Itoa(k))
+	// TODO: scm.add
+}
+
+// Title returns a string with the name of an issue and
+// optionally present Identifier, Status, Priority and tags.
 func (b Bug) Title(options string) string {
-	// options indicate if Status or Priority should be
-	// formatted and returned with the title.
+	// options indicate what should be formatted and returned with the title.
 	var hasOption = func(o string) bool {
 		return strings.Contains(options, o)
 	}
@@ -195,7 +243,7 @@ func (b *Bug) SetDescription(val string, config Config) error {
 func (b *Bug) RemoveTag(tag TagBoolTrue, config Config) {
 	if dir := b.Direr(); dir != "" {
 		os.Remove(string(dir) + sops + "tags" + sops + string(tag))
-		files, err := filepath.Glob(string(dir) + "tag_" + string(tag) + "")
+		files, err := filepath.Glob(string(dir) + sops + "tag_" + string(tag) + "*")
 		if err == nil {
 			for _, x := range files {
 				os.Remove(x)
@@ -208,17 +256,23 @@ func (b *Bug) RemoveTag(tag TagBoolTrue, config Config) {
 	}
 }
 
-// TagBug writes an empty boolean tag file.
+// TagBug writes an empty *boolean* tag file: key, no value
 func (b *Bug) TagBug(tag TagBoolTrue, config Config) {
+	var key string
 	if dir := b.Direr(); dir != "" {
+		if config.NewFieldLowerCase {
+			key = strings.ToLower(string(tag))
+		} else {
+			key = string(tag)
+		}
 		if config.TagKeyValue == true {
-			ioutil.WriteFile(string(dir)+sops+"tag_"+string(tag), []byte(""), 0644)
+			ioutil.WriteFile(string(dir)+sops+"tag_"+key, []byte(""), 0644)
 		} else {
 			os.Mkdir(string(dir)+sops+"tags"+sops, 0755)
-			ioutil.WriteFile(string(dir)+sops+"tags"+sops+string(tag), []byte(""), 0644)
+			ioutil.WriteFile(string(dir)+sops+"tags"+sops+key, []byte(""), 0644)
 		}
 	} else {
-		fmt.Printf("Error tagging bug: %s", tag)
+		fmt.Printf("Error tagging bug: %s", key)
 	}
 }
 
@@ -254,7 +308,7 @@ func (b *Bug) CommentBug(comment Comment, config Config) {
 
 // ViewBug outputs an issue.
 func (b Bug) ViewBug() {
-	// This could be more generalized and shortened if the bug design is changed.
+	// Fields and tags could be more general if architected differently.
 	if identifier := b.Identifier(); identifier != "" {
 		fmt.Printf("Identifier: %s\n", identifier)
 	}
@@ -355,7 +409,7 @@ func (b Bug) Tags() []TagBoolTrue {
 	}
 	// look in the <issue>/tags subdir
 	withtagsubdir, errsubdir := ioutil.ReadDir(string(dir) + sops + "tags" + sops) // returns []os.FileInfo
-	// look in the <issue> dir for tag_<key> and tag_<key>_<value> files
+	// look in the <issue> dir for tag_<key> and tag_<key>_<value>
 	withtagfile, errtagfile := filepath.Glob(string(dir) + sops + "tag_*") // returns []string
 	if len(tags) == 0 && errsubdir != nil && errtagfile != nil {
 		return nil
@@ -587,6 +641,7 @@ func (b Bug) SetMilestone(newValue string, config Config) error {
 
 // Identifier returns the string from the Identifier file of an issue.
 func (b Bug) Identifier() string {
+	// try to read both possible strings
 	i := b.fielder("Identifier")
 	if i != "" {
 		return i
@@ -597,10 +652,14 @@ func (b Bug) Identifier() string {
 
 // SetIdentifier writes the Identifier file to an issue.
 func (b Bug) SetIdentifier(newValue string, config Config) error {
-	return b.SetField("Identifier", newValue, config)
+	if config.IdAbbreviate {
+		return b.SetField("Id", newValue, config)
+	} else {
+		return b.SetField("Identifier", newValue, config)
+	}
 }
 
-// New assigns and writes an issue.
+// New prepares an issue directory.
 func New(title string, config Config) (*Bug, error) {
 	expectedDir := IssuesDirer(config) + Directory(os.PathSeparator) + TitleToDir(title)
 	err := os.Mkdir(string(expectedDir), 0755)

@@ -11,16 +11,16 @@ import (
 type Directory string
 
 // RootDirer returns the directory usually containing the issues subdirectory.
-func RootDirer(config Config) Directory {
+func RootDirer(config *Config) Directory {
 	dir := os.Getenv("FIT") // new first
 	if dir != "" {
 		if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
-	        if dirinfo, err = os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
-                // has an issues dir
-			    config.BugDir = dir
-			    os.Chdir(dir)
-			    return Directory(dir)
-            }
+			if dirinfo, err = os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
+				// has an issues dir
+				config.BugDir = dir
+				os.Chdir(dir)
+				return Directory(dir)
+			}
 			// better to fall through and start looking rather than
 			//} else {
 			//	return ""
@@ -62,7 +62,7 @@ func RootDirer(config Config) Directory {
 // IssuesDirer returns the directory containing the issues.
 // The root directory contains the issues directory.
 func IssuesDirer(config Config) Directory {
-	root := RootDirer(config)
+	root := RootDirer(&config)
 	if root == "" {
 		return root
 	}
@@ -122,7 +122,7 @@ func (d Directory) ModTime() time.Time {
 	}
 
 	dir, _ := os.Open(string(d))
-    defer dir.Close() // discards error for now
+	defer dir.Close() // discards error for now
 	files, _ := dir.Readdir(-1)
 	if len(files) == 0 {
 		t = stat.ModTime()

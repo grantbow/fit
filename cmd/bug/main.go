@@ -19,9 +19,9 @@ func main() {
 	rootPresent := false
 	bugYmlFileName := ".bug.yml"
 	skip := bugapp.SkipRootCheck(&os.Args) // too few args or help or env
-	if rd := bugs.RootDirer(config); rd != "" {
+	if rd := bugs.RootDirer(&config); rd != "" {
+		// bugs/Directory.go func RootDirer sets config.BugDir does os.Chdir()
 		rootPresent = true
-		config.BugDir = string(rd) // BugRootDir
 		// now try to read config
 		ErrC := bugs.ConfigRead(bugYmlFileName, &config, bugapp.ProgramVersion())
 		if ErrC == nil {

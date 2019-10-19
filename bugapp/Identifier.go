@@ -4,7 +4,6 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"github.com/driusan/bug/bugs"
-	"io/ioutil"
 	"os"
 	"sort"
 	"strings"
@@ -31,7 +30,7 @@ func getAllIds(config bugs.Config) []string {
 // IdsNone is a subcommand to print issues with no assigned tags.
 func IdsNone(config bugs.Config) {
 	issuesroot := bugs.IssuesDirer(config)
-	issues, _ := ioutil.ReadDir(string(issuesroot)) // TODO: should be a method elsewhere
+	issues := readIssues(string(issuesroot))
 	sort.Sort(byDir(issues))
 	var wantTags bool = false
 

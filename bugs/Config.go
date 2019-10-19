@@ -49,6 +49,10 @@ type Config struct {
 	MultipleIssuesDirs bool `json:"MultipleIssuesDirs"`
 	// close will add tag_status_close (true) or deletes issue (false, default)
 	CloseStatusTag bool `json:"CloseStatusTag"`
+	// Abbreviate Identifier as Id (true) or use Identifier (false, default)
+	IdAbbreviate bool `json:"IdAbbreviate"`
+	// Identifier Automatic assignment (true) or not (false, default)
+	IdAutomatic bool `json:"IdAutomatic"`
 }
 
 /*
@@ -67,6 +71,7 @@ list of places for
 creating new configs:
     * bugs/Config.go   // bugs.Config struct
                        // ConfigRead for reading values of config file
+    * bugs/Config_test.go
     * README.md        // includes config descriptions
                        // like comments from bugs.Config struct file
 
@@ -103,14 +108,14 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 			c.DefaultDescriptionFile = temp.DefaultDescriptionFile
 		}
 		//* ImportXmlDump: true or false,
-		//      saves raw xml as a file
+		//      Default false, saves raw xml as a file
 		if temp.ImportXmlDump {
 			c.ImportXmlDump = true
 		} else {
 			c.ImportXmlDump = false
 		}
 		//* ImportCommentsTogether: true or false,
-		//      commments save to one file or many files
+		//      Default false, commments save to one file or many files
 		if temp.ImportCommentsTogether {
 			c.ImportCommentsTogether = true
 		} else {
@@ -128,21 +133,21 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 			c.DescriptionFileName = "Description"
 		}
 		//* TagKeyValue: true or false,
-		//      Default tags subdir
+		//      Default false, use tags subdir
 		if temp.TagKeyValue {
 			c.TagKeyValue = true
 		} else {
 			c.TagKeyValue = false
 		}
 		//* NewFieldAsTag: true or false,
-		//      Default Field file
+		//      Default false use Field file
 		if temp.NewFieldAsTag {
 			c.NewFieldAsTag = true
 		} else {
 			c.NewFieldAsTag = false
 		}
 		//* NewFieldLowerCase: true or false,
-		//      Default Field as given
+		//      Default false, use Field as given
 		if temp.NewFieldLowerCase {
 			c.NewFieldLowerCase = true
 		} else {
@@ -179,18 +184,32 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 			c.IssuesSite = ""
 		}
 		//* MultipleIssuesDirs: true or false,
-		//      Default need to use -r cli option
+		//      Default false, need to use -r cli option
 		if temp.MultipleIssuesDirs {
 			c.MultipleIssuesDirs = true
 		} else {
 			c.MultipleIssuesDirs = false
 		}
 		//* CloseStatusTag: true or false,
-		//      Default delete
+		//      Default false, delete
 		if temp.CloseStatusTag {
 			c.CloseStatusTag = true
 		} else {
 			c.CloseStatusTag = false
+		}
+		//* IdAbbreviate: true or false,
+		//      Default false, Identifier
+		if temp.IdAbbreviate {
+			c.IdAbbreviate = true
+		} else {
+			c.IdAbbreviate = false
+		}
+		//* IdAutomatic: true or false,
+		//      Default false
+		if temp.IdAutomatic {
+			c.IdAutomatic = true
+		} else {
+			c.IdAutomatic = false
 		}
 		return nil // success
 	}

@@ -3,7 +3,6 @@ package bugapp
 import (
 	"fmt"
 	"github.com/driusan/bug/bugs"
-	"io/ioutil"
 	"os"
 	"sort"
 	"strings"
@@ -35,7 +34,7 @@ func getAllTags(config bugs.Config) []string {
 // TagsNone is a subcommand to print issues with no assigned tags.
 func TagsNone(config bugs.Config) {
 	issuesroot := bugs.IssuesDirer(config)
-	issues, _ := ioutil.ReadDir(string(issuesroot)) // TODO: should be a method elsewhere
+	issues := readIssues(string(issuesroot))
 	sort.Sort(byDir(issues))
 	var wantTags bool = false
 

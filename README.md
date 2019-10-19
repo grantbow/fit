@@ -198,6 +198,12 @@ issues directory. Current options include:
           Default is false.
 	      bug close will delete (false) or
           bug close will tag_status_close (true)
+    * IdAbbreviate: true or false
+          Default is false.
+          Use Identifier.
+    * IdAutomatic: true or false
+          Default is false.
+          Use Identifier.
           
 Other issue systems may use databases, hidden directories or hidden branches.
 While these may be useful techniques in certain circumstances this seems to

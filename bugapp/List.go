@@ -34,25 +34,10 @@ func listTags(files []os.FileInfo, args argumentList, config bugs.Config) {
 	}
 }
 
-//byDir allows sort.Sort(byDir(issues))
-// type and three functions are needed - also see Bug.go for type byBug
-// rather than a custom Len function for os.FileInfo, Len is calculated in Less
-type byDir []os.FileInfo
-
-func (t byDir) Len() int {
-	return len(t) // time.Format(time.UnixNano(t.modtime).UnixNano())
-}
-func (t byDir) Swap(i, j int) {
-	t[i], t[j] = t[j], t[i]
-}
-func (t byDir) Less(i, j int) bool {
-	return (t[i]).ModTime().Unix() < (t[j]).ModTime().Unix()
-}
-
 // List is a subcommand to print issues.
 func List(args argumentList, config bugs.Config, topRecurse bool) {
 	issuesroot := bugs.IssuesDirer(config)
-	issues, _ := ioutil.ReadDir(string(issuesroot))
+	issues := readIssues(string(issuesroot))
 	sort.Sort(byDir(issues))
 
 	var wantTags bool = false
@@ -89,7 +74,6 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 						printIssueByDir(idx, issue, issuesroot, config, wantTags)
 					} // else { continue }
 				} // else { continue }
-
 			}
 		}
 	} else if len(args) == 0 || (wantTags && len(args) == 1) || // --regex alone makes no sense
@@ -113,13 +97,12 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 		}
 		return
 	} else {
-		// getAllTags() is defined in Tag.go
 		// Get a list of tags, so that when we encounter
 		// an error we can check if it's because the user
 		// provided a tagname instead of a BugID. If they
 		// did, then list bugs matching that tag instead
 		// of full descriptions
-		tags := getAllTags(config)
+		tags := getAllTags(config) // see Tag.go getAllTags() is defined in Tag.go
 		// There were parameters, so show the full description of each
 		// of those issues
 		for i, length := 0, len(args); i < length; i += 1 {

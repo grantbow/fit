@@ -24,8 +24,10 @@ func (b BugNotFoundError) Error() string {
 
 // FindBugsByTag returns an array of tagged issues.
 func FindBugsByTag(tags []string, config Config) []Bug {
-	root := RootDirer(config)
-	issues, _ := ioutil.ReadDir(string(root) + sops + "issues")
+	root := RootDirer(&config)
+	issuesroot := IssuesDirer(config)
+	issues := readIssues(string(issuesroot))
+	sort.Sort(byDir(issues))
 
 	var bugs []Bug
 	for _, issue := range issues { // idx not needed
@@ -48,7 +50,7 @@ func FindBugsByTag(tags []string, config Config) []Bug {
 
 // LoadBugByDirectory returns an issue from the directory name.
 func LoadBugByDirectory(dir string, config Config) (*Bug, error) {
-	root := RootDirer(config)
+	root := RootDirer(&config)
 	_, err := ioutil.ReadDir(string(root) + sops + "issues" + sops + dir)
 	if err != nil {
 		return nil, BugNotFoundError("Not found " + dir)
@@ -60,8 +62,14 @@ func LoadBugByDirectory(dir string, config Config) (*Bug, error) {
 
 // LoadBugByHeuristic returns an issue.
 func LoadBugByHeuristic(id string, config Config) (*Bug, error) {
-	root := RootDirer(config)
-	issues, _ := ioutil.ReadDir(string(root) + sops + "issues")
+	root := RootDirer(&config)
+	issuesroot := IssuesDirer(config)
+	issues := readIssues(string(issuesroot))
+	sort.Sort(byDir(issues))
+	//fmt.Printf("debug Found %v files\n", len(issues)) //, strings.Join(issues, ", "))
+	//for _, issue := range issues {                    // idx not needed
+	//	fmt.Printf("debug %v\n", issue.Name())
+	//}
 
 	idx, err := strconv.Atoi(id)
 	if err == nil { // && idx > 0 && idx <= len(issues) {
@@ -89,7 +97,7 @@ func LoadBugByHeuristic(id string, config Config) (*Bug, error) {
 
 //// LoadBugByStringIndex returns an issue from a string index.
 //func LoadBugByStringIndex(i string, config Config) (*Bug, error) {
-//	root := RootDirer(config)
+//	root := RootDirer(&config)
 //	issues, _ := ioutil.ReadDir(string(root) + sops + "issues")
 //
 //	idx, err := strconv.Atoi(i)
@@ -108,8 +116,10 @@ func LoadBugByHeuristic(id string, config Config) (*Bug, error) {
 
 // LoadBugByIdentifier returns an issue from a string Identifier
 func LoadBugByIdentifier(id string, config Config) (*Bug, error) {
-	root := RootDirer(config)
-	issues, _ := ioutil.ReadDir(string(root) + sops + "issues")
+	root := RootDirer(&config)
+	issuesroot := IssuesDirer(config)
+	issues := readIssues(string(issuesroot))
+	sort.Sort(byDir(issues))
 
 	for _, issue := range issues { // idx not needed
 		if issue.IsDir() == true {
@@ -125,8 +135,10 @@ func LoadBugByIdentifier(id string, config Config) (*Bug, error) {
 
 // LoadBugByIndex returns an issue from an int index.
 func LoadBugByIndex(idx int, config Config) (*Bug, error) {
-	root := RootDirer(config)
-	issues, _ := ioutil.ReadDir(string(root) + sops + "/issues")
+	root := RootDirer(&config)
+	issuesroot := IssuesDirer(config)
+	issues := readIssues(string(issuesroot))
+	sort.Sort(byDir(issues))
 	if idx < 1 || idx > len(issues) {
 		return nil, BugNotFoundError("Invalid bug index")
 	}
@@ -140,8 +152,10 @@ func LoadBugByIndex(idx int, config Config) (*Bug, error) {
 
 // GetAllBugs returns an array of all issues.
 func GetAllBugs(config Config) []Bug {
-	root := RootDirer(config)
-	issues, _ := ioutil.ReadDir(string(root) + sops + "issues")
+	root := RootDirer(&config)
+	issuesroot := IssuesDirer(config)
+	issues := readIssues(string(issuesroot))
+	sort.Sort(byDir(issues))
 	//fmt.Printf("%+v\n", issues)
 
 	var bugs []Bug
