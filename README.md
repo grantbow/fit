@@ -23,65 +23,68 @@ bug manages plain text issues with git or mercurial.
 
 ## Goal
 
-Keep your code close and your issues closer.
+Standard coding tools can be used to improve project outcomes and minimize
+context switching between coding and issue tracking systems.
 
-Expandable with issue key/value pair metadata without reconfiguring anything.
+A limited number of conventions with just enough organization can quickly
+capture issues using human readable issue directories and files. This can
+supplement other issue/bug systems or quickly act in their place, especially if
+no other system is provided.
 
-The goal is to quickly capture issues using human readable issue directories
-and files. This can supplement more comprehensive issue and bug systems or act
-in their place.
-
-This is how people naturally keep track of issues after single text files and
-spreadsheets fail to meet all project needs. (see [FAQ.md](FAQ.md)) 
-
-bug manages issues using Filesystem Issue Tracker (see [FIT.md](FIT.md))
-conventions/format. An `issues/` directory holds one (descriptively titled)
-directory per issue.
-
-The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue
-system that can still work. It differs from other distributed, versioned,
-filesystem based issue tracking tools in several ways. Human readable plain
-text files are still easily viewed, edited and understood. Standard tools are
-used and further minimize context switching between coding and issue tracking
-systems. This context is valuable. bug also supports multiple `issues/`
-directories throughout the directory tree for stronger coordination of coding
-and issue tracking.
-
-Using bug and FIT help implementers streamline working with
+Using bug and FIT helps implementers streamline working with
 [issues](https://en.wikipedia.org/wiki/Issue_tracking_system) and [version
 control](https://en.wikipedia.org/wiki/Version_control). bug works well with
 both git and mercurial distributed version control though the git features are
 more well exercised.
 
-The alternative is all too common in IT projects or other projects:
-intentionally disregard issues and hope problems will not attract attention due
-to lack of project budget, time, scope, quality or other resources. Beyond
-spreadsheets and without a separate issue system there is FIT.
+bug is adaptable with issue key/value pair metadata.
 
-All issues are are captured, surfaced and addressed, whether they are actual
-problems or some other kind of question or idea by those familiar with the
-project but who may be less code savvy.
+bug manages issues using Filesystem Issue Tracker (see [FIT.md](FIT.md))
+conventions/format. An `issues/` directory holds one (descriptively titled)
+directory per issue. Each directory holds a Description file and anything else
+needed.
+
+The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue
+system that can still work. It differs from similar tools in several ways.
+Human readable plain text files are intuitively understood, viewable, editable.
+
+People naturally try to keep track of issues in single text files and
+spreadsheets but these can fail to meet project needs. (see [FAQ.md](FAQ.md))
+
+Issue context is valuable to coders and may be difficult for others to
+understand. bug also supports multiple `issues/` directories throughout the
+directory tree for stronger coordination of coding and issue tracking.
+
+An alternative in IT projects is all too common: implementers are not given the
+tools needed to record code issues because issue systems take resources to
+setup and maintain. These separate isssue systems are often focused on user
+facing issues so valuable implementation details are often lost. IT hopes
+problems will not attract attention. Valuable project budget, time, scope,
+quality or other resources are focused on new features. Beyond managing
+contentious flat files or spreadsheets there is FIT.
+
+Important issues can be captured, surfaced and addressed, whether they are
+actual problems, questions, possible features or ideas by those most familiar
+with the project. Less code savvy people are not distracted by implementation
+details, code reviews or operational facing features.
 
 Software Development LifeCycles (SDLCs) involve more than just the source code.
 Over time needs may change from hacking/coding, just getting something working,
 to implementing more disciplined software engineering best practices. Code can
 start small as grow gradually as users, use cases and developers are added.
-This issue system can help at each stage.
+The FIT issue system can help at each stage.
 
 Generally one issue set is used for one git repository but recursive issues
-directories are being supported. As complexity increases adding multiple
-`issues/` directories in different parts of your git repo helps keep things
-focused. Features are being added to comprehensively manage a hierarchy of
-`issues/` directories.
+directories are supported. As complexity increases adding multiple `issues/`
+directories in different parts of your git repo helps keep context focused.
 
-As the number of past issues grows closed issues can simply be deleted or an
-archive can hold the inactive issues. While deleting issues helps keep things
-uncluttered issues still have value over time. A compromise may be to delete
-them and retain an index of deleted `issues/` files so that they can still be
-found and processed as needed.
+There are some choices of how to handle past issues. As the number grows closed
+issues can simply be deleted or an archive can hold the inactive issues. While
+deleting issues helps keep things uncluttered issues still have value over
+time.
 
 bug can be aliased as a git subcommand such as `bug` or `issue`. Security
-concerns are handled like any other git repository.
+concerns are handled using standard git repository practices.
 
 bug software is written using [golang](https://golang.org) to make things easy,
 simple and reliable. Why go? [This video](https://vimeo.com/69237265) from a
@@ -310,14 +313,15 @@ Issue Tracker (PMIT) storage system also first developed by driusan. For his
 demo from 2016, see [driusan's
 talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
 GolangMontreal.org conference, GoMTL-01. The program and storage system have
-had additions while trying to remain backward compatible. See the
-[FAQ.md](FAQ.md) for more information.
+evolved while trying to remain backward compatible. See the [FAQ.md](FAQ.md)
+for more information.
 
-Engineers know that there is more to code than the source itself. For some this
-is enough context. For most people new to a code base context is extremely
-helpful. Refactoring history, code reviews and notes can be important to grok
-the code. These may originate from research after a user reported problems or
-may arise while coding.
+Engineers know that there is more to code than the source itself. For some rare
+individuals the code is enough context. For most people new to a code base or
+distracted by other concerns recorded context can be extremely helpful.
+Refactoring history, code reviews, feature ideas and notes can be important to
+grok a code base. These may originate from research after a user reported
+problems or may arise while coding.
 
 ## Next Steps
 
@@ -341,13 +345,13 @@ I would like to work with others and would appreciate feedback at
 grantbow+bug@gmail.com.
 
 Since the original project is not very active I have gone ahead and continuted
-some development on my fork. I encourage discussion. Submitting can be done
-with a pull request to me, to our upstream project or using [git
+development on my fork. I encourage discussion. Submitting can be done with a
+pull request, to our upstream project or using [git
 remotes](https://stackoverflow.com/questions/36628859/git-how-to-merge-a-pull-request-into-a-fork).
 
-Anyone thinking of [CONTRIBUTING.md](CONTRIBUTING.md) may do so. As this is an issue tracking
-system a pull request with an issue seems logical enough and good working
-practice. Development Guidelines are covered.
+Anyone thinking of [CONTRIBUTING.md](CONTRIBUTING.md) is encouraged to do so.
+As this is an issue tracking system a pull request with an issue seems logical
+enough and good working practice. Development Guidelines are included.
 
 As mentioned in [SUPPORT.md](SUPPORT.md) questions are encouraged via email, issues or pull
 requests for now.

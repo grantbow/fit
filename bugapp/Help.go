@@ -334,7 +334,7 @@ GitHub projects require a configured GithubPersonalAccessToken value.
 
 bug manages plain text issues with git or hg.
 Use "bug help <command>" or "bug <command> help" for
-more information about any command below.
+    more information about any command below.
 `)
 		PrintVersion()
 		fmt.Printf(`

@@ -96,8 +96,6 @@ func main() {
 	} else {
 		switch osArgs[1] {
 		// subcommands without osArgs first
-		case "tagslist", "tagsassigned", "tags":
-			bugapp.TagsAssigned(config)
 		case "notags", "notag":
 			bugapp.TagsNone(config)
 		case "idslist", "idsassigned", "ids", "identifiers":
@@ -110,6 +108,10 @@ func main() {
 			bugapp.Pwd(config)
 		case "version", "about", "--version", "-v":
 			bugapp.PrintVersion()
+		case "purge":
+			bugapp.Purge(config)
+		case "twilio":
+			bugapp.Twilio(config)
 		case "staging", "staged", "cached", "cache", "index":
 			if b, err := handler.SCMIssuesUpdaters(); err != nil {
 				fmt.Printf("Files in issues/ need committing, see $ git status --porcelain -u -- :/issues\nand for files already in index see $ git diff --name-status --cached HEAD -- :/issues\n")
@@ -126,15 +128,12 @@ func main() {
 			} else {
 				fmt.Printf("No files in issues/ need committing, see $ git status --porcelain -u issues \":top\"\n")
 			}
-		case "purge":
-			bugapp.Purge(config)
-		case "twilio":
-			bugapp.Twilio(config)
-		// subcommands with osArgs next
+		// subcommands that pass osArgs
+		case "tagslist", "taglist", "tagsassigned", "tags":
+			bugapp.TagsAssigned(osArgs[2:], config)
 		case "list", "view", "show", "display", "ls":
 			// bug list with no parameters shouldn't autopage,
 			// bug list with bugs to view should. So the original
-			// stdout is passed as a parameter.
 			bugapp.List(osArgs[2:], config, true)
 		case "find":
 			bugapp.Find(osArgs[2:], config)

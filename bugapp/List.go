@@ -102,7 +102,8 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 		// provided a tagname instead of a BugID. If they
 		// did, then list bugs matching that tag instead
 		// of full descriptions
-		tags := getAllTags(config) // see Tag.go getAllTags() is defined in Tag.go
+		//tags := getAllTags(config) // see Tag.go getAllTags() is defined in Tag.go
+		tags := uniqueTagList(config)
 		// There were parameters, so show the full description of each
 		// of those issues
 		for i, length := 0, len(args); i < length; i += 1 {

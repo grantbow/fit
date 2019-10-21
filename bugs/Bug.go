@@ -124,8 +124,6 @@ func (b *Bug) LoadBug(dir Directory, config Config) {
 			i := getIdNext(config)
 			if i != -1 {
 				b.SetIdentifier(strconv.Itoa(i), config)
-				removeIdNext(i, config)
-				writeIdNext(i+1, config)
 			}
 		}
 	}
@@ -136,11 +134,15 @@ func getIdNext(config Config) int {
 	files, err := filepath.Glob(config.BugDir + sops + ".bug_idnext_*")
 	//fmt.Printf("debug Found %v files: %v\n", len(files), strings.Join(files, ", "))
 	if err == nil && len(files) > 1 {
-		os.Exit(1)
+		fmt.Printf("Found %v files: %v\n", len(files), strings.Join(files, ", "))
+		os.Exit(1) // error
 	} else if err == nil && len(files) == 1 {
 		parts := strings.Split(files[0], "_")
 		val := parts[len(parts)-1]
 		i, _ := strconv.Atoi(val)
+		//removeIdNext(i, config)
+		//writeIdNext(i+1, config)
+		renameIdNext(i, i+1, config)
 		return i
 	} else if err != nil && len(files) == 0 {
 		// missing
@@ -148,7 +150,11 @@ func getIdNext(config Config) int {
 		writeIdNext(i+1, config)
 		return i
 	} else {
-		fmt.Printf("Found %v files: %v\nError : %v\n", len(files), strings.Join(files, ", "), err.Error())
+		if err != nil {
+			fmt.Printf("Found %v files: %v\nError : %v\n", len(files), strings.Join(files, ", "), err.Error())
+		} else {
+			fmt.Printf("Found %v files: %v\nNo error returned\n", len(files), strings.Join(files, ", "))
+		}
 		return -1
 		//errors.New("file %s%s.bug_idnext_<i>", config.BugDir, sops)
 	}
@@ -161,8 +167,14 @@ func writeIdNext(j int, config Config) {
 	// TODO: scm.add
 }
 
-func removeIdNext(k int, config Config) {
-	os.Remove(config.BugDir + sops + ".bug_idnext_" + strconv.Itoa(k))
+//func removeIdNext(k int, config Config) {
+//	os.Remove(config.BugDir + sops + ".bug_idnext_" + strconv.Itoa(k))
+//	// TODO: scm.add
+//}
+
+func renameIdNext(i int, j int, config Config) {
+	os.Rename(config.BugDir+sops+".bug_idnext_"+strconv.Itoa(i),
+		config.BugDir+sops+".bug_idnext_"+strconv.Itoa(j))
 	// TODO: scm.add
 }
 
