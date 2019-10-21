@@ -18,7 +18,7 @@ import (
 func runtagsassigned(args argumentList, expected string, t *testing.T) {
 	config := bugs.Config{}
 	stdout, stderr := captureOutput(func() {
-		TagsAssigned(config)
+		TagsAssigned(args, config)
 	}, t)
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
@@ -67,7 +67,7 @@ func TestTag(t *testing.T) {
 	config := bugs.Config{}
 	var gdir string
 	gdir, err := ioutil.TempDir("", "taggit")
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -94,7 +94,7 @@ func TestTag(t *testing.T) {
 	}, t)
 	// before
 	runfind(argumentList{"tags", "foo"}, "", t) // find uses tags but tag uses tag
-	runtagsnone(argumentList{""}, "No tags assigned", t)
+	runtagsnone(argumentList{""}, "No tags assigned:", t)
 	// add with too few args
 	runtag(argumentList{}, "", t) // no cmd as argument
 	// add
@@ -124,11 +124,11 @@ func TestTag(t *testing.T) {
 	runtag(argumentList{"3", "baz"}, "", t) // no cmd as argument
 	// --rm a tag
 	runtag(argumentList{"--rm", "1", "bar"}, "", t) // no cmd as argument
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }
 func TestTagsAssigned(t *testing.T) {
-	runtagsassigned(argumentList{""}, "Tags used in current tree", t)
+	runtagsassigned(argumentList{""}, "<none assigned yet>", t)
 }
 func TestTagsNone(t *testing.T) {
-	runtagsnone(argumentList{""}, "No tags assigned", t)
+	runtagsnone(argumentList{""}, "No tags assigned:", t)
 }
