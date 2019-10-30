@@ -17,6 +17,8 @@ type Config struct {
 	//     likely .git
 	// overridden by FIT/PMIT environment variable ** runtime only
 	BugDir string `json:"BugDir"`
+	// overridden by FIT/PMIT environment variable ** runtime only
+	IssuesDirName string `json:"IssuesDirName"`
 	// BugDir+"/.bug.yml" * if present ** runtime only
 	BugYml string `json:"BugYml"`
 	// Description contents for new issue or empty file (empty default)

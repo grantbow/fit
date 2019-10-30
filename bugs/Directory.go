@@ -10,38 +10,48 @@ import (
 // Directory type is a string path name.
 type Directory string
 
+func findIssuesDir(dir string, config *Config) Directory {
+	if dirinfo, err := os.Stat(dir); err == nil && dirinfo.IsDir() {
+		if dirinfo, err = os.Stat(dir + sops + "fit"); err == nil && dirinfo.IsDir() {
+			// has a fit dir
+			config.BugDir = dir
+			config.IssuesDirName = "fit"
+			os.Chdir(dir)
+			return Directory(dir)
+		} else if dirinfo, err = os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
+			// has an issues dir
+			config.BugDir = dir
+			config.IssuesDirName = "issues"
+			os.Chdir(dir)
+			return Directory(dir)
+		}
+		// better to fall through and start looking rather than
+		//} else {
+		//	return ""
+	}
+	return ""
+}
+
 // RootDirer returns the directory usually containing the issues subdirectory.
 func RootDirer(config *Config) Directory {
 	dir := os.Getenv("FIT") // new first
 	if dir != "" {
-		if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
-			if dirinfo, err = os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
-				// has an issues dir
-				config.BugDir = dir
-				os.Chdir(dir)
-				return Directory(dir)
-			}
-			// better to fall through and start looking rather than
-			//} else {
-			//	return ""
+		if x := findIssuesDir(dir, config); x != "" {
+			return x
 		}
 	} else {
-		dir := os.Getenv("PMIT") // for backwards compatibility
+		dir = os.Getenv("PMIT") // for backwards compatibility
 		if dir != "" {
-			if dirinfo, err := os.Stat(string(dir)); err == nil && dirinfo.IsDir() {
-				config.BugDir = dir
-				os.Chdir(dir)
-				return Directory(dir)
+			if x := findIssuesDir(dir, config); x != "" {
+				return x
 			}
 		}
 	}
 
 	wd, _ := os.Getwd()
 
-	if dirinfo, err := os.Stat(wd + sops + "issues"); err == nil && dirinfo.IsDir() {
-		config.BugDir = string(wd)
-		//os.Chdir(dir) // already there
-		return Directory(wd)
+	if x := findIssuesDir(wd, config); x != "" {
+		return x
 	}
 
 	// There's no environment variable and no issues
@@ -50,10 +60,12 @@ func RootDirer(config *Config) Directory {
 
 	for i := len(pieces); i > 0; i -= 1 {
 		dir := strings.Join(pieces[0:i], sops)
-		if dirinfo, err := os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
-			config.BugDir = dir
-			os.Chdir(dir)
-			return Directory(dir)
+		if x := findIssuesDir(dir, config); x != "" {
+			return x
+			//if dirinfo, err := os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
+			//	config.BugDir = dir
+			//	os.Chdir(dir)
+			//	return Directory(dir)
 		}
 	}
 	return "" // out of luck

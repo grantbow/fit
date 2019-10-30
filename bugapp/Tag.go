@@ -102,7 +102,7 @@ func TagsNone(config bugs.Config) {
 func TagsAssigned(Args argumentList, config bugs.Config) {
 	outputCount := false
 	if len(Args) == 1 &&
-		Args[0] == "-c" {
+		(Args[0] == "-c" || Args[0] == "--count") {
 		outputCount = true
 	}
 	//fmt.Printf("here\n")

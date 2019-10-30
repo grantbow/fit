@@ -173,9 +173,9 @@ func checkDirTree(args argumentList, config bugs.Config, node os.FileInfo, allow
 			nodee.IsDir() == true {
 			wd, _ := os.Getwd() // save for go back
 			// candidate
-			os.Chdir(nodee.Name()) // go down
-			checkDirTree(args, config, nodee, true)
-			os.Chdir(wd) // go back
+			os.Chdir(nodee.Name())                  // go down
+			checkDirTree(args, config, nodee, true) // calls itself
+			os.Chdir(wd)                            // go back
 		}
 	}
 }

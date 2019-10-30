@@ -11,7 +11,7 @@ import (
 
 func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 	var gdir string
-	gdir, err := ioutil.TempDir("", "rootdirbug")
+	gdir, err := ioutil.TempDir("", "rootdirbug1")
 	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
@@ -44,7 +44,7 @@ func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 func TestMissingRootDirerWithEnvironmentVariable(t *testing.T) {
 	var gdir string
 	config := Config{}
-	gdir, err := ioutil.TempDir("", "rootdirbug")
+	gdir, err := ioutil.TempDir("", "rootdirbug2")
 	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
@@ -57,7 +57,7 @@ func TestMissingRootDirerWithEnvironmentVariable(t *testing.T) {
 		return
 	}
 	// FIT/issues missing so doesn't override wd
-	fitdir := ".." + sops + "fit"
+	fitdir := ".." + sops + "abc"
 	os.Mkdir(fitdir, 0755) // missing issues directory
 	//os.Mkdir("../fit/issues", 0755)
 	os.Setenv("FIT", gdir+sops+fitdir)

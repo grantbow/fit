@@ -224,7 +224,7 @@ func readIssues(dirname string) []os.FileInfo {
 type byDir []os.FileInfo
 
 func (t byDir) Len() int {
-	return len(t) // time.Format(time.UnixNano(t.modtime).UnixNano())
+	return len(t)
 }
 func (t byDir) Swap(i, j int) {
 	t[i], t[j] = t[j], t[i]

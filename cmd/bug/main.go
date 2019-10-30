@@ -15,19 +15,22 @@ func main() {
 	config := bugs.Config{}
 	config.ProgramVersion = bugapp.ProgramVersion()
 	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "issues"
 
 	rootPresent := false
 	bugYmlFileName := ".bug.yml"
+	fitYmlFileName := ".fit.yml"
 	skip := bugapp.SkipRootCheck(&os.Args) // too few args or help or env
 	if rd := bugs.RootDirer(&config); rd != "" {
 		// bugs/Directory.go func RootDirer sets config.BugDir does os.Chdir()
 		rootPresent = true
 		// now try to read config
-		ErrC := bugs.ConfigRead(bugYmlFileName, &config, bugapp.ProgramVersion())
-		if ErrC == nil {
-			config.BugYml = config.BugDir + string(os.PathSeparator) + bugYmlFileName
+		if ErrC := bugs.ConfigRead(fitYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+			config.BugYml = config.BugDir + string(os.PathSeparator) + fitYmlFileName
 			//var sops = string(os.PathSeparator) not yet available
 			//var dops = Directory(os.PathSeparator)
+		} else if ErrC := bugs.ConfigRead(bugYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+			config.BugYml = config.BugDir + string(os.PathSeparator) + bugYmlFileName
 		}
 	}
 
@@ -37,8 +40,8 @@ func main() {
 		} else { // !skip
 			//bugapp.PrintVersion()
 			fmt.Printf("bug manages plain text issues with git or hg.\n")
-			fmt.Printf("Error: Could not find `issues` directory.\n")
-			fmt.Printf("    Check that the current or a parent directory has an issues directory\n")
+			fmt.Printf("Error: Could not find `fit` or `issues` directory.\n")
+			fmt.Printf("    Check that the current or a parent directory has a fit directory\n")
 			fmt.Printf("    or set the FIT environment variable.\n")
 			//fmt.Printf("Each issues directory contains issues.\n")
 			//fmt.Printf("Each issue directory contains a text file named Description.\n")
