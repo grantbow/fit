@@ -44,9 +44,10 @@ func TestFindSubcommandUnknownGTOne(t *testing.T) {
 }
 func TestFindSubcommands(t *testing.T) {
 	config := bugs.Config{}
+	config.IssuesDirName = "fit"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "findgit")
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -60,7 +61,7 @@ func TestFindSubcommands(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
-	os.Mkdir("issues", 0755)
+	os.Mkdir(config.IssuesDirName, 0755)
 	err = os.Setenv("FIT", gdir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
@@ -78,5 +79,5 @@ func TestFindSubcommands(t *testing.T) {
 	}, t)
 	runfind(argumentList{"tags", "foo"}, "Issue 1: no_id_bug \\(foo\\)\n", t)
 	runfind(argumentList{"tags", "matchstring"}, "", t) // still not found
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }

@@ -17,6 +17,7 @@ type tester struct {
 func (t *tester) Setup() {
 	config := Config{}
 	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "issues"
 	gdir, err := ioutil.TempDir("", "issuetest")
 	pwd, _ := os.Getwd()
 	t.pwd = pwd
@@ -31,7 +32,7 @@ func (t *tester) Setup() {
 		panic("Failed creating temporary directory")
 	}
 	// Make sure we get the right directory from the top level
-	os.Mkdir("issues", 0755)
+	os.Mkdir(config.IssuesDirName, 0755)
 	b, err := New("Test Bug", config)
 	if err != nil {
 		panic("Unexpected error creating Test Bug")
@@ -82,6 +83,7 @@ func TestNewBug(t *testing.T) {
 	var gdir string
 	config := Config{}
 	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "issues"
 	gdir, err := ioutil.TempDir("", "newbug")
 	pwd, _ := os.Getwd()
 	if err == nil {
@@ -94,7 +96,7 @@ func TestNewBug(t *testing.T) {
 		t.Error("Failed creating temporary directory for detect")
 		return
 	}
-	os.Mkdir("issues", 0755)
+	os.Mkdir(config.IssuesDirName, 0755)
 	b, err := New("I am a test", config)
 	if err != nil || b == nil {
 		t.Error("Unexpected error when creating New bug" + err.Error())

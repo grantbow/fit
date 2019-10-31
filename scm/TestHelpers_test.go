@@ -43,7 +43,7 @@ func runCmd(cmd string, options ...string) (string, error) {
 func assertLogs(tester ManagerTester, t *testing.T, titles []map[string]bool, diffs []string) {
 	logs, err := tester.Loggers()
 	if err != nil {
-        t.Error("scm Loggers error : " + err.Error())
+		t.Error("scm Loggers error : " + err.Error())
 		return
 	}
 
@@ -82,6 +82,7 @@ func assertLogs(tester ManagerTester, t *testing.T, titles []map[string]bool, di
 func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiffs []string) {
 	var config bugs.Config
 	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "fit"
 	err := tester.Setup()
 	defer tester.TearDown()
 	if err != nil {
@@ -94,8 +95,8 @@ func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiff
 		t.Error("Could not get manager")
 		return
 	}
-	os.MkdirAll("issues"+sops+"Test-bug", 0755)
-	ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
+	os.MkdirAll(config.IssuesDirName+sops+"Test-bug", 0755)
+	ioutil.WriteFile(config.IssuesDirName+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
 	m.Commit(bugs.Directory(tester.WorkDir()), "Initial commit", config)
 	//runCmd("bug", "retitle", "1", "Renamed", "bug")
 	args := argumentList{"1", "Renamed bug"}
@@ -119,6 +120,7 @@ func runtestRenameCommitsHelper(tester ManagerTester, t *testing.T, expectedDiff
 func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	var config bugs.Config
 	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "fit"
 	err := tester.Setup()
 	if err != nil {
 		panic("Something went wrong trying to initialize the scm : " + err.Error())
@@ -131,8 +133,8 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	}
 	//
 	//
-	os.MkdirAll("issues"+sops+"Test-bug", 0755)
-	ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
+	os.MkdirAll(config.IssuesDirName+sops+"Test-bug", 0755)
+	ioutil.WriteFile(config.IssuesDirName+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
 	if err = ioutil.WriteFile("donotcommit.txt", []byte(""), 0644); err != nil {
 		t.Error("Could not write file")
 		return
@@ -142,7 +144,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	})
 
 	//fmt.Print("pre  1 runtestCommitDirtyTree\n")
-	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Initial commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.IssuesDirName), "Initial commit", config)
 	//fmt.Print("post 1 runtestCommitDirtyTree\n")
 	tester.AssertStagingIndex(t, []FileStatus{
 		FileStatus{"donotcommit.txt", "?", "?"},
@@ -152,8 +154,8 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		FileStatus{"donotcommit.txt", "A", " "},
 	})
 	//fmt.Print("pre  2 runtestCommitDirtyTree\n")
-	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Initial commit", config)
-	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Initial commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.IssuesDirName), "Initial commit", config)
+	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+sops+config.IssuesDirName), "Initial commit", config)
 	//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", errCommit) // nil here
 	//    running test shows output here. actually HgManager.go Commit() returns *expected* error
 	//        not fully handled by Hg though
@@ -165,13 +167,13 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		FileStatus{"donotcommit.txt", "A", " "},
 	})
 	//
-	os.MkdirAll("issues"+sops+"Fresh-bug", 0755)
-	ioutil.WriteFile("issues"+sops+"Fresh-bug"+sops+"Description", []byte(""), 0644)
+	os.MkdirAll(config.IssuesDirName+sops+"Fresh-bug", 0755)
+	ioutil.WriteFile(config.IssuesDirName+sops+"Fresh-bug"+sops+"Description", []byte(""), 0644)
 	tester.AssertStagingIndex(t, []FileStatus{
 		FileStatus{"donotcommit.txt", "A", " "},
-		FileStatus{"issues" + sops + "Fresh-bug" + sops + "Description", "?", "?"},
+		FileStatus{config.IssuesDirName + sops + "Fresh-bug" + sops + "Description", "?", "?"},
 	})
-	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Initial commit", config)
+	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+sops+config.IssuesDirName), "Initial commit", config)
 	//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", errCommit) // shouldn't be nil
 	scmoptions := make(map[string]bool)
 	handler, _, _ := DetectSCM(scmoptions, config)
@@ -188,7 +190,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 			}
 		}
 	}
-	tester.StageFile("issues" + sops + "Fresh-bug" + sops + "Description")
+	tester.StageFile(config.IssuesDirName + sops + "Fresh-bug" + sops + "Description")
 	handler, _, _ = DetectSCM(scmoptions, config)
 	if b, err := handler.SCMIssuesUpdaters(); err != nil {
 		for _, bline := range strings.Split(string(b), "\n") {
@@ -238,6 +240,7 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	var config bugs.Config
 	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "fit"
 	err := tester.Setup()
 	if err != nil {
 		panic("Something went wrong trying to initialize: " + err.Error())
@@ -250,18 +253,18 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	}
 	// Commit a bug which should stay around after the purge
 	//runCmd("bug", "create", "-n", "Test", "bug")
-	os.MkdirAll("issues"+sops+"Test-bug", 0755)
-	ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
-	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Initial commit", config)
+	os.MkdirAll(config.IssuesDirName+sops+"Test-bug", 0755)
+	ioutil.WriteFile(config.IssuesDirName+sops+"Test-bug"+sops+"Description", []byte(""), 0644)
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.IssuesDirName), "Initial commit", config)
 
 	// Create another bug to elimate with purge
 	//runCmd("bug", "create", "-n", "Test", "Purge", "bug")
-	os.MkdirAll("issues"+sops+"Test-Purge-Bug", 0755)
-	err = m.Purge(bugs.Directory(tester.WorkDir() + "" + sops + "issues"))
+	os.MkdirAll(config.IssuesDirName+sops+"Test-Purge-Bug", 0755)
+	err = m.Purge(bugs.Directory(tester.WorkDir() + "" + sops + config.IssuesDirName))
 	if err != nil {
 		t.Error("Error purging bug directory: " + err.Error())
 	}
-	issuesDir, err := ioutil.ReadDir("issues") //fmt.Sprintf("debug: %s/issues/", tester.WorkDir()))
+	issuesDir, err := ioutil.ReadDir(config.IssuesDirName) //fmt.Sprintf("debug: %s/issues/", tester.WorkDir()))
 	if err != nil {
 		t.Error("Error reading issues directory: " + err.Error())
 	}
@@ -271,9 +274,9 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	if len(issuesDir) > 0 && issuesDir[0].Name() != "Test-bug" {
 		t.Error("Expected Test-bug to remain.")
 	}
-	err = m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "", config) // no changes
-	if err != nil {                                                            // should NOT be a nil
-        t.Error("Expected no commit error : " + err.Error())
+	err = m.Commit(bugs.Directory(tester.WorkDir()+sops+config.IssuesDirName), "", config) // no changes
+	if err != nil {                                                                        // should NOT be a nil
+		t.Error("Expected no commit error : " + err.Error())
 	}
 }
 
@@ -339,8 +342,8 @@ func scmRetitle(Args argumentList, config bugs.Config) {
 	newDir := bugs.IssuesDirer(config) + dops + bugs.TitleToDir(strings.Join(Args[1:], " "))
 	fmt.Printf("Moving %s to %s\n", currentDir, newDir)
 	err = os.Rename(string(currentDir), string(newDir))
-        // uses os.rename
-        // not git-mv and/or hg rename
+	// uses os.rename
+	// not git-mv and/or hg rename
 	if err != nil {
 		fmt.Printf("Error moving directory\n")
 	}

@@ -13,11 +13,12 @@ import (
 func TestBugWrite(t *testing.T) {
 	config := Config{}
 	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "fit"
 	var b *Bug
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	if dir, err := ioutil.TempDir("", "BugWrite"); err == nil {
 		os.Chdir(dir)
-		b = &Bug{Dir: Directory(dir + sops + "issues" + sops + "Test-bug"), DescriptionFileName: config.DescriptionFileName}
+		b = &Bug{Dir: Directory(dir + sops + config.IssuesDirName + sops + "Test-bug"), DescriptionFileName: config.DescriptionFileName}
 		defer os.RemoveAll(dir)
 	} else {
 		t.Error("Could not get temporary directory to test bug write()")
@@ -30,7 +31,7 @@ func TestBugWrite(t *testing.T) {
 	}
 	b.Close()
 
-	fp, _ := os.Open("issues" + sops + "Test-bug" + sops + "Description")
+	fp, _ := os.Open(config.IssuesDirName + sops + "Test-bug" + sops + "Description")
 	desc, err := ioutil.ReadAll(fp)
 	fp.Close()
 
@@ -44,7 +45,7 @@ func TestBugWrite(t *testing.T) {
 	if string(desc) != string("Hello there, Mr. Test") {
 		t.Error("Incorrect description file after writing to bug")
 	}
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }
 
 /*

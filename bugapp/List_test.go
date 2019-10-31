@@ -29,9 +29,10 @@ func runlist(args argumentList, expected string, t *testing.T) {
 func TestList(t *testing.T) {
 	config := bugs.Config{}
 	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "fit"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "listgit")
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -45,7 +46,7 @@ func TestList(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
-	os.Mkdir("issues", 0755)
+	os.Mkdir(config.IssuesDirName, 0755)
 
 	err = os.Setenv("FIT", gdir)
 	if err != nil {
@@ -77,7 +78,7 @@ func TestList(t *testing.T) {
 
 	// after
 	//fmt.Println("after")
-	//file, err := ioutil.ReadFile(fmt.Sprintf("%s%sissues%sno_list_bug%sMilestone", gdir, sops, sops, sops))
+	//file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_list_bug%sMilestone", gdir, sops, config.IssuesDirName, sops, sops))
 	//if err != nil {
 	//	t.Error("Could not load milestone file" + err.Error())
 	//}
@@ -85,5 +86,5 @@ func TestList(t *testing.T) {
 	//	t.Error("Expected a Milestone file")
 	//}
 	//runfind(argumentList{"milestone", "foo"}, "Issue 1: no_list_bug\n", t)
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }

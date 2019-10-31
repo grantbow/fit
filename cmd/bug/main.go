@@ -36,7 +36,7 @@ func main() {
 
 	if !rootPresent {
 		if skip {
-			fmt.Printf("Warn: no `issues` directory\n")
+			fmt.Printf("Warn: no `" + config.IssuesDirName + "` directory\n")
 		} else { // !skip
 			//bugapp.PrintVersion()
 			fmt.Printf("bug manages plain text issues with git or hg.\n")
@@ -117,7 +117,7 @@ func main() {
 			bugapp.Twilio(config)
 		case "staging", "staged", "cached", "cache", "index":
 			if b, err := handler.SCMIssuesUpdaters(); err != nil {
-				fmt.Printf("Files in issues/ need committing, see $ git status --porcelain -u -- :/issues\nand for files already in index see $ git diff --name-status --cached HEAD -- :/issues\n")
+				fmt.Printf("Files in " + config.IssuesDirName + "/ need committing, see $ git status --porcelain -u -- :/" + config.IssuesDirName + "\nand for files already in index see $ git diff --name-status --cached HEAD -- :/" + config.IssuesDirName + "\n")
 				if _, ErrCach := handler.SCMIssuesCacher(); ErrCach != nil {
 					for _, bline := range strings.Split(string(b), "\n") {
 						//if bline in c {
@@ -129,7 +129,7 @@ func main() {
 					fmt.Printf("%v\n", string(b))
 				}
 			} else {
-				fmt.Printf("No files in issues/ need committing, see $ git status --porcelain -u issues \":top\"\n")
+				fmt.Printf("No files in " + config.IssuesDirName + "/ need committing, see $ git status --porcelain -u " + config.IssuesDirName + " \":top\"\n")
 			}
 		// subcommands that pass osArgs
 		case "tagslist", "taglist", "tagsassigned", "tags":

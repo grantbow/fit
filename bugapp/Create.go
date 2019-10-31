@@ -76,7 +76,7 @@ func Create(Args argumentList, config bugs.Config) {
 	}
 	var bgid = bugs.IssuesDirer(config)
 	if bgid == "" {
-		os.MkdirAll("issues", 0700)
+		os.MkdirAll(config.IssuesDirName, 0700)
 		bgid = bugs.IssuesDirer(config)
 	}
 	var bug = bugs.Bug{

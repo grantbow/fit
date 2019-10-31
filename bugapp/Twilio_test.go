@@ -16,14 +16,15 @@ import (
 
 func TestTwilio(t *testing.T) {
 	config := bugs.Config{}
+	config.IssuesDirName = "fit"
 	dir, err := ioutil.TempDir("", "twiliotest")
 	if err != nil {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	os.Chdir(dir)
-	os.MkdirAll("issues", 0700)
+	os.MkdirAll(config.IssuesDirName, 0700)
 	defer os.RemoveAll(dir)
 	// On MacOS, /tmp is a symlink, which causes GetDirectory() to return
 	// a different path than expected in these tests, so make the issues
@@ -49,7 +50,7 @@ func TestTwilio(t *testing.T) {
 		t.Error("Unexpected output on STDOUT")
 		fmt.Printf("Expected: %s\nGot %s\n", "", stdout)
 	}
-	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
+	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%s%s%s", dir, sops, config.IssuesDirName, sops))
 	if err != nil {
 		t.Error("Could not read issues directory")
 		return
@@ -57,7 +58,7 @@ func TestTwilio(t *testing.T) {
 	if len(issuesDir) != 1 {
 		t.Errorf("Expected 1 issue  : %v\n", dirDumpFI(issuesDir))
 	}
-    // TODO: test
+	// TODO: test
 
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }

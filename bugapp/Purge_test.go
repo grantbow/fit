@@ -17,14 +17,15 @@ import (
 
 func TestPurgeNoEditor(t *testing.T) {
 	config := bugs.Config{}
+	config.IssuesDirName = "fit"
 	dir, err := ioutil.TempDir("", "purgetest")
 	if err != nil {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	os.Chdir(dir)
-	os.MkdirAll("issues", 0700)
+	os.MkdirAll(config.IssuesDirName, 0700)
 	defer os.RemoveAll(dir)
 	// On MacOS, /tmp is a symlink, which causes GetDirectory() to return
 	// a different path than expected in these tests, so make the issues
@@ -50,9 +51,9 @@ func TestPurgeNoEditor(t *testing.T) {
 		t.Error("Unexpected output on STDOUT")
 		fmt.Printf("Expected: %s\nGot %s\n", "", stdout)
 	}
-	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
+	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%s%s%s", dir, sops, config.IssuesDirName, sops))
 	if err != nil {
-		t.Error("Could not read issues directory")
+		t.Error("Could not read " + config.IssuesDirName + " directory")
 		return
 	}
 	if len(issuesDir) != 1 {
@@ -62,15 +63,15 @@ func TestPurgeNoEditor(t *testing.T) {
 	stdout, stderr = captureOutput(func() {
 		Purge(config)
 	}, t)
-	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%sissues%s", dir, sops, sops))
+	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%s%s%s", dir, sops, config.IssuesDirName, sops))
 	if err != nil {
-		t.Error("Could not purge issues directory")
+		t.Error("Could not purge " + config.IssuesDirName + " directory")
 		return
 	}
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-	expected := "Removing issues.Test-bug."
+	expected := "Removing " + config.IssuesDirName + ".Test-bug."
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
 	if !matched {
@@ -80,5 +81,5 @@ func TestPurgeNoEditor(t *testing.T) {
 	if len(issuesDir) != 0 {
 		t.Errorf("Expected 0 issues : %v\n", dirDumpFI(issuesDir))
 	}
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }

@@ -11,9 +11,11 @@ import (
 
 func TestEnvGit(t *testing.T) {
 	config := bugs.Config{}
+	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "fit"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "envgit")
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on

@@ -30,9 +30,10 @@ func runmiles(args argumentList, expected string, t *testing.T) {
 
 func TestMilestone(t *testing.T) {
 	config := bugs.Config{}
+	config.IssuesDirName = "fit"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "milestonegit")
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -46,7 +47,7 @@ func TestMilestone(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
-	os.Mkdir("issues", 0755)
+	os.Mkdir(config.IssuesDirName, 0755)
 
 	err = os.Setenv("FIT", gdir)
 	if err != nil {
@@ -63,14 +64,14 @@ func TestMilestone(t *testing.T) {
 	runmiles(argumentList{"1", "foo"}, "", t) // no cmd as argument
 	// force it to test when runmiles doesn't work
 	//val := []byte("foo\n")
-	//fmt.Println(ioutil.WriteFile(string(gdir)+sops+"issues"+sops+"no_miles_bug"+sops+"Milestone", []byte(val), 0644))
+	//fmt.Println(ioutil.WriteFile(string(gdir)+sops+config.IssuesDirName+sops+"no_miles_bug"+sops+"Milestone", []byte(val), 0644))
 	// check
-	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s%sissues%sno_miles_bug", gdir, sops, sops))
+	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s%s%s%sno_miles_bug", gdir, sops, config.IssuesDirName, sops))
 	//fmt.Printf("readdir len %#v\n", len(bugDir))
 	//fmt.Printf("readdir %#v\n", bugDir[0])
 	//fmt.Printf("readdir %#v\n", bugDir[1])
 	// after
-	file, err := ioutil.ReadFile(fmt.Sprintf("%s%sissues%sno_miles_bug%sMilestone", gdir, sops, sops, sops))
+	file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_miles_bug%sMilestone", gdir, sops, config.IssuesDirName, sops, sops))
 	if err != nil {
 		t.Error("Could not load Milestone file" + err.Error())
 	}
@@ -78,5 +79,5 @@ func TestMilestone(t *testing.T) {
 		t.Error("Expected a Milestone file")
 	}
 	runfind(argumentList{"milestone", "foo"}, "Issue 1: no_miles_bug\n", t)
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }

@@ -52,7 +52,7 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 				ititle := string(bugs.TitleToDir(fmt.Sprintf("%s%s%v", *issue.Title, "-", *issue.Number)))
 				fmt.Printf("Importing issue %s\n", ititle)
 				// add issue.Number to title
-				b := bugs.Bug{Dir: bugs.Directory(config.BugDir + sops + "issues" + sops + ititle)}
+				b := bugs.Bug{Dir: bugs.Directory(config.BugDir + sops + config.IssuesDirName + sops + ititle)}
 				if dir := b.Direr(); dir != "" {
 					os.Mkdir(string(dir), 0755)
 				}
@@ -161,7 +161,7 @@ func githubImportProjects(user, repo string, config bugs.Config) {
 			i += 1
 			projname := "proj-" + string(bugs.TitleToDir(fmt.Sprintf("%v%s%s", *project.Number, "-", *project.Name)))
 			fmt.Printf("Importing %s\n", projname)
-			b := bugs.Bug{Dir: bugs.Directory(config.BugDir + sops + "issues" + sops + projname)}
+			b := bugs.Bug{Dir: bugs.Directory(config.BugDir + sops + config.IssuesDirName + sops + projname)}
 			if dir := b.Direr(); dir != "" {
 				os.Mkdir(string(dir), 0755)
 			}

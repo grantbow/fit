@@ -18,9 +18,10 @@ type tester struct {
 
 func (t *tester) Setup() {
 	config := bugs.Config{}
+	config.IssuesDirName = "fit"
 	gdir, err := ioutil.TempDir("", "issuetestsetup")
-    pwd, _ := os.Getwd()
-    t.pwd = pwd
+	pwd, _ := os.Getwd()
+	t.pwd = pwd
 	if err == nil {
 		os.Chdir(gdir)
 		t.dir = gdir
@@ -32,7 +33,7 @@ func (t *tester) Setup() {
 		panic("Failed creating temporary directory")
 	}
 	// Make sure we get the right directory from the top level
-	os.Mkdir("issues", 0755)
+	os.Mkdir(config.IssuesDirName, 0755)
 	b, err := bugs.New("Test Bug", config)
 	if err != nil {
 		panic("Unexpected error creating Test Bug")
@@ -40,12 +41,13 @@ func (t *tester) Setup() {
 	t.bug = b
 }
 func (t *tester) Teardown() {
-    os.Chdir(t.pwd)
+	os.Chdir(t.pwd)
 	os.RemoveAll(t.dir)
 }
 
 func TestPwd(t *testing.T) {
 	config := bugs.Config{}
+	config.IssuesDirName = "fit"
 	test := tester{} // from Bug_test.go
 	test.Setup()
 	defer test.Teardown()
@@ -53,10 +55,10 @@ func TestPwd(t *testing.T) {
 	stdout, _ := captureOutput(func() {
 		Pwd(config)
 	}, t)
-	re := regexp.MustCompile("issues")
+	re := regexp.MustCompile(config.IssuesDirName)
 	matched := re.MatchString(stdout)
 	if !matched {
 		t.Error("Unexpected output on STDOUT for bugapp/Pwd_test")
-		fmt.Printf("Expected to match: %s\nGot: %s\n", "issues", stdout)
+		fmt.Printf("Expected to match: %s\nGot: %s\n", config.IssuesDirName, stdout)
 	}
 }

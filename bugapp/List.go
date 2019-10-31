@@ -53,7 +53,7 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 		wantRecursive = true
 	}
 
-	fmt.Printf("\n===== list %s\n", config.BugDir+sops+"issues")
+	fmt.Printf("\n===== list %s\n", config.BugDir+sops+config.IssuesDirName)
 	if matchRegex && (len(args) > 1) {
 		for i, length := 0, len(args); i < length; i += 1 {
 			// TODO for _, tag := range args { // idx not needed
@@ -158,8 +158,8 @@ func checkDirTree(args argumentList, config bugs.Config, node os.FileInfo, allow
 	// check pwd
 	topwd, _ := os.Getwd()
 	//fmt.Printf("/////  debug checkDirTree issues dir %s\n", topwd)
-	if dirinfo, err := os.Stat(topwd + sops + "issues"); err == nil && dirinfo.IsDir() && allowHits {
-		//fmt.Printf("\n/////  issues in dir %s\n", topwd+sops+"issues")
+	if dirinfo, err := os.Stat(topwd + sops + config.IssuesDirName); err == nil && dirinfo.IsDir() && allowHits {
+		//fmt.Printf("\n/////  issues in dir %s\n", topwd+sops+config.IssuesDirName)
 		newConfig := config
 		newConfig.BugDir = string(topwd) // BugRootDir
 		List(args, newConfig, false)     // process
@@ -169,7 +169,7 @@ func checkDirTree(args argumentList, config bugs.Config, node os.FileInfo, allow
 	fileinfos, _ := ioutil.ReadDir(topwd)
 	//fmt.Printf("/////  debug checkDirTree subdir %s\n", topwd) // +sops+node.Name())
 	for _, nodee := range fileinfos {
-		if nodee.Name() != "issues" &&
+		if nodee.Name() != config.IssuesDirName &&
 			nodee.IsDir() == true {
 			wd, _ := os.Getwd() // save for go back
 			// candidate

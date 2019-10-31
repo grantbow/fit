@@ -34,9 +34,10 @@ func (c GitCommit) CommitMessage() (string, error) {
 }
 
 type GitTester struct {
-	handler SCMHandler
-	workdir string
-	pwd string
+	handler       SCMHandler
+	workdir       string
+	pwd           string
+	issuesdirname string
 }
 
 func (g GitTester) Loggers() ([]Commit, error) {
@@ -82,8 +83,8 @@ func (g GitTester) StageFile(file string) error {
 	return err
 }
 func (g *GitTester) Setup() error {
-    pwd, _ := os.Getwd()
-    g.pwd = pwd
+	pwd, _ := os.Getwd()
+	g.pwd = pwd
 	if gdir, err := ioutil.TempDir("", "gitmanager"); err == nil {
 		g.workdir = gdir
 		os.Chdir(g.workdir)
@@ -95,7 +96,7 @@ func (g *GitTester) Setup() error {
 		panic("Failed creating temporary directory")
 	}
 	// Make sure we get the right directory from the top level
-	os.Mkdir("issues", 0755)
+	os.Mkdir(g.issuesdirname, 0755)
 
 	out, err := runCmd("git", "init")
 	if err != nil {
@@ -118,7 +119,7 @@ func init() {
 }
 
 func (g GitTester) TearDown() {
-    os.Chdir(g.pwd)
+	os.Chdir(g.pwd)
 	os.RemoveAll(g.workdir)
 }
 func (g GitTester) WorkDir() string {
@@ -141,10 +142,10 @@ func (g GitTester) Manager() SCMHandler {
 
 func TestGitBugRenameCommits(t *testing.T) {
 	t.Skip("windows failure - see scm/GitManager_test.go+143")
-    // TODO: finish making tests on Windows pass then redo this test
-    // This test fakes output of the main bug command then tries to rename
-    // what looks like with os.rename and not hg rename. Maybe scrap the test
-    // and start over. The simulations of simulations feel unnecessary.
+	// TODO: finish making tests on Windows pass then redo this test
+	// This test fakes output of the main bug command then tries to rename
+	// what looks like with os.rename and not hg rename. Maybe scrap the test
+	// and start over. The simulations of simulations feel unnecessary.
 	if git == false {
 		t.Skip("WARN git executable not found")
 	}
@@ -153,14 +154,14 @@ func TestGitBugRenameCommits(t *testing.T) {
 
 	expectedDiffs := []string{
 		`
-diff --git a/issues/Test-bug/Description b/issues/Test-bug/Description
+diff --git a/fit/Test-bug/Description b/fit/Test-bug/Description
 new file mode 100644
 index 0000000..e69de29
 `, `
-diff --git a/issues/Test-bug/Description b/issues/Renamed-bug/Description
+diff --git a/fit/Test-bug/Description b/fit/Renamed-bug/Description
 similarity index 100%
-rename from issues/Test-bug/Description
-rename to issues/Renamed-bug/Description
+rename from fit/Test-bug/Description
+rename to fit/Renamed-bug/Description
 `}
 
 	runtestRenameCommitsHelper(&g, t, expectedDiffs)
@@ -180,8 +181,8 @@ func TestGitFilesOutsideOfBugNotCommited(t *testing.T) {
 		t.Skip("WARN git executable not found")
 	}
 	t.Skip("windows failure - see scm/GitManager_test.go+182")
-    // TODO: finish making tests on Windows pass then redo this test
-    // the error codes need handling
+	// TODO: finish making tests on Windows pass then redo this test
+	// the error codes need handling
 	g := GitTester{}
 	g.handler = GitManager{}
 	runtestCommitDirtyTree(&g, t)
@@ -200,8 +201,8 @@ func TestGitManagerPurge(t *testing.T) {
 		t.Skip("WARN git executable not found")
 	}
 	t.Skip("windows failure - see scm/GitManager_test.go+202")
-    // TODO: finish making tests on Windows pass then redo this test
-    // the error codes need handling
+	// TODO: finish making tests on Windows pass then redo this test
+	// the error codes need handling
 	g := GitTester{}
 	g.handler = GitManager{}
 	runtestPurgeFiles(&g, t)
@@ -210,14 +211,15 @@ func TestGitManagerPurge(t *testing.T) {
 func TestGitManagerAutoclosingGitHub(t *testing.T) {
 	var config bugs.Config
 	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "fit"
 	// This test is specific to gitmanager, since GitHub
 	// only supports git
 	if git == false {
 		t.Skip("WARN git executable not found")
 	}
 	t.Skip("windows failure - see scm/GitManager_test.go+218")
-    // TODO: finish making tests on Windows pass then redo this test
-    // the error codes need handling
+	// TODO: finish making tests on Windows pass then redo this test
+	// the error codes need handling
 	tester := GitTester{}
 	tester.handler = GitManager{Autoclose: true}
 
@@ -232,27 +234,27 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 		return
 	}
 	//runCmd("bug", "create", "-n", "Test", "bug")
-	os.MkdirAll("issues"+sops+"Test-bug", 0755)
-	ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Description", []byte("desc1"), 0644)
-	if err = ioutil.WriteFile("issues"+sops+"Test-bug"+sops+"Identifier", []byte("\n\nGitHub:#TestBug"), 0644); err != nil {
+	os.MkdirAll(config.IssuesDirName+sops+"Test-bug", 0755)
+	ioutil.WriteFile(config.IssuesDirName+sops+"Test-bug"+sops+"Description", []byte("desc1"), 0644)
+	if err = ioutil.WriteFile(config.IssuesDirName+sops+"Test-bug"+sops+"Identifier", []byte("\n\nGitHub:#TestBug"), 0644); err != nil {
 		t.Error("Could not write Test-bug" + sops + "Identifier file")
 		return
 	}
 
 	//runCmd("bug", "create", "-n", "Test", "Another", "bug")
-	os.MkdirAll("issues"+sops+"Test-Another-bug", 0755)
-	ioutil.WriteFile("issues"+sops+"Test-Another-bug"+sops+"Description", []byte("desc2"), 0644)
-	if err = ioutil.WriteFile("issues"+sops+"Test-Another-bug"+sops+"Identifier", []byte("\n\nGITHuB:  #Whitespace   "), 0644); err != nil {
+	os.MkdirAll(config.IssuesDirName+sops+"Test-Another-bug", 0755)
+	ioutil.WriteFile(config.IssuesDirName+sops+"Test-Another-bug"+sops+"Description", []byte("desc2"), 0644)
+	if err = ioutil.WriteFile(config.IssuesDirName+sops+"Test-Another-bug"+sops+"Identifier", []byte("\n\nGITHuB:  #Whitespace   "), 0644); err != nil {
 		t.Error("Could not write Test-Another-bug" + sops + "Identifier file")
 		return
 	}
 
 	// Add and commit the file, so that we can close it..
-	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Adding commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.IssuesDirName), "Adding commit", config)
 	// Delete the bugs
-	os.RemoveAll(tester.WorkDir() + sops + "issues" + sops + "Test-bug")
-	os.RemoveAll(tester.WorkDir() + sops + "issues" + sops + "Test-Another-bug")
-	m.Commit(bugs.Directory(tester.WorkDir()+sops+"issues"), "Removal commit", config)
+	os.RemoveAll(tester.WorkDir() + sops + config.IssuesDirName + sops + "Test-bug")
+	os.RemoveAll(tester.WorkDir() + sops + config.IssuesDirName + sops + "Test-Another-bug")
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.IssuesDirName), "Removal commit", config)
 
 	commits, err := tester.Loggers()
 	if len(commits) != 2 || err != nil {

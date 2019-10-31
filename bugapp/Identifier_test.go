@@ -77,9 +77,10 @@ func TestIdInvalid(t *testing.T) {
 }
 func TestIdGenerate(t *testing.T) {
 	config := bugs.Config{}
+	config.IssuesDirName = "fit"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "idgit")
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -91,7 +92,7 @@ func TestIdGenerate(t *testing.T) {
 		return
 	}
 	// Make an issues Directory
-	os.Mkdir("issues", 0755)
+	os.Mkdir(config.IssuesDirName, 0755)
 	err = os.Setenv("FIT", gdir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
@@ -105,14 +106,14 @@ func TestIdGenerate(t *testing.T) {
 	runid(t, "Identifier not defined\n", argumentList{"1"})
 
 	runid(t, "Generated id .* for bug\n", argumentList{"1", "--generate-id"})
-	file, err := ioutil.ReadFile(fmt.Sprintf("%s%sissues%sno_id_bug%sIdentifier", gdir, sops, sops, sops))
+	file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_id_bug%sIdentifier", gdir, sops, config.IssuesDirName, sops, sops))
 	if err != nil {
 		t.Error("Could not load an Identifier file for Test bug" + err.Error())
 	}
 	if len(file) == 0 {
 		t.Error("Expected an Identifier file")
 	}
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }
 func TestIdsAssigned(t *testing.T) {
 	runidsassigned(argumentList{""}, "Ids used in current tree", t)

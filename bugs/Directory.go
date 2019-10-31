@@ -78,7 +78,7 @@ func IssuesDirer(config Config) Directory {
 	if root == "" {
 		return root
 	}
-	return Directory(root + dops + "issues") // dops is Directory(string(os.PathSeparator))
+	return Directory(root + dops + Directory(config.IssuesDirName)) // dops is Directory(string(os.PathSeparator))
 	/* edited the following
 	   when changed from /issues/ to /issues
 	   $ grep -ils issuesdirer ...

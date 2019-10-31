@@ -14,6 +14,7 @@ import (
 type Config struct {
 	BugDir                    string `json:"BugDir"`
 	BugYml                    string `json:"BugYml"`
+	IssuesDirName             string `json:"IssuesDirName"`
 	DefaultDescriptionFile    string `json:"DefaultDescriptionFile"`
 	ImportXmlDump             bool   `json:"ImportXmlDump"`
 	ImportCommentsTogether    bool   `json:"ImportCommentsTogether"`
@@ -71,6 +72,7 @@ func TestBugArgParser(t *testing.T) {
 	// setup
 	config := Config{}
 	config.DescriptionFileName = "Description"
+	config.IssuesDirName = "issues"
 	var gdir string
 	pwd, _ := os.Getwd()
 	gdir, err := ioutil.TempDir("", "main")
@@ -86,7 +88,7 @@ func TestBugArgParser(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
-	os.Mkdir("issues", 0755)
+	os.Mkdir(config.IssuesDirName, 0755)
 
 	err = os.Setenv("FIT", gdir)
 	if err != nil {
@@ -182,6 +184,9 @@ func TestMain(m *testing.M) {
 
 func TestCliArgs(t *testing.T) {
 	var gdir string
+	config := Config{}
+	//config.DescriptionFileName = "Description"
+	config.IssuesDirName = "issues"
 	pwd, _ := os.Getwd()
 	gdir, err := ioutil.TempDir("", "main")
 	if err == nil {
@@ -196,7 +201,7 @@ func TestCliArgs(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
-	os.Mkdir("issues", 0755)
+	os.Mkdir(config.IssuesDirName, 0755)
 
 	err = os.Setenv("FIT", gdir)
 	if err != nil {

@@ -23,9 +23,9 @@ func TestRootDirerWithGoodEnvironmentVariable(t *testing.T) {
 		t.Error("Failed creating TempDir")
 		return
 	}
-	err = os.MkdirAll("abc"+sops+"issues", 0755)
+	err = os.MkdirAll("abc"+sops+"fit", 0755)
 	if err != nil {
-		t.Error("Failed creating abc/issues")
+		t.Error("Failed creating abc/fit")
 		return
 	}
 	//os.Mkdir("issues", 0755)
@@ -59,7 +59,7 @@ func TestMissingRootDirerWithEnvironmentVariable(t *testing.T) {
 	// FIT/issues missing so doesn't override wd
 	fitdir := ".." + sops + "abc"
 	os.Mkdir(fitdir, 0755) // missing issues directory
-	//os.Mkdir("../fit/issues", 0755)
+	//os.Mkdir("../abc/issues", 0755)
 	os.Setenv("FIT", gdir+sops+fitdir)
 	defer os.Unsetenv("FIT")
 	dir := RootDirer(&config)
