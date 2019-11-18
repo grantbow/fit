@@ -6,9 +6,8 @@ require github.com/driusan/bug/bugs v0.0.0
 
 replace github.com/driusan/bug/bugs => ../../../grantbow/bug/bugs // fork
 
-require (
-	github.com/driusan/bug/bugapp v0.0.0
-	gopkg.in/yaml.v2 v2.2.2 // indirect
-)
+require github.com/driusan/bug/bugapp v0.0.0
 
 replace github.com/driusan/bug/bugapp => ../../../grantbow/bug/bugapp // fork
+
+go 1.13

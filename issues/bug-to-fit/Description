@@ -11,3 +11,7 @@ what should have happened?
 change text to "issue" from "bug" in many places including config file name
 sometimes both may be acceptable
 
+
+accomplished: git mv cmd/bug cmd/fit
+    and adjustments
+

@@ -10,7 +10,7 @@ export GO111MODULE=on # for forks
 
 echo "testing main"
 #go build
-cd cmd/bug
+cd cmd/fit
 go test -v -coverprofile=profile.out -covermode=atomic
 if [ -f profile.out ]; then
     cat profile.out >> ../../coverage.txt

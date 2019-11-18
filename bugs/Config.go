@@ -8,18 +8,18 @@ import (
 	"os"
 )
 
-// Config type holds .bug.yml configured values.
+// Config type holds .fit.yml configured values.
 type Config struct {
 	// aka RootDir or RepoDir
 	// storage of location of dir containing:
 	//     issues directory
-	//     .bug.yml
+	//     .fit.yml
 	//     likely .git
 	// overridden by FIT/PMIT environment variable ** runtime only
 	BugDir string `json:"BugDir"`
 	// overridden by FIT/PMIT environment variable ** runtime only
 	IssuesDirName string `json:"IssuesDirName"`
-	// BugDir+"/.bug.yml" * if present ** runtime only
+	// BugDir+"/.fit.yml" * if present ** runtime only
 	BugYml string `json:"BugYml"`
 	// Description contents for new issue or empty file (empty default)
 	DefaultDescriptionFile string `json:"DefaultDescriptionFile"`
@@ -74,6 +74,7 @@ creating new configs:
     * bugs/Config.go   // bugs.Config struct
                        // ConfigRead for reading values of config file
     * bugs/Config_test.go
+    * cmd/fit/main_test.go
     * README.md        // includes config descriptions
                        // like comments from bugs.Config struct file
 
@@ -91,9 +92,9 @@ notes:
 */
 
 // ErrNoConfig
-var ErrNoConfig = errors.New("No .bug.yml provided")
+var ErrNoConfig = errors.New("No .fit.yml provided")
 
-// ConfigRead assigns values to the Config type from .bug.yml.
+// ConfigRead assigns values to the Config type from .fit.yml.
 func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 	temp := Config{}
 	if fileinfo, err := os.Stat(bugYmls); err == nil && fileinfo.Mode().IsRegular() {
@@ -214,6 +215,35 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 			c.IdAutomatic = false
 		}
 		return nil // success
+	} else {
+		return ErrNoConfig
 	}
-	return ErrNoConfig
+}
+
+func ConfigWrite(bugYmls string) (err error) {
+
+	if fileinfo, err := os.Stat(bugYmls); err != nil && fileinfo.Mode().IsRegular() {
+		err = ioutil.WriteFile(bugYmls, []byte(`
+DefaultDescriptionFile:"DescriptionTemplate.txt"
+ImportXmlDump:false
+ImportCommentsTogether:false
+ProgramVersion:""
+DescriptionFileName:""
+TagKeyValue:false
+NewFieldAsTag:false
+NewFieldLowerCase:false
+GithubPersonalAccessToken:""
+TwilioAccountSid:""
+TwilioAuthToken:""
+TwilioPhoneNumberFrom:""
+IssuesSite:""
+MultipleIssuesDirs:false
+CloseStatusTag:false
+IdAbbreviate:false
+IdAutomatic:true
+`), 0644)
+		// check error
+		return nil
+	}
+	return nil
 }

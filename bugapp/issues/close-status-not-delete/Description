@@ -18,4 +18,4 @@ optionally: bug status close foo
     bug archive
     could `git mv 1` to another subfolder like issues-archive/1
         to prevent being read as an issue
-
+ 

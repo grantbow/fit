@@ -12,9 +12,9 @@ import (
 )
 
 type Config struct {
-	BugDir                    string `json:"BugDir"`
-	BugYml                    string `json:"BugYml"`
-	IssuesDirName             string `json:"IssuesDirName"`
+	BugDir                    string `json:"BugDir"`        // runtime only
+	BugYml                    string `json:"BugYml"`        // runtime only
+	IssuesDirName             string `json:"IssuesDirName"` // runtime only
 	DefaultDescriptionFile    string `json:"DefaultDescriptionFile"`
 	ImportXmlDump             bool   `json:"ImportXmlDump"`
 	ImportCommentsTogether    bool   `json:"ImportCommentsTogether"`
@@ -28,6 +28,10 @@ type Config struct {
 	TwilioAuthToken           string `json:"TwilioAuthToken"`
 	TwilioPhoneNumberFrom     string `json:"TwilioPhoneNumberFrom"`
 	IssuesSite                string `json:"IssuesSite"`
+	MultipleIssuesDirs        bool   `json:"MultipleIssuesDirs"`
+	CloseStatusTag            bool   `json:"CloseStatusTag"`
+	IdAbbreviate              bool   `json:"IdAbbreviate"`
+	IdAutomatic               bool   `json:"IdAutomatic"`
 }
 
 var firstbugargtests = []struct {
@@ -51,7 +55,7 @@ var setupbugargtests = []struct {
 	{"pwd --help aha yes", `usage:`},
 }
 
-var binaryname = "bug"
+var binaryname = "fit"
 var binarypath string
 
 func TestBugArgParser(t *testing.T) {
@@ -169,12 +173,12 @@ func TestMain(m *testing.M) {
 	build := exec.Command(goPath, "build")
 	err := build.Run() // removed after TestCliArgs
 	if err != nil {
-		fmt.Printf("go build error %s: %v", "bug", err)
+		fmt.Printf("go build error %s: %v", binaryname, err)
 		os.Exit(1)
 	}
 	dir, err := os.Getwd()
 	if err != nil {
-		fmt.Printf("go pwd of %s: %v", "bug", err)
+		fmt.Printf("go pwd of %s: %v", binaryname, err)
 		os.Exit(1)
 	}
 	binarypath = path.Join(dir, binaryname)

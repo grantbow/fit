@@ -22,3 +22,5 @@ require (
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
 	golang.org/x/review v0.0.0-20190422220318-83908358f3a5 // indirect
 )
+
+go 1.13

@@ -19,3 +19,20 @@ have an id assigned already. If not, ask to add it.
 #### Does this issue reproduce with the latest release?
 
 
+added features to bugs/Config.go to create and increment idnext
+
+        // Identifier Automatic assignment (true) or not (false, default)
+        IDAutomatic bool `json:"IDAutomati"`
+
+creates next to .bug_yml a file .bug_idnext_1001 by default
+
+
+
+todo: add to automatic configuration creation
+
+todo: add to documentation
+
+todo: name of file should default to .fit_idnext_1001 instead
+
+todo: missing help for subcommands notags, tagslist and noids
+
