@@ -21,13 +21,13 @@ func TestBugWrite(t *testing.T) {
 		b = &Bug{Dir: Directory(dir + sops + config.IssuesDirName + sops + "Test-bug"), DescriptionFileName: config.DescriptionFileName}
 		defer os.RemoveAll(dir)
 	} else {
-		t.Error("Could not get temporary directory to test bug write()")
+		t.Error("Could not get temporary directory to test write()")
 		return
 	}
 
 	_, err := b.Write([]byte("Hello there, Mr. Test"))
 	if err != nil {
-		t.Errorf("Error writing to bug at %s.", b.Dir)
+		t.Errorf("Error writing at %s.", b.Dir)
 	}
 	b.Close()
 

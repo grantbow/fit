@@ -110,7 +110,7 @@ func beImportBugs(prefix, issuesdir, bedir, dirname string, config bugs.Config) 
 	bugsdir := bedir + sops + dirname + sops + "bugs"
 	dir, err := os.Open(bugsdir)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not open bug directory %s\n", bugsdir)
+		fmt.Fprintf(os.Stderr, "Could not open directory %s\n", bugsdir)
 	}
 	files, _ := dir.Readdir(-1)
 

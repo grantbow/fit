@@ -262,7 +262,7 @@ func runtestPurgeFiles(tester ManagerTester, t *testing.T) {
 	os.MkdirAll(config.IssuesDirName+sops+"Test-Purge-Bug", 0755)
 	err = m.Purge(bugs.Directory(tester.WorkDir() + "" + sops + config.IssuesDirName))
 	if err != nil {
-		t.Error("Error purging bug directory: " + err.Error())
+		t.Error("Error purging directory: " + err.Error())
 	}
 	issuesDir, err := ioutil.ReadDir(config.IssuesDirName) //fmt.Sprintf("debug: %s/issues/", tester.WorkDir()))
 	if err != nil {
@@ -327,14 +327,14 @@ func captureOutput(f func(), t *testing.T) (string, string) {
 
 func scmRetitle(Args argumentList, config bugs.Config) {
 	if len(Args) < 2 {
-		fmt.Printf("Usage: %s retitle BugID New Title\n", os.Args[0])
+		fmt.Printf("Usage: %s retitle <IssueID> New Title\n", os.Args[0])
 		return
 	}
 
 	b, err := bugs.LoadBugByHeuristic(Args[0], config)
 
 	if err != nil {
-		fmt.Printf("Could not load bug: %s\n", err.Error())
+		fmt.Printf("Could not load issue: %s\n", err.Error())
 		return
 	}
 

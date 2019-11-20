@@ -99,7 +99,7 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 	} else {
 		// Get a list of tags, so that when we encounter
 		// an error we can check if it's because the user
-		// provided a tagname instead of a BugID. If they
+		// provided a tagname instead of a IssueID. If they
 		// did, then list bugs matching that tag instead
 		// of full descriptions
 		//tags := getAllTags(config) // see Tag.go getAllTags() is defined in Tag.go
@@ -125,7 +125,7 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 				continue
 			}
 
-			// err == nil so bug loaded
+			// err == nil so issue loaded
 			b.ViewBug()
 			if i < length-1 {
 				fmt.Printf("\n--\n\n")

@@ -38,7 +38,7 @@ func Edit(args argumentList, config bugs.Config) {
 
 		b, err := bugs.LoadBugByHeuristic(bugID, config)
 		if err != nil {
-			fmt.Printf("Invalid BugID %s\n", bugID)
+			fmt.Printf("Invalid IssueID %s\n", bugID)
 			return
 		}
 
@@ -61,7 +61,7 @@ func Edit(args argumentList, config bugs.Config) {
 			log.Fatal(err)
 		}
 	default:
-		fmt.Printf("Usage: %s edit [fieldname] BugID\n", os.Args[0])
-		fmt.Printf("\nNo BugID specified\n")
+		fmt.Printf("Usage: %s edit [fieldname] IssueID\n", os.Args[0])
+		fmt.Printf("\nNo IssueID specified\n")
 	}
 }

@@ -224,23 +224,23 @@ func ConfigWrite(bugYmls string) (err error) {
 
 	if fileinfo, err := os.Stat(bugYmls); err != nil && fileinfo.Mode().IsRegular() {
 		err = ioutil.WriteFile(bugYmls, []byte(`
-DefaultDescriptionFile:"DescriptionTemplate.txt"
-ImportXmlDump:false
-ImportCommentsTogether:false
-ProgramVersion:""
-DescriptionFileName:""
-TagKeyValue:false
-NewFieldAsTag:false
-NewFieldLowerCase:false
-GithubPersonalAccessToken:""
-TwilioAccountSid:""
-TwilioAuthToken:""
-TwilioPhoneNumberFrom:""
-IssuesSite:""
-MultipleIssuesDirs:false
-CloseStatusTag:false
-IdAbbreviate:false
-IdAutomatic:true
+DefaultDescriptionFile: DescriptionTemplate.txt
+ImportXmlDump: false
+ImportCommentsTogether: false
+ProgramVersion:
+DescriptionFileName:
+TagKeyValue: false
+NewFieldAsTag: false
+NewFieldLowerCase: false
+GithubPersonalAccessToken:
+TwilioAccountSid:
+TwilioAuthToken:
+TwilioPhoneNumberFrom:
+IssuesSite:
+MultipleIssuesDirs: false
+CloseStatusTag: false
+IdAbbreviate: false
+IdAutomatic: true
 `), 0644)
 		// check error
 		return nil

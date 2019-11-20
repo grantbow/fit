@@ -16,14 +16,14 @@ func TestFindBugsByTag(t *testing.T) {
 
 	c, err := New("find me", config)
 	if err != nil {
-		panic("Unexpected error creating bug find me")
+		panic("Unexpected error creating issue find me")
 	}
 	c.TagBug("hit", config)
 	c.SetIdentifier("special", config)
 
 	d, errd := New("hiding", config)
 	if errd != nil {
-		panic("Unexpected error creating bug hiding")
+		panic("Unexpected error creating issue hiding")
 	}
 	d.TagBug("miss", config)
 

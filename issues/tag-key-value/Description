@@ -13,3 +13,8 @@ and with --rm removes boolean tags.
 #### What version?
 0.6
 
+
+#### notes:
+the original implementation will require
+renaming the existing tag command
+

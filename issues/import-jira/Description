@@ -1,0 +1,32 @@
+#### What did you do?
+
+fit import <jira url>
+
+#### What did you expect to see?
+
+import the issues
+
+
+#### What did you see instead?
+
+<nothing yet>
+
+#### What version?
+
+
+
+#### notes:
+
+find the url
+find the way a user will most easily find the url
+how to provide the url
+    configuration is better than a cli argument because
+    it doesn't change and will be reusable.
+implement a mvp
+    look for the taxonomy of tags that are needed
+    with the number of tag keys planned
+    making the system generic seems reasonable instead of
+    just supporting the existing four special values with similar implementations.
+    dynamic lists of keys is already implemented, so using that as a basis for loops
+    instead of hard coded exceptions feels expandable and reasonable.
+make using the import easier

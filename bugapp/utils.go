@@ -124,13 +124,13 @@ func captureOutput(f func(), t *testing.T) (string, string) {
 func fieldHandler(command string, args argumentList,
 	setCallback func(bugs.Bug, string, bugs.Config) error, retrieveCallback func(bugs.Bug) string, config bugs.Config) {
 	if len(args) < 1 {
-		fmt.Printf("Usage: %s %s BugID [set %s]\n", os.Args[0], command, command)
+		fmt.Printf("Usage: %s %s IssueID [set %s]\n", os.Args[0], command, command)
 		return
 	}
 
 	b, err := bugs.LoadBugByHeuristic(args[0], config)
 	if err != nil {
-		fmt.Printf("Invalid BugID: %s\n", err.Error())
+		fmt.Printf("Invalid IssueID: %s\n", err.Error())
 		return
 	}
 	if len(args) > 1 {

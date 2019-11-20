@@ -16,7 +16,7 @@ func TestEditInvalid(t *testing.T) {
 		t.Error("Unexpected error:")
 		fmt.Printf("Expected: %s\nGot %s\n", "", stderr)
 	}
-	expected := "Invalid BugID Test\n"
+	expected := "Invalid IssueID Test\n"
 	if stdout != expected {
 		t.Error("Unexpected output on STDOUT")
 		fmt.Printf("Expected: %s\nGot %s\n", expected, stdout)
@@ -29,7 +29,7 @@ func TestEditInvalid(t *testing.T) {
 		t.Error("Unexpected error:")
 		fmt.Printf("Expected: %s\nGot %s\n", "", stderr)
 	}
-	expected = "Usage.* edit \\[fieldname\\] BugID\n\nNo BugID specified\n"
+	expected = "Usage.* edit \\[fieldname\\] IssueID\n\nNo IssueID specified\n"
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(string(stdout))
 	if !matched {

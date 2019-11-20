@@ -2,8 +2,8 @@
 github projects uses tags we should use
 
 #### What did you expect to see?
-    assignee
-    author
+    people - assignee
+    people - author
     is
     label
     milestone
@@ -15,4 +15,25 @@ support these on import
 
 #### What version?
 
+
+
+#### notes:
+classes of data types are evolving. the "who" and the "what" and the "when" value types.
+the "where" and the "why" are somewhat covered by the Description text.
+the "how" comes afterward and is more forward looking for issues than
+    text describing past or present which makes sense.
+
+status - given a workflow, where along the path is the issue explicitly or implicitly labeled to be
+
+priority - this tries to give some kind of context about the issue regarding ordering compared to other issues
+identifier - explicit id of the issue itself
+
+milestone - future or past version of the software itself
+
+the semantics of some of these require coding, especially identifier.
+
+Milestone might be able to be associated with tags in the past but is often a target future implying a deadline for work.
+
+The idea of status with workflow feels like it could be expanded and is important.
+one way I am using the fit system now is an implied status of notags which I coded.
 

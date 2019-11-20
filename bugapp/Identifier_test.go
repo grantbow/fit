@@ -70,10 +70,10 @@ func TestIdGen(t *testing.T) {
 	rungenid("test string", "b6612", t)
 }
 func TestIdUsage(t *testing.T) {
-	runid(t, "Usage: .* identifier BugID \\[value\\]\n", argumentList{})
+	runid(t, "Usage: .* id <IssueID> \\[value\\]\n", argumentList{})
 }
 func TestIdInvalid(t *testing.T) {
-	runid(t, "Invalid BugID: Not found test\n", argumentList{"test"})
+	runid(t, "Invalid IssueID: Not found test\n", argumentList{"test"})
 }
 func TestIdGenerate(t *testing.T) {
 	config := bugs.Config{}
@@ -103,9 +103,9 @@ func TestIdGenerate(t *testing.T) {
 	_, _ = captureOutput(func() {
 		Create(argumentList{"-n", "no_id_bug"}, config)
 	}, t)
-	runid(t, "Identifier not defined\n", argumentList{"1"})
+	runid(t, "Id not defined\n", argumentList{"1"})
 
-	runid(t, "Generated id .* for bug\n", argumentList{"1", "--generate-id"})
+	runid(t, "Generated id .* for issue\n", argumentList{"1", "--generate-id"})
 	file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_id_bug%sIdentifier", gdir, sops, config.IssuesDirName, sops, sops))
 	if err != nil {
 		t.Error("Could not load an Identifier file for Test bug" + err.Error())

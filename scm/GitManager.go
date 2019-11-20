@@ -189,11 +189,11 @@ func (mgr GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config 
 	} else {
 		var pref string
 		if mgr.UseBugPrefix {
-			pref = "bug: "
+			pref = "issue: "
 		}
 		fmt.Fprintf(file, "%s%s\n", pref, msg)
 	}
-    //fmt.Print("debug commit : git", "commit", "-o", string(dir), "-F", file.Name(), "-q\n")
+	//fmt.Print("debug commit : git", "commit", "-o", string(dir), "-F", file.Name(), "-q\n")
 	cmd = exec.Command("git", "commit", "-o", string(dir), "-F", file.Name(), "-q")
 	if err := cmd.Run(); err != nil {
 		// If nothing was added commit will have an error.
@@ -203,8 +203,8 @@ func (mgr GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config 
 		fmt.Printf("git commit error %v\n", err.Error()) // $?
 		return err
 	} else {
-	    return nil
-    }
+		return nil
+	}
 }
 
 // SCMTyper returns "git".

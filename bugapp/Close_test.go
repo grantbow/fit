@@ -63,9 +63,9 @@ func TestCloseByIndex(t *testing.T) {
 	stdout, stderr := captureOutput(func() {
 		Close(argumentList{"FooBug"}, config)
 	}, t)
-	if stderr != "Could not close bug FooBug: Not found FooBug\n" {
+	if stderr != "Could not close issue FooBug: Not found FooBug\n" {
 		t.Error("Unexpected output on STDERR for Foo-bug")
-		fmt.Printf("Got %s\nExpected %s\n", stderr, "Could not close bug FooBug: Not found FooBug")
+		fmt.Printf("Got %s\nExpected %s\n", stderr, "Could not close issue FooBug: Not found FooBug")
 	}
 	if stdout != "" {
 		t.Error("Unexpected output on STDOUT for Foo-bug")

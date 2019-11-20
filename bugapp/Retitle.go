@@ -13,14 +13,14 @@ import (
 // Relabel is a subcommand to change an issue title.
 func Relabel(Args argumentList, config bugs.Config) {
 	if len(Args) < 2 {
-		fmt.Printf("Usage: %s relabel BugID New Title\n", os.Args[0])
+		fmt.Printf("Usage: %s relabel <IssueID> New Title\n", os.Args[0])
 		return
 	}
 
 	b, err := bugs.LoadBugByHeuristic(Args[0], config)
 
 	if err != nil {
-		fmt.Printf("Could not load bug: %s\n", err.Error())
+		fmt.Printf("Could not load issue: %s\n", err.Error())
 		return
 	}
 

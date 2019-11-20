@@ -53,7 +53,7 @@ func TestHelpValidArg(t *testing.T) {
 	runhelp(t, "usage:.*", "help", "roadmap")
 	runhelp(t, "usage:.*", "help", "id")
 	runhelp(t, "usage:.*", "help", "about")
-	runhelp(t, "Bugs can be.*", "help", "identifiers")
+	runhelp(t, "Issues can be.*", "help", "identifiers")
 }
 func TestHelpValidArgs(t *testing.T) {
 	runhelp(t, "usage:.*", "create", "list")

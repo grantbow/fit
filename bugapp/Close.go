@@ -10,7 +10,7 @@ import (
 func Close(args argumentList, config bugs.Config) {
 	// No parameters, print a list of all bugs
 	if len(args) == 0 {
-		fmt.Fprintf(os.Stderr, "Usage: %s close BugID\n\nMust provide an BugID to close as parameter\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s close <IssueID>\n\nMust provide an ID to close as parameter\n", os.Args[0])
 		return
 	}
 
@@ -30,7 +30,7 @@ func Close(args argumentList, config bugs.Config) {
 				bugsToClose = append(bugsToClose, string(dir))
 			}
 		} else {
-			fmt.Fprintf(os.Stderr, "Could not close bug %s: %s\n", bugID, err.Error())
+			fmt.Fprintf(os.Stderr, "Could not close issue %s: %s\n", bugID, err.Error())
 		}
 	}
 	for _, dir := range bugsToClose {

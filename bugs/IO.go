@@ -34,7 +34,7 @@ func (b *Bug) Write(data []byte) (n int, err error) {
 		os.MkdirAll(string(dir), 0755)
 		fp, err := os.OpenFile(string(dir)+sops+b.DescriptionFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error writing to bug: %s", err.Error())
+			fmt.Fprintf(os.Stderr, "Error writing to issue: %s", err.Error())
 			return 0, err
 		}
 		b.descFile = fp
@@ -53,7 +53,7 @@ func (b *Bug) WriteAt(data []byte, off int64) (n int, err error) {
 		os.MkdirAll(string(dir), 0755)
 		fp, err := os.OpenFile(b.DescriptionFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error writing to bug: %s", err.Error())
+			fmt.Fprintf(os.Stderr, "Error writing to issue: %s", err.Error())
 			return 0, err
 		}
 		b.descFile = fp

@@ -40,13 +40,13 @@ func runcommit(expected string, t *testing.T) {
 }
 func TestCommit(t *testing.T) {
 	t.Skip("windows failure - see bugapp/Commit_test.go+41")
-    // TODO: finish making tests on Windows pass then redo this test
+	// TODO: finish making tests on Windows pass then redo this test
 	dir, err := ioutil.TempDir("", "committest")
 	if err != nil {
 		t.Error("Could not create temporary dir for test")
 		return
 	}
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	os.Chdir(dir)
 	os.MkdirAll("issues"+sops+"Test", 0700)
 	defer os.RemoveAll(dir)
@@ -66,15 +66,15 @@ func TestCommit(t *testing.T) {
 	}
 	// create
 	ioutil.WriteFile(dir+sops+"issues"+sops+"Test"+sops+"Description", []byte("TestBug\n"), 0600)
-	expected := "bug. Create issue .Test."
+	expected := "issue. Create issue .Test."
 	runcommit(expected, t)
 	// update
 	ioutil.WriteFile(dir+sops+"issues"+sops+"Test"+sops+"Description", []byte("TestBug-changed\n"), 0600)
-	expected = "bug. Update issue .Test."
+	expected = "issue. Update issue .Test."
 	runcommit(expected, t)
 	// close
 	os.RemoveAll(dir + sops + "issues" + sops + "Test")
-	expected = "bug. Close issue .Test."
+	expected = "issue. Close issue .Test."
 	runcommit(expected, t)
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }

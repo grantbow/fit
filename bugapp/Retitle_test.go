@@ -35,38 +35,38 @@ func TestRetitle(t *testing.T) {
 	runretitle("usage", args, config, expected, t)
 
 	args = argumentList{"bad", "bar"} // bad
-	expected = "Could not load bug: .*"
+	expected = "Could not load issue: .*"
 	runretitle("bad", args, config, expected, t)
 
-    /* 
-        this test fails on windows
-        removing write on directory doesn't cause the same error
-        TODO: finish making tests on Windows pass then redo this test
+	/*
+	        this test fails on windows
+	        removing write on directory doesn't cause the same error
+	        TODO: finish making tests on Windows pass then redo this test
 
-	args = argumentList{"1", "Error Bug"} // rename err
-	// before chmod
-	//fi, _ := os.Open(string(issuesDir))
-	//stat, _ := fi.Stat()
-	//fmt.Println(dirDumpFI([]os.FileInfo{stat}))
-	//fmt.Println(dirDump(string(issuesDir)))
-	//fmt.Printf("mode %v\n", stat.Mode())
+		args = argumentList{"1", "Error Bug"} // rename err
+		// before chmod
+		//fi, _ := os.Open(string(issuesDir))
+		//stat, _ := fi.Stat()
+		//fmt.Println(dirDumpFI([]os.FileInfo{stat}))
+		//fmt.Println(dirDump(string(issuesDir)))
+		//fmt.Printf("mode %v\n", stat.Mode())
 
-	// chmod 500 temp parent directory, read and execute
-	err := os.Chmod(string(issuesDir), 0500) // remove write permission
-	check(err)
-	// after chmod
-	//fi, _ = os.Open(string(issuesDir))
-	//stat, _ = fi.Stat()
-	//fmt.Println(dirDumpFI([]os.FileInfo{stat}))
-	//fmt.Println(dirDump(string(issuesDir)))
-	//fmt.Printf("mode %v\n", stat.Mode())
-	expected = "Moving .*\\nError moving directory\\n"
-	runretitle("rename err", args, config, expected, t)
-    */
+		// chmod 500 temp parent directory, read and execute
+		err := os.Chmod(string(issuesDir), 0500) // remove write permission
+		check(err)
+		// after chmod
+		//fi, _ = os.Open(string(issuesDir))
+		//stat, _ = fi.Stat()
+		//fmt.Println(dirDumpFI([]os.FileInfo{stat}))
+		//fmt.Println(dirDump(string(issuesDir)))
+		//fmt.Printf("mode %v\n", stat.Mode())
+		expected = "Moving .*\\nError moving directory\\n"
+		runretitle("rename err", args, config, expected, t)
+	*/
 
 	args = argumentList{"1", "Success Bug"} // good
 	// chmod 700 temp parent directory
-    err := os.Chmod(string(issuesDir), 0700) // change
+	err := os.Chmod(string(issuesDir), 0700) // change
 	check(err)
 	expected = "Moving .*"
 	runretitle("good", args, config, expected, t)

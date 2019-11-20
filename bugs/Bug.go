@@ -55,7 +55,7 @@ type Comment struct {
 var ErrNoDescription = errors.New("No description provided")
 
 // ErrNotFound defines a new error.
-var ErrNotFound = errors.New("Could not find bug")
+var ErrNotFound = errors.New("Could not find issue")
 
 func TitleToDirString(title string) string {
 	// replace non-matching valid characters with _

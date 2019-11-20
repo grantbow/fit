@@ -87,31 +87,31 @@ func generateID(val string) string {
 // Identifier is a subcommand to assign tags to issues.
 func Identifier(args argumentList, config bugs.Config) {
 	if len(args) < 1 {
-		fmt.Printf("Usage: %s identifier BugID [value]\n", os.Args[0])
+		fmt.Printf("Usage: %s id <IssueID> [value]\n", os.Args[0])
 		return
 	}
 
 	b, err := bugs.LoadBugByHeuristic(args[0], config)
 	if err != nil {
-		fmt.Printf("Invalid BugID: %s\n", err.Error())
+		fmt.Printf("Invalid IssueID: %s\n", err.Error())
 		return
 	}
 	if len(args) > 1 {
 		var newValue string
 		if args.HasArgument("--generate-id") {
 			newValue = generateID(b.Title(""))
-			fmt.Printf("Generated id %s for bug\n", newValue)
+			fmt.Printf("Generated id %s for issue\n", newValue)
 		} else {
 			newValue = strings.Join(args[1:], " ")
 		}
 		err := b.SetIdentifier(newValue, config)
 		if err != nil {
-			fmt.Printf("Error setting identifier: %s", err.Error())
+			fmt.Printf("Error setting id: %s", err.Error())
 		}
 	} else {
 		val := b.Identifier()
 		if val == "" {
-			fmt.Printf("Identifier not defined\n")
+			fmt.Printf("Id not defined\n")
 		} else {
 			fmt.Printf("%s\n", val)
 		}

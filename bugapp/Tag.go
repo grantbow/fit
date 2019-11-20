@@ -123,7 +123,7 @@ func TagsAssigned(Args argumentList, config bugs.Config) {
 // Tag is a subcommand to assign a bool true/false tag to an issue.
 func Tag(Args argumentList, config bugs.Config) {
 	if len(Args) < 2 {
-		fmt.Printf("Usage: %s tag [--rm] BugID tagname [more tagnames]\n", os.Args[0])
+		fmt.Printf("Usage: %s tag [--rm] <IssueID> <tagname> [more tagnames]\n", os.Args[0])
 		fmt.Printf("\nBoth issue number and tagname to set are required.\n")
 		var tags = uniqueTagList(config)
 		fmt.Printf("\nCurrently used tags in entire tree: %s\n", strings.Join(tags, "\n"))
@@ -138,7 +138,7 @@ func Tag(Args argumentList, config bugs.Config) {
 	b, err := bugs.LoadBugByHeuristic(Args[0], config)
 
 	if err != nil {
-		fmt.Printf("Could not load bug: %s\n", err.Error())
+		fmt.Printf("Could not load issue: %s\n", err.Error())
 		return
 	}
 	for _, tag := range Args[1:] {

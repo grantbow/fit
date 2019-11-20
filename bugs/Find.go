@@ -140,7 +140,7 @@ func LoadBugByIndex(idx int, config Config) (*Bug, error) {
 	issues := readIssues(string(issuesroot))
 	sort.Sort(byDir(issues))
 	if idx < 1 || idx > len(issues) {
-		return nil, BugNotFoundError("Invalid bug index")
+		return nil, BugNotFoundError("Invalid issue index")
 	}
 
 	b := Bug{}
