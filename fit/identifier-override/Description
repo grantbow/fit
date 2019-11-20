@@ -1,0 +1,17 @@
+#### What did you do?
+fit list
+
+
+#### What did you expect to see?
+identifiers used when they are set
+
+
+#### What did you see instead?
+identifiers are not mixed with the natural date ordering sequence number assigned 
+
+this may be a bit tricky and something may be needed to signal in the listing if it's
+assigned explicity or implicitly like a () or something
+
+#### What version?
+
+

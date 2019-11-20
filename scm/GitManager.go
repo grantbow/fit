@@ -217,9 +217,15 @@ func (mgr GitManager) SCMIssuesUpdaters() ([]byte, error) { // config bugs.Confi
 	cmd := exec.Command("git", "status", "--porcelain", "-u", "--", ":"+sops+"issues")
 	// --porcelain output format
 	// -u shows all unstaged files, not just directories
-	// issues is the directory off of the git repo to show
-	// the ":(top)" shows full paths when not at the git root directory
-	// the shorthand is ":"+sops+"issues"
+	// after -- the path is  ":"+sops+"issues"
+	//
+	// previously
+	//cmd := exec.Command("git", "status", "--porcelain", "-u", "issues", "\":(top)\"")
+	//     the ":(top)" was used for full paths when not at the git root directory
+	// then
+	//cmd := exec.Command("git", "status", "--porcelain", "-u", "--", ":/issues")
+	//     need to test for windows / vs \ as path separator
+
 	co, _ := cmd.CombinedOutput()
 	if string(co) == "" {
 		return []byte(""), nil

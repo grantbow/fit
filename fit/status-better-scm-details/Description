@@ -1,0 +1,23 @@
+#### What did you do?
+fit status
+fit staging || fit cached
+
+
+#### What did you expect to see?
+the information should be specific and helpful
+it isn't easy checking through each hit to know if
+it is untracked and/or if it's staged but not yet committed
+
+
+#### What did you see instead?
+output differs. both should be equally helpful
+
+
+#### What version?
+
+
+#### notes:
+bugapp/Env.go
+should have similar code and description to
+cmd/fit/main.go
+

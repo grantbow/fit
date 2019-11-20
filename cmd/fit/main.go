@@ -129,7 +129,7 @@ func main() {
 					fmt.Printf("%v\n", string(b))
 				}
 			} else {
-				fmt.Printf("No files in " + config.IssuesDirName + "/ need committing, see $ git status --porcelain -u " + config.IssuesDirName + " \":top\"\n")
+				fmt.Printf("No files in " + config.IssuesDirName + "/ need committing, see $ git status --porcelain -u :/" + config.IssuesDirName + " \":top\"\n")
 			}
 		// subcommands that pass osArgs
 		case "tagslist", "taglist", "tagsassigned", "tags":

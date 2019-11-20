@@ -20,7 +20,7 @@ func Env(config bugs.Config) {
 		fmt.Printf("VCS Type:    %s\n", t)
 		fmt.Printf("%s Directory:    %s\n", t, scmdir)
 		//
-		fmt.Printf("Need Staging:    ")
+		fmt.Printf("Need Committing or Staging:    ")
 		if b, err := vcs.SCMIssuesUpdaters(); err == nil {
 			fmt.Printf("(nothing)\n\n")
 		} else {
