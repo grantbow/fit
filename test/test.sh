@@ -21,9 +21,9 @@ cd ../..
 #for d in scm; do # bugapp bugs scm
 for d in $(find ./* -maxdepth 0 -type d); do
     if ls $d/*_test.go &> /dev/null; then
-        if [[ $d = *issues* ]] ; then
-            continue
-        fi
+        #if [[ $d = *fit* ]] ; then
+        #    continue
+        #fi
         echo "testing in $d"
         cd $d
         go test -v -coverprofile=profile.out -covermode=atomic

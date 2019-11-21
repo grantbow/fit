@@ -1,7 +1,7 @@
 package scm
 
 import (
-	"github.com/driusan/bug/bugs"
+	bugs "github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
 	"reflect"
@@ -13,7 +13,7 @@ func TestDetectGit(t *testing.T) {
 	config.DescriptionFileName = "Description"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "gitdetect")
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -32,7 +32,7 @@ func TestDetectGit(t *testing.T) {
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
-	if dir != bugs.Directory(gdir + sops + ".git") {
+	if dir != bugs.Directory(gdir+sops+".git") {
 		t.Error("Unexpected directory found when trying to detect git repo" + dir)
 	}
 	switch handler.(type) {
@@ -44,13 +44,13 @@ func TestDetectGit(t *testing.T) {
 	}
 
 	// Go somewhere higher in the tree and do it again
-	os.MkdirAll("tmp" + sops + "abc" + sops + "hello", 0755)
+	os.MkdirAll("tmp"+sops+"abc"+sops+"hello", 0755)
 	os.Chdir("tmp" + sops + "abc" + sops + "hello")
 	handler, dir, err = DetectSCM(options, config)
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
-	if dir != bugs.Directory(gdir + sops + ".git") {
+	if dir != bugs.Directory(gdir+sops+".git") {
 		t.Error("Unexpected directory found when trying to detect git repo" + dir)
 	}
 	switch handler.(type) {
@@ -60,7 +60,7 @@ func TestDetectGit(t *testing.T) {
 	default:
 		t.Error("Unexpected SCMHandler found for Git")
 	}
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }
 
 func TestDetectHg(t *testing.T) {
@@ -68,7 +68,7 @@ func TestDetectHg(t *testing.T) {
 	config.DescriptionFileName = "Description"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "hgdetect")
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -87,7 +87,7 @@ func TestDetectHg(t *testing.T) {
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
-	if dir != bugs.Directory(gdir + sops + ".hg") {
+	if dir != bugs.Directory(gdir+sops+".hg") {
 		t.Error("Unexpected directory found when trying to detect hg repo" + dir)
 	}
 	switch handler.(type) {
@@ -99,13 +99,13 @@ func TestDetectHg(t *testing.T) {
 	}
 
 	// Go somewhere higher in the tree and do it again
-	os.MkdirAll("tmp" + sops + "abc" + sops + "hello", 0755)
+	os.MkdirAll("tmp"+sops+"abc"+sops+"hello", 0755)
 	os.Chdir("tmp" + sops + "abc" + sops + "hello")
 	handler, dir, err = DetectSCM(options, config)
 	if err != nil {
 		t.Error("Unexpected while detecting repo type: " + err.Error())
 	}
-	if dir != bugs.Directory(gdir + sops + ".hg") {
+	if dir != bugs.Directory(gdir+sops+".hg") {
 		t.Error("Unexpected directory found when trying to detect hg repo" + dir)
 	}
 	switch handler.(type) {
@@ -115,19 +115,19 @@ func TestDetectHg(t *testing.T) {
 	default:
 		t.Error("Unexpected SCMHandler found for Mercurial")
 	}
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }
 
 func TestDetectNone(t *testing.T) {
 	t.Skip("windows failure - see scm/Detect_test.go+121")
-    // TODO: finish making tests on Windows pass then redo this test
-    // seems to be run below a directory with a .git
+	// TODO: finish making tests on Windows pass then redo this test
+	// seems to be run below a directory with a .git
 
 	var config bugs.Config
 	config.DescriptionFileName = "Description"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "nonedetect") // almost same
-    pwd, _ := os.Getwd()
+	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
 		// Hack to get around the fact that /tmp is a symlink on
@@ -151,7 +151,7 @@ func TestDetectNone(t *testing.T) {
 		// nil is what we expect, don't fall through
 		// to the error
 	default:
-        t.Error("Unexpected SCMHandler found, type : " + reflect.TypeOf(handler).String())
+		t.Error("Unexpected SCMHandler found, type : " + reflect.TypeOf(handler).String())
 	}
-    os.Chdir(pwd)
+	os.Chdir(pwd)
 }

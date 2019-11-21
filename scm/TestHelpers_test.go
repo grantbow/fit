@@ -2,7 +2,7 @@ package scm
 
 import (
 	"fmt"
-	"github.com/driusan/bug/bugs"
+	bugs "github.com/driusan/bug/bugs"
 	"io/ioutil"
 	"os"
 	"os/exec"

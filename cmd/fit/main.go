@@ -3,8 +3,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/driusan/bug/bugapp"
-	"github.com/driusan/bug/bugs"
+	bugapp "github.com/driusan/bug/bugapp"
+	bugs "github.com/driusan/bug/bugs"
 	"github.com/driusan/bug/scm"
 	"os"
 	"strings"

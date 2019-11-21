@@ -1,7 +1,7 @@
 package scm
 
 import (
-	"github.com/driusan/bug/bugs"
+	bugs "github.com/driusan/bug/bugs"
 	"os"
 )
 

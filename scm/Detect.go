@@ -2,7 +2,7 @@ package scm
 
 import (
 	"errors"
-	"github.com/driusan/bug/bugs"
+	bugs "github.com/driusan/bug/bugs"
 	"os"
 	"strings"
 )
