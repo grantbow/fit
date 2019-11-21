@@ -1,8 +1,8 @@
-# bug
+# fit
 
 [![GoDoc](https://godoc.org/github.com/grantbow/bug?status.svg)](https://godoc.org/github.com/grantbow/bug) [![Build Status](https://travis-ci.org/grantbow/bug.svg?branch=master)](https://travis-ci.org/grantbow/bug) [![Test Coverage](https://codecov.io/gh/grantbow/bug/branch/master/graphs/badge.svg)](https://codecov.io/gh/grantbow/bug) [![GoReportCard](https://goreportcard.com/badge/github.com/grantbow/bug)](https://goreportcard.com/report/github.com/grantbow/bug) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2820/badge)](https://bestpractices.coreinfrastructure.org/projects/2820) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/fit-issue/community)
 
-bug manages plain text issues with git or mercurial.
+fit manages plain text issues with git or mercurial.
 
 **TOC:**
 
@@ -31,29 +31,30 @@ capture issues using human readable issue directories and files. This can
 supplement other issue/bug systems or quickly act in their place, especially if
 no other system is provided.
 
-Using bug and FIT helps implementers streamline working with
+Using fit helps implementers streamline working with
 [issues](https://en.wikipedia.org/wiki/Issue_tracking_system) and [version
-control](https://en.wikipedia.org/wiki/Version_control). bug works well with
+control](https://en.wikipedia.org/wiki/Version_control). fit works well with
 both git and mercurial distributed version control though the git features are
 more well exercised.
 
-bug is adaptable with issue key/value pair metadata.
+fit is adaptable with issue key/value pair metadata.
 
-bug manages issues using Filesystem Issue Tracker (see [FIT.md](FIT.md))
-conventions/format. An `issues/` directory holds one (descriptively titled)
-directory per issue. Each directory holds a Description file and anything else
-needed.
+fit manages issues using the Filesystem Issue Tracker (see [FIT.md](FIT.md))
+conventions/format. A `fit/` or `issues/` directory holds one (descriptively
+titled) directory per issue. Each directory holds a Description file and
+anything else needed.
 
-The bug implementation of FIT ([FIT.md](FIT.md)) is (almost) the simplest issue
-system that can still work. It differs from similar tools in several ways.
-Human readable plain text files are intuitively understood, viewable, editable.
+The fit implementation is (almost) the simplest issue system that can still
+work. It differs from similar tools in several ways. Human readable plain text
+files are intuitively understood, viewable, editable.
 
-People naturally try to keep track of issues in single text files and
+At first people naturally try to keep track of issues in single text files and
 spreadsheets but these can fail to meet project needs. (see [FAQ.md](FAQ.md))
 
 Issue context is valuable to coders and may be difficult for others to
-understand. bug also supports multiple `issues/` directories throughout the
-directory tree for stronger coordination of coding and issue tracking.
+understand. fit also supports multiple `fit/` or `issues/` directories
+throughout the directory tree for stronger coordination of coding and issue
+tracking.
 
 An alternative in IT projects is all too common: implementers are not given the
 tools needed to record code issues because issue systems take resources to
@@ -74,8 +75,8 @@ to implementing more disciplined software engineering best practices. Code can
 start small as grow gradually as users, use cases and developers are added.
 The FIT issue system can help at each stage.
 
-Generally one issue set is used for one git repository but recursive issues
-directories are supported. As complexity increases adding multiple `issues/`
+Generally one issue set is used for one git repository but recursive fit
+directories are supported. As complexity increases adding multiple `fit/`
 directories in different parts of your git repo helps keep context focused.
 
 There are some choices of how to handle past issues. As the number grows closed
@@ -83,10 +84,11 @@ issues can simply be deleted or an archive can hold the inactive issues. While
 deleting issues helps keep things uncluttered issues still have value over
 time.
 
-bug can be aliased as a git subcommand such as `bug` or `issue`. Security
-concerns are handled using standard git repository practices.
+fit can be aliased as a git subcommand using the name you prefer like fit, bug
+or issue. Security concerns are handled using standard git repository
+practices.
 
-bug software is written using [golang](https://golang.org) to make things easy,
+fit software is written using [golang](https://golang.org) to make things easy,
 simple and reliable. Why go? [This video](https://vimeo.com/69237265) from a
 2013 Ruby conference by Andrew Gerrand of Google seems a good explanation. It
 was linked from the golang.org home page.
@@ -99,14 +101,14 @@ Filesystem Issue Tracker ([FIT.md](FIT.md)) conventions/format are a set of
 suggestions for storing issues, one directory/folder per issue with plain text
 file details.
 
-An `issues/` directory holds one (descriptively titled) directory per issue.
+A `fit/` directory holds one (descriptively titled) directory per issue.
 The "Description" file is the only text needed providing the details. Optional
 tag_key_value files assign meta data.
 
-bug maintains the nearest `issues/` directory to your current working directory
-or it's parent directories. There can be more than one. bug can commit (or
-remove) issues from versioning or this can be done manually without bug. Unlike
-many other issue systems, bug issues naturally branch and merge along with the
+fit maintains the nearest `fit/` directory to your current working directory
+or it's parent directories. There can be more than one. fit can commit (or
+remove) issues from versioning or this can be done manually without fit. Unlike
+many other issue systems, fit issues naturally branch and merge along with the
 rest of your versioned files. Using branches or related repos is optional.
 
 Some support is available to import and/or reference other issue trackers.
@@ -114,40 +116,40 @@ Some support is available to import and/or reference other issue trackers.
 ### Installation
 
 After you have [go installed](https://golang.org/doc/install), install the
-latest version of bug with:
+latest version of fit with:
 
 `GO111MODULE=on go install github.com/grantbow/bug`
 
 Make sure `$GOPATH/bin` or `$GOBIN` are in your path (or copy
-the "bug" binary somewhere that is.)
+the "fit" binary somewhere that is.)
 
 The environment variable GO111MODULE changes how your golang works by enabling
-golang 1.11 module support required for this version of bug. The default in
+golang 1.11 module support required for this version of fit. The default in
 golang 1.12 is still "auto" but golang 1.13 is expected to default to "on".
 
-Working with bug and git via the command line can be simplified. You can run
-bug as a git subcommand like `git bug` or `git issue`. This [chapter about git
+Working with fit and git via the command line can be simplified. You can run
+fit as a git subcommand like `git fit` or `git issue`. This [chapter about git
 aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) describes how
 to set them up. It is part of the Pro Git book available for free online.
 Simply add the alias to your .gitconfig or edit your .gitconfig.
 
-`git config --global alias.issue !/path/to/bug`
+`git config --global alias.issue !/path/to/fit`
 
 This adds to your $HOME/.gitconfig:
 
 `[alias]
-    issue = !/path/to/bug`
+    issue = !/path/to/fit`
 
 ### Configuration
 
-Settings can be read from an optional config file .bug.yml placed next to the
-issues directory. Current options include:
+Settings can be read from an optional config file .fit.yml placed next to the
+fit directory. Current options include:
 
     * DefaultDescriptionFile: string,
           Default is ""
-          when doing bug {add|new|create}
+          when doing fit {add|new|create}
           first copy this file name to Description
-          recommended: issues/DescriptionDefault.txt
+          recommended: fit/DescriptionDefault.txt
     * ImportXmlDump: true or false, 
           Default is false.
           during import, save raw xml files
@@ -199,8 +201,8 @@ issues directory. Current options include:
           always recursive when possible
     * CloseStatusTag: true or false
           Default is false.
-	      bug close will delete (false) or
-          bug close will tag_status_close (true)
+	      fit close will delete (false) or
+          fit close will tag_status_close (true)
     * IdAbbreviate: true or false
           Default is false.
           Use Identifier.
@@ -220,31 +222,30 @@ Work to help adapt hooks to both git and hg would be appreciated.
 
 ### Example Use
 
-To get started in the top of an existing git repo simply `mkdir issues` then
-add and commit to the repo issues/_issue name_/Description files. Create and
-maintain issues by editing the files inside issues/_issue names_/.
+To get started in the top of an existing git repo simply `mkdir fit` then
+add and commit to the repo fit/_issue name_/Description files. Create and
+maintain issues by editing the files inside fit/_issue names_/.
 
-If an environment variable named FIT is set that value will be used as a directory name used to
-find the 'issues' directory. All bug commands will use FIT no matter your present working
-directory.
+If an environment variable named FIT is set that value will be used as a
+directory name used to find the 'fit' or 'issues' directory. All fit commands
+will use FIT no matter your present working directory.
 
-If an 'issues' directory/folder is not found bug will walk up the tree toward
-the root until it finds an "issues" subdirectory similar to how git looks for
-.git or hg looks for .hg. A warning is provided if no issues directory is
-found.
+If an 'fit' directory/folder is not found fit will walk up the tree toward
+the root until it finds a "fit" subdirectory similar to how git looks for
+.git or hg looks for .hg. A warning is provided if no directory is found.
 
 ```
 $ mkdir foo && cd foo
 $ git init
-$ mkdir issues
-$ bug help
+$ mkdir fit
+$ fit help
 cmd: help
 Usage: help <command>
 
-Use "bug help <command>" or "bug <command> help" for
+Use "fit help <command>" or "fit <command> help" for
 more information about any command below.
-bug version 0.6 built using go1.12.6 GOOS android
-executable: -rwx------ 8749028 Sat Jun 22 10:19:54 PDT 2019 /data/data/com.termux/files/home/go/bin/bug
+fit version 0.6 built using go1.12.6 GOOS android
+executable: -rwx------ 8749028 Sat Jun 22 10:19:54 PDT 2019 /data/data/com.termux/files/home/go/bin/fit
 
 Status/reading commands:
     list       List issues
@@ -279,35 +280,35 @@ Processing commands:
 
 aliases for help: --help -h
 
-$ bug create Need better help
+$ fit create Need better help
 (<your editor> Description)
 (save and quit)
 Created issue: Need better help
 
-$ bug list
+$ fit list
 
 ===== list /...
 Issue 1: Need better help
 
-$ bug list 1
+$ fit list 1
 
 ===== list /...
 Title: Need better help
 Description:
 <the entered description>
 
-$ bug create -n Need better formating for README
+$ fit create -n Need better formating for README
 (no editor, default to empty Description)
 Created issue: Need better formatting for README
 
-$ bug list
+$ fit list
 Issue 1: Need better help
 Issue 2: Need better formating for README
 ```
 
 ## History
 
-bug is the golang program first developed by Dave MacFarlane (driusan).
+fit is the golang program first developed as "bug" by Dave MacFarlane (driusan).
 Filesystem Issue Tracker ([FIT.md](FIT.md)) is the new name for the Poor Man's
 Issue Tracker (PMIT) storage system also first developed by driusan. For his
 demo from 2016, see [driusan's
@@ -342,7 +343,7 @@ tickets, support tickets, incident tickets or requests. See the FAQ.md
 We would like to hear about how you use this system.
 
 I would like to work with others and would appreciate feedback at
-grantbow+bug@gmail.com.
+grantbow+fit@gmail.com.
 
 Since the original project is not very active I have gone ahead and continuted
 development on my fork. I encourage discussion. Submitting can be done with a

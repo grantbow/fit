@@ -19,7 +19,7 @@ type Config struct {
 	BugDir string `json:"BugDir"`
 	// overridden by FIT/PMIT environment variable ** runtime only
 	IssuesDirName string `json:"IssuesDirName"`
-	// BugDir+"/.fit.yml" * if present ** runtime only
+	// BugDir+"/.fit.yml" or .bug.yml * if present ** runtime only
 	BugYml string `json:"BugYml"`
 	// Description contents for new issue or empty file (empty default)
 	DefaultDescriptionFile string `json:"DefaultDescriptionFile"`
@@ -66,8 +66,8 @@ and where the help output is modeled:
                        // help output at bottom of the file
     * main.go          // case lines
     * README.md        // includes help output generated from bottom of Help.go file, collected by running program
-    * FIT.md
-    * FAQ.md
+    * docs/FIT.md
+    * docs/FAQ.md
 
 list of places for
 creating new configs:

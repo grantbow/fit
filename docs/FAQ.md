@@ -34,45 +34,56 @@ A: That project stores "Operation"s editing each bug/issue. This has advantages
    launchpad issues. We have focused on github (issues and projects) with some
    bugseverywhere support.
 
+Q: Why change the name from bug to fit?
+   While it took some work, overloading naming conflicts for users and for the
+   code began to pile up and cause problems as work on new features advanced.
+   While a bug is somewhat specific to code it is also somewhat pejorative. The
+   name fit feels better and allows for multiple use cases. fit has
+   connotations with health and fitness. Working with git the name fit is quite
+   natural once you get used to it.
+
 Q: Why change the name from PMIT to [FIT](FIT.md)?
-A: bug is the program written in Go. PMIT is the old name of the storage
+A: bug was the program written in Go. PMIT was the original name of the storage
    system. [FIT](FIT.md) is the new name for the system that stores the
    issues. Dave MacFarlane (driusan) created bug and PMIT. The combination
-   of flat files with git is fantastic.
+   of flat files with was fantastic and just what needed to be created.
 
-   Several assumptions are built into bug and PMIT that do not meet some of my
-   needs. Therefore I have extended this version by writing or rewriting code
-   to handle things a little differently, trying to retain compability. The
-   original bug repository assumes deleting issues is ok. It assumes tags do
-   not need values, only true/false present/not present is enough. It uses a
-   tags subdirectory. It assumes four "tags" need values: Status, Priority,
-   Milestone and Identifier. These four are hard coded.
+   Several assumptions are built into bug and PMIT that do not meet all needs.
+   Therefore fit has extended bug by writing or rewriting code to handle things
+   a little differently, trying to retain compability and provide a great
+   experience to people using the system for the first time. The original bug
+   repository assumes deleting issues is ok. It assumes tags do not need
+   values, only true/false present/not present is enough. It uses a tags
+   subdirectory. It assumes four "tags" are special and need values: Status,
+   Priority, Milestone and Identifier. They were special cases and were hard
+   coded.
 
-   Despite the intended meaning, I feel the word "poor" in PMIT is too
+   Despite the intended jovial meaning, the word "poor" in PMIT feels too
    negative. The program binary can be called by any name using using aliases.
-   I also feel the word "poor" is not good description of this system.
+   The word "poor" is not good description of this highly capable system.
 
    The "poor man's" idiom as [described](https://www.merriam-webster.com/dictionary/poor%20man's)
-   is a useful description in two ways.
+   is still applicable description in two ways.
 
    First, PMIT and file system issue systems are much less expensive to set up
    and use. Ease of setup is an inherent benefit of [FIT](FIT.md).
-   Unfortunately the "poor man's" idiom used in PMIT can also be used to
-   indicate that an entity is similar to an original entity but is not as
-   talented or successful as that original entity. This feels wrong to me
-   because I believe using a filesystem is in some ways more talented than
-   other systems and could become very successful in the future.
+   Unfortunately the "poor man's" idiom can also be used to indicate that an
+   entity is a faximile of an original entity but is not as talented or
+   successful. This feels wrong to me because using a filesystem is in some
+   ways more talented than other systems and could become very successful in
+   the future.
 
-   I offered some patches to the original repository and some have been
-   applied. Development there has slowed down. I have forked the original github
-   repository to continue development and to improve bug which does many things
-   well.
+   Some of the patches offered to the original driusan/bug repository have been
+   applied. Development there has slowed down. fit was forked from the original
+   github repository to continue development and to improve upon the solid code
+   to do many more things.
 
    To build the submodules in this golang fork the paths to the modules must be
    renamed. Therefore golang version 1.11 or greater and `export
    GO111MODULE=on` are required. This allows setting up go.mod files to rename
    the build paths and test paths. As of 2019 go.mod files are the best way to
-   rename module paths.
+   rename module paths. A move to a repo rather than rewriting the original paths
+   may be worthwhile in the future.
 
 Q: What's the difference between a DVCS and an SCM?
 A: A source code management (SCM) system is a (distributed) version control
@@ -287,12 +298,12 @@ A: There are some impressive options out there available as open source
    [Github](https://github.com) by Microsoft and [Bitbucket](https://bitbucket.org) by Atlassian have hosted projects since 2008
 
    [github.com/duplys/git-issues](https://github.com/duplys/git-issues) is 
-   very similar to bug but is written in python and uses a hidden branch for
+   very similar to fit but is written in python and uses a hidden branch for
    storage depending on a system called a shelf. It was able to store a
-   version of itself under the .git/ directory so only python is required. I
-   contributed some code but after that I didn't feel it was stable and was a
-   bit difficult to debug because of the shelf storage. Development activity
-   has decreased.
+   version of itself under the .git/ directory so only python is required.
+   Code was contributed ther but after that it didn't feel stable and was a
+   bit difficult to debug because of the shelf storage system. Development
+   activity has also decreased.
 
    [github.com/dspinellis/git-issue](https://github.com/dspinellis/git-issue)
    is a single shell script to work with git. It can use an existing git repo
@@ -313,7 +324,7 @@ A: There are some impressive options out there available as open source
    [github.com/MichaelMure/git-bug](github.com/MichaelMure/git-bug) is a
    written in go, uses a golang struct (shown as json) data model to store
    changes to bugs as git tree (dir) and git blob objects in a structure like
-   refs/bugs/<bug-id> which are hashes.  These are aggregated into an array
+   refs/bugs/<bug-id> which are hashes. These are aggregated into an array
    called an OperationPack. It uses a colorful, interactive terminal UI and is
    developing a web based UI. It has "bridges" to other trackers and is
    packaged for Archlinux.
@@ -388,7 +399,7 @@ A: The alternatives to good IT project practices are are all too common, in IT
    record the ideas they have so everyone has a better chance of providing the
    best project outcome possible. These issues need to be recorded immediately
    using any available device. Using [FIT](FIT.md) conventions supports this
-   using your present tools to capture valuable notes and ideas. The bug tool
+   using your present tools to capture valuable notes and ideas. The fit tool
    manages them. Specialized, high maintenance issue systems officially
    provided to project team members are not appropriate for collecting all
    possible project knowledge.
@@ -398,7 +409,7 @@ A: How to Report Bugs Effectively by Simon Tatham
 
     [sgtatham bugs.html](https://www.chiark.greenend.org.uk/~sgtatham/bugs.html)
 
-   While I hesitate to include the following URL the content is carefully written
+   While it can be difficult to read the content of the following URL is carefully written
    and can help people better understand the perspectives of people involved in
    the lifecycle of open source software. Many people have never tried to code a
    fix to a software bug. Be prepared to accept language and/or terminology that

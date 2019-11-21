@@ -8,12 +8,12 @@ Use your choice of editors, devices and shared file storage.
 The FIT format can evolve to meet changing team needs. Data can be imported
 or exported from other issue systems.
 
-bug is a program that implements the FIT conventions and helps manage issues
+fit is a program that implements the FIT conventions and helps manage issues
 versioned in git or mercurial.
 
-bug is the program written in Go developed by Dave MacFarlane (driusan).
-Filesystem Issue Tracker (FIT) is the new name for the Poor Man's Issue Tracker
-(PMIT) storage system also developed by driusan.
+fit began to be written as a program named bug in Go developed by Dave
+MacFarlane (driusan). Filesystem Issue Tracker (FIT) is the new name for the
+Poor Man's Issue Tracker (PMIT) storage system also developed by driusan.
 
 # Minimum Requirements
 # Jobs
@@ -23,7 +23,7 @@ Filesystem Issue Tracker (FIT) is the new name for the Poor Man's Issue Tracker
 ## Good - One File (List) For All Issues
 ## Better - One File Per Issue
 ## FIT Conventions/Format - One Directory Per Issue
-### issues top directory
+### fit top directory
 ### issue directory name
 ### issue Description file
 ### issue tag files
@@ -40,7 +40,7 @@ and access to a shared file storage can be used.
 Version control using git is highly recommended to provide detailed change
 history, ownership and date/times.
 
-Other tools are not required. To speed up working with issues tools like bug
+Other tools are not required. To speed up working with issues tools like fit
 will evolve to meet existing and new needs. People should even be able to adapt
 their existing tool back ends to read and write to FIT with no lost data.
 
@@ -154,24 +154,24 @@ and filesystem attributes such as directories, permissions and symbolic links.
 
 Centralized lists can provide status quickly and show some relation between the
 issues, but without a way to make a copy locally you can not access the system
-when on the go.
+without a network connection.
 
 A little more structure, just enough, makes a huge difference.
 
 ## FIT Conventions/Format - One Directory Per Issue
 
-It is surprising how often an employer or project does not already provide an
-adequate system for recording important issues in a trusted, reliable system so
-that issues will not fall through the cracks.
+It is surprising how often an employer or project, despite perhaps the best of
+intentions, does not already provide an adequate system for recording important
+issues in a trusted, reliable system so that issues will not get lost.
 
 The conventions consist of directories for each issue that contain a mandatory
 Description file, tag files and any needed support files.
 
 The few necessary parts of an issue are described for clarity.
 
-### issues top directory
+### fit top directory
 
-A top level `issues/` directory holds one descriptively named directory per
+A top level `fit/` directory holds one descriptively named directory per
 issue.
 
 Human readable directory names provide context.
@@ -184,9 +184,9 @@ Implement more than one issues directory to capture naturally similar sets of
 issues. Merge and synchronize issues to adapt them as needed. Issues
 naturally branch and merge along with the rest of your versioned files.
 
-The title should never change during the life time of the issue. Tradeoffs are
-involved when choosing how to store issues. Other storage naming choices may
-provide better or worse tradeoffs for your needs.
+Ideally the title should never change during the life time of an issue.
+Tradeoffs are involved when choosing how to store issues. Other storage naming
+choices may provide better or worse tradeoffs for your needs.
 
 Directories may contain tag files and other files as needed.
 
@@ -240,10 +240,9 @@ Issue bodies can contain many notes, remarks, comments, ideas and
 things to remember.
 
 People like to rename things. So to prevent technical dependency problems
-requiring the renaming of subdirectories the title of the issue should be
-located on the first line of the "Description" file. It will usually match the
-directory name. i.e. an issue dir-name should have it's first line "title: sub
-dir name"
+requiring the renaming of subdirectories the title of an issue may be copied to
+the first line of the "Description" file. It may often match the directory
+name. i.e. an issue dir-name should have it's first line "title: dir name"
 
 If the first line does not begin with the letters "title" or if renaming is not
 a problem for your system then the directory name is used as the title.
@@ -251,12 +250,15 @@ a problem for your system then the directory name is used as the title.
 The rest of the file contains free form text describing the issue. There is an
 art and science to what an issue can and should contain. It can be interpreted
 as markdown format. This is the only logically required file in the directory
-and the only file with a fixed file name. Contents depend upon how the system
-is used but descriptions often contain the context of an issue, how to
-reproduce the issue, what a desired outcome would be, etc.
+and the only file with a fixed file name unless a primary alternative is
+configured. Contents depend upon how people use the system but descriptions
+often contain the context of an issue, how to reproduce the issue, what a
+desired outcome would be, the version of the program you are reporting an issue
+with, etc. Over time conventions will help readability but this can be
+standardized as the system grows.
 
 Three character file extensions on Description files containing human readable
-text are not recommended to make for consistent naming.
+text are not recommended but can be configured.
 
 ### issue id
 
@@ -266,11 +268,12 @@ creation time.
 
 tag_id_1001
 
-Tags are further detailed below and a feature or tool may help.
+Tags are further detailed below. Tooling or features may help when working with
+issues that have ids assigned.
 
 ### issue tag files
 
-Tags give this system more power and flexibility than many others.
+Tags give this system more power and flexibility than many similar systems.
 
 File names beginning with 'tag' contain keys and values. Underscores in the
 name separate keys and values. i.e. "tag_key_value"
@@ -278,15 +281,17 @@ name separate keys and values. i.e. "tag_key_value"
 The part after the first _ is the key.
 
 The part after the second _ is the optional value. If no value is provided just
-the presence of the tag_key signifies a true/false flag. Values are still
-recommended for clarity.
+the presence of the tag_key signifies a present/true vs. an absent/false flag.
+Specified values are recommended to convey a less ambiguous meaning.
 
 The storage is expandable, flexible and may be updated independently of other
 issue parts. Files beginning with "tag" that are not issue tag files should be
 avoided in issue directories.
 
-A special subdirectory can be used for tag keys that have implied true/present
-and false/absent implied values.
+A special subdirectory named "tags" can be used for tag keys that have by
+default only have implied present/true and absent/false values but it feels
+more clear and direct when working with issue directories and files to not
+require an extra directory.
 
 Value names may optionally be stored in the file name or possibly in the file.
 Implementations should trim beginning/end of line whitespace just in case.
@@ -313,14 +318,14 @@ Three character file extensions on tag files are not recommended.
 Tag files may be empty or contain arbitrary text. Tools should allow for the
 preservation of the rest of the file while editing. This can be useful if a
 team member includes contextual information like why this issue was given this
-tag, historical comments, etc. though updating the Description text may better
-meet team needs.
+tag, historical comments, etc. though team conventions may prefer updating the
+Description file's text.
 
 These tag files seem a good compromise between data processing needs and the
 needs of the people using the system with or without custom tools.
 
 Some special tags may require additional rules and/or tools. To minimize key
-variances and/or value variances a tool can collect existing tag keys and
+variances and/or value variances tools can collect existing tag keys and
 existing tag values.
 
 Some anticipated tags might include:
@@ -352,18 +357,21 @@ Some anticipated tags might include:
     begin with the same prefix. The .tag extension also conflicts with DFQuery.
 
     While it is tempting to include numbers in issue directory names, using a
-    tag allows easy renumbering. Numbers are very useful which is why many
-    issue systems use them. They allow lookup and cross referencing within or
-    between issue systems. Needs of small teams could require only three or
-    four digits. The use of a leading one in the most significant digit can
-    easily prevent confusing leading zeros.
+    tag allows easy renumbering with minimal disruption. Numbers are very
+    useful which is why many issue systems use them. They allow lookup and
+    cross referencing within or between issue systems. Needs of small teams
+    could require only three or four digits. The use of a leading one in the
+    most significant digit can easily prevent confusing leading zeros.
 
 `tag_priority_2`
+`tag_priority_b`
 
-    Priority values should be interpreted as numbers. Lower numbers usually
-    have higher priority that naturally allow for meaningful default sort
-    ordering. Priority values may change often and/or need to be automatically
-    assigned.
+    Priority values might be interpreted as numbers. Lower numbers usually have
+    higher priority that naturally allow for meaningful default sort ordering.
+    Priority values may change often and/or need to be automatically assigned.
+    Alphabetical systems may be used to increase human readability, human
+    differentiation from other tag key/values or to contrast with other numeric
+    systems.
 
 `tag_resolution_fixed`
 `tag_resolution_wont-fix`
@@ -374,7 +382,7 @@ Some anticipated tags might include:
     Outcomes are best assigned using tags. While it may be tempting to delete
     completed issues keeping them maintains important context. While version
     control can provide all deleted files as needed they are difficult to
-    easily access and/or count.
+    easily access and/or count if only present in your version control logs.
 
 `tag_stage_todo`
 `tag_stage_in-progress`
@@ -403,13 +411,14 @@ Some anticipated tags might include:
 `tag_impact_`
 
     Tags may enable comparisons of relative time, work invested vs. expected
-    impact. These can help evaluate team opportunity costs. Team members should
-    understand the conventions used for the meanings of the values.
+    impact, etc. These can help evaluate team opportunity costs. Team members
+    and perhaps tools should be able to understand the conventions used for the
+    meanings of the values.
 
 Tag like data may be calculated using file time stamps or other attributes.
 These tags may not need to be created manually but may be derived as needed.
 
-If a tag value is missing or invalid alternative locations can store values.
+If a tag value is missing or invalid then alternative locations can store values.
 This can be implicit or explicit.
 
     tag_x_firstline      For positive identification the first line can be used
@@ -420,7 +429,8 @@ This can be implicit or explicit.
 
 ### Other Files
 
-Human readable files accurately and quickly capture details.
+Human readable files accurately and quickly capture details. This is a key
+advantage of using directories. Any files may be included as needed.
 
 ### Other Considerations 
 
@@ -431,43 +441,39 @@ unwieldy and requiring duplicate, time consuming data entry.
 
 # Tools
 
-Tools will likely follow to get more jobs done more easily.
+Tools may follow to get more jobs done more easily.
 
-Recorded issues can bring sense to an inherently disorderly process as things
-move forward and/or increase the need for more features to work with issues
-past and present.
+Issues recorded can bring sense to an otherwise disorderly process as software
+moves forward and generally will increase complexity with time. An extendible
+system can address needs to work with past and present issues as they increase.
 
-The whole thing should be tracked with a version control system such as git or
-another revision control systems (RCS). If using git you can call it a
-distributed issue tracker. All the benefits of git and similar RCS like
-synchronizing on demand allowing distributed and/or remote work, merge conflict
-handling These conventions with git makes for a very capable, mobile and agile
-system.
+The whole thing can be tracked with a version control system such as git or
+another (distributed) revision control systems (RCS). Benefits of using git,
+mercurial (hg) or similar RCS system are synchronizing on demand, distributed
+and/or remote work and merge conflict handling. The FIT conventions implemented
+with git and fit in golang make for a very capable, mobile and agile system.
 
-The git annex is useful for tracking larger files instead of git.
+The git annex tool can be used with git to track larger files.
 
-Conventions should be followed for consistent processing by a variety of tools.
+When evolving an issue system human and technical conventions should be
+followed allowing for consistent processing by a variety of people and tools.
 Since just a few conventions are used with directories and files tools may be
-written in your most convenient programming language.
+written in the programming language you find most convenient.
 
-A numeric running count of issues is often desired. It could be written as a
-git hook to increment a tag_id_value. Quite a bit of tacit knowledge can be
-quickly gained when a running identifier is assigned. Not only the total number
-of issues but a feel for issue velocity can be seen by those most familiar with
-the system.
+A numeric running count of issues is often desired. Quite a bit of tacit
+knowledge can be quickly gained when a running identifier is assigned. The Ids
+can not only quickly convey the total number of issues created but can also
+provide a feel for issue velocity to those most familiar with the system.
 
-Filesystems with version control provide many of the advantages that databases
-provide, but when needed issues can and should be parsed into a database.
-Things like querying and reporting can be more efficient using something like
-Berkeley DB, Sqlite, MariaDB, Postgres, MongoDB, CouchDB, etc.
+Filesystems with version control provide many advantages provided by databases.
+Issues may later be parsed into a database and/or imported or exported to other
+systems. Things like querying and reporting can be more efficient using
+something like Berkeley DB, Sqlite, MariaDB, Postgres, MongoDB, CouchDB, etc.
 
-For end user access an http front end would be a good logical next step. For
-the additionally types of summaries (like BUGS.txt), reports, html files and
-other files in the system exclusions can be specified so they are not checked
-into the version control system.
+To facilite visibility an http front end may be a good logical next step.
+Summaries (like BUGS.txt), reports and html files may be generated to provide
+different kinds of visibility. Generated files may be excluded so they are not
+accidentally checked into your version control system.
 
 Import and export from other issue systems could be very useful.
-
-People, command line tools or other tool implementations (like http) should be
-updated with the present conventions and assumptions in mind.
 
