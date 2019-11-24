@@ -15,28 +15,70 @@ func main() {
 	config := bugs.Config{}
 	config.ProgramVersion = bugapp.ProgramVersion()
 	config.DescriptionFileName = "Description"
-	config.IssuesDirName = "issues"
-
+	config.FitDirName = "fit"
 	rootPresent := false
-	bugYmlFileName := ".bug.yml"
-	fitYmlFileName := ".fit.yml"
 	skip := bugapp.SkipRootCheck(&os.Args) // too few args or help or env
+
+	// detect scm first to determine backup location for .fit.yml
+	scmoptions := make(map[string]bool)
+	handler, detectedDir, ErrH := scm.DetectSCM(scmoptions, config)
+	//a, b, c := scm.DetectSCM(scmoptions, config)
+	//fmt.Printf("%+v %+v %+v\n", a, b, c)
+	if ErrH != nil {
+		fmt.Printf("Warn: no .git or .hg directory. Use \"{git|hg} init\".\n")
+		//fmt.Printf("Warn: %s\n", ErrH) // No SCM found
+		//a, b := handler.SCMIssuesUpdaters()
+		//fmt.Printf("%+v %+v\n", a, b)
+		if handler != nil {
+			if _, ErrU := handler.SCMIssuesUpdaters(config); ErrU != nil {
+				if _, ErrCa := handler.SCMIssuesCacher(config); ErrCa != nil {
+					fmt.Printf("Warn: %s\n", ErrCa)
+				} else {
+					fmt.Printf("Warn: %s\n", ErrU)
+				}
+			}
+		}
+	} else {
+		config.ScmDirName = string(detectedDir)
+		config.ScmType = handler.SCMTyper()
+	}
+
+	fitYmlFileName := ".fit.yml"
+	bugYmlFileName := ".bug.yml"
+	fitYmlExt := fitYmlFileName
+	bugYmlExt := bugYmlFileName
 	if rd := bugs.RootDirer(&config); rd != "" {
-		// bugs/Directory.go func RootDirer sets config.BugDir does os.Chdir()
+		// issues/Directory.go func RootDirer sets config.FitDir runs os.Chdir()
 		rootPresent = true
-		// now try to read config
+		// now try to read fit config
 		if ErrC := bugs.ConfigRead(fitYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
-			config.BugYml = config.BugDir + string(os.PathSeparator) + fitYmlFileName
+			config.FitYml = config.FitDir + string(os.PathSeparator) + fitYmlFileName
 			//var sops = string(os.PathSeparator) not yet available
 			//var dops = Directory(os.PathSeparator)
+			// now try to read bug config
 		} else if ErrC := bugs.ConfigRead(bugYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
-			config.BugYml = config.BugDir + string(os.PathSeparator) + bugYmlFileName
+			config.FitYml = config.FitDir + string(os.PathSeparator) + bugYmlFileName
+		} else if config.ScmType == "git" {
+			s := len(config.ScmDirName)
+			//fmt.Printf("debug s01 %v\n scmdirname %v\n dir %v\n", s, config.ScmDirName, string(config.ScmDirName[:s-4])+fitYmlExt)
+			if ErrC := bugs.ConfigRead(string(config.ScmDirName[:s-4])+fitYmlExt, &config, bugapp.ProgramVersion()); ErrC == nil {
+				config.FitYml = string(config.ScmDirName[:s-4]) + fitYmlExt
+				//fmt.Printf("debug 02\n %v\n", config.FitYml)
+			}
+		} else if config.ScmType == "hg" {
+			s := len(config.ScmDirName)
+			//fmt.Printf("debug s03 %v\n scmdirname %v\n dir %v\n", s, config.ScmDirName, string(config.ScmDirName[:s-3])+fitYmlExt)
+			if ErrC := bugs.ConfigRead(string(config.ScmDirName[:s-3])+bugYmlExt, &config, bugapp.ProgramVersion()); ErrC == nil {
+				config.FitYml = string(config.ScmDirName[:s-3]) + bugYmlExt
+				//fmt.Printf("debug 04\n %v\n", config.FitYml)
+			}
 		}
+		//} else { // no
 	}
 
 	if !rootPresent {
 		if skip {
-			fmt.Printf("Warn: no `" + config.IssuesDirName + "` directory\n")
+			fmt.Printf("Warn: no `" + config.FitDirName + "` directory\n")
 		} else { // !skip
 			//bugapp.PrintVersion()
 			fmt.Printf("bug manages plain text issues with git or hg.\n")
@@ -51,31 +93,12 @@ func main() {
 		}
 	}
 
-	bugs.IssuesDirer(config) // from bugs/Directory.go, uses config.BugDir from bugs/Bug.go
-
-	scmoptions := make(map[string]bool)
-	handler, _, ErrH := scm.DetectSCM(scmoptions, config)
-	//a, b, c := scm.DetectSCM(scmoptions, config)
-	//fmt.Printf("%+v %+v %+v\n", a, b, c)
-	if ErrH != nil {
-		fmt.Printf("Warn: no .git or .hg directory. Use \"{git|hg} init\".\n")
-		//fmt.Printf("Warn: %s\n", ErrH) // No SCM found
-		//a, b := handler.SCMIssuesUpdaters()
-		//fmt.Printf("%+v %+v\n", a, b)
-		if handler != nil {
-			if _, ErrU := handler.SCMIssuesUpdaters(); ErrU != nil {
-				if _, ErrCa := handler.SCMIssuesCacher(); ErrCa != nil {
-					fmt.Printf("Warn: %s\n", ErrCa)
-				} else {
-					fmt.Printf("Warn: %s\n", ErrU)
-				}
-			}
-		}
-	}
+	bugs.FitDirer(config) // from issues/Directory.go, uses config.FitDir from issues/Bug.go
 
 	// flags package is nice but this seemed more direct at the time
 	// because of subcommands and
 	// arguments that can be space separated names
+	// glog requires the use of flag
 	osArgs := os.Args // TODO: use an env var and assign to osArgs to setup for testing
 	//fmt.Printf("A %s %#v\n", "osArgs: ", osArgs)
 	if len(osArgs) <= 1 {
@@ -116,9 +139,9 @@ func main() {
 		case "twilio":
 			bugapp.Twilio(config)
 		case "staging", "staged", "cached", "cache", "index":
-			if b, err := handler.SCMIssuesUpdaters(); err != nil {
-				fmt.Printf("Files in " + config.IssuesDirName + "/ need committing, see $ git status --porcelain -u -- :/" + config.IssuesDirName + "\nand for files already in index see $ git diff --name-status --cached HEAD -- :/" + config.IssuesDirName + "\n")
-				if _, ErrCach := handler.SCMIssuesCacher(); ErrCach != nil {
+			if b, err := handler.SCMIssuesUpdaters(config); err != nil {
+				fmt.Printf("Files in " + config.FitDirName + "/ need committing, see $ git status --porcelain -u -- :/" + config.FitDirName + "\nor if already in the index see     $ git diff --name-status --cached HEAD -- :/" + config.FitDirName + "\n")
+				if _, ErrCach := handler.SCMIssuesCacher(config); ErrCach != nil {
 					for _, bline := range strings.Split(string(b), "\n") {
 						//if bline in c {
 						//} else {
@@ -129,7 +152,7 @@ func main() {
 					fmt.Printf("%v\n", string(b))
 				}
 			} else {
-				fmt.Printf("No files in " + config.IssuesDirName + "/ need committing, see $ git status --porcelain -u :/" + config.IssuesDirName + " \":top\"\n")
+				fmt.Printf("No files in " + config.FitDirName + "/ need committing, see $ git status --porcelain -u :/" + config.FitDirName + " \":top\"\n")
 			}
 		// subcommands that pass osArgs
 		case "tagslist", "taglist", "tagsassigned", "tags":
@@ -178,7 +201,7 @@ func main() {
 		default:
 			//if
 			if len(osArgs) == 2 {
-				buglist, _ := bugs.LoadBugByHeuristic(osArgs[1], config)
+				buglist, _ := bugs.LoadIssueByHeuristic(osArgs[1], config)
 				//fmt.Printf("%+v\n", buglist)
 				if buglist != nil { // || ae, ok := bugerr.(bugs.ErrNotFound); ! ok { // bug list when possible, not help
 					bugapp.List(osArgs[1:], config, true)

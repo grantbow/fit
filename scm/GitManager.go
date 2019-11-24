@@ -21,7 +21,7 @@ type GitManager struct {
 	UseBugPrefix bool
 }
 
-// Purge runs git clean -fd on the directory containing the issues directory.
+// Purge runs git clean -fd on the directory containing the fit directory.
 func (mgr GitManager) Purge(dir bugs.Directory) error {
 	cmd := exec.Command("git", "clean", "-fd", string(dir)+sops)
 
@@ -213,8 +213,8 @@ func (mgr GitManager) SCMTyper() string {
 }
 
 // SCMIssuesUpdaters returns []byte of uncommitted files staged AND working directory
-func (mgr GitManager) SCMIssuesUpdaters() ([]byte, error) { // config bugs.Config
-	cmd := exec.Command("git", "status", "--porcelain", "-u", "--", ":"+sops+"issues")
+func (mgr GitManager) SCMIssuesUpdaters(config bugs.Config) ([]byte, error) {
+	cmd := exec.Command("git", "status", "--porcelain", "-u", "--", ":"+sops+config.FitDirName)
 	// --porcelain output format
 	// -u shows all unstaged files, not just directories
 	// after -- the path is  ":"+sops+"issues"
@@ -230,19 +230,19 @@ func (mgr GitManager) SCMIssuesUpdaters() ([]byte, error) { // config bugs.Confi
 	if string(co) == "" {
 		return []byte(""), nil
 	} else {
-		return co, errors.New("Files In issues/ Need Committing")
+		return co, errors.New("Files In " + config.FitDirName + "/ Need Committing")
 	}
 }
 
 // SCMIssuesCacher returns []byte of uncommitted files staged NOT working directory
-func (mgr GitManager) SCMIssuesCacher() ([]byte, error) { // config bugs.Config
-	cmd := exec.Command("git", "diff", "--name-status", "--cached", "HEAD", "--", ":"+sops+"issues")
+func (mgr GitManager) SCMIssuesCacher(config bugs.Config) ([]byte, error) { // config bugs.Config
+	cmd := exec.Command("git", "diff", "--name-status", "--cached", "HEAD", "--", ":"+sops+config.FitDirName)
 	// only whitespace differs from output of git status
 	co, _ := cmd.CombinedOutput()
 	if string(co) == "" {
 		return []byte(""), nil
 	} else {
-		return co, errors.New("Files In issues/ Staged and Need Committing")
+		return co, errors.New("Files In " + config.FitDirName + "/ Staged and Need Committing")
 	}
 }
 

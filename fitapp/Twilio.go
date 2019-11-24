@@ -22,7 +22,7 @@ func Twilio(config bugs.Config) {
 		return strings.Contains(target, part)
 	}
 
-	buglist := bugs.GetAllBugs(config)
+	buglist := bugs.GetAllIssues(config)
 	//fmt.Printf("getallbugs: %q\n", buglist)
 	if len(buglist) > 0 {
 		// from buglist and
@@ -32,11 +32,11 @@ func Twilio(config bugs.Config) {
 		handler, _, ErrH := scm.DetectSCM(scmoptions, config)
 		if ErrH == nil {
 			// scm exists
-			if _, err := handler.SCMIssuesUpdaters(); err != nil {
+			if _, err := handler.SCMIssuesUpdaters(config); err != nil {
 				// []byte and err
 				// uncommitted files including staged AND working directory
 				//fmt.Printf("debug 2\n")
-				if b, ErrCach := handler.SCMIssuesCacher(); ErrCach != nil {
+				if b, ErrCach := handler.SCMIssuesCacher(config); ErrCach != nil {
 					// []byte and ErrCach
 					// uncommitted files staged only NOT working directory
 					//fmt.Printf("debug 3\n")
@@ -55,28 +55,28 @@ func Twilio(config bugs.Config) {
 					//for key, _ := range updatedissues {
 					//	fmt.Printf("bug dirname: %v\n", key)
 					//}
-					bug := bugs.Bug{}
+					bug := bugs.Issue{}
 
 					// build message for each recipient from updated issues and twilio tags
 					for key, _ := range updatedissues {
 						//fmt.Printf("twilio bug dirname: %v\n", key)
-						expectedbugdir := string(bugs.IssuesDirer(config)) + sops + key
-						bug.LoadBug(bugs.Directory(expectedbugdir), config)
+						expectedbugdir := string(bugs.FitDirer(config)) + sops + key
+						bug.LoadIssue(bugs.Directory(expectedbugdir), config)
 						tags := bug.Tags()
 						//fmt.Printf("debug %v tags %v\n", key, tags)
 						for _, k := range tags {
 							//fmt.Printf("k: %v\n", k)
 							if hasPart(string(k), "twilio") { // local function returns bool
-								a := strings.Split(string(k), ":") // : separated from bug.Tags
+								a := strings.Split(string(k), ":") // : separated from issue.Tags
 								recip := a[1]
-								//fmt.Printf("twilio bug dirname: %v tag %v : %v\n", key, a[0], recip)
+								//fmt.Printf("twilio issue dirname: %v tag %v : %v\n", key, a[0], recip)
 								//	if strings.ToLower(string(tag)) == "twilio" {
 								if _, ok := twiliorecipients[recip]; ok {
 									// recipient exists, append
 									twiliorecipients[recip] = twiliorecipients[recip] + ", " + key
 								} else {
 									// new recipient
-									twiliorecipients[recip] = "site " + config.IssuesSite + "\nupdated " + key
+									twiliorecipients[recip] = "site " + config.FitSite + "\nupdated " + key
 								}
 							}
 						}

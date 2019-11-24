@@ -15,7 +15,7 @@ func Purge(config bugs.Config) {
 		return
 	}
 
-	err = scm.Purge(bugs.IssuesDirer(config))
+	err = scm.Purge(bugs.FitDirer(config))
 	if err != nil {
 		fmt.Printf("Error: %s\n", err.Error())
 		return

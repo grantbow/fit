@@ -13,7 +13,7 @@ import (
 //var dops = bugs.Directory(os.PathSeparator)
 //var sops = string(os.PathSeparator)
 
-func beImportComments(b bugs.Bug, directory string, includeHeaders bool) string {
+func beImportComments(b bugs.Issue, directory string, includeHeaders bool) string {
 	file := directory + sops + "body"
 	data, _ := ioutil.ReadFile(file)
 	if includeHeaders == false {
@@ -40,7 +40,7 @@ func beImportComments(b bugs.Bug, directory string, includeHeaders bool) string 
 	return "---------- Comment ---------\nFrom:" + beComment.Author + "\nDate:" + beComment.Date + "\n\n" + string(data)
 }
 
-func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
+func beImportIssue(identifier, issuesDir, fullbepath string, config bugs.Config) {
 	/* BE appears to store the top level data of a bug
 	   in a json file with the format:
 	    {
@@ -72,22 +72,22 @@ func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
 
 	fmt.Printf("File: %s\n", file)
 	data, _ := ioutil.ReadFile(file)
-	var beBug BeValues
-	err := json.Unmarshal([]byte(data), &beBug)
+	var beIssue BeValues
+	err := json.Unmarshal([]byte(data), &beIssue)
 	if err != nil {
 		fmt.Printf("Error unmarshalling data: %s\n", err.Error())
 	}
 
-	fmt.Printf("%s\n", beBug)
+	fmt.Printf("%s\n", beIssue)
 
-	bugdir := bugs.TitleToDir(beBug.Summary)
+	bugdir := bugs.TitleToDir(beIssue.Summary)
 
-	b := bugs.Bug{Dir: bugs.Directory(issuesDir) + bugdir}
+	b := bugs.Issue{Dir: bugs.Directory(issuesDir) + bugdir}
 	if dir := b.Direr(); dir != "" {
 		os.Mkdir(string(dir), 0755)
 	}
-	if beBug.Status != "" && beBug.Severity != "" {
-		b.SetStatus(beBug.Status+":"+beBug.Severity, config)
+	if beIssue.Status != "" && beIssue.Severity != "" {
+		b.SetStatus(beIssue.Status+":"+beIssue.Severity, config)
 	}
 
 	comments := fullbepath + sops + "comments" + sops
@@ -106,7 +106,7 @@ func beImportBug(identifier, issuesDir, fullbepath string, config bugs.Config) {
 	b.SetDescription(DescriptionStr, config)
 	b.SetIdentifier(identifier, config)
 }
-func beImportBugs(prefix, issuesdir, bedir, dirname string, config bugs.Config) {
+func beImportIssues(prefix, issuesdir, bedir, dirname string, config bugs.Config) {
 	bugsdir := bedir + sops + dirname + sops + "bugs"
 	dir, err := os.Open(bugsdir)
 	if err != nil {
@@ -124,7 +124,7 @@ func beImportBugs(prefix, issuesdir, bedir, dirname string, config bugs.Config) 
 			}
 			name := shortestPrefix(file.Name(), nextIdentifier, lastIdentifier, 3)
 			identifier := fmt.Sprintf("%s%s%s", prefix, sops, name)
-			beImportBug(identifier, issuesdir, bugsdir+sops+file.Name(), config)
+			beImportIssue(identifier, issuesdir, bugsdir+sops+file.Name(), config)
 			lastIdentifier = file.Name()
 		}
 	}
@@ -155,7 +155,7 @@ func beImport(config bugs.Config) {
 			os.Exit(4)
 		}
 
-		issuesDir := bugs.IssuesDirer(config)
+		issuesDir := bugs.FitDirer(config)
 		lastIdentifier := ""
 		nextIdentifier := ""
 		for idx, file := range files {
@@ -165,7 +165,7 @@ func beImport(config bugs.Config) {
 				}
 				name := shortestPrefix(file.Name(), nextIdentifier, lastIdentifier, 3)
 
-				beImportBugs(name, string(issuesDir), dir.Name(), file.Name(), config)
+				beImportIssues(name, string(issuesDir), dir.Name(), file.Name(), config)
 				lastIdentifier = file.Name()
 			}
 		}

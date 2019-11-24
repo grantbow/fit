@@ -12,9 +12,11 @@ import (
 )
 
 type Config struct {
-	BugDir                    string `json:"BugDir"`        // runtime only
-	BugYml                    string `json:"BugYml"`        // runtime only
-	IssuesDirName             string `json:"IssuesDirName"` // runtime only
+	FitDir                    string `json:"FitDir"`     // runtime only
+	FitDirName                string `json:"FitDirName"` // runtime only
+	ScmDirName                string `json:"ScmDirName"` // runtime only
+	ScmType                   string `json:"ScmType"`    // runtime only
+	FitYml                    string `json:"FitYml"`     // runtime only
 	DefaultDescriptionFile    string `json:"DefaultDescriptionFile"`
 	ImportXmlDump             bool   `json:"ImportXmlDump"`
 	ImportCommentsTogether    bool   `json:"ImportCommentsTogether"`
@@ -27,8 +29,8 @@ type Config struct {
 	TwilioAccountSid          string `json:"TwilioAccountSid"`
 	TwilioAuthToken           string `json:"TwilioAuthToken"`
 	TwilioPhoneNumberFrom     string `json:"TwilioPhoneNumberFrom"`
-	IssuesSite                string `json:"IssuesSite"`
-	MultipleIssuesDirs        bool   `json:"MultipleIssuesDirs"`
+	FitSite                   string `json:"FitSite"`
+	MultipleFitDirs           bool   `json:"MultipleFitDirs"`
 	CloseStatusTag            bool   `json:"CloseStatusTag"`
 	IdAbbreviate              bool   `json:"IdAbbreviate"`
 	IdAutomatic               bool   `json:"IdAutomatic"`
@@ -46,7 +48,7 @@ var setupbugargtests = []struct {
 }{
 	{"", `usage:`},
 	{"--version", `version`},
-	{"pwd", `issues`},
+	{"pwd", `fit`},
 	{"env", `Editor`},
 	{"find", `Usage:`},
 	//{"status", `Usage:`},
@@ -76,7 +78,7 @@ func TestBugArgParser(t *testing.T) {
 	// setup
 	config := Config{}
 	config.DescriptionFileName = "Description"
-	config.IssuesDirName = "issues"
+	config.FitDirName = "fit"
 	var gdir string
 	pwd, _ := os.Getwd()
 	gdir, err := ioutil.TempDir("", "main")
@@ -92,7 +94,7 @@ func TestBugArgParser(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
-	os.Mkdir(config.IssuesDirName, 0755)
+	os.Mkdir(config.FitDirName, 0755)
 
 	err = os.Setenv("FIT", gdir)
 	if err != nil {
@@ -190,7 +192,7 @@ func TestCliArgs(t *testing.T) {
 	var gdir string
 	config := Config{}
 	//config.DescriptionFileName = "Description"
-	config.IssuesDirName = "issues"
+	config.FitDirName = "fit"
 	pwd, _ := os.Getwd()
 	gdir, err := ioutil.TempDir("", "main")
 	if err == nil {
@@ -205,7 +207,7 @@ func TestCliArgs(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
-	os.Mkdir(config.IssuesDirName, 0755)
+	os.Mkdir(config.FitDirName, 0755)
 
 	err = os.Setenv("FIT", gdir)
 	if err != nil {

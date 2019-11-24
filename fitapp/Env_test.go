@@ -12,7 +12,7 @@ import (
 func TestEnvGit(t *testing.T) {
 	config := bugs.Config{}
 	config.DescriptionFileName = "Description"
-	config.IssuesDirName = "fit"
+	config.FitDirName = "fit"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "envgit")
 	pwd, _ := os.Getwd()
@@ -28,8 +28,8 @@ func TestEnvGit(t *testing.T) {
 	}
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
-	// Fake an Issues Directory
-	os.Mkdir("Issues", 0755)
+	// Fake a Fit Directory
+	os.Mkdir("Fit", 0755)
 
 	stdout, stderr := captureOutput(func() {
 		Env(config)
@@ -37,7 +37,7 @@ func TestEnvGit(t *testing.T) {
 	if stderr != "" {
 		t.Error("Unexpected error: " + stderr)
 	}
-	expected := "Settings:\n\nEditor:.*\nRoot Directory:.*\nIssues Directory:.*\nSettings file:.*\n\nVCS Type:.*\ngit Directory:.*\nNeed Committing or Staging:.*"
+	expected := "Settings:\n\nEditor:.*\nRoot Directory:.*\nFit Directory:.*\nSettings file:.*\n\nVCS Type:.*\ngit Directory:.*\nNeed Committing or Staging:.*"
 	// TODO: fix Need Staging output and test
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)

@@ -132,9 +132,9 @@ func TestNoRoot(t *testing.T) {
 	os.Chdir(pwd)
 }
 
-// TestIssuesDirer was deprecated
+// TestFitDirer was deprecated
 
-func TestNoIssuesDirer(t *testing.T) {
+func TestNoFitDirer(t *testing.T) {
 	var gdir string
 	config := Config{}
 	gdir, err := ioutil.TempDir("", "rootdirbug")
@@ -151,7 +151,7 @@ func TestNoIssuesDirer(t *testing.T) {
 	}
 	// Don't create an issues directory. Just try and get the directory.
 	// empty is accepted! why?
-	if dir := IssuesDirer(config); dir != "" {
+	if dir := FitDirer(config); dir != "" {
 		t.Error("Found unexpected issues directory." + string(dir))
 	}
 	os.Chdir(pwd)

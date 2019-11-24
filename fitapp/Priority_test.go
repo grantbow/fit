@@ -32,7 +32,7 @@ func runpriority(args argumentList, expected string, t *testing.T) {
 
 func TestPriority(t *testing.T) {
 	config := bugs.Config{}
-	config.IssuesDirName = "fit"
+	config.FitDirName = "fit"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "prioritygit")
 	pwd, _ := os.Getwd()
@@ -49,7 +49,7 @@ func TestPriority(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
-	os.Mkdir(config.IssuesDirName, 0755)
+	os.Mkdir(config.FitDirName, 0755)
 
 	err = os.Setenv("FIT", gdir)
 	if err != nil {
@@ -66,15 +66,15 @@ func TestPriority(t *testing.T) {
 	runpriority(argumentList{"1", "foo"}, "", t) // no cmd as argument
 	// force it to test when runmiles doesn't work
 	//val := []byte("foo\n")
-	//fmt.Println(ioutil.WriteFile(string(gdir)+sops+config.IssuesDirName+sops+"no_pri_bug"+sops+"Priority", []byte(val), 0644))
+	//fmt.Println(ioutil.WriteFile(string(gdir)+sops+config.FitDirName+sops+"no_pri_bug"+sops+"Priority", []byte(val), 0644))
 	// check
-	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s%s%s%sno_pri_bug", gdir, sops, config.IssuesDirName, sops))
+	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s%s%s%sno_pri_bug", gdir, sops, config.FitDirName, sops))
 	//fmt.Printf("readdir len %#v\n", len(bugDir))
 	//fmt.Printf("readdir %#v\n", bugDir[0])
 	//fmt.Printf("readdir %#v\n", bugDir[1])
 	// after
 	runfind(argumentList{"priority", "foo"}, "Issue 1: no_pri_bug \\(Priority: foo\\)\n", t)
-	file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_pri_bug%sPriority", gdir, sops, config.IssuesDirName, sops, sops))
+	file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_pri_bug%sPriority", gdir, sops, config.FitDirName, sops, sops))
 	if err != nil {
 		t.Error("Could not load Priority file" + err.Error())
 	}

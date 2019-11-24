@@ -120,22 +120,30 @@ latest version of fit with:
 
 `GO111MODULE=on go install github.com/grantbow/bug`
 
-Make sure `$GOPATH/bin` or `$GOBIN` are in your path (or copy
-the "fit" binary somewhere that is.)
+If that does not work in one command then:
+    export GO111MODULE=on
+    cd $GOPATH/src/github.com/grantbow/bug/cmd/fit
+    go install
+
+This will create the binary $GOPATH/src/github.com/grantbow/bug/cmd/fit/fit
+and copy it to $GOPATH/bin/fit
+
+Make sure `$GOPATH/bin` or `$GOBIN` are in your path or you can copy
+the "fit" binary somewhere that is in your path.
 
 The environment variable GO111MODULE changes how your golang works by enabling
-golang 1.11 module support required for this version of fit. The default in
-golang 1.12 is still "auto" but golang 1.13 is expected to default to "on".
+golang 1.11+ module support required for this version of fit. The default in
+golang 1.12, 1.13 and 1.14 are still "auto".
 
 Working with fit and git via the command line can be simplified. You can run
 fit as a git subcommand like `git fit` or `git issue`. This [chapter about git
 aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) describes how
-to set them up. It is part of the Pro Git book available for free online.
-Simply add the alias to your .gitconfig or edit your .gitconfig.
+to set them up very well. It is part of the Pro Git book available for free
+online. You can quickly add the alias to your .gitconfig:
 
 `git config --global alias.issue !/path/to/fit`
 
-This adds to your $HOME/.gitconfig:
+This will add to your $HOME/.gitconfig or you can edit it manually:
 
 `[alias]
     issue = !/path/to/fit`
@@ -193,10 +201,10 @@ fit directory. Current options include:
     * TwilioPhoneNumberFrom: string
           Default is empty.
           Needed for twilio use.
-    * TwilioIssuesSite: string
+    * FitSite: string
           Default is empty.
-          base url for notifications
-    * MultipleIssuesDirs: true or false
+          base url used in notifications
+    * MultipleFitDirs: true or false
           Default is false.
           always recursive when possible
     * CloseStatusTag: true or false

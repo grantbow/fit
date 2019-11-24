@@ -10,15 +10,15 @@ import (
 //var dops = Directory(os.PathSeparator)
 //var sops = string(os.PathSeparator)
 
-func TestBugWrite(t *testing.T) {
+func TestIssueWrite(t *testing.T) {
 	config := Config{}
 	config.DescriptionFileName = "Description"
-	config.IssuesDirName = "fit"
-	var b *Bug
+	config.FitDirName = "fit"
+	var b *Issue
 	pwd, _ := os.Getwd()
-	if dir, err := ioutil.TempDir("", "BugWrite"); err == nil {
+	if dir, err := ioutil.TempDir("", "IssueWrite"); err == nil {
 		os.Chdir(dir)
-		b = &Bug{Dir: Directory(dir + sops + config.IssuesDirName + sops + "Test-bug"), DescriptionFileName: config.DescriptionFileName}
+		b = &Issue{Dir: Directory(dir + sops + config.FitDirName + sops + "Test-bug"), DescriptionFileName: config.DescriptionFileName}
 		defer os.RemoveAll(dir)
 	} else {
 		t.Error("Could not get temporary directory to test write()")
@@ -31,7 +31,7 @@ func TestBugWrite(t *testing.T) {
 	}
 	b.Close()
 
-	fp, _ := os.Open(config.IssuesDirName + sops + "Test-bug" + sops + "Description")
+	fp, _ := os.Open(config.FitDirName + sops + "Test-bug" + sops + "Description")
 	desc, err := ioutil.ReadAll(fp)
 	fp.Close()
 
@@ -49,10 +49,10 @@ func TestBugWrite(t *testing.T) {
 }
 
 /*
-func ExampleBugWriter() {
+func ExampleIssueWriter() {
 	config := Config{}
 	config.DescriptionFileName = "Description"
-	if b, err := New("Bug Title", config); err != nil {
+	if b, err := New("Issue Title", config); err != nil {
 		fmt.Fprintf(b, "This is a bug report.\n")
 		fmt.Fprintf(b, "The bug will be created as necessary.\n")
 	}

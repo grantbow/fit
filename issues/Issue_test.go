@@ -9,15 +9,15 @@ import (
 )
 
 type tester struct {
-	dir string
-	bug *Bug
-	pwd string
+	dir   string
+	issue *Issue
+	pwd   string
 }
 
 func (t *tester) Setup() {
 	config := Config{}
 	config.DescriptionFileName = "Description"
-	config.IssuesDirName = "issues"
+	config.FitDirName = "issues"
 	gdir, err := ioutil.TempDir("", "issuetest")
 	pwd, _ := os.Getwd()
 	t.pwd = pwd
@@ -32,12 +32,12 @@ func (t *tester) Setup() {
 		panic("Failed creating temporary directory")
 	}
 	// Make sure we get the right directory from the top level
-	os.Mkdir(config.IssuesDirName, 0755)
-	b, err := New("Test Bug", config)
+	os.Mkdir(config.FitDirName, 0755)
+	b, err := New("Test Issue", config)
 	if err != nil {
-		panic("Unexpected error creating Test Bug")
+		panic("Unexpected error creating Test Issue")
 	}
-	t.bug = b
+	t.issue = b
 }
 func (t *tester) Teardown() {
 	os.Chdir(t.pwd)
@@ -79,12 +79,12 @@ func TestShortTitleToDir(t *testing.T) {
 
 }
 
-func TestNewBug(t *testing.T) {
+func TestNewIssue(t *testing.T) {
 	var gdir string
 	config := Config{}
 	config.DescriptionFileName = "Description"
-	config.IssuesDirName = "issues"
-	gdir, err := ioutil.TempDir("", "newbug")
+	config.FitDirName = "fit"
+	gdir, err := ioutil.TempDir("", "newissue")
 	pwd, _ := os.Getwd()
 	if err == nil {
 		os.Chdir(gdir)
@@ -96,13 +96,13 @@ func TestNewBug(t *testing.T) {
 		t.Error("Failed creating temporary directory for detect")
 		return
 	}
-	os.Mkdir(config.IssuesDirName, 0755)
+	os.Mkdir(config.FitDirName, 0755)
 	b, err := New("I am a test", config)
 	if err != nil || b == nil {
-		t.Error("Unexpected error when creating New bug" + err.Error())
+		t.Error("Unexpected error when creating New issue" + err.Error())
 	}
-	if b.Dir != IssuesDirer(config)+Directory(os.PathSeparator)+TitleToDir("I am a test") {
-		t.Error("Unexpected directory when creating New bug")
+	if b.Dir != FitDirer(config)+Directory(os.PathSeparator)+TitleToDir("I am a test") {
+		t.Error("Unexpected directory when creating New issue")
 	}
 	os.Chdir(pwd)
 }
@@ -114,15 +114,15 @@ func TestSetDescription(t *testing.T) {
 	test.Setup()
 	defer test.Teardown()
 
-	b := test.bug
+	b := test.issue
 
-	b.SetDescription("Hello, I am a bug.", config)
+	b.SetDescription("Hello, I am an issue.", config)
 	val, err := ioutil.ReadFile(string(b.Direr()) + sops + config.DescriptionFileName)
 	if err != nil {
 		t.Error("Could not read Description file")
 	}
 
-	if string(val) != "Hello, I am a bug.\n" {
+	if string(val) != "Hello, I am an issue.\n" {
 		t.Error("Unexpected description after SetDescription")
 	}
 }
@@ -134,9 +134,9 @@ func TestTitle(t *testing.T) {
 	test.Setup()
 	defer test.Teardown()
 
-	b := test.bug
+	b := test.issue
 
-	expected := "Test Bug"
+	expected := "Test Issue"
 	val := b.Title("")
 	if string(val) != expected {
 		t.Error(fmt.Sprintf("Failed on %s: got %s but expected %s\n", "TestTitle", val, expected))
@@ -158,11 +158,11 @@ func TestCommentStatusPriorityMilestone(t *testing.T) {
 	test.Setup()
 	defer test.Teardown()
 
-	b := test.bug
+	b := test.issue
 
-	expected := "Test Bug Comment"
-	//b.CommentBug(Comment("Author", time.Now(), expected, 0, []byte("")), config)
-	b.CommentBug(Comment{Author: "Author", Time: time.Now(), Body: expected, Order: 0, Xml: []byte("")}, config)
+	expected := "Test Issue Comment"
+	//b.CommentIssue(Comment("Author", time.Now(), expected, 0, []byte("")), config)
+	b.CommentIssue(Comment{Author: "Author", Time: time.Now(), Body: expected, Order: 0, Xml: []byte("")}, config)
 	b.RemoveComment(Comment{Author: "Author", Time: time.Now(), Body: expected, Order: 0, Xml: []byte("")})
 	_ = b.SetStatus("do", config)
 	_ = b.Status()
@@ -179,10 +179,10 @@ func TestDescription(t *testing.T) {
 	test.Setup()
 	defer test.Teardown()
 
-	b := test.bug
+	b := test.issue
 	b.DescriptionFileName = config.DescriptionFileName
 
-	desc := "I am yet another bug.\nWith Two Lines."
+	desc := "I am yet another issue.\nWith Two Lines."
 	b.SetDescription(desc, config)
 
 	if b.Description() != desc+"\n" {

@@ -77,7 +77,7 @@ func TestIdInvalid(t *testing.T) {
 }
 func TestIdGenerate(t *testing.T) {
 	config := bugs.Config{}
-	config.IssuesDirName = "fit"
+	config.FitDirName = "fit"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "idgit")
 	pwd, _ := os.Getwd()
@@ -92,7 +92,7 @@ func TestIdGenerate(t *testing.T) {
 		return
 	}
 	// Make an issues Directory
-	os.Mkdir(config.IssuesDirName, 0755)
+	os.Mkdir(config.FitDirName, 0755)
 	err = os.Setenv("FIT", gdir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())
@@ -106,7 +106,7 @@ func TestIdGenerate(t *testing.T) {
 	runid(t, "Id not defined\n", argumentList{"1"})
 
 	runid(t, "Generated id .* for issue\n", argumentList{"1", "--generate-id"})
-	file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_id_bug%sIdentifier", gdir, sops, config.IssuesDirName, sops, sops))
+	file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_id_bug%sIdentifier", gdir, sops, config.FitDirName, sops, sops))
 	if err != nil {
 		t.Error("Could not load an Identifier file for Test bug" + err.Error())
 	}

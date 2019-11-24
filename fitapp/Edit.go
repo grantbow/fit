@@ -36,7 +36,7 @@ func Edit(args argumentList, config bugs.Config) {
 			file = args[1]
 		}
 
-		b, err := bugs.LoadBugByHeuristic(bugID, config)
+		b, err := bugs.LoadIssueByHeuristic(bugID, config)
 		if err != nil {
 			fmt.Printf("Invalid IssueID %s\n", bugID)
 			return

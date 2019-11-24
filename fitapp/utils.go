@@ -1,6 +1,7 @@
 package fitapp
 
 import (
+	_ "flag"
 	"fmt"
 	bugs "github.com/driusan/bug/bugs"
 	"io/ioutil"
@@ -122,13 +123,13 @@ func captureOutput(f func(), t *testing.T) (string, string) {
 
 // fieldHandler is used for Priority, Milestone and Status, not Identifier
 func fieldHandler(command string, args argumentList,
-	setCallback func(bugs.Bug, string, bugs.Config) error, retrieveCallback func(bugs.Bug) string, config bugs.Config) {
+	setCallback func(bugs.Issue, string, bugs.Config) error, retrieveCallback func(bugs.Issue) string, config bugs.Config) {
 	if len(args) < 1 {
 		fmt.Printf("Usage: %s %s IssueID [set %s]\n", os.Args[0], command, command)
 		return
 	}
 
-	b, err := bugs.LoadBugByHeuristic(args[0], config)
+	b, err := bugs.LoadIssueByHeuristic(args[0], config)
 	if err != nil {
 		fmt.Printf("Invalid IssueID: %s\n", err.Error())
 		return
@@ -199,19 +200,33 @@ func SkipRootCheck(args *[]string) bool {
 	return ret
 }
 
-// also in bugs/utils.go
+// also in issues/utils.go
 func removeFi(slice []os.FileInfo, i int) []os.FileInfo {
-	copy(slice[i:], slice[i+1:])
+	//flag.Parse()
+	//Debug("debug len " + string(len(slice)) + " i " + string(i) + " slice[0].Name() " + string(slice[0].Name()) + "\n")
+	//fmt.Printf("%+v\n", flag.Args()) // didn't seem to help, needs more work to make it active
+	//
+	//fmt.Printf("debug ok 01 \n")
+	//fmt.Printf("debug len " + string(len(slice)) + " i " + string(i) + " slice[0].Name() " + string(slice[0].Name()) + "\n")
+	//fmt.Printf("debug removeFi args len " + string(len(slice)) + " i " + string(i) + "\n")
+	if (len(slice) == 1) && (i == 0) {
+		return []os.FileInfo{}
+	} else if i < len(slice)-2 {
+		copy(slice[i:], slice[i+1:])
+	}
 	return slice[:len(slice)-1]
 }
 
-// also in bugs/utils.go
+// also in issues/utils.go
 func readIssues(dirname string) []os.FileInfo {
 	//var issueList []os.FileInfo
 	fis, _ := ioutil.ReadDir(string(dirname))
 	issueList := fis
 	for idx, fi := range issueList {
+		//Debug("debug fi " + string(fi.Name()) + "idx " + string(idx) + "\n")
+		//fmt.Printf("debug readIssues loop fi " + string(fi.Name()) + "idx " + string(idx) + "\n")
 		if fi.IsDir() != true {
+			//fmt.Printf("debug before removeFi name " + fi.Name() + " idx " + string(idx) + "\n")
 			issueList = removeFi(issueList, idx)
 		}
 	}
@@ -219,7 +234,7 @@ func readIssues(dirname string) []os.FileInfo {
 }
 
 //byDir allows sort.Sort(byDir(issues))
-// type and three functions are needed - also see Bug.go for type byBug
+// type and three functions are needed - also see Issue.go for type byIssue
 // rather than a custom Len function for os.FileInfo, Len is calculated in Less
 type byDir []os.FileInfo
 

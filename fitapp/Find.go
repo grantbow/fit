@@ -12,14 +12,14 @@ import (
 
 // find does the work of finding bugs.
 func find(findType string, findValues []string, config bugs.Config) {
-	issuesroot := bugs.IssuesDirer(config)
-	//issues, _ := ioutil.ReadDir(string(issuesroot))
-	issues := readIssues(string(issuesroot))
+	fitdir := bugs.FitDirer(config)
+	//issues, _ := ioutil.ReadDir(string(fitdir))
+	issues := readIssues(string(fitdir))
 	sort.Sort(byDir(issues))
 	for idx, issue := range issues {
-		var dir bugs.Directory = issuesroot + dops + bugs.Directory(issue.Name())
-		b := bugs.Bug{Dir: dir}
-		name := bugNamer(b, idx)
+		var dir bugs.Directory = fitdir + dops + bugs.Directory(issue.Name())
+		b := bugs.Issue{Dir: dir}
+		name := issueNamer(b, idx)
 		var values []string
 		switch findType {
 		case "tags":

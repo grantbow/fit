@@ -52,7 +52,7 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 				ititle := string(bugs.TitleToDir(fmt.Sprintf("%s%s%v", *issue.Title, "-", *issue.Number)))
 				fmt.Printf("Importing issue %s\n", ititle)
 				// add issue.Number to title
-				b := bugs.Bug{Dir: bugs.Directory(config.BugDir + sops + config.IssuesDirName + sops + ititle)}
+				b := bugs.Issue{Dir: bugs.Directory(config.FitDir + sops + config.FitDirName + sops + ititle)}
 				if dir := b.Direr(); dir != "" {
 					os.Mkdir(string(dir), 0755)
 				}
@@ -75,7 +75,7 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 				// "Closes ..." in the commit message.
 				b.SetIdentifier(fmt.Sprintf("GitHub:%s%s%s%s%d", user, "/", repo, "#", *issue.Number), config)
 				for _, lab := range issue.Labels {
-					b.TagBug(bugs.TagBoolTrue(*lab.Name), config)
+					b.TagIssue(bugs.TagBoolTrue(*lab.Name), config)
 				}
 				j := 1
 				if *issue.Comments > 0 {
@@ -93,7 +93,7 @@ func githubImportIssues(user, repo string, config bugs.Config) {
 							Body:   *co.Body,
 							Order:  j,
 							Xml:    xml}
-						b.CommentBug(x, config)
+						b.CommentIssue(x, config)
 						if config.ImportXmlDump == true {
 							// b.SetXml()
 							comname := "comment-" + string(bugs.ShortTitleToDir(string(*co.Body))) + "-" + fmt.Sprintf("%v", j)
@@ -161,7 +161,7 @@ func githubImportProjects(user, repo string, config bugs.Config) {
 			i += 1
 			projname := "proj-" + string(bugs.TitleToDir(fmt.Sprintf("%v%s%s", *project.Number, "-", *project.Name)))
 			fmt.Printf("Importing %s\n", projname)
-			b := bugs.Bug{Dir: bugs.Directory(config.BugDir + sops + config.IssuesDirName + sops + projname)}
+			b := bugs.Issue{Dir: bugs.Directory(config.FitDir + sops + config.FitDirName + sops + projname)}
 			if dir := b.Direr(); dir != "" {
 				os.Mkdir(string(dir), 0755)
 			}

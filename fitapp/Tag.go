@@ -14,7 +14,7 @@ import (
 
 // getAllTags returns all the tags
 func getAllTags(config bugs.Config) map[string]int {
-	bugs := bugs.GetAllBugs(config)
+	bugs := bugs.GetAllIssues(config)
 	//fmt.Printf("%+v\n", bugs)
 	tagMap := make(map[string]int, 0)
 	// Put all the tags in a map, values are count of occurances
@@ -50,12 +50,12 @@ func uniqueTagListWithValues(config bugs.Config) []string {
 
 // TagsNone is a subcommand to print issues with no assigned tags.
 func TagsNone(config bugs.Config) {
-	issuesroot := bugs.IssuesDirer(config)
-	issues := readIssues(string(issuesroot))
+	fitdir := bugs.FitDirer(config)
+	issues := readIssues(string(fitdir))
 	sort.Sort(byDir(issues))
 	var wantTags bool = false
 
-	allbugs := bugs.GetAllBugs(config)
+	allbugs := bugs.GetAllIssues(config)
 	tagMap := make(map[string]int, 0)
 	for _, bug := range allbugs {
 		if len(bug.Tags()) == 0 {
@@ -67,7 +67,7 @@ func TagsNone(config bugs.Config) {
 	//keys := make([]string, 0, len(tagMap))
 	/*for k, _ := range tagMap {
 		//fmt.Printf("%v\n", k)
-		name := bugNamer(b, idx) // Issue x:
+		name := issueNamer(b, idx) // Issue x:
 		fmt.Printf("%v\n", k)
 		//keys = append(keys, k) // TODO: should just append not tagmap intermediary
 	} */
@@ -79,10 +79,10 @@ func TagsNone(config bugs.Config) {
 		for k, _ := range tagMap {
 			if issue.Name() == k {
 				//fmt.Printf("1in: %v\n2tm: %v\n", issue.Name(), k)
-				var dir bugs.Directory = issuesroot + dops + bugs.Directory(issue.Name())
+				var dir bugs.Directory = fitdir + dops + bugs.Directory(issue.Name())
 				//fmt.Printf("dir %v\n", dir)
-				b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName}
-				name := bugNamer(b, idx) // Issue x:
+				b := bugs.Issue{Dir: dir, DescriptionFileName: config.DescriptionFileName}
+				name := issueNamer(b, idx) // Issue x:
 				//fmt.Printf("name %v\n", name)
 				if wantTags == false { // always
 					fmt.Printf("%s: %s\n", name, b.Title(""))
@@ -135,7 +135,7 @@ func Tag(Args argumentList, config bugs.Config) {
 		Args = Args[1:]
 	}
 
-	b, err := bugs.LoadBugByHeuristic(Args[0], config)
+	b, err := bugs.LoadIssueByHeuristic(Args[0], config)
 
 	if err != nil {
 		fmt.Printf("Could not load issue: %s\n", err.Error())
@@ -145,7 +145,7 @@ func Tag(Args argumentList, config bugs.Config) {
 		if removeTags {
 			b.RemoveTag(bugs.TagBoolTrue(tag), config)
 		} else {
-			b.TagBug(bugs.TagBoolTrue(tag), config)
+			b.TagIssue(bugs.TagBoolTrue(tag), config)
 		}
 	}
 

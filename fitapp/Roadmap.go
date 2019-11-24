@@ -9,13 +9,13 @@ import (
 	"strings"
 )
 
-// BugListByMilestone is a pkg global to hold a list of issues.
-type BugListByMilestone [](bugs.Bug)
+// IssueListByMilestone is a pkg global to hold a list of issues.
+type IssueListByMilestone [](bugs.Issue)
 
 // Len, Swap and Less sort issues.
-func (a BugListByMilestone) Len() int      { return len(a) }
-func (a BugListByMilestone) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
-func (a BugListByMilestone) Less(i, j int) bool {
+func (a IssueListByMilestone) Len() int      { return len(a) }
+func (a IssueListByMilestone) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a IssueListByMilestone) Less(i, j int) bool {
 	iMS := a[i].Milestone()
 	jMS := a[j].Milestone()
 	// If there's a "v" at the start, strip it out
@@ -48,16 +48,16 @@ func (a BugListByMilestone) Less(i, j int) bool {
 
 // Roadmap is a subcommand to output issues by milestone.
 func Roadmap(args argumentList, config bugs.Config) {
-	var bgs []bugs.Bug
+	var bgs []bugs.Issue
 
 	if args.HasArgument("--filter") {
 		tags := strings.Split(args.GetArgument("--filter", ""), ",")
 		fmt.Printf("%s", tags)
-		bgs = bugs.FindBugsByTag(tags, config)
+		bgs = bugs.FindIssuesByTag(tags, config)
 	} else {
-		bgs = bugs.GetAllBugs(config)
+		bgs = bugs.GetAllIssues(config)
 	}
-	sort.Sort(BugListByMilestone(bgs))
+	sort.Sort(IssueListByMilestone(bgs))
 
 	fmt.Printf("# Roadmap for %s\n", bugs.RootDirer(&config).ShortNamer().ToTitle())
 	milestone := ""

@@ -34,10 +34,10 @@ func (c GitCommit) CommitMessage() (string, error) {
 }
 
 type GitTester struct {
-	handler       SCMHandler
-	workdir       string
-	pwd           string
-	issuesdirname string
+	handler    SCMHandler
+	workdir    string
+	pwd        string
+	fitdirname string
 }
 
 func (g GitTester) Loggers() ([]Commit, error) {
@@ -96,7 +96,7 @@ func (g *GitTester) Setup() error {
 		panic("Failed creating temporary directory")
 	}
 	// Make sure we get the right directory from the top level
-	os.Mkdir(g.issuesdirname, 0755)
+	os.Mkdir(g.fitdirname, 0755)
 
 	out, err := runCmd("git", "init")
 	if err != nil {
@@ -211,7 +211,7 @@ func TestGitManagerPurge(t *testing.T) {
 func TestGitManagerAutoclosingGitHub(t *testing.T) {
 	var config bugs.Config
 	config.DescriptionFileName = "Description"
-	config.IssuesDirName = "fit"
+	config.FitDirName = "fit"
 	// This test is specific to gitmanager, since GitHub
 	// only supports git
 	if git == false {
@@ -234,27 +234,27 @@ func TestGitManagerAutoclosingGitHub(t *testing.T) {
 		return
 	}
 	//runCmd("bug", "create", "-n", "Test", "bug")
-	os.MkdirAll(config.IssuesDirName+sops+"Test-bug", 0755)
-	ioutil.WriteFile(config.IssuesDirName+sops+"Test-bug"+sops+"Description", []byte("desc1"), 0644)
-	if err = ioutil.WriteFile(config.IssuesDirName+sops+"Test-bug"+sops+"Identifier", []byte("\n\nGitHub:#TestBug"), 0644); err != nil {
+	os.MkdirAll(config.FitDirName+sops+"Test-bug", 0755)
+	ioutil.WriteFile(config.FitDirName+sops+"Test-bug"+sops+"Description", []byte("desc1"), 0644)
+	if err = ioutil.WriteFile(config.FitDirName+sops+"Test-bug"+sops+"Identifier", []byte("\n\nGitHub:#TestBug"), 0644); err != nil {
 		t.Error("Could not write Test-bug" + sops + "Identifier file")
 		return
 	}
 
 	//runCmd("bug", "create", "-n", "Test", "Another", "bug")
-	os.MkdirAll(config.IssuesDirName+sops+"Test-Another-bug", 0755)
-	ioutil.WriteFile(config.IssuesDirName+sops+"Test-Another-bug"+sops+"Description", []byte("desc2"), 0644)
-	if err = ioutil.WriteFile(config.IssuesDirName+sops+"Test-Another-bug"+sops+"Identifier", []byte("\n\nGITHuB:  #Whitespace   "), 0644); err != nil {
+	os.MkdirAll(config.FitDirName+sops+"Test-Another-bug", 0755)
+	ioutil.WriteFile(config.FitDirName+sops+"Test-Another-bug"+sops+"Description", []byte("desc2"), 0644)
+	if err = ioutil.WriteFile(config.FitDirName+sops+"Test-Another-bug"+sops+"Identifier", []byte("\n\nGITHuB:  #Whitespace   "), 0644); err != nil {
 		t.Error("Could not write Test-Another-bug" + sops + "Identifier file")
 		return
 	}
 
 	// Add and commit the file, so that we can close it..
-	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.IssuesDirName), "Adding commit", config)
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.FitDirName), "Adding commit", config)
 	// Delete the bugs
-	os.RemoveAll(tester.WorkDir() + sops + config.IssuesDirName + sops + "Test-bug")
-	os.RemoveAll(tester.WorkDir() + sops + config.IssuesDirName + sops + "Test-Another-bug")
-	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.IssuesDirName), "Removal commit", config)
+	os.RemoveAll(tester.WorkDir() + sops + config.FitDirName + sops + "Test-bug")
+	os.RemoveAll(tester.WorkDir() + sops + config.FitDirName + sops + "Test-Another-bug")
+	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.FitDirName), "Removal commit", config)
 
 	commits, err := tester.Loggers()
 	if len(commits) != 2 || err != nil {

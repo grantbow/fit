@@ -14,7 +14,7 @@ import (
 
 // getAllIds returns all the ids
 func getAllIds(config bugs.Config) []string {
-	bugs := bugs.GetAllBugs(config)
+	bugs := bugs.GetAllIssues(config)
 	idMap := make(map[string]int, 0)
 	for _, bug := range bugs {
 		idMap[strings.ToLower(string(bug.Identifier()))] += 1
@@ -29,12 +29,12 @@ func getAllIds(config bugs.Config) []string {
 
 // IdsNone is a subcommand to print issues with no assigned tags.
 func IdsNone(config bugs.Config) {
-	issuesroot := bugs.IssuesDirer(config)
-	issues := readIssues(string(issuesroot))
+	fitdir := bugs.FitDirer(config)
+	issues := readIssues(string(fitdir))
 	sort.Sort(byDir(issues))
 	var wantTags bool = false
 
-	allbugs := bugs.GetAllBugs(config)
+	allbugs := bugs.GetAllIssues(config)
 	idMap := make(map[string]int, 0)
 	for _, bug := range allbugs {
 		if bug.Identifier() == "" {
@@ -48,10 +48,10 @@ func IdsNone(config bugs.Config) {
 		for k, _ := range idMap {
 			if issue.Name() == k {
 				//fmt.Printf("1in: %v\n2tm: %v\n", issue.Name(), k)
-				var dir bugs.Directory = issuesroot + dops + bugs.Directory(issue.Name())
+				var dir bugs.Directory = fitdir + dops + bugs.Directory(issue.Name())
 				//fmt.Printf("dir %v\n", dir)
-				b := bugs.Bug{Dir: dir, DescriptionFileName: config.DescriptionFileName}
-				name := bugNamer(b, idx) // Issue x:
+				b := bugs.Issue{Dir: dir, DescriptionFileName: config.DescriptionFileName}
+				name := issueNamer(b, idx) // Issue x:
 				//fmt.Printf("name %v\n", name)
 				if wantTags == false { // always
 					fmt.Printf("%s: %s\n", name, b.Title(""))
@@ -91,7 +91,7 @@ func Identifier(args argumentList, config bugs.Config) {
 		return
 	}
 
-	b, err := bugs.LoadBugByHeuristic(args[0], config)
+	b, err := bugs.LoadIssueByHeuristic(args[0], config)
 	if err != nil {
 		fmt.Printf("Invalid IssueID: %s\n", err.Error())
 		return

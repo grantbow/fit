@@ -10,17 +10,21 @@ import (
 
 // Config type holds .fit.yml configured values.
 type Config struct {
-	// aka RootDir or RepoDir
+	// FitDir aka RootDir or RepoDir
 	// storage of location of dir containing:
 	//     issues directory
 	//     .fit.yml
 	//     likely .git
 	// overridden by FIT/PMIT environment variable ** runtime only
-	BugDir string `json:"BugDir"`
+	FitDir string `json:"FitDir"`
 	// overridden by FIT/PMIT environment variable ** runtime only
-	IssuesDirName string `json:"IssuesDirName"`
-	// BugDir+"/.fit.yml" or .bug.yml * if present ** runtime only
-	BugYml string `json:"BugYml"`
+	FitDirName string `json:"FitDirName"`
+	// save the detected directory name            ** runtime only
+	ScmDirName string `json:"ScmDirName"`
+	// save the detected scm type                  ** runtime only
+	ScmType string `json:"ScmType"`
+	// FitDir+"/.fit.yml" or .bug.yml * if present ** runtime only
+	FitYml string `json:"FitYml"`
 	// Description contents for new issue or empty file (empty default)
 	DefaultDescriptionFile string `json:"DefaultDescriptionFile"`
 	// saves raw json files of import (true) or don't save (false, default)
@@ -46,9 +50,9 @@ type Config struct {
 	//* your twilio number
 	TwilioPhoneNumberFrom string `json:"TwilioPhoneNumberFrom"`
 	//* base url for notifications
-	IssuesSite string `json:"IssuesSite"`
-	// issues directories always recursive (true) or need -r cli option (false, default)
-	MultipleIssuesDirs bool `json:"MultipleIssuesDirs"`
+	FitSite string `json:"FitSite"`
+	// fit directories always recursive (true) or need -r cli option (false, default)
+	MultipleFitDirs bool `json:"MultipleFitDirs"`
 	// close will add tag_status_close (true) or deletes issue (false, default)
 	CloseStatusTag bool `json:"CloseStatusTag"`
 	// Abbreviate Identifier as Id (true) or use Identifier (false, default)
@@ -181,17 +185,17 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 			c.TwilioPhoneNumberFrom = ""
 		}
 		//* base url for notifications
-		if temp.IssuesSite != "" {
-			c.IssuesSite = temp.IssuesSite
+		if temp.FitSite != "" {
+			c.FitSite = temp.FitSite
 		} else {
-			c.IssuesSite = ""
+			c.FitSite = ""
 		}
-		//* MultipleIssuesDirs: true or false,
+		//* MultipleFitDirs: true or false,
 		//      Default false, need to use -r cli option
-		if temp.MultipleIssuesDirs {
-			c.MultipleIssuesDirs = true
+		if temp.MultipleFitDirs {
+			c.MultipleFitDirs = true
 		} else {
-			c.MultipleIssuesDirs = false
+			c.MultipleFitDirs = false
 		}
 		//* CloseStatusTag: true or false,
 		//      Default false, delete
@@ -224,11 +228,11 @@ func ConfigWrite(bugYmls string) (err error) {
 
 	if fileinfo, err := os.Stat(bugYmls); err != nil && fileinfo.Mode().IsRegular() {
 		err = ioutil.WriteFile(bugYmls, []byte(`
-DefaultDescriptionFile: DescriptionTemplate.txt
+DefaultDescriptionFile: fit/DescriptionTemplate.txt
 ImportXmlDump: false
 ImportCommentsTogether: false
 ProgramVersion:
-DescriptionFileName:
+DescriptionFileName: Description
 TagKeyValue: false
 NewFieldAsTag: false
 NewFieldLowerCase: false
@@ -236,8 +240,8 @@ GithubPersonalAccessToken:
 TwilioAccountSid:
 TwilioAuthToken:
 TwilioPhoneNumberFrom:
-IssuesSite:
-MultipleIssuesDirs: false
+FitSite: https://github.com/<you>/<proj>/tree/master/<proj>/
+MultipleFitDirs: false
 CloseStatusTag: false
 IdAbbreviate: false
 IdAutomatic: true

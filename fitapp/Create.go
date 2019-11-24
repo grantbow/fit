@@ -74,12 +74,12 @@ func Create(Args argumentList, config bugs.Config) {
 		fmt.Fprintf(os.Stderr, "\nNo Bug Description provided.\n")
 		return
 	}
-	var bgid = bugs.IssuesDirer(config)
+	var bgid = bugs.FitDirer(config)
 	if bgid == "" {
-		os.MkdirAll(config.IssuesDirName, 0700)
-		bgid = bugs.IssuesDirer(config)
+		os.MkdirAll(config.FitDirName, 0700)
+		bgid = bugs.FitDirer(config)
 	}
-	var bug = bugs.Bug{
+	var bug = bugs.Issue{
 		Dir:                 bgid + dops + bugs.TitleToDir(strings.Join(Args, " ")),
 		DescriptionFileName: config.DescriptionFileName,
 	}
@@ -121,7 +121,7 @@ func Create(Args argumentList, config bugs.Config) {
 	}
 
 	if tag != "" {
-		bug.TagBug(bugs.TagBoolTrue(tag), config)
+		bug.TagIssue(bugs.TagBoolTrue(tag), config)
 	}
 	if status != "" {
 		bug.SetStatus(status, config)

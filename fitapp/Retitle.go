@@ -17,7 +17,7 @@ func Relabel(Args argumentList, config bugs.Config) {
 		return
 	}
 
-	b, err := bugs.LoadBugByHeuristic(Args[0], config)
+	b, err := bugs.LoadIssueByHeuristic(Args[0], config)
 
 	if err != nil {
 		fmt.Printf("Could not load issue: %s\n", err.Error())
@@ -25,7 +25,7 @@ func Relabel(Args argumentList, config bugs.Config) {
 	}
 
 	currentDir := b.Direr()
-	newDir := bugs.IssuesDirer(config) + dops + bugs.TitleToDir(strings.Join(Args[1:], " "))
+	newDir := bugs.FitDirer(config) + dops + bugs.TitleToDir(strings.Join(Args[1:], " "))
 	fmt.Printf("Moving %s to %s\n", currentDir, newDir)
 	err = os.Rename(string(currentDir), string(newDir))
 	if err != nil {

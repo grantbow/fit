@@ -10,18 +10,18 @@ import (
 // Directory type is a string path name.
 type Directory string
 
-func findIssuesDir(dir string, config *Config) Directory {
+func findFitDir(dir string, config *Config) Directory {
 	if dirinfo, err := os.Stat(dir); err == nil && dirinfo.IsDir() {
 		if dirinfo, err = os.Stat(dir + sops + "fit"); err == nil && dirinfo.IsDir() {
 			// has a fit dir
-			config.BugDir = dir
-			config.IssuesDirName = "fit"
+			config.FitDir = dir
+			config.FitDirName = "fit"
 			os.Chdir(dir)
 			return Directory(dir)
 		} else if dirinfo, err = os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
 			// has an issues dir
-			config.BugDir = dir
-			config.IssuesDirName = "issues"
+			config.FitDir = dir
+			config.FitDirName = "issues"
 			os.Chdir(dir)
 			return Directory(dir)
 		}
@@ -32,17 +32,17 @@ func findIssuesDir(dir string, config *Config) Directory {
 	return ""
 }
 
-// RootDirer returns the directory usually containing the issues subdirectory.
+// RootDirer returns the directory usually containing the fit subdirectory.
 func RootDirer(config *Config) Directory {
 	dir := os.Getenv("FIT") // new first
 	if dir != "" {
-		if x := findIssuesDir(dir, config); x != "" {
+		if x := findFitDir(dir, config); x != "" {
 			return x
 		}
 	} else {
 		dir = os.Getenv("PMIT") // for backwards compatibility
 		if dir != "" {
-			if x := findIssuesDir(dir, config); x != "" {
+			if x := findFitDir(dir, config); x != "" {
 				return x
 			}
 		}
@@ -50,7 +50,7 @@ func RootDirer(config *Config) Directory {
 
 	wd, _ := os.Getwd()
 
-	if x := findIssuesDir(wd, config); x != "" {
+	if x := findFitDir(wd, config); x != "" {
 		return x
 	}
 
@@ -60,10 +60,10 @@ func RootDirer(config *Config) Directory {
 
 	for i := len(pieces); i > 0; i -= 1 {
 		dir := strings.Join(pieces[0:i], sops)
-		if x := findIssuesDir(dir, config); x != "" {
+		if x := findFitDir(dir, config); x != "" {
 			return x
 			//if dirinfo, err := os.Stat(dir + sops + "issues"); err == nil && dirinfo.IsDir() {
-			//	config.BugDir = dir
+			//	config.FitDir = dir
 			//	os.Chdir(dir)
 			//	return Directory(dir)
 		}
@@ -71,17 +71,17 @@ func RootDirer(config *Config) Directory {
 	return "" // out of luck
 }
 
-// IssuesDirer returns the directory containing the issues.
+// FitDirer returns the directory containing the issues.
 // The root directory contains the issues directory.
-func IssuesDirer(config Config) Directory {
+func FitDirer(config Config) Directory {
 	root := RootDirer(&config)
 	if root == "" {
 		return root
 	}
-	return Directory(root + dops + Directory(config.IssuesDirName)) // dops is Directory(string(os.PathSeparator))
+	return Directory(root + dops + Directory(config.FitDirName)) // dops is Directory(string(os.PathSeparator))
 	/* edited the following
 	   when changed from /issues/ to /issues
-	   $ grep -ils issuesdirer ...
+	   $ grep -ils FitDirer ...
 	bug-import/be.go
 	bug-import/github.go
 	bugapp/Commit.go

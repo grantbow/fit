@@ -39,11 +39,11 @@ func (mgr HgManager) SCMTyper() string {
 }
 
 // SCMIssuesUpdaters returns in error
-func (mgr HgManager) SCMIssuesUpdaters() ([]byte, error) { // config bugs.Config
+func (mgr HgManager) SCMIssuesUpdaters(config bugs.Config) ([]byte, error) {
 	return []byte(""), nil
 }
 
 // SCMIssuesCacher returns in error
-func (mgr HgManager) SCMIssuesCacher() ([]byte, error) { // config bugs.Config
+func (mgr HgManager) SCMIssuesCacher(config bugs.Config) ([]byte, error) {
 	return []byte(""), nil
 }

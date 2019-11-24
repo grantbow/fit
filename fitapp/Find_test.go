@@ -44,7 +44,7 @@ func TestFindSubcommandUnknownGTOne(t *testing.T) {
 }
 func TestFindSubcommands(t *testing.T) {
 	config := bugs.Config{}
-	config.IssuesDirName = "fit"
+	config.FitDirName = "fit"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "findgit")
 	pwd, _ := os.Getwd()
@@ -61,7 +61,7 @@ func TestFindSubcommands(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
-	os.Mkdir(config.IssuesDirName, 0755)
+	os.Mkdir(config.FitDirName, 0755)
 	err = os.Setenv("FIT", gdir)
 	if err != nil {
 		t.Error("Could not set environment variable: " + err.Error())

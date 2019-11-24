@@ -15,7 +15,7 @@ import (
 func TestRoadmapLess(t *testing.T) {
 	// func (a BugListByMilestone) Less(i, j int) bool {
 	config := bugs.Config{}
-	config.IssuesDirName = "fit"
+	config.FitDirName = "fit"
 	dir, err := ioutil.TempDir("", "roadmaptest")
 	if err != nil {
 		t.Error("Could not create temporary dir for test")
@@ -23,7 +23,7 @@ func TestRoadmapLess(t *testing.T) {
 	}
 	pwd, _ := os.Getwd()
 	os.Chdir(dir)
-	os.MkdirAll(config.IssuesDirName, 0700)
+	os.MkdirAll(config.FitDirName, 0700)
 	defer os.RemoveAll(dir)
 	// On MacOS, /tmp is a symlink, which causes GetDirectory() to return
 	// a different path than expected in these tests, so make the issues
@@ -68,8 +68,8 @@ func TestRoadmapLess(t *testing.T) {
 	re := regexp.MustCompile(expected)
 	//d, _   := os.Open(dir)
 	//dd, _  := d.Readdir(0)
-	//dd, _ := ioutil.ReadDir(dir+sops+config.IssuesDirName)
-	//fmt.Printf("dirdump %s\n", dirDump(fmt.Sprintf("%s%s%s",dir, sops,config.IssuesDirName)))
+	//dd, _ := ioutil.ReadDir(dir+sops+config.FitDirName)
+	//fmt.Printf("dirdump %s\n", dirDump(fmt.Sprintf("%s%s%s",dir, sops,config.FitDirName)))
 	stdout, stderr = captureOutput(func() {
 		Roadmap(argumentList{}, bugs.Config{})
 	}, t)

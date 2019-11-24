@@ -7,3 +7,7 @@ all subdirectories of .. that also have an issues directory
 
 I changed a few printing specifics to make it look better
 
+reopened since when in a lower directory there is no indicator
+that there may be other directories under the .git directory
+exist. This came up with the cmd/fit directory vs. the .git/../fit
+

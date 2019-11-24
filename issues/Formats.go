@@ -5,8 +5,8 @@ import (
 )
 
 // ToJSONString encodes an issue. A string and an error are returned.
-func (b Bug) ToJSONString() (string, error) {
-	bJSONStruct := struct {
+func (i Issue) ToJSONString() (string, error) {
+	iJSONStruct := struct {
 		Identifier  string `json:",omitempty"`
 		Title       string
 		Description string
@@ -15,18 +15,18 @@ func (b Bug) ToJSONString() (string, error) {
 		Milestone   string   `json:",omitempty"`
 		Tags        []string `json:",omitempty"`
 	}{
-		Identifier:  b.Identifier(),
-		Title:       b.Title(""),
-		Description: b.Description(),
-		Status:      b.Status(),
-		Priority:    b.Priority(),
-		Milestone:   b.Milestone(),
-		Tags:        b.StringTags(),
+		Identifier:  i.Identifier(),
+		Title:       i.Title(""),
+		Description: i.Description(),
+		Status:      i.Status(),
+		Priority:    i.Priority(),
+		Milestone:   i.Milestone(),
+		Tags:        i.StringTags(),
 	}
 
-	bJSON, err := json.Marshal(bJSONStruct)
+	iJSON, err := json.Marshal(iJSONStruct)
 	if err != nil {
 		return "", err
 	}
-	return string(bJSON), nil
+	return string(iJSON), nil
 }

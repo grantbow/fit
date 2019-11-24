@@ -29,7 +29,7 @@ func runlist(args argumentList, expected string, t *testing.T) {
 func TestList(t *testing.T) {
 	config := bugs.Config{}
 	config.DescriptionFileName = "Description"
-	config.IssuesDirName = "fit"
+	config.FitDirName = "fit"
 	var gdir string
 	gdir, err := ioutil.TempDir("", "listgit")
 	pwd, _ := os.Getwd()
@@ -46,7 +46,7 @@ func TestList(t *testing.T) {
 	// Fake a git repo
 	os.Mkdir(".git", 0755)
 	// Make an issues Directory
-	os.Mkdir(config.IssuesDirName, 0755)
+	os.Mkdir(config.FitDirName, 0755)
 
 	err = os.Setenv("FIT", gdir)
 	if err != nil {
@@ -78,7 +78,7 @@ func TestList(t *testing.T) {
 
 	// after
 	//fmt.Println("after")
-	//file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_list_bug%sMilestone", gdir, sops, config.IssuesDirName, sops, sops))
+	//file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_list_bug%sMilestone", gdir, sops, config.FitDirName, sops, sops))
 	//if err != nil {
 	//	t.Error("Could not load milestone file" + err.Error())
 	//}

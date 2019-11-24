@@ -18,7 +18,7 @@ func Close(args argumentList, config bugs.Config) {
 	// of those issues
 	var bugsToClose []string
 	for _, bugID := range args {
-		if bug, err := bugs.LoadBugByHeuristic(bugID, config); err == nil {
+		if bug, err := bugs.LoadIssueByHeuristic(bugID, config); err == nil {
 			dir := bug.Direr()
 			if config.CloseStatusTag {
 				fmt.Printf("Tag status closed %s\n", dir)
