@@ -1,18 +1,8 @@
-module github.com/grantbow/bug/main // fork
+require github.com/grantbow/bug/fitapp v0.0.0
 
-// for go.mod fork https://github.com/golang/go/issues/28514
+require github.com/grantbow/bug/issues v0.0.0
 
-require github.com/driusan/bug/bugapp v0.0.0
-
-replace github.com/driusan/bug/bugapp => ../../grantbow/bug/fitapp // fork
-
-require github.com/driusan/bug/bugs v0.0.0
-
-replace github.com/driusan/bug/bugs => ../../grantbow/bug/issues // fork
-
-require github.com/driusan/bug/scm v0.0.0
-
-replace github.com/driusan/bug/scm => ../../grantbow/bug/scm // fork
+require github.com/grantbow/bug/scm v0.0.0
 
 require (
 	github.com/FabianWe/etherpadlite-golang v0.0.0-20190415145731-46b2da95f3b7 // indirect

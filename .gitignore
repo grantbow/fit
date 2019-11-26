@@ -2,6 +2,7 @@
 *.o
 *.a
 *.so
+*.dylib
 
 # Folders
 _obj
@@ -20,6 +21,10 @@ _cgo_export.*
 _testmain.go
 
 *.exe
+*.exe~
+*.dll
+
+# Test binary, build with `go test -c`
 *.test
 *.prof
 *.un~
@@ -27,6 +32,9 @@ _testmain.go
 # Temp file
 *.swp
 *~
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
 
 coverage.txt
 profile.out
