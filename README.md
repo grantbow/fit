@@ -45,16 +45,16 @@ titled) directory per issue. Each directory holds a Description file and
 anything else needed.
 
 The fit implementation is (almost) the simplest issue system that can still
-work. It differs from similar tools in several ways. Human readable plain text
-files are intuitively understood, viewable, editable.
+work. Human readable plain text files are intuitively understood, viewable
+and editable.
 
-At first people naturally try to keep track of issues in single text files and
-spreadsheets but these can fail to meet project needs. (see [FAQ.md](FAQ.md))
+At first people may naturally try to keep track of issues in a single text
+file and/or spreadsheet but these can fail to meet project needs.
+(see [FAQ.md](FAQ.md))
 
 Issue context is valuable to coders and may be difficult for others to
-understand. fit also supports multiple `fit/` or `issues/` directories
-throughout the directory tree for stronger coordination of coding and issue
-tracking.
+understand. fit also supports multiple `fit/` directories in the
+repository's tree for stronger coordination of coding and issue tracking.
 
 An alternative in IT projects is all too common: implementers are not given the
 tools needed to record code issues because issue systems take resources to
@@ -66,27 +66,30 @@ contentious flat files or spreadsheets there is FIT.
 
 Important issues can be captured, surfaced and addressed, whether they are
 actual problems, questions, possible features or ideas by those most familiar
-with the project. Less code savvy people are not distracted by implementation
-details, code reviews or operational facing features.
+with the project. Less code savvy project collaborators are not distracted by
+implementation details, code reviews or operational facing features.
 
 Software Development LifeCycles (SDLCs) involve more than just the source code.
 Over time needs may change from hacking/coding, just getting something working,
 to implementing more disciplined software engineering best practices. Code can
-start small as grow gradually as users, use cases and developers are added.
-The FIT issue system can help at each stage.
+start small and grow gradually as users, use cases and developers are added.
+The FIT issue system can adapt to each stage.
 
-Generally one issue set is used for one git repository but recursive fit
+While one issue set used for one git repository may be enough recursive fit
 directories are supported. As complexity increases adding multiple `fit/`
-directories in different parts of your git repo helps keep context focused.
+directories in different parts of your git repo may help project coders keep
+focused.
 
-There are some choices of how to handle past issues. As the number grows closed
-issues can simply be deleted or an archive can hold the inactive issues. While
-deleting issues helps keep things uncluttered issues still have value over
-time.
+There are some choices for how to handle past issues. As the number of closed
+issues grows closed they can simply be deleted or an archive can hold the
+inactive issues. While deleting issues helps keep things uncluttered issues
+still have value over time and may be difficult to find using the version
+control history.
 
 fit can be aliased as a git subcommand using the name you prefer like fit, bug
-or issue. Security concerns are handled using standard git repository
-practices.
+or issue.
+
+Security concerns are handled using standard git repository practices.
 
 fit software is written using [golang](https://golang.org) to make things easy,
 simple and reliable. Why go? [This video](https://vimeo.com/69237265) from a
