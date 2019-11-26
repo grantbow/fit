@@ -43,6 +43,7 @@ func main() {
 		config.ScmType = handler.SCMTyper()
 	}
 
+	config.FitYmlDir = "." // default
 	fitYmlFileName := ".fit.yml"
 	bugYmlFileName := ".bug.yml"
 	if rd := bugs.RootDirer(&config); rd != "" {
