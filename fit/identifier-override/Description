@@ -3,14 +3,19 @@ fit list
 
 
 #### What did you expect to see?
-identifiers used when they are set
+identifiers used when they are set -- fixed
 
 
 #### What did you see instead?
-identifiers are not mixed with the natural date ordering sequence number assigned 
+identifiers are not mixed with the natural date ordering sequence number assigned  -- fixed
+    both numbers work with present implementation
 
 this may be a bit tricky and something may be needed to signal in the listing if it's
 assigned explicity or implicitly like a () or something
+
+explicity may be more "natural" and the natural date ordering sequence may change as it's
+assigned on each run of the program and relies on the directory date. Perhaps this number
+should be highlighted using ().
 
 #### What version?
 
