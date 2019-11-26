@@ -1,8 +1,8 @@
-require github.com/grantbow/bug/fitapp v0.0.0
+require github.com/grantbow/fit/fitapp v0.0.0
 
-require github.com/grantbow/bug/issues v0.0.0
+require github.com/grantbow/fit/issues v0.0.0
 
-require github.com/grantbow/bug/scm v0.0.0
+require github.com/grantbow/fit/scm v0.0.0
 
 require (
 	github.com/FabianWe/etherpadlite-golang v0.0.0-20190415145731-46b2da95f3b7 // indirect
@@ -14,3 +14,5 @@ require (
 )
 
 go 1.13
+
+module github.com/grantbow/fit

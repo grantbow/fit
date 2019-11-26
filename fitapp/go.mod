@@ -1,8 +1,8 @@
 module fitapp
 
-require github.com/grantbow/bug/issues v0.0.0
+require github.com/grantbow/fit/issues v0.0.0
 
-require github.com/grantbow/bug/scm v0.0.0
+require github.com/grantbow/fit/scm v0.0.0
 
 require (
 	github.com/blang/semver v3.5.1+incompatible
