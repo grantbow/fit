@@ -43,12 +43,12 @@ func main() {
 		config.ScmType = handler.SCMTyper()
 	}
 
-	config.FitYmlDir = "." // default
-	fitYmlFileName := ".fit.yml"
-	bugYmlFileName := ".bug.yml"
 	if rd := bugs.RootDirer(&config); rd != "" {
 		// issues/Directory.go func RootDirer sets config.FitDir runs os.Chdir()
 		rootPresent = true
+		config.FitYmlDir = config.FitDir // default
+		fitYmlFileName := ".fit.yml"
+		bugYmlFileName := ".bug.yml"
 		if ErrC := bugs.ConfigRead(fitYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
 			// tried to read FitDir fit config, must try both fit and bug
 			config.FitYmlDir = config.FitDir
@@ -155,6 +155,7 @@ func main() {
 		case "twilio":
 			bugapp.Twilio(config)
 		case "staging", "staged", "cached", "cache", "index":
+			// TODO: scm/Staged.go
 			if b, err := handler.SCMIssuesUpdaters(config); err != nil {
 				fmt.Printf("Files in " + config.FitDirName + "/ need committing, see $ git status --porcelain -u -- :/" + config.FitDirName + "\nor if already in the index see     $ git diff --name-status --cached HEAD -- :/" + config.FitDirName + "\n")
 				if _, ErrCach := handler.SCMIssuesCacher(config); ErrCach != nil {
