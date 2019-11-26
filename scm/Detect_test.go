@@ -1,7 +1,7 @@
 package scm
 
 import (
-	bugs "github.com/driusan/bug/bugs"
+	bugs "github.com/grantbow/fit/issues"
 	"io/ioutil"
 	"os"
 	"reflect"

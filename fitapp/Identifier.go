@@ -3,7 +3,7 @@ package fitapp
 import (
 	"crypto/sha1"
 	"fmt"
-	bugs "github.com/driusan/bug/bugs"
+	bugs "github.com/grantbow/fit/issues"
 	"os"
 	"sort"
 	"strings"

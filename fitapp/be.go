@@ -3,7 +3,7 @@ package fitapp
 import (
 	"encoding/json"
 	"fmt"
-	bugs "github.com/driusan/bug/bugs"
+	bugs "github.com/grantbow/fit/issues"
 	"io/ioutil"
 	"os"
 	"sort"

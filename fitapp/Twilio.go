@@ -3,8 +3,8 @@ package fitapp
 import (
 	"encoding/json"
 	"fmt"
-	bugs "github.com/driusan/bug/bugs"
-	"github.com/driusan/bug/scm"
+	bugs "github.com/grantbow/fit/issues"
+	"github.com/grantbow/fit/scm"
 	"net/http"
 	"net/url"
 	"strings"

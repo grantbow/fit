@@ -1,6 +1,6 @@
 package scm
 
-import bugs "github.com/driusan/bug/bugs"
+import bugs "github.com/grantbow/fit/issues"
 
 // SCMHandler interface defines how to call Commit, Purge and SCMTyper.
 type SCMHandler interface {

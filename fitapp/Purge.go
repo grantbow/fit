@@ -2,8 +2,8 @@ package fitapp
 
 import (
 	"fmt"
-	bugs "github.com/driusan/bug/bugs"
-	"github.com/driusan/bug/scm"
+	bugs "github.com/grantbow/fit/issues"
+	"github.com/grantbow/fit/scm"
 )
 
 // Purge is a subcommand to delete all issues.

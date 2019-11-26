@@ -8,7 +8,7 @@ should be added to the automated test suite. We use codecov and strive to
 increase the test coverage of the code.
 
 Security vulnerabilities should be reported privately via email to
-grantbow+bug@gmail.com (preferred) or via the regular bug reporting process.
+grantbow+fit@gmail.com (preferred) or via the regular bug reporting process.
 
 Please try to google for how to do so if you haven't done this before but don't
 let this step stop you from contributing something. Other project contributing

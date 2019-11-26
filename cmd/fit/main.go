@@ -3,9 +3,9 @@ package main
 
 import (
 	"fmt"
-	bugapp "github.com/driusan/bug/bugapp"
-	bugs "github.com/driusan/bug/bugs"
-	"github.com/driusan/bug/scm"
+	bugapp "github.com/grantbow/fit/fitapp"
+	bugs "github.com/grantbow/fit/issues"
+	"github.com/grantbow/fit/scm"
 	"os"
 	"strings"
 )

@@ -1,7 +1,7 @@
 package fitapp
 
 import (
-	bugs "github.com/driusan/bug/bugs"
+	bugs "github.com/grantbow/fit/issues"
 )
 
 // Milestone is a subcommand to assign a milestone to an issue.

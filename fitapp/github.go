@@ -5,8 +5,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	bugs "github.com/driusan/bug/bugs"
 	"github.com/google/go-github/github" // handles json
+	bugs "github.com/grantbow/fit/issues"
 	"golang.org/x/oauth2"
 	"io/ioutil"
 	"os"

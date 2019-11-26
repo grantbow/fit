@@ -3,7 +3,7 @@ package fitapp
 import (
 	"fmt"
 	"github.com/blang/semver"
-	bugs "github.com/driusan/bug/bugs"
+	bugs "github.com/grantbow/fit/issues"
 	"sort"
 	"strconv"
 	"strings"

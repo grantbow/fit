@@ -1,8 +1,8 @@
 {
     "description": "manages plain text issues with git or mercurial",
     "keywords": [ "fit", "bug", "golang", "bash", "git", "hg", "bugs", "issues", "requests", "incidents", "tickets", "tracker"],
-    "homepage": "https://github.com/grantbow/bug#README.md",
-    "bugs": { "url": "https://github.com/grantbow/bug/tree/master/issues"
+    "homepage": "https://github.com/grantbow/fit#README.md",
+    "bugs": { "url": "https://github.com/grantbow/fit/tree/master/issues"
             , "email": "grantbow+fit@gmail.com"},
     "license": "GPL-3.0",
     "author": "Grant Bowman <grantbow+fit@gmail.com> (https://github.com/grantbow)",
@@ -12,7 +12,7 @@
                     , "HazCod (https://github.com/HazCod)"
                     ],
     "bin": {"fit": "./cmd/fit/main"},
-    "repository": {"github:grantbow/bug"},
+    "repository": {"github:grantbow/fit"},
     "dependencies":
         { "ghodss/yaml": "v1.0.0"
         , "google/go-querystring": "v1.0.0"
