@@ -15,17 +15,21 @@ type Config struct {
 	//     issues directory
 	//     .fit.yml
 	//     likely .git
-	// overridden by FIT/PMIT environment variable ** runtime only
+	// overridden by FIT/PMIT environment variable    ** runtime only
 	FitDir string `json:"FitDir"`
-	// overridden by FIT/PMIT environment variable ** runtime only
+	// overridden by FIT/PMIT environment variable    ** runtime only
 	FitDirName string `json:"FitDirName"`
-	// save the detected directory name            ** runtime only
-	ScmDirName string `json:"ScmDirName"`
-	// save the detected scm type                  ** runtime only
+	// save the detected directory name               ** runtime only
+	ScmDir string `json:"ScmDir"`
+	// save the detected scm type                     ** runtime only
 	ScmType string `json:"ScmType"`
-	// FitDir+"/.fit.yml" or .bug.yml * if present ** runtime only
+	// FitYmlDir                         * if present ** runtime only
+	// Now important because this could be FitDir or ScmDir
+	FitYmlDir string `json:"FitYmlDir"`
+	// FitYmlDir+"/.fit.yml" or .bug.yml * if present ** runtime only
 	FitYml string `json:"FitYml"`
 	// Description contents for new issue or empty file (empty default)
+	// relative to FitYmlDir, aka FitDir or ScmDir
 	DefaultDescriptionFile string `json:"DefaultDescriptionFile"`
 	// saves raw json files of import (true) or don't save (false, default)
 	ImportXmlDump bool `json:"ImportXmlDump"`

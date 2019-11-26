@@ -14,8 +14,9 @@ import (
 type Config struct {
 	FitDir                    string `json:"FitDir"`     // runtime only
 	FitDirName                string `json:"FitDirName"` // runtime only
-	ScmDirName                string `json:"ScmDirName"` // runtime only
+	ScmDir                    string `json:"ScmDir"`     // runtime only
 	ScmType                   string `json:"ScmType"`    // runtime only
+	FitYmlDir                 string `json:"FitYmlDir"`  // runtime only
 	FitYml                    string `json:"FitYml"`     // runtime only
 	DefaultDescriptionFile    string `json:"DefaultDescriptionFile"`
 	ImportXmlDump             bool   `json:"ImportXmlDump"`

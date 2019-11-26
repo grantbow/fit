@@ -58,15 +58,15 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 	//fmt.Printf("debug topRecurse %v wantRecursive %v config.MultipleFitDirs %v \n", topRecurse, wantRecursive, config.MultipleFitDirs == true)
 	if topRecurse == true && (wantRecursive == true || config.MultipleFitDirs == true) {
 		// print warning if below the .git directory
-		//fmt.Printf("debug config.FitDir %v len %v config.ScmDirName %v len %v\n",
+		//fmt.Printf("debug config.FitDir %v len %v config.ScmDir %v len %v\n",
 		//	config.FitDir, len(config.FitDir),
-		//	config.ScmDirName, len(config.ScmDirName))
+		//	config.ScmDir, len(config.ScmDir))
 		if config.ScmType == "git" &&
-			len(config.ScmDirName) != len(config.FitDir)+5 {
-			fmt.Printf("\n===== WARNING, path from git to issues: %s\n", config.FitDir[len(config.ScmDirName)-5:])
+			len(config.ScmDir) != len(config.FitDir)+5 {
+			fmt.Printf("\n===== WARNING, path from git to issues: %s\n", config.FitDir[len(config.ScmDir)-5:])
 		} else if config.ScmType == "hg" &&
-			len(config.ScmDirName) != len(config.FitDir)+4 {
-			fmt.Printf("\n===== WARNING, path from hg to issues: %s\n", config.FitDir[len(config.ScmDirName)-4:])
+			len(config.ScmDir) != len(config.FitDir)+4 {
+			fmt.Printf("\n===== WARNING, path from hg to issues: %s\n", config.FitDir[len(config.ScmDir)-4:])
 		}
 	}
 

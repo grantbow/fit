@@ -97,14 +97,14 @@ func Create(Args argumentList, config bugs.Config) {
 	if noDesc {
 		txt := []byte("")
 		if config.DefaultDescriptionFile != "" {
-			filecp(config.DefaultDescriptionFile, DescriptionFile)
+			filecp(config.FitYmlDir+sops+config.DefaultDescriptionFile, DescriptionFile)
 		} else {
 			//fmt.Printf("here %s\n", config.DescriptionFileName)
 			ioutil.WriteFile(DescriptionFile, txt, 0644)
 		}
 	} else {
 		if config.DefaultDescriptionFile != "" {
-			filecp(config.DefaultDescriptionFile, DescriptionFile)
+			filecp(config.FitYmlDir+sops+config.DefaultDescriptionFile, DescriptionFile)
 		}
 		cmd := exec.Command(getEditor(), DescriptionFile)
 

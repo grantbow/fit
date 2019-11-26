@@ -39,37 +39,52 @@ func main() {
 			}
 		}
 	} else {
-		config.ScmDirName = string(detectedDir)
+		config.ScmDir = string(detectedDir)
 		config.ScmType = handler.SCMTyper()
 	}
 
 	fitYmlFileName := ".fit.yml"
 	bugYmlFileName := ".bug.yml"
-	fitYmlExt := fitYmlFileName
-	bugYmlExt := bugYmlFileName
 	if rd := bugs.RootDirer(&config); rd != "" {
 		// issues/Directory.go func RootDirer sets config.FitDir runs os.Chdir()
 		rootPresent = true
-		// now try to read fit config
 		if ErrC := bugs.ConfigRead(fitYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
-			config.FitYml = config.FitDir + string(os.PathSeparator) + fitYmlFileName
+			// tried to read FitDir fit config, must try both fit and bug
+			config.FitYmlDir = config.FitDir
+			config.FitYml = config.FitYmlDir + string(os.PathSeparator) + fitYmlFileName
 			//var sops = string(os.PathSeparator) not yet available
 			//var dops = Directory(os.PathSeparator)
-			// now try to read bug config
 		} else if ErrC := bugs.ConfigRead(bugYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+			// tried to read FitDir bug config, must try both fit and bug
+			config.FitYmlDir = config.FitDir
 			config.FitYml = config.FitDir + string(os.PathSeparator) + bugYmlFileName
 		} else if config.ScmType == "git" {
-			s := len(config.ScmDirName)
-			//fmt.Printf("debug s01 %v\n scmdirname %v\n dir %v\n", s, config.ScmDirName, string(config.ScmDirName[:s-4])+fitYmlExt)
-			if ErrC := bugs.ConfigRead(string(config.ScmDirName[:s-4])+fitYmlExt, &config, bugapp.ProgramVersion()); ErrC == nil {
-				config.FitYml = string(config.ScmDirName[:s-4]) + fitYmlExt
+			// TODO: collapse else if ...git... && else if ...hg... with .git(4 char len, stl ScmTypeLen) and .hg(3 char len)
+			s := len(config.ScmDir)
+			//fmt.Printf("debug s01 %v\n scmdir %v\n dir %v\n", s, config.ScmDir, string(config.ScmDir[:s-4])+fitYmlFileName)
+			if ErrC := bugs.ConfigRead(string(config.ScmDir[:s-4])+fitYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+				// tried to read .git fit config
+				config.FitYmlDir = string(config.ScmDir[:s-5])
+				config.FitYml = string(config.ScmDir[:s-4]) + fitYmlFileName
 				//fmt.Printf("debug 02\n %v\n", config.FitYml)
+			} else if ErrC := bugs.ConfigRead(string(config.ScmDir[:s-4])+bugYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+				// tried to read .git bug config
+				config.FitYmlDir = string(config.ScmDir[:s-5])
+				config.FitYml = string(config.ScmDir[:s-4]) + bugYmlFileName
 			}
 		} else if config.ScmType == "hg" {
-			s := len(config.ScmDirName)
-			//fmt.Printf("debug s03 %v\n scmdirname %v\n dir %v\n", s, config.ScmDirName, string(config.ScmDirName[:s-3])+fitYmlExt)
-			if ErrC := bugs.ConfigRead(string(config.ScmDirName[:s-3])+bugYmlExt, &config, bugapp.ProgramVersion()); ErrC == nil {
-				config.FitYml = string(config.ScmDirName[:s-3]) + bugYmlExt
+			// try to read .hg fit config
+			s := len(config.ScmDir)
+			//fmt.Printf("debug s03 %v\n scmdir %v\n dir %v\n", s, config.ScmDir, string(config.ScmDir[:s-3])+fitYmlFileName)
+			if ErrC := bugs.ConfigRead(string(config.ScmDir[:s-3])+fitYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+				// tried to read .hg fit config
+				config.FitYmlDir = string(config.ScmDir[:s-4])
+				config.FitYml = string(config.ScmDir[:s-3]) + fitYmlFileName
+				//fmt.Printf("debug 04\n %v\n", config.FitYml)
+			} else if ErrC := bugs.ConfigRead(string(config.ScmDir[:s-3])+bugYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+				// tried to read .hg fit config
+				config.FitYmlDir = string(config.ScmDir[:s-4])
+				config.FitYml = string(config.ScmDir[:s-3]) + bugYmlFileName
 				//fmt.Printf("debug 04\n %v\n", config.FitYml)
 			}
 		}
@@ -143,6 +158,7 @@ func main() {
 				fmt.Printf("Files in " + config.FitDirName + "/ need committing, see $ git status --porcelain -u -- :/" + config.FitDirName + "\nor if already in the index see     $ git diff --name-status --cached HEAD -- :/" + config.FitDirName + "\n")
 				if _, ErrCach := handler.SCMIssuesCacher(config); ErrCach != nil {
 					for _, bline := range strings.Split(string(b), "\n") {
+						//if c, bline
 						//if bline in c {
 						//} else {
 						fmt.Printf("%v\n", string(bline))
