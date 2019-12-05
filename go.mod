@@ -8,3 +8,5 @@ require (
 	golang.org/x/oauth2 v0.0.0-20191122200657-5d9234df094c
 	gopkg.in/yaml.v2 v2.2.7 // indirect
 )
+
+go 1.13

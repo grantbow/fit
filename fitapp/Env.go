@@ -10,8 +10,14 @@ import (
 // Env is a subcommand to output detected editor, directory and scm type.
 func Env(config bugs.Config) {
 	vcs, scmdir, scmerr := scm.DetectSCM(make(map[string]bool), config)
+	settingsOut := ""
+	if config.FitYml == "" {
+		settingsOut = "<missing>"
+	} else {
+		settingsOut = config.FitYml
+	}
 	fmt.Printf("Settings:\n\nEditor: %s\nRoot Directory: %s\nFit Directory: %s\nSettings file: %s\n\n",
-		getEditor(), config.FitDir, bugs.FitDirer(config), config.FitYml)
+		getEditor(), config.FitDir, bugs.FitDirer(config), settingsOut)
 
 	if scmerr != nil {
 		fmt.Printf("VCS Type: <missing> (purge and commit commands unavailable)\n\n")
