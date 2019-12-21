@@ -30,3 +30,22 @@ implement a mvp
     dynamic lists of keys is already implemented, so using that as a basis for loops
     instead of hard coded exceptions feels expandable and reasonable.
 make using the import easier
+
+https://www.atlassian.com/blog/jira-software/how-to-maximize-your-jira-instance
+    How to maximize your jira instance... describes five types of apps/integrations people use
+
+    https://www.atlassian.com/webinars/software/5-use-cases-to-supercharge-jira-cloud
+    webinar: 5 use cases to supercharge Jira Cloud via Atlassian Marketplace.
+         automation - automation for jira. others:
+             scriptrunner,
+             power scripts,
+             jira misc workflow extension
+             jsu automation
+         test management - xray
+             https://marketplace.atlassian.com/categories/test-management
+         analytics (and reporting tools) - eazybi
+             https://marketplace.atlassian.com/categories/analytics-reports
+         time tracking - tempo timesheets
+             https://marketplace.atlassian.com/categories/time-tracking
+         integrations
+             slack, gmail, box, bitbucket.
