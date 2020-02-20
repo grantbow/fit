@@ -187,7 +187,14 @@ func SkipRootCheck(args *[]string) bool {
 		ret = true
 	case 2:
 		if (*args)[1] == "help" ||
+			(*args)[1] == "--help" ||
+			(*args)[1] == "-h" ||
 			(*args)[1] == "status" ||
+			(*args)[1] == "version" ||
+			(*args)[1] == "about" ||
+			(*args)[1] == "--version" ||
+			(*args)[1] == "-v" ||
+			(*args)[1] == "environment" ||
 			(*args)[1] == "env" {
 			ret = true
 		}

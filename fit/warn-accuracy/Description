@@ -1,0 +1,47 @@
+#### What did you do?
+cd $HOME
+fit version
+
+also
+
+$ cd go/src/github.com/grantybow/fit/cmd/fit
+$ fit list
+
+
+#### What did you see?
+
+Warn: no .git or .hg directory. Use "{git|hg} init".
+bug manages plain text issues with git or hg.
+Error: Could not find `fit` or `issues` directory.
+    Check that the current or a parent directory has a fit directory
+    or set the FIT environment variable.
+Use "bug help" or "bug help help" for details.
+Aborting.
+
+
+also
+
+
+===== WARNING, path from git to issues: /cmd
+
+===== list /home/grantbow/go/src/github.com/grantbow/fit/cmd/fit
+
+#### What did you expect to see?
+fit should always give it's version number, then maybe warn about the environment.
+Special case to turn off checking for these errors should be coded for this and
+    perhaps the env command.
+Some variables for the dir name and program name need to be used
+    better in this and likely other error messages.
+
+also
+
+This part may only be a problem in the fit distribution.
+Fit looks for both a fit directory and/or an issues directory.
+When directories exist with those names that are not intended
+for issue/bug reports the warnings should be more helpful.
+The issue/fit/bug dir name and program name variables need to be used.
+
+
+#### What version?
+0.6
+

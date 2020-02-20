@@ -3,8 +3,8 @@ package main
 
 import (
 	"fmt"
-	bugapp "github.com/grantbow/fit/fitapp"
-	bugs "github.com/grantbow/fit/issues"
+	fitapp "github.com/grantbow/fit/fitapp"
+	issues "github.com/grantbow/fit/issues"
 	"github.com/grantbow/fit/scm"
 	"os"
 	"strings"
@@ -12,12 +12,12 @@ import (
 
 func main() {
 
-	config := bugs.Config{}
-	config.ProgramVersion = bugapp.ProgramVersion()
+	config := issues.Config{}
+	config.ProgramVersion = fitapp.ProgramVersion()
 	config.DescriptionFileName = "Description"
 	config.FitDirName = "fit"
 	rootPresent := false
-	skip := bugapp.SkipRootCheck(&os.Args) // too few args or help or env
+	skip := fitapp.SkipRootCheck(&os.Args) // too few args or help or env
 
 	// detect scm first to determine backup location for .fit.yml
 	scmoptions := make(map[string]bool)
@@ -43,19 +43,19 @@ func main() {
 		config.ScmType = handler.SCMTyper()
 	}
 
-	if rd := bugs.RootDirer(&config); rd != "" {
+	if rd := issues.RootDirer(&config); rd != "" {
 		// issues/Directory.go func RootDirer sets config.FitDir runs os.Chdir()
 		rootPresent = true
 		config.FitYmlDir = config.FitDir // default
 		fitYmlFileName := ".fit.yml"
 		bugYmlFileName := ".bug.yml"
-		if ErrC := bugs.ConfigRead(fitYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+		if ErrC := issues.ConfigRead(fitYmlFileName, &config, fitapp.ProgramVersion()); ErrC == nil {
 			// tried to read FitDir fit config, must try both fit and bug
 			config.FitYmlDir = config.FitDir
 			config.FitYml = config.FitYmlDir + string(os.PathSeparator) + fitYmlFileName
 			//var sops = string(os.PathSeparator) not yet available
 			//var dops = Directory(os.PathSeparator)
-		} else if ErrC := bugs.ConfigRead(bugYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+		} else if ErrC := issues.ConfigRead(bugYmlFileName, &config, fitapp.ProgramVersion()); ErrC == nil {
 			// tried to read FitDir bug config, must try both fit and bug
 			config.FitYmlDir = config.FitDir
 			config.FitYml = config.FitDir + string(os.PathSeparator) + bugYmlFileName
@@ -63,12 +63,12 @@ func main() {
 			// TODO: collapse else if ...git... && else if ...hg... with .git(4 char len, stl ScmTypeLen) and .hg(3 char len)
 			s := len(config.ScmDir)
 			//fmt.Printf("debug s01 %v\n scmdir %v\n dir %v\n", s, config.ScmDir, string(config.ScmDir[:s-4])+fitYmlFileName)
-			if ErrC := bugs.ConfigRead(string(config.ScmDir[:s-4])+fitYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+			if ErrC := issues.ConfigRead(string(config.ScmDir[:s-4])+fitYmlFileName, &config, fitapp.ProgramVersion()); ErrC == nil {
 				// tried to read .git fit config
 				config.FitYmlDir = string(config.ScmDir[:s-5])
 				config.FitYml = string(config.ScmDir[:s-4]) + fitYmlFileName
 				//fmt.Printf("debug 02\n %v\n", config.FitYml)
-			} else if ErrC := bugs.ConfigRead(string(config.ScmDir[:s-4])+bugYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+			} else if ErrC := issues.ConfigRead(string(config.ScmDir[:s-4])+bugYmlFileName, &config, fitapp.ProgramVersion()); ErrC == nil {
 				// tried to read .git bug config
 				config.FitYmlDir = string(config.ScmDir[:s-5])
 				config.FitYml = string(config.ScmDir[:s-4]) + bugYmlFileName
@@ -77,12 +77,12 @@ func main() {
 			// try to read .hg fit config
 			s := len(config.ScmDir)
 			//fmt.Printf("debug s03 %v\n scmdir %v\n dir %v\n", s, config.ScmDir, string(config.ScmDir[:s-3])+fitYmlFileName)
-			if ErrC := bugs.ConfigRead(string(config.ScmDir[:s-3])+fitYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+			if ErrC := issues.ConfigRead(string(config.ScmDir[:s-3])+fitYmlFileName, &config, fitapp.ProgramVersion()); ErrC == nil {
 				// tried to read .hg fit config
 				config.FitYmlDir = string(config.ScmDir[:s-4])
 				config.FitYml = string(config.ScmDir[:s-3]) + fitYmlFileName
 				//fmt.Printf("debug 04\n %v\n", config.FitYml)
-			} else if ErrC := bugs.ConfigRead(string(config.ScmDir[:s-3])+bugYmlFileName, &config, bugapp.ProgramVersion()); ErrC == nil {
+			} else if ErrC := issues.ConfigRead(string(config.ScmDir[:s-3])+bugYmlFileName, &config, fitapp.ProgramVersion()); ErrC == nil {
 				// tried to read .hg fit config
 				config.FitYmlDir = string(config.ScmDir[:s-4])
 				config.FitYml = string(config.ScmDir[:s-3]) + bugYmlFileName
@@ -96,7 +96,7 @@ func main() {
 		if skip {
 			fmt.Printf("Warn: no `" + config.FitDirName + "` directory\n")
 		} else { // !skip
-			//bugapp.PrintVersion()
+			//fitapp.PrintVersion()
 			fmt.Printf("bug manages plain text issues with git or hg.\n")
 			fmt.Printf("Error: Could not find `fit` or `issues` directory.\n")
 			fmt.Printf("    Check that the current or a parent directory has a fit directory\n")
@@ -109,7 +109,7 @@ func main() {
 		}
 	}
 
-	bugs.FitDirer(config) // from issues/Directory.go, uses config.FitDir from issues/Bug.go
+	issues.FitDirer(config) // from issues/Directory.go, uses config.FitDir from issues/Bug.go
 
 	// flags package is nice but this seemed more direct at the time
 	// because of subcommands and
@@ -119,7 +119,7 @@ func main() {
 	//fmt.Printf("A %s %#v\n", "osArgs: ", osArgs)
 	if len(osArgs) <= 1 {
 		if rootPresent {
-			bugapp.List([]string{}, config, true)
+			fitapp.List([]string{}, config, true)
 		} else {
 			fmt.Printf("Usage: " + os.Args[0] + " <command> [options]\n")
 			fmt.Printf("\nUse \"bug help\" or \"bug help <command>\" for details.\n")
@@ -128,32 +128,32 @@ func main() {
 		(osArgs[1] == "--help" ||
 			osArgs[1] == "help" ||
 			osArgs[1] == "-h") {
-		bugapp.Help("help") // just bug help
+		fitapp.Help("help") // just bug help
 	} else if len(osArgs) >= 3 &&
 		(osArgs[2] == "--help" ||
 			osArgs[2] == "help" ||
 			osArgs[2] == "-h") { // 'bug cmd --help' just like 'bug help cmd'
 		//fmt.Printf("B %s %#v\n", "osArgs: ", osArgs)
-		bugapp.Help(osArgs[1])
+		fitapp.Help(osArgs[1])
 	} else {
 		switch osArgs[1] {
 		// subcommands without osArgs first
 		case "notags", "notag":
-			bugapp.TagsNone(config)
+			fitapp.TagsNone(config)
 		case "idslist", "idsassigned", "ids", "identifiers":
-			bugapp.IdsAssigned(config)
+			fitapp.IdsAssigned(config)
 		case "noids", "noid", "noidentifiers", "noidentifier":
-			bugapp.IdsNone(config)
-		case "env":
-			bugapp.Env(config)
+			fitapp.IdsNone(config)
+		case "env", "environment":
+			fitapp.Env(config)
 		case "pwd", "dir", "cwd":
-			bugapp.Pwd(config)
+			fitapp.Pwd(config)
 		case "version", "about", "--version", "-v":
-			bugapp.PrintVersion()
+			fitapp.PrintVersion()
 		case "purge":
-			bugapp.Purge(config)
+			fitapp.Purge(config)
 		case "twilio":
-			bugapp.Twilio(config)
+			fitapp.Twilio(config)
 		case "staging", "staged", "cached", "cache", "index":
 			// TODO: scm/Staged.go
 			if b, err := handler.SCMIssuesUpdaters(config); err != nil {
@@ -174,57 +174,57 @@ func main() {
 			}
 		// subcommands that pass osArgs
 		case "tagslist", "taglist", "tagsassigned", "tags":
-			bugapp.TagsAssigned(osArgs[2:], config)
+			fitapp.TagsAssigned(osArgs[2:], config)
 		case "list", "view", "show", "display", "ls":
 			// bug list with no parameters shouldn't autopage,
-			// bug list with bugs to view should. So the original
-			bugapp.List(osArgs[2:], config, true)
+			// bug list with issues to view should. So the original
+			fitapp.List(osArgs[2:], config, true)
 		case "find":
-			bugapp.Find(osArgs[2:], config)
+			fitapp.Find(osArgs[2:], config)
 		case "create", "add", "new":
 			//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
-			bugapp.Create(osArgs[2:], config)
+			fitapp.Create(osArgs[2:], config)
 			//fmt.Printf("%s %#v\n", "osArgs: ", len(osArgs))
 		case "edit":
-			bugapp.Edit(osArgs[2:], config)
+			fitapp.Edit(osArgs[2:], config)
 		case "retitle", "mv", "rename", "relabel":
-			bugapp.Relabel(osArgs[2:], config)
+			fitapp.Relabel(osArgs[2:], config)
 		case "close", "rm":
-			bugapp.Close(osArgs[2:], config)
+			fitapp.Close(osArgs[2:], config)
 		case "tag":
-			bugapp.Tag(osArgs[2:], config) // boolean only
+			fitapp.Tag(osArgs[2:], config) // boolean only
 		case "id", "identifier":
-			bugapp.Identifier(osArgs[2:], config)
+			fitapp.Identifier(osArgs[2:], config)
 		case "status":
 			if len(osArgs) == 2 {
 				// overview like a git status
-				bugapp.Env(config)
+				fitapp.Env(config)
 			} else {
 				// get or set the status of an issue
-				bugapp.Status(osArgs[2:], config)
+				fitapp.Status(osArgs[2:], config)
 			}
 		case "priority":
-			bugapp.Priority(osArgs[2:], config)
+			fitapp.Priority(osArgs[2:], config)
 		case "milestone":
-			bugapp.Milestone(osArgs[2:], config)
+			fitapp.Milestone(osArgs[2:], config)
 		case "import":
-			bugapp.Import(osArgs[2:], config)
+			fitapp.Import(osArgs[2:], config)
 		case "commit", "save":
-			bugapp.Commit(osArgs[2:], config)
+			fitapp.Commit(osArgs[2:], config)
 		case "roadmap":
-			bugapp.Roadmap(osArgs[2:], config)
+			fitapp.Roadmap(osArgs[2:], config)
 		case "help", "--help", "-h":
 			//fmt.Printf("C %s %#v\n", "osArgs: ", osArgs)
-			bugapp.Help(osArgs[2])
+			fitapp.Help(osArgs[2])
 		default:
 			//if
 			if len(osArgs) == 2 {
-				buglist, _ := bugs.LoadIssueByHeuristic(osArgs[1], config)
+				buglist, _ := issues.LoadIssueByHeuristic(osArgs[1], config)
 				//fmt.Printf("%+v\n", buglist)
-				if buglist != nil { // || ae, ok := bugerr.(bugs.ErrNotFound); ! ok { // bug list when possible, not help
-					bugapp.List(osArgs[1:], config, true)
+				if buglist != nil { // || ae, ok := bugerr.(issues.ErrNotFound); ! ok { // bug list when possible, not help
+					fitapp.List(osArgs[1:], config, true)
 				} else {
-					bugapp.Help(osArgs[1:]...)
+					fitapp.Help(osArgs[1:]...)
 				}
 			}
 		}

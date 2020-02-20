@@ -3,10 +3,10 @@
 <If possible, provide a recipe for reproducing the error or behavior.>
 
 
+#### What did you see?
+
+
 #### What did you expect to see?
-
-
-#### What did you see instead?
 
 
 #### What version?

@@ -42,6 +42,12 @@ Q: Why change the name from bug to fit?
    connotations with health and fitness. Working with git the name fit is quite
    natural once you get used to it.
 
+   Submodule bugs was changed to issues.
+       This is may also confuse. This new name for the code directory is the
+       old name of the directory that holds the issues. This feels like the
+       most natural choice to reduce future ambiguity.
+   Submodule bugapp was changed to fitapp.
+
 Q: Why change the name from PMIT to [FIT](FIT.md)?
 A: bug was the program written in Go. PMIT was the original name of the storage
    system. [FIT](FIT.md) is the new name for the system that stores the

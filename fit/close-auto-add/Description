@@ -1,0 +1,14 @@
+#### What did you do?
+$ fit close 58
+
+#### What did you see?
+tag_status_close file was created
+but it was not staged with $ git add
+
+#### What did you expect to see?
+It would be nice to do this automatically.
+The api in the scm module is still needed.
+
+#### What version?
+0.6
+

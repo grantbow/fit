@@ -63,10 +63,10 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 		//	config.ScmDir, len(config.ScmDir))
 		if config.ScmType == "git" &&
 			len(config.ScmDir) != len(config.FitDir)+5 {
-			fmt.Printf("\n===== WARNING, path from git to issues: %s\n", config.FitDir[len(config.ScmDir)-5:])
+			fmt.Printf("\n===== WARNING, path from .git to %s: %s\n", config.FitDirName, config.FitDir[len(config.ScmDir)-5:])
 		} else if config.ScmType == "hg" &&
 			len(config.ScmDir) != len(config.FitDir)+4 {
-			fmt.Printf("\n===== WARNING, path from hg to issues: %s\n", config.FitDir[len(config.ScmDir)-4:])
+			fmt.Printf("\n===== WARNING, path from .hg to %s: %s\n", config.FitDirName, config.FitDir[len(config.ScmDir)-4:])
 		}
 	}
 
@@ -99,11 +99,16 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 		config.MultipleFitDirs == true {
 		// No parameters, print a list of all bugs
 		//os.Stdout = stdout
+		foundsome := 0
 		for idx, issue := range issues {
 			if issue.IsDir() != true {
 				continue
 			}
 			printIssueByDir(idx, issue, fitdir, config, wantTags)
+			foundsome += 1
+		}
+		if foundsome == 0 {
+			fmt.Printf("   << found no issues >>\n")
 		}
 		if topRecurse == true && (wantRecursive || config.MultipleFitDirs == true) {
 			fi, _ := os.Stat(config.FitDir)
