@@ -124,15 +124,15 @@ Some support is available to import and/or reference other issue trackers.
 After you have [go installed](https://golang.org/doc/install), install the
 latest version of fit with:
 
-`GO111MODULE=on go install github.com/grantbow/bug`
+`GO111MODULE=on go install github.com/grantbow/fit`
 
 If that does not work in one command then:
     export GO111MODULE=on
-    cd $GOPATH/src/github.com/grantbow/bug/cmd/fit
+    cd $GOPATH/src/github.com/grantbow/fit/cmd/fit
     go install
 
-This will create the binary $GOPATH/src/github.com/grantbow/bug/cmd/fit/fit
-and copy it to $GOPATH/bin/fit
+This will create the binary $GOPATH/src/github.com/grantbow/fit/cmd/fit/fit(.exe)
+and move it to $GOPATH/bin/fit
 
 Make sure `$GOPATH/bin` or `$GOBIN` are in your path or you can copy
 the "fit" binary somewhere that is in your path.
@@ -345,7 +345,7 @@ problems or may arise while coding.
 * [CONTRIBUTING.md](CONTRUBUTING.md)
 * [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 * [SUPPORT.md](SUPPORT.md)
-* [wiki](https://github.com/grantbow/bug/wiki)
+* [wiki](https://github.com/grantbow/fit/wiki)
 * [gitter](https://gitter.im/fit-issue/community)
 
 Your system is the beginning, not the end. Much has been written about how to
