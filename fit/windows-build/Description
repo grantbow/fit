@@ -6,3 +6,50 @@ I removed use of filepath.FromSlash()because it didn't seem to work on Windows
 
 tests now pass but many in scm are disabled.
 
+
+
+
+
+fit status doesn't look right for "Need Committing or Staging" (fatal is output)
+    and the spaced printing of some of the strings in the config is wrong
+    it might just be the way it's printed and not bad values themselves.
+
+
+$ fit status
+Settings:
+
+Editor: vim
+Root Directory: C:\cygwin64\home\<user>\go\src\github.com\<user>\fit
+Fit Directory: C:\cygwin64\home\<user>\go\src\github.com\<user>\fit\fit
+Settings file: <missing>
+
+VCS Type:    git
+git Directory:    C:\cygwin64\home\<user>\go\src\github.com\<user>\fit\.git
+Need Committing or Staging:    fatal: :\fit: '\fit' is outside repository
+
+
+Config:
+    es.Config{FitDir : "C : \\cygwin64\\home\\user\\go\\src\\github.com\\grantbow\\fit"
+    FitDirName : "fit"
+    ScmDir : "C : \\cygwin64\\home\\user\\go\\src\\github.com\\grantbow\\fit\\.git"
+    ScmType : "git"
+    FitYmlDir : "C : \\cygwin64\\home\\user\\go\\src\\github.com\\grantbow\\fit"
+    FitYml : ""
+    DefaultDescriptionFile : ""
+    ImportXmlDump : false
+    ImportCommentsTogether : false
+    ProgramVersion : "0.6"
+    DescriptionFileName : "Description"
+    TagKeyValue : false
+    NewFieldAsTag : false
+    NewFieldLowerCase : false
+    GithubPersonalAccessToken : ""
+    TwilioAccountSid : ""
+    TwilioAuthToken : ""
+    TwilioPhoneNumberFrom : ""
+    FitSite : ""
+    MultipleFitDirs : false
+    CloseStatusTag : false
+    IdAbbreviate : false
+    IdAutomatic : false}
+

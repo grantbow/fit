@@ -1,0 +1,17 @@
+#### What did you do?
+in the fit project repo directory
+fit list -r
+
+#### What did you see?
+only the top fit directory
+
+
+#### What did you expect to see?
+subdirectories named fit listed as well
+such as fitapp/fit/*
+this might be a special case of a fit top level dir 
+    beside a top level .git
+
+
+#### What version?
+

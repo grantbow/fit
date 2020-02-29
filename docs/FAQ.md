@@ -12,6 +12,14 @@ A: Different people may have different reasons. Bootstrapping project
    your own extensions/conventions to add to this since arbitrary files are
    permited.
 
+Q: What is the project governance model?
+A: Currently the project owner and lead contributors make all final decisions.
+   If/when more people are involved this can be expanded.
+   Of course forks are possible with all open source projects.
+
+Q: What is the code of conduct for this project?
+A: see CODE_OF_CONDUCT.md
+
 Q: What is different from [git-bug](https://github.com/michaelmure/git-bug)?
 
 A: That project stores "Operation"s editing each bug/issue. This has advantages
@@ -146,7 +154,7 @@ Q: How do I enforce [policy x] for a team
 A: Write a git hook.
 
 Q: How do I secure the system?
-A: The same way you secure your files.
+A: The same way you secure your files and revision control system.
 
 Q: What do you mean by a job?
 A: `Jobs` are the reasons for your issues you track. This term is inspired by

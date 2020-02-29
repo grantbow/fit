@@ -1,24 +1,21 @@
 # fit
 manages plain text issues with git or mercurial
 
-# fit
-
 [![GoDoc](https://godoc.org/github.com/grantbow/fit?status.svg)](https://godoc.org/github.com/grantbow/fit) [![Build Status](https://travis-ci.org/grantbow/fit.svg?branch=master)](https://travis-ci.org/grantbow/fit) [![Test Coverage](https://codecov.io/gh/grantbow/fit/branch/master/graphs/badge.svg)](https://codecov.io/gh/grantbow/fit) [![GoReportCard](https://goreportcard.com/badge/github.com/grantbow/fit)](https://goreportcard.com/report/github.com/grantbow/fit) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2820/badge)](https://bestpractices.coreinfrastructure.org/projects/2820) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/fit-issue/community)
-
-fit manages plain text issues with git or mercurial.
 
 **TOC:**
 
 <!-- toc -->
 
 - [Goal](#goal)
+- [History](#history)
+- [Background](#history)
 - [Getting Started](#getting-started)
   * [Layout](#layout)
   * [Installation](#installation)
   * [Configuration](#configuration)
   * [Hooks](#hooks)
   * [Example Use](#example-use)
-- [History](#history)
 - [Next Steps](#next-steps)
   * [Feedback](#feedback)
 
@@ -26,30 +23,45 @@ fit manages plain text issues with git or mercurial.
 
 ## Goal
 
-Standard coding tools can be used to improve project outcomes and minimize
-context switching between coding and issue tracking systems.
-
-A limited number of conventions with just enough organization can quickly
-capture issues using human readable issue directories and files. This can
-supplement other issue/bug systems or quickly act in their place, especially if
-no other system is provided.
-
-Using fit helps implementers streamline working with
-[issues](https://en.wikipedia.org/wiki/Issue_tracking_system) and [version
-control](https://en.wikipedia.org/wiki/Version_control). fit works well with
-both git and mercurial distributed version control though the git features are
-more well exercised.
-
-fit is adaptable with issue key/value pair metadata.
-
-fit manages issues using the Filesystem Issue Tracker (see [FIT.md](FIT.md))
-conventions/format. A `fit/` or `issues/` directory holds one (descriptively
-titled) directory per issue. Each directory holds a Description file and
-anything else needed.
+Standard coding practices improve project outcomes. Using as few tools and
+systems as possible increases productivity. Using fit minimizes context
+switching between coding and issue tracking systems.
 
 The fit implementation is (almost) the simplest issue system that can still
 work. Human readable plain text files are intuitively understood, viewable
 and editable.
+
+## History
+
+fit is the golang program first developed as "bug" by Dave MacFarlane (driusan).
+Filesystem Issue Tracker ([FIT.md](FIT.md)) is the new name for the Poor Man's
+Issue Tracker (PMIT) storage system also first developed by driusan. For his
+demo from 2016, see [driusan's
+talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
+GolangMontreal.org conference, GoMTL-01. The program and storage system have
+evolved while trying to remain backward compatible. See the [FAQ.md](FAQ.md)
+for more information.
+
+## Background
+
+A limited but sufficient number of conventions with just enough organization
+can quickly capture issues using human readable issue directories and files.
+fit can be the primary system if no other system is provided or supplement
+other issue/bug systems to quickly capture issues and their context as close
+to the issue as possible.
+
+Using fit helps implementers streamline working with
+[issues](https://en.wikipedia.org/wiki/Issue_tracking_system) and [version
+control](https://en.wikipedia.org/wiki/Version_control). fit works with
+both git and mercurial distributed version control though the git features are
+more well exercised.
+
+fit is designed to adapt to your processes using issue key/value pair metadata.
+
+The fit too manages issues using conventions/format of
+Filesystem Issue Tracker (see [FIT.md](FIT.md)). A `fit/` or `issues/`
+directory holds one descriptively titled directory per issue. Each directory 
+holds a Description (name is configurable) text file and anything else needed.
 
 At first people may naturally try to keep track of issues in a single text
 file and/or spreadsheet but these can fail to meet project needs.
@@ -78,19 +90,18 @@ to implementing more disciplined software engineering best practices. Code can
 start small and grow gradually as users, use cases and developers are added.
 The FIT issue system can adapt to each stage.
 
-While one issue set used for one git repository may be enough recursive fit
-directories are supported. As complexity increases adding multiple `fit/`
-directories in different parts of your git repo may help project coders keep
-focused.
+While one issue set used for one git repository may be enough the use of
+recursive fit directories are supported. As complexity increases adding
+multiple `fit/` directories in different parts of your git repo may help
+project coders keep focused.
 
-There are some choices for how to handle past issues. As the number of closed
-issues grows closed they can simply be deleted or an archive can hold the
+There are some choices for how to handle closed issues. As the number of
+issues grows closed can simply be deleted or an archive can hold the
 inactive issues. While deleting issues helps keep things uncluttered issues
-still have value over time and may be difficult to find using the version
+still have value over time and may be difficult to find using only version
 control history.
 
-fit can be aliased as a git subcommand using the name you prefer like fit, bug
-or issue.
+fit can be aliased as a git subcommand "git fit ..."
 
 Security concerns are handled using standard git repository practices.
 
@@ -98,6 +109,13 @@ fit software is written using [golang](https://golang.org) to make things easy,
 simple and reliable. Why go? [This video](https://vimeo.com/69237265) from a
 2013 Ruby conference by Andrew Gerrand of Google seems a good explanation. It
 was linked from the golang.org home page.
+
+Engineers know that there is more to code than the source itself. For some rare
+individuals the code is enough context. For most people new to a code base or
+distracted by other concerns any recorded context can be extremely helpful.
+Notes about refactoring history, code reviews or feature ideas can be
+important to grok a code base more quickly. This context may originate from
+researching a user reported problem or may arise any time while coding.
 
 ## Getting Started
 
@@ -320,24 +338,6 @@ Issue 1: Need better help
 Issue 2: Need better formating for README
 ```
 
-## History
-
-fit is the golang program first developed as "bug" by Dave MacFarlane (driusan).
-Filesystem Issue Tracker ([FIT.md](FIT.md)) is the new name for the Poor Man's
-Issue Tracker (PMIT) storage system also first developed by driusan. For his
-demo from 2016, see [driusan's
-talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
-GolangMontreal.org conference, GoMTL-01. The program and storage system have
-evolved while trying to remain backward compatible. See the [FAQ.md](FAQ.md)
-for more information.
-
-Engineers know that there is more to code than the source itself. For some rare
-individuals the code is enough context. For most people new to a code base or
-distracted by other concerns recorded context can be extremely helpful.
-Refactoring history, code reviews, feature ideas and notes can be important to
-grok a code base. These may originate from research after a user reported
-problems or may arise while coding.
-
 ## Next Steps
 
 * [FIT.md](FIT.md)
@@ -371,5 +371,6 @@ enough and good working practice. Development Guidelines are included.
 As mentioned in [SUPPORT.md](SUPPORT.md) questions are encouraged via email, issues or pull
 requests for now.
 
-The [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) is the standard offered by github and looks great.
+The [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) is the standard recommended by github
+offered by contributor-covenant.org.
 
