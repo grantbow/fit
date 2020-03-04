@@ -3,9 +3,13 @@ are encouraged.
 
 Development has slowed in the main driusan/bug repository.
 
-As a policy when submitting new functionality, tests of the functionality
+As a policy, when submitting new functionality tests of the functionality
 should be added to the automated test suite. We use codecov and strive to
 increase the test coverage of the code.
+
+As a policy, code should follow recommendations from
+https://golang.org/doc/effective_go.html and
+https://github.com/golang/go/wiki/CodeReviewComments
 
 Security vulnerabilities should be reported privately via email to
 grantbow+fit@gmail.com (preferred) or via the regular bug reporting process.

@@ -84,7 +84,7 @@ actual problems, questions, possible features or ideas by those most familiar
 with the project. Less code savvy project collaborators are not distracted by
 implementation details, code reviews or operational facing features.
 
-Software Development LifeCycles (SDLCs) involve more than just the source code.
+[Software Development Life Cycles](https://en.wikipedia.org/wiki/Software_development_process) (SDLCs) involve more than just the source code.
 Over time needs may change from hacking/coding, just getting something working,
 to implementing more disciplined software engineering best practices. Code can
 start small and grow gradually as users, use cases and developers are added.

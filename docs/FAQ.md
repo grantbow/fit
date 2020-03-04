@@ -20,8 +20,12 @@ A: Currently the project owner and lead contributors make all final decisions.
 Q: What is the code of conduct for this project?
 A: see CODE_OF_CONDUCT.md
 
-Q: What is different from [git-bug](https://github.com/michaelmure/git-bug)?
+Q: How does the project respond to vulnerability reports?
+A: We will respond asap to any vulnerability reports. Since security is
+   handled by the filesystem and revision control systems no reports are
+   expected.
 
+Q: What is different from [git-bug](https://github.com/michaelmure/git-bug)?
 A: That project stores "Operation"s editing each bug/issue. This has advantages
    but simplicity isn't one. The trees are also not readily visible. Despite
    no lock-in of vendors that particular way git is used makes getting the
@@ -43,7 +47,7 @@ A: That project stores "Operation"s editing each bug/issue. This has advantages
    bugseverywhere support.
 
 Q: Why change the name from bug to fit?
-   While it took some work, overloading naming conflicts for users and for the
+A: While it took some work, overloading naming conflicts for users and for the
    code began to pile up and cause problems as work on new features advanced.
    While a bug is somewhat specific to code it is also somewhat pejorative. The
    name fit feels better and allows for multiple use cases. fit has

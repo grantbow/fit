@@ -10,6 +10,7 @@ only the top fit directory
 subdirectories named fit listed as well
 such as fitapp/fit/*
 this might be a special case of a fit top level dir 
+    with a fit subdirectory for issues
     beside a top level .git
 
 
