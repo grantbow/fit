@@ -57,8 +57,14 @@ type Config struct {
 	FitSite string `json:"FitSite"`
 	// fit directories always recursive (true) or need -r cli option (false, default)
 	MultipleFitDirs bool `json:"MultipleFitDirs"`
-	// close will add tag_status_close (true) or deletes issue (false, default)
+	// close will add tag_status_close (true) or not (false, default)
 	CloseStatusTag bool `json:"CloseStatusTag"`
+	// close will move (true, sets ClosePreventDelete=true) or not (false, default)
+	CloseMove bool `json:"CloseMove"`
+	// if using CloseMove this is inside FitDir
+	FitClosedDirName string `json:"FitClosedDirName"`
+	// close will prevent delete (true) or not (false), implies CloseMove or CloseStatusTag
+	ClosePreventDelete bool `json:"ClosePreventDelete"`
 	// Abbreviate Identifier as Id (true) or use Identifier (false, default)
 	IdAbbreviate bool `json:"IdAbbreviate"`
 	// Identifier Automatic assignment (true) or not (false, default)
@@ -79,12 +85,15 @@ and where the help output is modeled:
 
 list of places for
 creating new configs:
-    * issues/Config.go   // issues.Config struct
-                       // ConfigRead for reading values of config file
+    * issues/Config.go   // issues.Config struct (above)
+                       // ConfigRead for reading values
+                       // ConfigWrite for writing default values
     * issues/Config_test.go
     * cmd/fit/main_test.go
     * README.md        // includes config descriptions
                        // like comments from issues.Config struct file
+    * use and testing of commands that use the config as necessary
+    * as necessary docs/FIT.md, docs/FAQ.md and bugapp/Help.go
 
 synchronize
 
@@ -202,11 +211,34 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 			c.MultipleFitDirs = false
 		}
 		//* CloseStatusTag: true or false,
-		//      Default false, delete
+		//      Default false, don't set the tag
 		if temp.CloseStatusTag {
 			c.CloseStatusTag = true
 		} else {
 			c.CloseStatusTag = false
+		}
+		//* CloseMove: true or false,
+		//      Default false, see CloseDelete
+		if temp.CloseMove {
+			c.CloseMove = true
+		} else {
+			c.CloseMove = false
+		}
+		//
+		if temp.FitClosedDirName != "" {
+			c.FitClosedDirName = temp.FitClosedDirName
+		} else {
+			c.FitClosedDirName = "closed"
+		}
+		//* ClosePreventDelete: true or false,
+		//      Default false, deletes
+		if temp.ClosePreventDelete || c.CloseMove {
+			c.ClosePreventDelete = true
+			if ! (c.CloseStatusTag || c.CloseMove) {
+				c.CloseStatusTag = true
+			}
+		} else {
+			c.ClosePreventDelete = false
 		}
 		//* IdAbbreviate: true or false,
 		//      Default false, Identifier
@@ -247,6 +279,9 @@ TwilioPhoneNumberFrom:
 FitSite: https://github.com/<you>/<proj>/tree/master/<proj>/
 MultipleFitDirs: false
 CloseStatusTag: false
+CloseMove: false
+FitClosedDirName: closed
+ClosePreventDelete: false
 IdAbbreviate: false
 IdAutomatic: true
 `), 0644)

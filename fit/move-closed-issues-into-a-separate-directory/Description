@@ -1,0 +1,36 @@
+Move closed issues into a separate directory instead of deleting them. #25
+Open	momozor opened this issue on Apr 29 · 0 comments
+
+Comments:
+@momozor
+ 
+momozor commented on Apr 29
+
+Hi. I think it's much better for close command to actually move the closed
+issue into issues/closed directory instead of deleting them, for future
+reference in case the same issue occurs again.
+
+
+
+#### What did you do?
+$ mkdir test && cd test
+$ git init
+$ mkdir fit
+$ fit create -n foo
+$ fit list
+$ git add fit/foo/Description
+$ git commit <in editor add "bug foo" and save>
+$ fit close 1
+
+
+#### What did you see?
+fit/foo directory is deleted
+
+
+#### What did you expect to see?
+fit/foo is moved/renamed to fit/closed/foo
+
+
+#### What version?
+
+

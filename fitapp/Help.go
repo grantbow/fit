@@ -159,16 +159,18 @@ aliases for retitle: mv rename relabel
 	case "rm", "close":
 		fmt.Printf("usage: " + os.Args[0] + " close <IssueID>\n\n")
 		fmt.Printf(
-			`This will delete the issue identifier by IssueID. See
-"help ids" for details on what constitutes a IssueID.
+			`This will move or delete and possibly tag the issue
+IssueID. See "help ids" for details on what constitutes a IssueID.
 
-Note that closing an issue may cause existing IssueIDs to change if
-they do not have a stable id set (see "help ids",
-again.)
+By default the issue will be deleted. You may set CloseStatusTag,
+CloseMove, FitClosedDirName and/or ClosePreventDelete to change 
+how close/rm functions.
 
-Also note that this does not remove the issue from git, but only 
-from the file system. You'll need to execute "fit commit" to
-remove the issue from version control.
+Note that closing an issue may cause other IssueIDs to change if
+they do not have a stable id set (see "help ids", again.)
+
+Also note that this removes the issue from the filesystem only.
+To commit the removal you will need to execute "fit commit".
 
 alias for close: rm
 `)

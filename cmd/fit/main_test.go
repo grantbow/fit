@@ -33,6 +33,9 @@ type Config struct {
 	FitSite                   string `json:"FitSite"`
 	MultipleFitDirs           bool   `json:"MultipleFitDirs"`
 	CloseStatusTag            bool   `json:"CloseStatusTag"`
+	CloseMove                 bool   `json:"CloseMove"`
+	FitClosedDirName          string `json:"FitClosedDirName"`
+	ClosePreventDelete        bool   `json:"ClosePreventDelete"`
 	IdAbbreviate              bool   `json:"IdAbbreviate"`
 	IdAutomatic               bool   `json:"IdAutomatic"`
 }

@@ -104,6 +104,30 @@ func TestConfigRead(t *testing.T) {
 	doconfigtestbool(t, string(rootDir),
 		"\n",
 		&config,
+		&config.CloseMove,
+		false)
+	config = Config{} //// clears
+	doconfigtestbool(t, string(rootDir),
+		"CloseMove: true\n",
+		&config,
+		&config.CloseMove,
+		true)
+	config = Config{} //// clears
+	doconfigtestbool(t, string(rootDir),
+		"\n",
+		&config,
+		&config.ClosePreventDelete,
+		false)
+	config = Config{} //// clears
+	doconfigtestbool(t, string(rootDir),
+		"ClosePreventDelete: true\n",
+		&config,
+		&config.ClosePreventDelete,
+		true)
+	config = Config{} //// clears
+	doconfigtestbool(t, string(rootDir),
+		"\n",
+		&config,
 		&config.IdAbbreviate,
 		false)
 	config = Config{} //// clears

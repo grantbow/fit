@@ -88,7 +88,7 @@ func TestCreateWithoutIssues(t *testing.T) {
 
 // Test a very basic invocation of "Create" with the -n
 // argument. We can't yet try it without -n, since it means
-// an editor will be spawned..
+// an editor will be spawned.
 func TestCreateNoEditor(t *testing.T) {
 	config := bugs.Config{}
 	config.DescriptionFileName = "Description"
@@ -151,7 +151,8 @@ func TestCreateNoEditor(t *testing.T) {
 	}
 
 	///// second issue
-	config.DefaultDescriptionFile = dir + sops + "ddf" // put ABOVE issues so len(issuesDir) check later is unaltered
+	config.DefaultDescriptionFile = dir + sops + "ddf"
+    // put this ABOVE issues so len(issuesDir) check later is unaltered
 	ioutil.WriteFile(config.DefaultDescriptionFile,
 		[]byte("text used in default description file (ddf) issue template"), 0755)
 
@@ -162,7 +163,7 @@ func TestCreateNoEditor(t *testing.T) {
 		t.Error("Unexpected output on STDERR for Test2-bug")
 	}
 	if stdout != "Created issue: Test2 bug\n" {
-		t.Error("Unexpected output on STDOUT for Test2-bug")
+		t.Error("Unexpected output on STDOUT for Test2-bug: " + stdout)
 	}
 	issuesDir, err = ioutil.ReadDir(fmt.Sprintf("%s%s%s%s", dir, sops, config.FitDirName, sops))
 	if err != nil {

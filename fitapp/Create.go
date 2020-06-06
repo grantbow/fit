@@ -34,8 +34,8 @@ func Create(Args argumentList, config bugs.Config) {
 	//fmt.Print("a\n")
 	if len(Args) < 1 || (len(Args) < 2 && Args[0] == "-n") {
 		//fmt.Print("b\n")
-		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] <Bug Description>\n", os.Args[0])
-		fmt.Fprintf(os.Stderr, "\nNo Bug Description provided.\n")
+		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] <Bug Title>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "\nNo bug title provided.\n")
 		return
 	}
 	var noDesc bool = false
@@ -70,8 +70,8 @@ func Create(Args argumentList, config bugs.Config) {
 	// It's possible there were arguments provided, but still no title
 	// included. Do another check before trying to create the bug.
 	if strings.TrimSpace(strings.Join(Args, " ")) == "" {
-		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] <Bug Description>\n", os.Args[0])
-		fmt.Fprintf(os.Stderr, "\nNo Bug Description provided.\n")
+		fmt.Fprintf(os.Stderr, "Usage: %s create [-n] <Bug Title>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "\nNo bug title provided.\n")
 		return
 	}
 	var bgid = bugs.FitDirer(config)

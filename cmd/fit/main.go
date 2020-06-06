@@ -16,6 +16,7 @@ func main() {
 	config.ProgramVersion = fitapp.ProgramVersion()
 	config.DescriptionFileName = "Description"
 	config.FitDirName = "fit"
+	config.FitClosedDirName = "closed"
 	rootPresent := false
 	skip := fitapp.SkipRootCheck(&os.Args) // too few args or help or env
 

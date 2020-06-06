@@ -197,17 +197,17 @@ fit directory. Current options include:
           Default is "Description".
           The name is one of the few imposed limitations.
           This configuration allows overriding the name used in your system.
-	* TagKeyValue: true or false
+    * TagKeyValue: true or false
           Default is false.
           writes tags in tag_key_value format (true)
           rather than .../tag/key without values.
           tags in both forms are read automatically.
-	* NewFieldAsTag: true or false
+    * NewFieldAsTag: true or false
           Default is false.
           writes fields in tag_key_value format (true)
           rather than .../Key file with value in the text.
           fields in both forms are read automatically.
-	* NewFieldLowerCase: true or false
+    * NewFieldLowerCase: true or false
           Default is false.
           writes fields as tag_key_value format (true)
           rather than .../tag_Key_value.
@@ -233,15 +233,28 @@ fit directory. Current options include:
           always recursive when possible
     * CloseStatusTag: true or false
           Default is false.
-	      fit close will delete (false) or
-          fit close will tag_status_close (true)
+          fit close will not add a tag (false) or
+          add tag_status_closed (true)
+    * CloseMove: true or false
+          Default is false.
+          fit close will use ClosePreventDelete (false) or
+          fit close will move issues to CloseDir (true) and
+              sets ClosePreventDelete=true
+    * FitClosedDirName: string
+          Default is "closed"
+          this is the name used inside the fit directory
+    * ClosePreventDelete: true or false
+          Default is false.
+          fit close will delete (false) or
+          fit close will not delete (true)
+              implies CloseStatusTag and/or CloseMove
     * IdAbbreviate: true or false
           Default is false.
           Use Identifier.
     * IdAutomatic: true or false
           Default is false.
           Use Identifier.
-          
+
 Other issue systems may use databases, hidden directories or hidden branches.
 While these may be useful techniques in certain circumstances this seems to
 unnecessarily obfuscate access.

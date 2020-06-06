@@ -41,6 +41,7 @@ func TestPurgeNoEditor(t *testing.T) {
 		log.Fatal(err)
 	}
 
+    // Create
 	stdout, stderr := captureOutput(func() {
 		Create(argumentList{"-n", "Test", "bug"}, config)
 	}, t)
@@ -48,8 +49,8 @@ func TestPurgeNoEditor(t *testing.T) {
 		t.Error("Unexpected error: " + stderr)
 	}
 	if stdout != "Created issue: Test bug\n" {
-		t.Error("Unexpected output on STDOUT")
 		fmt.Printf("Expected: %s\nGot %s\n", "", stdout)
+		t.Error("Unexpected output on STDOUT")
 	}
 	issuesDir, err := ioutil.ReadDir(fmt.Sprintf("%s%s%s%s", dir, sops, config.FitDirName, sops))
 	if err != nil {
@@ -60,6 +61,10 @@ func TestPurgeNoEditor(t *testing.T) {
 		t.Errorf("Expected 1 issue  : %v\n", dirDumpFI(issuesDir))
 	}
 
+    // Create does not automatically Commit
+    //Commit(argumentList{}, config)
+
+    // Purge
 	stdout, stderr = captureOutput(func() {
 		Purge(config)
 	}, t)
@@ -75,8 +80,8 @@ func TestPurgeNoEditor(t *testing.T) {
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)
 	if !matched {
-		t.Error("Unexpected output on STDOUT")
 		fmt.Printf("Expected: %s\nGot %s\n", expected, stdout)
+		t.Error("Unexpected output on STDOUT")
 	}
 	if len(issuesDir) != 0 {
 		t.Errorf("Expected 0 issues : %v\n", dirDumpFI(issuesDir))
