@@ -94,6 +94,10 @@ func Create(Args argumentList, config bugs.Config) {
 		log.Fatal(err)
 	}
 	DescriptionFile := string(dir) + sops + config.DescriptionFileName
+	//DescriptionFile := config.DescriptionFileName
+	//if string(dir) != "" {
+	//	DescriptionFile = string(dir) + sops + config.DescriptionFileName
+	//} // might fix a cygwin issue
 	if noDesc {
 		txt := []byte("")
 		if config.DefaultDescriptionFile != "" {
