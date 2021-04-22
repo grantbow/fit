@@ -127,6 +127,10 @@ This will add to your $HOME/.gitconfig or you can edit it manually:
 Settings can be read from an optional config file .fit.yml placed next to the
 fit directory. Current options include:
 
+    * DescriptionFileName: string
+          Default is "Description".
+          The name is one of the few imposed limitations.
+          This configuration allows overriding the name used in your system.
     * DefaultDescriptionFile: string,
           Default is ""
           when doing fit {add|new|create}
@@ -140,13 +144,8 @@ fit directory. Current options include:
           during import, commments save together as one file
           instead of one comment per file.
     * ProgramVersion: string
-          Default is ""
-          String appended to the version of the program to
-          identify customization.
-    * DescriptionFileName: string
-          Default is "Description".
-          The name is one of the few imposed limitations.
-          This configuration allows overriding the name used in your system.
+          Default is "". Set to 0.6 when run. This
+          string is appended to identify local customizations.
     * TagKeyValue: true or false
           Default is false.
           writes tags in tag_key_value format (true)
@@ -180,7 +179,7 @@ fit directory. Current options include:
           base url used in notifications
     * MultipleFitDirs: true or false
           Default is false.
-          always recursive when possible
+          Set to always look recursive.
     * CloseStatusTag: true or false
           Default is false.
           fit close will not add a tag (false) or
@@ -200,10 +199,10 @@ fit directory. Current options include:
               implies CloseStatusTag and/or CloseMove
     * IdAbbreviate: true or false
           Default is false.
-          Use Identifier.
+          Use Identifier. True uses Id.
     * IdAutomatic: true or false
           Default is false.
-          Use Identifier.
+          Generates an Identifier.
 
 Other issue systems may use databases, hidden directories or hidden branches.
 While these may be useful techniques in certain circumstances this seems to
