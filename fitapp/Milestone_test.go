@@ -18,7 +18,7 @@ func runmiles(args argumentList, expected string, t *testing.T) {
 		Milestone(args, config)
 	}, t)
 	if stderr != "" {
-		t.Error("Unexpected error: " + stderr)
+		t.Error("Unexpected runmiles error: " + stderr)
 	}
 	re := regexp.MustCompile(expected)
 	matched := re.MatchString(stdout)

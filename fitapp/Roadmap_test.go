@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 	"testing"
+	"time"
 )
 
 //var dops = bugs.Directory(os.PathSeparator)
@@ -39,7 +40,7 @@ func TestRoadmapLess(t *testing.T) {
 		Create(argumentList{"-n", "Test1bug"}, config)
 	}, t)
 	if stderr != "" || stdout != expected {
-		t.Error("Unexpected err/out create 1")
+		t.Error("Unexpected output/err create 1")
 		fmt.Printf("Expected stdout: %s\nGot: %s\n", expected, stdout)
 		fmt.Printf("Expected stderr: %s\nGot: %s\n", "", stderr)
 	}
@@ -49,12 +50,13 @@ func TestRoadmapLess(t *testing.T) {
 		Create(argumentList{"-n", "Test2bug"}, config)
 	}, t)
 	if stderr != "" || stdout != expected {
-		t.Error("Unexpected error/out create 2")
+		t.Error("Unexpected output/error create 2")
 		fmt.Printf("Expected stdout: %s\nGot: %s\n", expected, stdout)
 		fmt.Printf("Expected stderr: %s\nGot: %s\n", "", stderr)
 	}
 	// milestones
 	runmiles(argumentList{"1", "v1.0"}, "", t)
+	time.Sleep(3 * time.Second)
 	runmiles(argumentList{"2", "v2.0"}, "", t)
 	// roadmap
 	expected = `# Roadmap for .*
@@ -75,9 +77,13 @@ func TestRoadmapLess(t *testing.T) {
 	}, t)
 	matched := re.MatchString(stdout)
 	if stderr != "" || !matched {
-		t.Error("Unexpected error/out roadmap")
-		fmt.Printf("Expected stdout: %s\nGot: %s\n", expected, stdout)
-		fmt.Printf("Expected stderr: %s\nGot: %s\n", "", stderr)
+		t.Error("Unexpected out/error of roadmap")
+        if !matched {
+            fmt.Printf("Expected stdout:\n%s\nGot:\n%s\n", expected, stdout)
+        }
+        if stderr != "" {
+            fmt.Printf("Expected stderr:\n%s\nGot:\n%s\n", "", stderr)
+        }
 	}
 	os.Chdir(pwd)
 }

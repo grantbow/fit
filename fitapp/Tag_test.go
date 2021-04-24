@@ -100,14 +100,6 @@ func TestTag(t *testing.T) {
 	runtag(argumentList{}, "", t) // no cmd as argument
 	// add
 	runtag(argumentList{"1", "foo"}, "", t) // no cmd as argument
-	// force it to test when runmiles doesn't work
-	//val := []byte("foo\n")
-	//fmt.Println(ioutil.WriteFile(string(gdir)+sops+config.FitDirName+sops+"no_tag_bug"+sops+"Tag", []byte(val), 0644))
-	// check
-	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s%s%s%sno_tag_bug%stags", gdir, sops, sops, sops))
-	//fmt.Printf("readdir len %#v\n", len(bugDir))
-	//fmt.Printf("readdir %#v\n", bugDir[0])
-	//fmt.Printf("readdir %#v\n", bugDir[1])
 	// after
 	runfind(argumentList{"tags", "foo"}, "Issue 1: no_tag_bug \\(foo\\)\n", t)                                              // boolean flags not tags
 	_, err = ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_tag_bug%stags%sfoo", gdir, sops, config.FitDirName, sops, sops, sops)) // file is empty

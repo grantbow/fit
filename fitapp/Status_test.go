@@ -64,14 +64,6 @@ func TestStatus(t *testing.T) {
 	runfind(argumentList{"status", "foo"}, "", t)
 	// add
 	runstatus(argumentList{"1", "foo"}, "", t) // no cmd as argument
-	// force it to test when runmiles doesn't work
-	//val := []byte("foo\n")
-	//fmt.Println(ioutil.WriteFile(string(gdir)+sops+config.FitDirName+sops+"no_status_bug"+sops+"Status", []byte(val), 0644))
-	// check
-	//bugDir, _ := ioutil.ReadDir(fmt.Sprintf("%s%s%s%sno_status_bug", gdir, sops, config.FitDirName, sops))
-	//fmt.Printf("readdir len %#v\n", len(bugDir))
-	//fmt.Printf("readdir %#v\n", bugDir[0])
-	//fmt.Printf("readdir %#v\n", bugDir[1])
 	// after
 	runfind(argumentList{"status", "foo"}, "Issue 1: no_status_bug \\(Status: foo\\)\n", t)
 	file, err := ioutil.ReadFile(fmt.Sprintf("%s%s%s%sno_status_bug%sStatus", gdir, sops, config.FitDirName, sops, sops))
