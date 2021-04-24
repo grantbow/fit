@@ -34,8 +34,8 @@ func Close(args argumentList, config bugs.Config) {
 	}
 	for _, dir := range bugsToClose {
 		if config.CloseMove {
-			fmt.Printf("Moving %s to %s\n", dir, config.FitClosedDirName)
-			err := os.Rename(dir, config.FitClosedDirName + sops + dir )
+			fmt.Printf("Moving %s to %s\n", dir, config.ClosedDirName)
+			err := os.Rename(dir, config.ClosedDirName + sops + dir )
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Error renaming %s : %s\n", dir, err.Error())
 			}

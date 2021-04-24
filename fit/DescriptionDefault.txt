@@ -1,6 +1,7 @@
 #### What did you do?
 <Facts are preferred. Complete, minimal examples are ideal.>
 <If possible, provide a recipe for reproducing the error or behavior.>
+<Replace any personally identifiable information. i.e. username with <user>>
 
 
 #### What did you see?

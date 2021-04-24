@@ -55,8 +55,8 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 		wantRecursive = true
 	}
 
-	//fmt.Printf("debug topRecurse %v wantRecursive %v config.MultipleFitDirs %v \n", topRecurse, wantRecursive, config.MultipleFitDirs == true)
-	if topRecurse == true && (wantRecursive == true || config.MultipleFitDirs == true) {
+	//fmt.Printf("debug topRecurse %v wantRecursive %v config.MultipleDirs %v \n", topRecurse, wantRecursive, config.MultipleDirs == true)
+	if topRecurse == true && (wantRecursive == true || config.MultipleDirs == true) {
 		// print warning if below the .git directory
 		//fmt.Printf("debug config.FitDir %v len %v config.ScmDir %v len %v\n",
 		//	config.FitDir, len(config.FitDir),
@@ -96,7 +96,7 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 	} else if len(args) == 0 || (wantTags && len(args) == 1) || // --regex alone makes no sense
 		(wantRecursive && len(args) == 1) ||
 		(wantTags && wantRecursive && len(args) == 2) ||
-		config.MultipleFitDirs == true {
+		config.MultipleDirs == true {
 		// No parameters, print a list of all bugs
 		//os.Stdout = stdout
 		foundsome := 0
@@ -110,7 +110,7 @@ func List(args argumentList, config bugs.Config, topRecurse bool) {
 		if foundsome == 0 {
 			fmt.Printf("   << found no issues >>\n")
 		}
-		if topRecurse == true && (wantRecursive || config.MultipleFitDirs == true) {
+		if topRecurse == true && (wantRecursive || config.MultipleDirs == true) {
 			fi, _ := os.Stat(config.FitDir)
 			//if fierr != nil {
 			//	panic(fierr)

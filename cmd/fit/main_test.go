@@ -31,10 +31,10 @@ type Config struct {
 	TwilioAuthToken           string `json:"TwilioAuthToken"`
 	TwilioPhoneNumberFrom     string `json:"TwilioPhoneNumberFrom"`
 	FitSite                   string `json:"FitSite"`
-	MultipleFitDirs           bool   `json:"MultipleFitDirs"`
+	MultipleDirs              bool   `json:"MultipleDirs"`
 	CloseStatusTag            bool   `json:"CloseStatusTag"`
 	CloseMove                 bool   `json:"CloseMove"`
-	FitClosedDirName          string `json:"FitClosedDirName"`
+	ClosedDirName             string `json:"ClosedDirName"`
 	ClosePreventDelete        bool   `json:"ClosePreventDelete"`
 	IdAbbreviate              bool   `json:"IdAbbreviate"`
 	IdAutomatic               bool   `json:"IdAutomatic"`

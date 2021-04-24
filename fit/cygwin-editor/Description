@@ -1,0 +1,20 @@
+#### What did you do?
+
+$ fit create -n test
+$ fit edit 1
+
+#### What did you see?
+
+Editing C:\cygwin64\home\<user>\go\src\github.com\<user>\fit\fit\warn-accuracy\Description
+2021/04/24 15:10:20 exec: "/cygdrive/c/cygwin64/bin/vim": file does not exist
+
+I tried several EDITOR values like /usr/bin/vi. In cygwin /usr/bin is usually
+redirected to /bin.
+
+#### What did you expect to see?
+
+user EDITOR environment variable to exec the editor on the Description of the issue.
+
+#### What version?
+0.6
+

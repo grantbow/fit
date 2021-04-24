@@ -25,9 +25,11 @@ filesystem issue tracker: manages plain text issues with git or mercurial
 
 ## Prerequisites
 
-    git or hg (mercurial)
+git or hg (mercurial)
 
-    golang
+golang 1.12 or higher
+
+linux, mac or windows OS.
 
 ## Goal
 
@@ -42,7 +44,7 @@ work. See ([Background](#background)) for an explanation.
 
 ### Layout
 
-Filesystem Issue Tracker ([FIT.md](FIT.md)) conventions/format are a set of
+Filesystem Issue Tracker ([Filesystem_Issues.md](Filesystem_Issues.md)) conventions/format are a set of
 suggestions for storing issues, one directory/folder per issue with plain text
 file details.
 
@@ -125,11 +127,18 @@ This will add to your $HOME/.gitconfig or you can edit it manually:
     issue = !/home/<user>/go/bin/fit
 ```
 
-
 ### Configuration
 
-Settings can be read from an optional config file .fit.yml placed next to the
-fit directory. Current options include:
+The environment variable EDITOR is used to execute your preferred editor
+when needed.
+
+An important choice is what to do with closed issues. They can be deleted
+(the historical default), moved to a subdirectory "closed" or
+add a tag\_status\_closed.
+
+Settings can be read from .fit.yml next to the fit directory.
+This is an optional config file. Defaults are backwards compatible with
+the original bug program so far. Current options include:
 
     * DescriptionFileName: string
           Default is "Description".
@@ -181,7 +190,7 @@ fit directory. Current options include:
     * FitSite: string
           Default is empty.
           base url used in notifications
-    * MultipleFitDirs: true or false
+    * MultipleDirs: true or false
           Default is false.
           Set to always look recursive.
     * CloseStatusTag: true or false
@@ -193,7 +202,7 @@ fit directory. Current options include:
           fit close will use ClosePreventDelete (false) or
           fit close will move issues to CloseDir (true) and
               sets ClosePreventDelete=true
-    * FitClosedDirName: string
+    * ClosedDirName: string
           Default is "closed"
           this is the name used inside the fit directory
     * ClosePreventDelete: true or false
@@ -211,6 +220,19 @@ fit directory. Current options include:
 Other issue systems may use databases, hidden directories or hidden branches.
 While these may be useful techniques in certain circumstances this seems to
 unnecessarily obfuscate access.
+
+Tags have been significantly enhanced since they were originally implemented.
+Using the above options the default behavior of boolean present/not present
+file names in a "tags" subdirectory can instead be filenames like Status that
+contain the values or even simple tag\_key\_value filenames with empty contents
+or comment contents. The last option enables great flexibility. A few keys are
+hard coded in the program with special features: Identifier, Priority, Status,
+Milestone, Tag.
+
+As every bug system operates within the context of a number of people that use
+the system efforts have been made in the code to support as many system choices
+as reasonably possible. Comments and suggestions are welcomed. Pull requests
+are even better but are not required to participate in this project.
 
 ### Hooks
 
@@ -230,8 +252,8 @@ Usage: help <command>
 
 Use "fit help <command>" or "fit <command> help" for
 more information about any command below.
-fit version 0.6 built using go1.12.6 GOOS android
-executable: -rwx------ 8749028 Sat Jun 22 10:19:54 PDT 2019 /data/data/com.termux/files/home/go/bin/fit
+fit version 0.6 built using go1.16.6 GOOS android
+executable: -rwx------ 8749028 Sat Jun 22 10:19:54 PDT 2021 /data/data/com.termux/files/home/go/bin/fit
 
 Status/reading commands:
     list       List issues
@@ -295,12 +317,12 @@ Issue 2: Need better formating for README
 ## History
 
 fit is the golang program first developed as "bug" by Dave MacFarlane (driusan).
-Filesystem Issue Tracker ([FIT.md](FIT.md)) is the new name for the Poor Man's
+Filesystem Issue Tracker ([Filesystem_Issues.md](Filesystem_Issues.md)) is the new name for the Poor Man's
 Issue Tracker (PMIT) storage system also first developed by driusan. For his
 demo from 2016, see [driusan's
 talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
 GolangMontreal.org conference, GoMTL-01. The program and storage system have
-evolved while trying to remain backward compatible. See the [FAQ.md](FAQ.md)
+evolved while trying to remain backward compatible. See the docs/[FAQ.md](FAQ.md)
 for more information.
 
 ## Background
@@ -320,13 +342,13 @@ more well exercised.
 fit is designed to adapt to your processes using issue key/value pair metadata.
 
 The fit too manages issues using conventions/format of
-Filesystem Issue Tracker (see [FIT.md](FIT.md)). A `fit/` or `issues/`
+Filesystem Issue Tracker (see [Filesystem_Issues.md](Filesystem_Issues.md)). A `fit/` or `issues/`
 directory holds one descriptively titled directory per issue. Each directory 
 holds a Description (name is configurable) text file and anything else needed.
 
 At first people may naturally try to keep track of issues in a single text
 file and/or spreadsheet but these can fail to meet project needs.
-(see [FAQ.md](FAQ.md))
+(see docs/[FAQ.md](FAQ.md))
 
 Issue context is valuable to coders and may be difficult for others to
 understand. fit also supports multiple `fit/` directories in the
@@ -380,8 +402,8 @@ researching a user reported problem or may arise any time while coding.
 
 ## Next Steps
 
-* [FIT.md](FIT.md)
-* [FAQ.md](FAQ.md)
+* docs/[Filesystem_Issues.md](Filesystem_Issues.md)
+* docs/[FAQ.md](FAQ.md)
 * [CONTRIBUTING.md](CONTRUBUTING.md)
 * [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 * [SUPPORT.md](SUPPORT.md)
@@ -390,7 +412,7 @@ researching a user reported problem or may arise any time while coding.
 
 Your system is the beginning, not the end. Much has been written about how to
 use and setup systems to track or manage issues, software bugs, trouble
-tickets, support tickets, incident tickets or requests. See the FAQ.md
+tickets, support tickets, incident tickets or requests. See the docs/FAQ.md
 
 ### Feedback
 

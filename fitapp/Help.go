@@ -216,6 +216,8 @@ alias for commit: save
 
 Use this command if you want to see settings what directory "fit create" is
 using to store issues, or what editor will be invoked for a create/edit.
+
+aliases for env: environment config settings
 `)
 
 	case "pwd", "dir", "cwd":
@@ -374,4 +376,5 @@ aliases for help: --help -h
 
 `)
 	}
+    // see issues/Config.go for comments when adding commands or configs
 }

@@ -60,11 +60,11 @@ A: While it took some work, overloading naming conflicts for users and for the
        most natural choice to reduce future ambiguity.
    Submodule bugapp was changed to fitapp.
 
-Q: Why change the name from PMIT to [FIT](FIT.md)?
+Q: Why change the environment variable name from PMIT to FIT?
 A: bug was the program written in Go. PMIT was the original name of the storage
-   system. [FIT](FIT.md) is the new name for the system that stores the
-   issues. Dave MacFarlane (driusan) created bug and PMIT. The combination
-   of flat files with was fantastic and just what needed to be created.
+   system. [Filesystem_Issues](Filesystem_Issues.md) is the new name for the system
+   that stores the issues. Dave MacFarlane (driusan) created bug and PMIT.
+   The combination of flat files with was fantastic and just what needed to be created.
 
    Several assumptions are built into bug and PMIT that do not meet all needs.
    Therefore fit has extended bug by writing or rewriting code to handle things
@@ -84,9 +84,9 @@ A: bug was the program written in Go. PMIT was the original name of the storage
    is still applicable description in two ways.
 
    First, PMIT and file system issue systems are much less expensive to set up
-   and use. Ease of setup is an inherent benefit of [FIT](FIT.md).
+   and use. Ease of setup is an inherent benefit of filesystem issues.
    Unfortunately the "poor man's" idiom can also be used to indicate that an
-   entity is a faximile of an original entity but is not as talented or
+   entity is a facsimile of an original entity but is not as talented or
    successful. This feels wrong to me because using a filesystem is in some
    ways more talented than other systems and could become very successful in
    the future.
@@ -172,7 +172,7 @@ A: `Jobs` are the reasons for your issues you track. This term is inspired by
 
    Jobs are the needs big enough to do something about or hire someone.
 
-   There are many reasons to organize issues. The uses of a [FIT](FIT.md) storage system
+   There are many reasons to organize issues. The uses of a [Filesystem_Issues](Filesystem_Issues.md) storage system
    could be varied. In today's fast paced environments tasks must queue up if
    there is more to do than currently possible without more resources. Things
    can get missed if not recorded accurately.
@@ -218,7 +218,7 @@ A: Yes. Recording shared understandings can be difficult even when a system
    underlying causes. Tools need to change as problems are more clearly
    understood.
 
-Q: What inspired [FIT](FIT.md) and what does it compare and contrast with?
+Q: What inspired [Filesystem_Issues](Filesystem_Issues.md) and what does it compare and contrast with?
 A: There are some impressive options out there available as open source
    software, commercial software and SAAS cloud services providing solutions
    tracking many different kinds of issues. There are no shortage of
@@ -416,7 +416,7 @@ A: The alternatives to good IT project practices are are all too common, in IT
    notice things will often not say anything, so when they do it's best to
    record the ideas they have so everyone has a better chance of providing the
    best project outcome possible. These issues need to be recorded immediately
-   using any available device. Using [FIT](FIT.md) conventions supports this
+   using any available device. Using [Filesystem_Issues](Filesystem_Issues.md) conventions supports this
    using your present tools to capture valuable notes and ideas. The fit tool
    manages them. Specialized, high maintenance issue systems officially
    provided to project team members are not appropriate for collecting all

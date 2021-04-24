@@ -1,0 +1,87 @@
+.TH fit 1
+.SH NAME
+fit \- filesystem issue tracker, manage plain text issues directories
+.SH SYNOPSIS
+.B fit
+[\fB\-\-help\fR \fIcommand\fR]
+.IR command \fR[options] ...
+.SH DESCRIPTION
+.B fit
+manage plain text issues directories with git and hg (mercurial) using Filesystem Issues format.
+.SH CONFIGURATION
+.\
+.PP .fit.yml contains values that change the way fit behaves.
+.\
+.SH OPTIONS
+.\
+.PP Each command has a help subcommand with further details.
+.\
+.PP Status/reading commands
+.\
+.TP
+.BR list \fR[\fIid\fR]
+List existing issues, all or a subset with one of several types of identifiers.
+.TP
+.BR find \fR[\fIid\fR]
+Search issues for a tag, status, priority, or milestone
+.TP
+.BR env
+Show settings that fit will use if invoked from this directory
+.TP
+.BR pwd
+Prints the issues directory to stdout (useful subcommand in the shell)
+.TP
+.BR version
+Print the version of this software
+.TP
+.BR help \fR[\fIcommand\fR]
+Show help for all commands. If a command is provided show just that command's help.
+.\
+.PP Issue editing commands:
+.\
+.TP
+.BR create \fR[\fI\-n <title>\fR]
+Report a new issue and open the default editor for Description. If -n is provided the text is used as the title, Description is blank and no editor is launched.
+.TP
+.BR edit
+Edit an existing issue
+.TP
+.BR tag
+Tag an issue with a category
+.TP
+.BR identifier
+Set a stable identifier for the issue
+.TP
+.BR relabel
+Rename the title of an issue
+.TP
+.BR close
+Delete an existing issue
+.TP
+.BR status
+View or edit an issue's status
+.TP
+.BR priority
+View or edit an issue's priority
+.TP
+.BR milestone
+View or edit an issue's milestone
+.TP
+.BR import
+Create local issues from other issue trackers
+.\
+.PP Version control commands:
+.\
+.TP
+.BR commit
+Commit any new, changed or deleted issues to git or hg
+.TP
+.BR purge
+Remove all issues not tracked by git or hg
+.\
+.PP Other commands:
+.\
+.TP
+.BR roadmap
+Print a list of issues sorted by milestone
+

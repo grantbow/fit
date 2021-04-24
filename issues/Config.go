@@ -56,13 +56,13 @@ type Config struct {
 	//* base url for notifications
 	FitSite string `json:"FitSite"`
 	// fit directories always recursive (true) or need -r cli option (false, default)
-	MultipleFitDirs bool `json:"MultipleFitDirs"`
+	MultipleDirs bool `json:"MultipleDirs"`
 	// close will add tag_status_close (true) or not (false, default)
 	CloseStatusTag bool `json:"CloseStatusTag"`
 	// close will move (true, sets ClosePreventDelete=true) or not (false, default)
 	CloseMove bool `json:"CloseMove"`
 	// if using CloseMove this is inside FitDir
-	FitClosedDirName string `json:"FitClosedDirName"`
+	ClosedDirName string `json:"ClosedDirName"`
 	// close will prevent delete (true) or not (false), implies CloseMove or CloseStatusTag
 	ClosePreventDelete bool `json:"ClosePreventDelete"`
 	// Abbreviate Identifier as Id (true) or use Identifier (false, default)
@@ -75,12 +75,12 @@ type Config struct {
 list of places for
 creating new commands
 and where the help output is modeled:
-    * bugapp/Help.go   // case lines
+    * fitapp/Help.go   // case lines
                        // alias line at bottom of each long description
                        // help output at bottom of the file
     * cmd/fit/main.go  // case lines
     * README.md        // includes help output generated from bottom of Help.go file, collected by running program
-    * docs/FIT.md
+    * docs/Filesystem_Issues.md
     * docs/FAQ.md
 
 list of places for
@@ -93,7 +93,7 @@ creating new configs:
     * README.md        // includes config descriptions
                        // like comments from issues.Config struct file
     * use and testing of commands that use the config as necessary
-    * as necessary docs/FIT.md, docs/FAQ.md and bugapp/Help.go
+    * as necessary docs/Filesystem_Issues.md, docs/FAQ.md and fitapp/Help.go
 
 synchronize
 
@@ -203,12 +203,12 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 		} else {
 			c.FitSite = ""
 		}
-		//* MultipleFitDirs: true or false,
+		//* MultipleDirs: true or false,
 		//      Default false, need to use -r cli option
-		if temp.MultipleFitDirs {
-			c.MultipleFitDirs = true
+		if temp.MultipleDirs {
+			c.MultipleDirs = true
 		} else {
-			c.MultipleFitDirs = false
+			c.MultipleDirs = false
 		}
 		//* CloseStatusTag: true or false,
 		//      Default false, don't set the tag
@@ -225,10 +225,10 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 			c.CloseMove = false
 		}
 		//
-		if temp.FitClosedDirName != "" {
-			c.FitClosedDirName = temp.FitClosedDirName
+		if temp.ClosedDirName != "" {
+			c.ClosedDirName = temp.ClosedDirName
 		} else {
-			c.FitClosedDirName = "closed"
+			c.ClosedDirName = "closed"
 		}
 		//* ClosePreventDelete: true or false,
 		//      Default false, deletes
@@ -277,10 +277,10 @@ TwilioAccountSid:
 TwilioAuthToken:
 TwilioPhoneNumberFrom:
 FitSite: https://github.com/<you>/<proj>/tree/master/<proj>/
-MultipleFitDirs: false
+MultipleDirs: false
 CloseStatusTag: false
 CloseMove: false
-FitClosedDirName: closed
+ClosedDirName: closed
 ClosePreventDelete: false
 IdAbbreviate: false
 IdAutomatic: true

@@ -195,6 +195,8 @@ func SkipRootCheck(args *[]string) bool {
 			(*args)[1] == "--version" ||
 			(*args)[1] == "-v" ||
 			(*args)[1] == "environment" ||
+			(*args)[1] == "config" ||
+			(*args)[1] == "settings" ||
 			(*args)[1] == "env" {
 			ret = true
 		}

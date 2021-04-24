@@ -16,9 +16,9 @@ func main() {
 	config.ProgramVersion = fitapp.ProgramVersion()
 	config.DescriptionFileName = "Description"
 	config.FitDirName = "fit"
-	config.FitClosedDirName = "closed"
 	rootPresent := false
 	skip := fitapp.SkipRootCheck(&os.Args) // too few args or help or env
+                   // see fitapp/utils.go
 
 	// detect scm first to determine backup location for .fit.yml
 	scmoptions := make(map[string]bool)
@@ -145,7 +145,7 @@ func main() {
 			fitapp.IdsAssigned(config)
 		case "noids", "noid", "noidentifiers", "noidentifier":
 			fitapp.IdsNone(config)
-		case "env", "environment":
+		case "env", "environment", "config", "settings":
 			fitapp.Env(config)
 		case "pwd", "dir", "cwd":
 			fitapp.Pwd(config)

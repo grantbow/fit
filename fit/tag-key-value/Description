@@ -1,13 +1,19 @@
 #### What did you do?
-bug tag 1 Status closed
+fit create -n issue one
+fit tag 1 Status closed
 
 #### What did you expect to see?
-create file Status with closed or
-create file tag_status_closed
+create file fit/issue_one/Status with "closed" content or
+create file fit/issue_one/tag_status_closed
 
 
 #### What did you see instead?
-bug tag command adds true values
+The fit tag command now adds true values as originally implemented.
+Fit tag command creattes empty files by default in the tags directory.
+
+    $ls fit/issue_one/tags/
+    Status  closed
+
 and with --rm removes boolean tags.
 
 #### What version?
