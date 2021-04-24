@@ -89,12 +89,14 @@ latest version of fit with:
 `GO111MODULE=on go install github.com/grantbow/fit`
 
 If that does not work in one command then:
-    export GO111MODULE=on
-    cd $GOPATH/src/github.com/grantbow/fit/cmd/fit
+```
+    export GO111MODULE=on;
+    cd $GOPATH/src/github.com/grantbow/fit/cmd/fit;
     go install
+```
 
-This will create the binary $GOPATH/src/github.com/grantbow/fit/cmd/fit/fit(.exe)
-and move it to $GOPATH/bin/fit
+This will create the binary $GOPATH/src/github.com/grantbow/fit/cmd/fit/fit(.exe)  
+and move it to $GOPATH/bin/fit(.exe)
 
 Make sure `$GOPATH/bin` or `$GOBIN` are in your path or you can copy
 the "fit" binary somewhere that is in your path.
@@ -110,16 +112,18 @@ aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) describes how
 to set them up very well. It is part of the Pro Git book available for free
 online. You can quickly add the alias to your .gitconfig:
 
-`git config --global alias.fit !/home/<user>/go/bin/fit`
-`git config --global alias.issue !/home/<user>/go/bin/fit`
+`git config --global alias.fit !/home/<user>/go/bin/fit`  
+`git config --global alias.issue !/home/<user>/go/bin/fit`  
 
-Note: cygwin users use !/cygdrive/c/Users/<user>/go/bin/fit.exe
+Note: cygwin users use !/cygdrive/c/Users/\<user\>/go/bin/fit.exe
 
 This will add to your $HOME/.gitconfig or you can edit it manually:
 
-`[alias]
-    fit = !/home/<user>/go/bin/fit
-    issue = !/home/<user>/go/bin/fit`
+```
+[alias]  
+    fit = !/home/<user>/go/bin/fit  
+    issue = !/home/<user>/go/bin/fit
+```
 
 
 ### Configuration
