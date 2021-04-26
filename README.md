@@ -44,7 +44,7 @@ work. See ([Background](#background)) for an explanation.
 
 ### Layout
 
-Filesystem Issue Tracker ([Filesystem_Issues.md](Filesystem_Issues.md)) conventions/format are a set of
+Filesystem Issue Tracker conventions/format ([Filesystem_Issues.md](docs/Filesystem_Issues.md)) are a set of
 suggestions for storing issues, one directory/folder per issue with plain text
 file details.
 
@@ -402,8 +402,8 @@ researching a user reported problem or may arise any time while coding.
 
 ## Next Steps
 
-* docs/[Filesystem_Issues.md](Filesystem_Issues.md)
-* docs/[FAQ.md](FAQ.md)
+* docs/[Filesystem_Issues.md](docs/Filesystem_Issues.md)
+* docs/[FAQ.md](docs/FAQ.md)
 * [CONTRIBUTING.md](CONTRUBUTING.md)
 * [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 * [SUPPORT.md](SUPPORT.md)
