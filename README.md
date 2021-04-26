@@ -317,12 +317,12 @@ Issue 2: Need better formating for README
 ## History
 
 fit is the golang program first developed as "bug" by Dave MacFarlane (driusan).
-Filesystem Issue Tracker ([Filesystem_Issues.md](Filesystem_Issues.md)) is the new name for the Poor Man's
+Filesystem Issue Tracker ([Filesystem_Issues.md](docs/Filesystem_Issues.md)) is the new name for the Poor Man's
 Issue Tracker (PMIT) storage system also first developed by driusan. For his
 demo from 2016, see [driusan's
 talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
 GolangMontreal.org conference, GoMTL-01. The program and storage system have
-evolved while trying to remain backward compatible. See the docs/[FAQ.md](FAQ.md)
+evolved while trying to remain backward compatible. See the docs/[FAQ.md](docs/FAQ.md)
 for more information.
 
 ## Background
@@ -342,13 +342,13 @@ more well exercised.
 fit is designed to adapt to your processes using issue key/value pair metadata.
 
 The fit too manages issues using conventions/format of
-Filesystem Issue Tracker (see [Filesystem_Issues.md](Filesystem_Issues.md)). A `fit/` or `issues/`
+Filesystem Issue Tracker (see [Filesystem_Issues.md](docs/Filesystem_Issues.md)). A `fit/` or `issues/`
 directory holds one descriptively titled directory per issue. Each directory 
 holds a Description (name is configurable) text file and anything else needed.
 
 At first people may naturally try to keep track of issues in a single text
 file and/or spreadsheet but these can fail to meet project needs.
-(see docs/[FAQ.md](FAQ.md))
+(see docs/[FAQ.md](docs/FAQ.md))
 
 Issue context is valuable to coders and may be difficult for others to
 understand. fit also supports multiple `fit/` directories in the
