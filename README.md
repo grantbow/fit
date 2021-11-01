@@ -1,7 +1,7 @@
 # fit
 filesystem issue tracker: manages plain text issues with git or mercurial
 
-[![GoDoc](https://godoc.org/github.com/grantbow/fit?status.svg)](https://godoc.org/github.com/grantbow/fit) [![Build Status](https://travis-ci.com/grantbow/fit.svg?branch=master)](https://travis-ci.com/grantbow/fit) [![Test Coverage](https://codecov.io/gh/grantbow/fit/branch/master/graphs/badge.svg)](https://codecov.io/gh/grantbow/fit) [![GoReportCard](https://goreportcard.com/badge/github.com/grantbow/fit)](https://goreportcard.com/report/github.com/grantbow/fit) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2820/badge)](https://bestpractices.coreinfrastructure.org/projects/2820) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/fit-issue/community)
+[![GoDoc](https://godoc.org/github.com/grantbow/fit?status.svg)](https://godoc.org/github.com/grantbow/fit) [![Build Status](https://travis-ci.com/grantbow/fit.svg?branch=master)](https://app.travis-ci.com/github/grantbow/fit) [![Test Coverage](https://codecov.io/gh/grantbow/fit/branch/master/graphs/badge.svg)](https://codecov.io/gh/grantbow/fit) [![GoReportCard](https://goreportcard.com/badge/github.com/grantbow/fit)](https://goreportcard.com/report/github.com/grantbow/fit) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2820/badge)](https://bestpractices.coreinfrastructure.org/projects/2820) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/fit-issue/community)
 
 **TOC:**
 
@@ -27,7 +27,7 @@ filesystem issue tracker: manages plain text issues with git or mercurial
 
 git or hg (mercurial)
 
-golang 1.12 or higher
+golang 1.13 or higher
 
 linux, mac or windows OS.
 
@@ -49,7 +49,7 @@ suggestions for storing issues, one directory/folder per issue with plain text
 file details.
 
 A `fit/` directory holds one (descriptively titled) directory per issue.
-The "Description" file is the only text needed. Optional
+The "Description" file is the only fiel needed in each directory. Optional
 tag_key_value files assign meta data. A minimal issue looks like:
 
     fit/name_of_issue/Description
@@ -63,6 +63,7 @@ this can be done manually without fit. Unlike many other issue systems, fit
 issues naturally branch and merge along with the rest of your versioned files.
 
 Some support is available to import and/or reference other issue trackers.
+Usage reports via email or gitter are encouraged.
 
 ### Example Use
 
@@ -74,11 +75,12 @@ Then `mkdir fit/<issue_name>` and edit `fit/issue_name/Description`.
 Add and commit the Description file like any other file in your repository.
 
 If an environment variable named FIT is set that value will be used as a
-directory name used to find the 'fit' or 'issues' directory. All fit commands
-will use the FIT environment variable in any working directory.
+directory name used to find the 'fit' or 'issues' directory instead of your
+present working directory. All fit commands use the FIT environment variable
+if present.
 
-If a 'fit' directory/folder is not found fit will walk up the tree toward
-the root until it finds a "fit" subdirectory similar to how git looks for
+If a 'fit' directory/folder is not found fit will walk up your filesystem tree
+until it finds a "fit" subdirectory similar to how git looks for
 .git or hg looks for .hg. A warning is provided if no directory is found.
 
 fit uses subcommands like git. For a list of commands use `fit help`
@@ -87,16 +89,18 @@ fit uses subcommands like git. For a list of commands use `fit help`
 
 After you have [go installed](https://golang.org/doc/install) make sure you
 have `/usr/local/go/bin` (or equivalent) and `$HOME/go/bin` in your path and
-`GOPATH` is set to something like `$HOME/go`. To install the
+`GOPATH` is set to something like `$HOME/go`. Install the
 latest version of fit with:
 
 `GO111MODULE=on go install github.com/grantbow/fit`
 
 If that does not work in one command then:
 ```
-    export GO111MODULE=on;
-    cd $GOPATH/src/github.com/grantbow/fit/cmd/fit;
-    go install
+    $ export GO111MODULE=on
+    $ mkdir -p $GOPATH/src/github.com/grantbow/fit
+    $ git clone https://github.com/grantbow/fit $GOPATH/src/github.com/grantbow/fit
+    $ cd $GOPATH/src/github.com/grantbow/fit/cmd/fit
+    $ go install
 ```
 
 This will create the binary `$GOPATH/src/github.com/grantbow/fit/cmd/fit/fit(.exe)`
@@ -105,21 +109,21 @@ and move it to `$GOPATH/bin/fit(.exe)`
 Make sure `$GOPATH/bin` or `$GOBIN` are in your path or you can copy
 the "fit" binary somewhere that is in your path.
 
-The environment variable set using `export GO111MODULE=on` changes how your
-golang works by enabling golang 1.11+ module support required for this version
-of fit. The default in golang 1.12, 1.13 and 1.14 and 1.15 are still "auto".
+The environment variable set using `export GO111MODULE=on` changes how old
+golang versuibs work by enabling golang 1.11+ module support required by fit.
+The defaults in golang 1.13 and 1.14 and 1.15 were still "auto".
 The defaults in golang 1.16 and 1.17 are "on" so this setup is no longer
 required any more.
 
 Working with fit and git via the command line can be simplified. You can run
-fit as a git subcommand like `git fit` or `git issue` or `git bug`. This
-[chapter about git aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) describes how
-to set them up very well. It is part of the Pro Git book available for free
-online. You can quickly add the alias to your .gitconfig:
+fit as it's own command or as a git subcommand like `git fit`.
+You can quickly add the alias to your .gitconfig:
 
-`git config --global alias.fit \!/home/<user>/go/bin/fit`  
-`git config --global alias.issue \!/home/<user>/go/bin/fit`  
-`git config --global alias.bug \!/home/<user>/go/bin/fit`  
+```
+ git config --global alias.fit \!/home/<user>/go/bin/fit`  
+ git config --global alias.issue \!/home/<user>/go/bin/fit`  
+ git config --global alias.bug \!/home/<user>/go/bin/fit`  
+```
 
 Note: cygwin users use !/cygdrive/c/Users/\<user\>/go/bin/fit.exe
 
@@ -131,6 +135,10 @@ This will add to your $HOME/.gitconfig or you can edit it manually:
     issue = !/home/<user>/go/bin/fit
     bug = !/home/<user>/go/bin/fit
 ```
+
+This[chapter about git aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) describes how
+to set them up very well. It is part of the Pro Git book available for free
+online. 
 
 ### Configuration
 
@@ -232,20 +240,20 @@ file names in a "tags" subdirectory can instead be filenames like Status that
 contain the values or even simple tag\_key\_value filenames with empty contents
 or comment contents. The last option enables great flexibility. A few keys are
 hard coded in the program with special features: Identifier, Priority, Status,
-Milestone, Tag.
+Milestone and Tag. Newer tag\_key\_value filenames are recommended.
 
 As every bug system operates within the context of a number of people that use
-the system efforts have been made in the code to support as many system choices
-as reasonably possible. Comments and suggestions are welcomed. Pull requests
+the system many efforts to support as many choices of system use that
+are reasonably possible. Comments and suggestions are welcomed. Pull requests
 are even better but are not required to participate in this project.
 
 ### Hooks
 
 Event based automation can be added through git or mercurial. We created a
-hooks directory and look forward to seeing what code teams use and contribute.
-Work to help adapt hooks to both git and hg would be appreciated.
+hooks directory and look forward to seeing what teams use and contribute.
+Work to help adapt hooks to both git and hg are appreciated.
 
-### Example Script
+### Example
 
 ```
 $ mkdir foo && cd foo
@@ -257,10 +265,10 @@ Usage: help <command>
 
 Use "fit help <command>" or "fit <command> help" for
 more information about any command below.
-fit version 0.6 built using go1.16.6 GOOS android
-executable: -rwx------ 8749028 Sat Jun 22 10:19:54 PDT 2021 /data/data/com.termux/files/home/go/bin/fit
+fit version 0.7 built using go1.17.2 GOOS linux
+executable: -rwxrwxr-x 7931914 Sun Oct 31 23:43:08 PDT 2021 /home/grantbow/go/bin/fit
 
-Status/reading commands:
+Commands for status/reading:
     list       List issues
     find       Search for tag of fields: id, status, priority, or milestone
     tagslist   List assigned tags
@@ -272,7 +280,7 @@ Status/reading commands:
     help       Show this screen
     version    Print the version of this software
 
-Editing commands:
+Commands for editing:
     create     Open new issue
     edit       Edit an issue
     retitle    Rename an issue
@@ -284,11 +292,11 @@ Editing commands:
     milestone  View or set milestone
     import     Download from github or bugseverywhere repository
 
-Version control commands:
+Commands for version control:
     commit     Commit any new, changed or deleted issues
     purge      Remove all issues not tracked
 
-Processing commands:
+Commands for processing:
     roadmap    Print list of open issues sorted by milestone
 
 aliases for help: --help -h
@@ -300,35 +308,37 @@ Created issue: Need better help
 
 $ fit list
 
-===== list /...
+===== list /.../foo/fit
 Issue 1: Need better help
 
 $ fit list 1
 
-===== list /...
+===== list /.../foo/fit
 Title: Need better help
 Description:
 <the entered description>
 
-$ fit create -n Need better formating for README
-(no editor, default to empty Description)
+$ fit create -n Need better formatting for README
+(no editor launched, defaults to empty Description file)
 Created issue: Need better formatting for README
 
 $ fit list
+
+===== list /.../foo/fit
 Issue 1: Need better help
-Issue 2: Need better formating for README
+Issue 2: Need better formatting for README
 ```
 
 ## History
 
 fit is the golang program first developed as "bug" by Dave MacFarlane (driusan).
 Filesystem Issue Tracker ([Filesystem_Issues.md](docs/Filesystem_Issues.md)) is the new name for the Poor Man's
-Issue Tracker (PMIT) storage system also first developed by driusan. For his
-demo from 2016, see [driusan's
+Issue Tracker (PMIT) storage system also first developed by driusan. See the
+2016 demo video of [driusan's
 talk](https://www.youtube.com/watch?v=ysgMlGHtDMo) at the first
-GolangMontreal.org conference, GoMTL-01. The program and storage system have
+GolangMontreal.org conference, GoMTL-01. The program and storage system have incrementally
 evolved while trying to remain backward compatible. See the docs/[FAQ.md](docs/FAQ.md)
-for more information.
+for even more information.
 
 ## Background
 
@@ -346,52 +356,66 @@ more well exercised.
 
 fit is designed to adapt to your processes using issue key/value pair metadata.
 
-The fit too manages issues using conventions/format of
+The fit tool manages issues using conventions/format of
 Filesystem Issue Tracker (see [Filesystem_Issues.md](docs/Filesystem_Issues.md)). A `fit/` or `issues/`
 directory holds one descriptively titled directory per issue. Each directory 
-holds a Description (name is configurable) text file and anything else needed.
+holds a file Description (name is configurable) which is a text file.
+Issue directories hold anything else needed about the issue.
+
+Issue systems typically evolve from the most simple systems that work to slightly
+more complex systems that work better when working with others.
 
 At first people may naturally try to keep track of issues in a single text
 file and/or spreadsheet but these can fail to meet project needs.
 (see docs/[FAQ.md](docs/FAQ.md))
 
 Issue context is valuable to coders and may be difficult for others to
-understand. fit also supports multiple `fit/` directories in the
+understand, especially without the context of the code they describe.
+fit can support multiple `fit/` directories in a
 repository's tree for stronger coordination of coding and issue tracking.
 
-An alternative in IT projects is all too common: implementers are not given the
-tools needed to record code issues because issue systems take resources to
-setup and maintain. These separate isssue systems are often focused on user
-facing issues so valuable implementation details are often lost. IT hopes
-problems will not attract attention. Valuable project budget, time, scope,
-quality or other resources are focused on new features. Beyond managing
+Projects in IT environments face all too common circumstances: implementers
+may not be given the tools needed (or given bad tools) to record code issues.
+Other issue systems typically take some resources to setup and maintain which
+can be difficult to justify until long after a system is desperately needed
+by implementers. Separate issue systems are often focused on higher volume
+user facing streams of problem reports. These systems may or may not be meet
+project needs to capture valuable implementation details so valuable details
+are often poorly documented or completely lost. Some IT groups hope that
+problems will not attract attention and see obfuscation as a way to reduce
+perhaps already oversized workloads. It can be reasonable to focus valuable
+project budget, time, scope, quality or other resources on new features but
+code level or low volume streams of issues can be ignored. Beyond managing
 contentious flat files or spreadsheets there is FIT.
 
 Important issues can be captured, surfaced and addressed, whether they are
 actual problems, questions, possible features or ideas by those most familiar
-with the project. Less code savvy project collaborators are not distracted by
-implementation details, code reviews or operational facing features.
+with the project. It is hoped that all code savvy project collaborators can
+capture implementation details of varying importance quickly and easily using
+fit compared to using larger, possibly distracting systems best designed for
+other uses like code reviews or operational facing streams of issues. Regardless
+of other available issue systems that might be available, using a fit system
+might advantageously complement project workflows.
 
 [Software Development Life Cycles](https://en.wikipedia.org/wiki/Software_development_process) (SDLCs) involve more than just the source code.
-Over time needs may change from hacking/coding, just getting something working,
+Over time needs of a project may change from hacking/coding, just getting something working,
 to implementing more disciplined software engineering best practices. Code can
-start small and grow gradually as users, use cases and developers are added.
-The FIT issue system can adapt to each stage.
+start small and grow as users, TODO comments, use cases and developers are added.
+The FIT issue system was designed to adapt to each stage of needs.
 
 While one issue set used for one git repository may be enough the use of
-recursive fit directories are supported. As complexity increases adding
+recursive fit directories are now supported. As complexity increases adding
 multiple `fit/` directories in different parts of your git repo may help
 project coders keep focused.
 
-There are some choices for how to handle closed issues. As the number of
-issues grows closed can simply be deleted or an archive can hold the
-inactive issues. While deleting issues helps keep things uncluttered issues
-still have value over time and may be difficult to find using only version
-control history.
+There are some choices each project can make for how to handle closed
+issues. As the number of issues grows closed issues can simply be deleted or
+an archive can hold the inactive issues. While deleting issues helps keep things
+uncluttered issues still have value over time and may be difficult to find
+using only version control history.
 
-fit can be aliased as a git subcommand "git fit ..."
-
-Security concerns are handled using standard git repository practices.
+fit can be aliased as a git subcommand "git fit ..." It is intended that similar
+subcommands perform similarly expected functions.
 
 fit software is written using [golang](https://golang.org) to make things easy,
 simple and reliable. Why go? [This video](https://vimeo.com/69237265) from a
@@ -414,30 +438,33 @@ researching a user reported problem or may arise any time while coding.
 * [SUPPORT.md](SUPPORT.md)
 * [wiki](https://github.com/grantbow/fit/wiki)
 * [gitter](https://gitter.im/fit-issue/community)
+* [SECURITY.md](SECURITY.md)
 
-Your system is the beginning, not the end. Much has been written about how to
-use and setup systems to track or manage issues, software bugs, trouble
+Your system is just the beginning, not the end. Much has been written about
+how to use and setup systems to track or manage issues, software bugs, trouble
 tickets, support tickets, incident tickets or requests. See the docs/FAQ.md
 
 ### Feedback
 
-We would like to hear about how you use this system.
+We would very much like to hear about how you use this system.
 
 I would like to work with others and would appreciate feedback at
 grantbow+fit@gmail.com.
 
-Since the original project is not very active I have gone ahead and continuted
-development on my fork. I encourage discussion. Submitting can be done with a
-pull request, to our upstream project or using [git
-remotes](https://stackoverflow.com/questions/36628859/git-how-to-merge-a-pull-request-into-a-fork).
+Since the original bug project is not very active I have gone ahead and continuted
+development. I encourage discussion. Submissions can be done with a
+pull request or using [git remotes](https://stackoverflow.com/questions/36628859/git-how-to-merge-a-pull-request-into-a-fork).
 
-Anyone thinking of [CONTRIBUTING.md](CONTRIBUTING.md) is encouraged to do so.
-As this is an issue tracking system a pull request with an issue seems logical
-enough and good working practice. Development Guidelines are included.
+Anyone thinking of [CONTRIBUTING.md](CONTRIBUTING.md) is encouraged to do so
+and development guidelines are included in that file. As this is an issue
+tracking system a pull request with an issue seems logical enough and a good
+practice to exercise our own tool.
 
 As mentioned in [SUPPORT.md](SUPPORT.md) questions are encouraged via email, issues or pull
-requests for now.
+requests.
 
 The [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) is the standard recommended by github
 offered by contributor-covenant.org.
 
+As mentioned in [SECURITY.md](SECURITY.md) vulnerabilities are encouraged via email.
+Security concerns are generally handled using standard git repository practices.
