@@ -4,8 +4,8 @@ are encouraged.
 Development has slowed in the main driusan/bug repository.
 
 As a policy, when submitting new functionality tests of the functionality
-should be added to the automated test suite. We use codecov and strive to
-increase the test coverage of the code.
+must be added to the automated test suite. We use codecov and strive to
+increase the test coverage of the code to at least 80% coverage.
 
 As a policy, code should follow recommendations from
 https://golang.org/doc/effective_go.html and
