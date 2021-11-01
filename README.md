@@ -18,6 +18,7 @@ filesystem issue tracker: manages plain text issues with git or mercurial
   * [Example Script](#example-script)
 - [History](#history)
 - [Background](#background)
+- [Governance](#governance)
 - [Next Steps](#next-steps)
   * [Feedback](#feedback)
 
@@ -428,6 +429,11 @@ distracted by other concerns any recorded context can be extremely helpful.
 Notes about refactoring history, code reviews or feature ideas can be
 important to grok a code base more quickly. This context may originate from
 researching a user reported problem or may arise any time while coding.
+
+## Governance
+
+There are two key roles in the fit project: project owner & lead contributors.
+Collaboration is encouraged. See docs/FAQ.md for details.
 
 ## Next Steps
 
