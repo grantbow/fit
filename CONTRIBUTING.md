@@ -5,8 +5,6 @@ Many small tasks can be performed by new or casual contributors. Using the progr
 and providing FEEDBACK.md is something anyone can do. Grammar and typos are still
 being found and generated, so reporting these is greatly appreciated.
 
-Development has slowed in the main driusan/bug repository.
-
 As a policy, when submitting new functionality tests of the functionality
 must be added to the automated test suite. We use codecov and strive to
 increase the test coverage of the code to at least 80% coverage.
@@ -14,6 +12,11 @@ increase the test coverage of the code to at least 80% coverage.
 As a policy, code should follow recommendations from
 https://golang.org/doc/effective_go.html and
 https://github.com/golang/go/wiki/CodeReviewComments
+
+Code reviews submitted to the project owner are performed and later checked by
+all contributors. The project owner will review the proposed modifications and
+apply them to the code for release in the next version of the software. New
+features must be accompanied by new tests added to the automated test suite.
 
 Security vulnerabilities should be reported privately via email to
 grantbow+fit@gmail.com (preferred) or via the regular bug reporting process.
@@ -26,6 +29,10 @@ guideline samples:
 https://github.com/atom/atom/blob/master/CONTRIBUTING.md
 https://github.com/rails/rails/blob/master/CONTRIBUTING.md
 https://github.com/opengovernment/opengovernment/blob/master/CONTRIBUTING.md
+
+Development has slowed in the main driusan/bug repository and is being monitored.
+If contributions are provided there they will be picked up and reviewed for
+inclusion here.
 
 https://developcertificate.org
 Developer Certificate of Origin
