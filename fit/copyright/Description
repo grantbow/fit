@@ -1,0 +1,12 @@
+#### What did you do?
+Copyright notices are required for gold CLI Best Practice status.
+https://bestpractices.coreinfrastructure.org
+
+#### What did you see?
+Notices "copyright the fit project contributors" are not yet contained in each source file
+
+#### What did you expect to see?
+The line needs to be added to each source file.
+
+#### What version?
+0.7
