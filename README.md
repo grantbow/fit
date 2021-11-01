@@ -85,7 +85,9 @@ fit uses subcommands like git. For a list of commands use `fit help`
 
 ### Installation
 
-After you have [go installed](https://golang.org/doc/install), install the
+After you have [go installed](https://golang.org/doc/install) make sure you
+have `/usr/local/go/bin` (or equivalent) and `$HOME/go/bin` in your path and
+`GOPATH` is set to something like `$HOME/go`. To install the
 latest version of fit with:
 
 `GO111MODULE=on go install github.com/grantbow/fit`
@@ -97,8 +99,8 @@ If that does not work in one command then:
     go install
 ```
 
-This will create the binary $GOPATH/src/github.com/grantbow/fit/cmd/fit/fit(.exe)  
-and move it to $GOPATH/bin/fit(.exe)
+This will create the binary `$GOPATH/src/github.com/grantbow/fit/cmd/fit/fit(.exe)`
+and move it to `$GOPATH/bin/fit(.exe)`
 
 Make sure `$GOPATH/bin` or `$GOBIN` are in your path or you can copy
 the "fit" binary somewhere that is in your path.
@@ -106,16 +108,18 @@ the "fit" binary somewhere that is in your path.
 The environment variable set using `export GO111MODULE=on` changes how your
 golang works by enabling golang 1.11+ module support required for this version
 of fit. The default in golang 1.12, 1.13 and 1.14 and 1.15 are still "auto".
-The default in golang 1.16 is "on".
+The defaults in golang 1.16 and 1.17 are "on" so this setup is no longer
+required any more.
 
 Working with fit and git via the command line can be simplified. You can run
-fit as a git subcommand like `git fit` or `git issue`. This [chapter about git
-aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) describes how
+fit as a git subcommand like `git fit` or `git issue` or `git bug`. This
+[chapter about git aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) describes how
 to set them up very well. It is part of the Pro Git book available for free
 online. You can quickly add the alias to your .gitconfig:
 
-`git config --global alias.fit !/home/<user>/go/bin/fit`  
-`git config --global alias.issue !/home/<user>/go/bin/fit`  
+`git config --global alias.fit \!/home/<user>/go/bin/fit`  
+`git config --global alias.issue \!/home/<user>/go/bin/fit`  
+`git config --global alias.bug \!/home/<user>/go/bin/fit`  
 
 Note: cygwin users use !/cygdrive/c/Users/\<user\>/go/bin/fit.exe
 
@@ -123,8 +127,9 @@ This will add to your $HOME/.gitconfig or you can edit it manually:
 
 ```
 [alias]  
-    fit = !/home/<user>/go/bin/fit  
+    fit = !/home/<user>/go/bin/fit
     issue = !/home/<user>/go/bin/fit
+    bug = !/home/<user>/go/bin/fit
 ```
 
 ### Configuration
