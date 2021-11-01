@@ -1,6 +1,10 @@
 Contributions of issues, pull requests, automated unit tests and good questions
 are encouraged.
 
+Many small tasks can be performed by new or casual contributors. Using the program
+and providing FEEDBACK.md is something anyone can do. Grammar and typos are still
+being found and generated, so reporting these is greatly appreciated.
+
 Development has slowed in the main driusan/bug repository.
 
 As a policy, when submitting new functionality tests of the functionality
