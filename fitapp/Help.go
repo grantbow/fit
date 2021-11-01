@@ -45,18 +45,25 @@ aliases for create: add new
 	case "list", "view", "show", "display", "ls":
 		fmt.Printf("usage: " + os.Args[0] + " list \n")
 		fmt.Printf("       " + os.Args[0] + " list <IssueID>...\n")
-		fmt.Printf("       " + os.Args[0] + " list <-m|--match> <regex>...\n")
 		fmt.Printf("       " + os.Args[0] + " list <-t|--tags> <IssueID>...\n")
+		fmt.Printf("       " + os.Args[0] + " list <-m|--match> <regex>...\n")
 		fmt.Printf("       " + os.Args[0] + " list <tag>...\n\n")
-		fmt.Printf("       " + os.Args[0] + " list <-r|--recursive>...\n")
+		fmt.Printf("       " + os.Args[0] + " list <-r|--recursive>...\n\n")
 		fmt.Printf(
-			`This will list the issues found in the current environment
+			`Lists the issues.
 
 With no arguments, issue number and titles will be printed.
-Issue numbers can reference this issue on the command line.
+Issue numbers are used to reference particular issues.
+If valid IssueIDs are provided, whole issues with Description
+will print.  See "fit help ids" for valid IssueIDs.
 
-The [-m|--match] option tells list you are providing a regular
-expression. Matching issues are listed.
+Use -t to list with tags, especially removing (case insensitive) closed
+
+    fit list -t | grep -iv closed
+
+Provide a regular expression with the [-m|--match] option.
+
+Recursive lists issues in subdirectories, not just the present directory.
 
 Escape spcial characters. Many regular expressions use special
 characters that must be escaped. Escaping prevents argument
@@ -65,15 +72,10 @@ fit is passed the arguments. Two good references with details are:
 http://tldp.org/LDP/abs/html/globbingref.html
 https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html
 
-If valid IssueIDs are provided, whole issues with Description
-will print.  See "fit help ids" for what makes an IssueID.
-
 If 1 or more <tag>s are provided, matching issues are listed.
 
 Note that IssueIDs may change as you create, edit, and close other
 issues. Details are provided by "fit help ids."
-
-The [-r|--recursive] option lists matching issues in subdirectories.
 
 aliases for list: view show display ls
 `)
