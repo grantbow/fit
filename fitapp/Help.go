@@ -58,15 +58,15 @@ Issue numbers can reference this issue on the command line.
 The [-m|--match] option tells list you are providing a regular
 expression. Matching issues are listed.
 
-All unix shell arguments that contain special characters, which many
-regular expressions use, must be escaped. This prevents the automatic
+Escape spcial characters. Many regular expressions use special
+characters that must be escaped. Escaping prevents argument
 "filename expansion" or "globbing" performed by the shell before
-launching the fit command. A good references with details are at:
+fit is passed the arguments. Two good references with details are:
 http://tldp.org/LDP/abs/html/globbingref.html
 https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html
 
 If valid IssueIDs are provided, whole issues with Description
-will print.  See "fit help ids" for what makes a IssueID.
+will print.  See "fit help ids" for what makes an IssueID.
 
 If 1 or more <tag>s are provided, matching issues are listed.
 
@@ -95,7 +95,7 @@ to your editor.
 		fmt.Printf("usage: " + os.Args[0] + " status <IssueID> <NewStatus>\n\n")
 		fmt.Printf(
 			`This will edit or display the status of the issue identified by IssueID.
-See "fit help ids" for what constitutes a IssueID.
+See "fit help ids" for what constitutes an IssueID.
             
 If NewStatus is provided, it will update the first line of the Status file
 for the issue (creating the file as necessary). If not provided, it will 
@@ -160,7 +160,7 @@ aliases for retitle: mv rename relabel
 		fmt.Printf("usage: " + os.Args[0] + " close <IssueID>\n\n")
 		fmt.Printf(
 			`This will move or delete and possibly tag the issue
-IssueID. See "help ids" for details on what constitutes a IssueID.
+IssueID. See "help ids" for details on what constitutes an IssueID.
 
 By default the issue will be deleted. You may set CloseStatusTag,
 CloseMove, FitClosedDirName and/or ClosePreventDelete to change 
