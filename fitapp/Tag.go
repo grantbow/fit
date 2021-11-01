@@ -17,7 +17,7 @@ func getAllTags(config bugs.Config) map[string]int {
 	bugs := bugs.GetAllIssues(config)
 	//fmt.Printf("%+v\n", bugs)
 	tagMap := make(map[string]int, 0)
-	// Put all the tags in a map, values are count of occurances
+	// Put all the tags in a map, values are count of occurrences
 	for _, bug := range bugs {
 		for _, tag := range bug.Tags() {
 			tagMap[strings.ToLower(string(tag))] += 1
