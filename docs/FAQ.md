@@ -13,8 +13,8 @@ A: Different people may have different reasons. Bootstrapping project
    permited.
 
 Q: What is the project governance model?
-A: Currently the project owner and lead contributors make all final decisions.
-   If/when more people are involved this can be expanded.
+A: Currently the project owner (Grant Bowman) and lead contributors make all
+   project decisions. If/when more people are involved this can be expanded.
    Of course forks are possible with all open source projects.
 
 Q: What is the code of conduct for this project?
