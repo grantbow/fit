@@ -1,0 +1,13 @@
+#### What did you do?
+run fit using international text; runes, not just strings.
+
+#### What did you see?
+fit is not equipped for this yet.
+
+#### What did you expect to see?
+It should support runes, not just strings
+
+significant effort and testing will be needed to update code to handle runes.
+
+#### What version?
+0.7
