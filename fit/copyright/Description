@@ -3,10 +3,11 @@ Copyright notices are required for gold CLI Best Practice status.
 https://bestpractices.coreinfrastructure.org
 
 #### What did you see?
-Notices "copyright the fit project contributors" are not yet contained in each source file
+Notices "Copyright (c) 2021+ the fit project contributors" are not yet contained in each source file.
+Notices "Licensed under the terms of the GPLv3, see included LICENSE file" are not yet contained in each source file.
 
 #### What did you expect to see?
-The line needs to be added to each source file.
+The lines needs to be added to each source file.
 
 #### What version?
 0.7
