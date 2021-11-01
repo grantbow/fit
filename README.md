@@ -439,7 +439,7 @@ Collaboration is encouraged. See docs/FAQ.md for details.
 
 * docs/[Filesystem_Issues.md](docs/Filesystem_Issues.md)
 * docs/[FAQ.md](docs/FAQ.md)
-* [CONTRIBUTING.md](CONTRUBUTING.md)
+* [CONTRIBUTING.md](CONTRIBUTING.md)
 * [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 * [SUPPORT.md](SUPPORT.md)
 * [wiki](https://github.com/grantbow/fit/wiki)
