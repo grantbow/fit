@@ -1,0 +1,10 @@
+#### What did you do?
+comparing https://pkg.go.dev/rsc.io/quote in the golang tutorial
+I am looking at https://pkg.go.dev/github.com/grantbow/fit
+which looks better now but still needs improvements.
+
+#### What did you see?
+Needs review for correctness.
+
+#### What version?
+0.7
