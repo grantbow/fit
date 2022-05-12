@@ -30,7 +30,7 @@ func uniqueTagList(config bugs.Config) []string {
 	get := getAllTags(config)
 	var tags []string
 	// iterate over map keys. results are unique. discard values.
-	for k, _ := range get {
+	for k := range get {
 		tags = append(tags, k)
 	}
 	sort.Strings(tags)
@@ -76,7 +76,7 @@ func TagsNone(config bugs.Config) {
 	//fmt.Printf("%v\n", len(issues))
 	for idx, issue := range issues {
 		//fmt.Printf("%v\n", issue)
-		for k, _ := range tagMap {
+		for k := range tagMap {
 			if issue.Name() == k {
 				//fmt.Printf("1in: %v\n2tm: %v\n", issue.Name(), k)
 				var dir bugs.Directory = fitdir + dops + bugs.Directory(issue.Name())

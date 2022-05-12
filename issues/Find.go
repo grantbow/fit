@@ -75,10 +75,9 @@ func LoadIssueByHeuristic(id string, config Config) (*Issue, error) {
 		// check for an assigned id before index
 		if bugptr, errId := LoadIssueByIdentifier(id, config); errId == nil {
 			return bugptr, nil
-		} else {
-			// now check for index within range or pass through error
-			return LoadIssueByIndex(idx, config)
 		}
+        // now check for index within range or pass through error
+        return LoadIssueByIndex(idx, config)
 	}
 	// just a string, not an string of integers
 

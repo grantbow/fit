@@ -202,9 +202,8 @@ func (mgr GitManager) Commit(dir bugs.Directory, backupCommitMsg string, config 
 		//fmt.Printf("No new issues committed.\n") // assumed this error incorrectly, same for HgManager
 		fmt.Printf("git commit error %v\n", err.Error()) // $?
 		return err
-	} else {
-		return nil
 	}
+    return nil
 }
 
 // SCMTyper returns "git".
@@ -229,9 +228,8 @@ func (mgr GitManager) SCMIssuesUpdaters(config bugs.Config) ([]byte, error) {
 	co, _ := cmd.CombinedOutput()
 	if string(co) == "" {
 		return []byte(""), nil
-	} else {
-		return co, errors.New("Files In " + config.FitDirName + "/ Need Committing")
 	}
+    return co, errors.New("Files In " + config.FitDirName + "/ Need Committing")
 }
 
 // SCMIssuesCacher returns []byte of uncommitted files staged NOT working directory
@@ -241,9 +239,8 @@ func (mgr GitManager) SCMIssuesCacher(config bugs.Config) ([]byte, error) { // c
 	co, _ := cmd.CombinedOutput()
 	if string(co) == "" {
 		return []byte(""), nil
-	} else {
-		return co, errors.New("Files In " + config.FitDirName + "/ Staged and Need Committing")
 	}
+    return co, errors.New("Files In " + config.FitDirName + "/ Staged and Need Committing")
 }
 
 //func (mgr GitManager) SCMChangedIssues() ([]byte, error) {

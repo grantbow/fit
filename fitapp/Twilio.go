@@ -13,7 +13,9 @@ import (
 //var dops = bugs.Directory(os.PathSeparator)
 //var sops = string(os.PathSeparator)
 
+// TwilioUrlHttp default base of url https://api.twilio.com/2010-04-01/Accounts/
 var TwilioUrlHttp = "https://api.twilio.com/2010-04-01/Accounts/"
+// TwilioUrlMessages default like Messages.json /Messages.json
 var TwilioUrlMessages = "/Messages.json"
 
 // Twilio is a subcommand to send to changed isssues with tag_twilio_4155551212
@@ -58,7 +60,7 @@ func Twilio(config bugs.Config) {
 					bug := bugs.Issue{}
 
 					// build message for each recipient from updated issues and twilio tags
-					for key, _ := range updatedissues {
+					for key := range updatedissues {
 						//fmt.Printf("twilio bug dirname: %v\n", key)
 						expectedbugdir := string(bugs.FitDirer(config)) + sops + key
 						bug.LoadIssue(bugs.Directory(expectedbugdir), config)
@@ -98,6 +100,7 @@ func Twilio(config bugs.Config) {
 	}
 }
 
+// TwilioDoSend used to text all recipients a string
 func TwilioDoSend(config bugs.Config, PNTo string, BodyStr string) {
 	urlStr := TwilioUrlHttp + config.TwilioAccountSid + TwilioUrlMessages
 	fmt.Println(urlStr)

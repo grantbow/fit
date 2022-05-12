@@ -140,18 +140,18 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 		return
 	}
 	tester.AssertStagingIndex(t, []FileStatus{
-		FileStatus{"donotcommit.txt", "?", "?"},
+		{"donotcommit.txt", "?", "?"},
 	})
 
 	//fmt.Print("pre  1 runtestCommitDirtyTree\n")
 	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.FitDirName), "Initial commit", config)
 	//fmt.Print("post 1 runtestCommitDirtyTree\n")
 	tester.AssertStagingIndex(t, []FileStatus{
-		FileStatus{"donotcommit.txt", "?", "?"},
+		{"donotcommit.txt", "?", "?"},
 	})
 	tester.StageFile("donotcommit.txt")
 	tester.AssertStagingIndex(t, []FileStatus{
-		FileStatus{"donotcommit.txt", "A", " "},
+		{"donotcommit.txt", "A", " "},
 	})
 	//fmt.Print("pre  2 runtestCommitDirtyTree\n")
 	m.Commit(bugs.Directory(tester.WorkDir()+sops+config.FitDirName), "Initial commit", config)
@@ -164,14 +164,14 @@ func runtestCommitDirtyTree(tester ManagerTester, t *testing.T) {
 	//    stdout not captured this time.
 	//fmt.Print("post 2 runtestCommitDirtyTree\n")
 	tester.AssertStagingIndex(t, []FileStatus{
-		FileStatus{"donotcommit.txt", "A", " "},
+		{"donotcommit.txt", "A", " "},
 	})
 	//
 	os.MkdirAll(config.FitDirName+sops+"Fresh-bug", 0755)
 	ioutil.WriteFile(config.FitDirName+sops+"Fresh-bug"+sops+"Description", []byte(""), 0644)
 	tester.AssertStagingIndex(t, []FileStatus{
-		FileStatus{"donotcommit.txt", "A", " "},
-		FileStatus{config.FitDirName + sops + "Fresh-bug" + sops + "Description", "?", "?"},
+		{"donotcommit.txt", "A", " "},
+		{config.FitDirName + sops + "Fresh-bug" + sops + "Description", "?", "?"},
 	})
 	//errCommit := m.Commit(bugs.Directory(tester.WorkDir()+sops+config.FitDirName), "Initial commit", config)
 	//fmt.Printf("post 2 runtestCommitDirtyTree error %v\n", errCommit) // shouldn't be nil

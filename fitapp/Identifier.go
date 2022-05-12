@@ -45,7 +45,7 @@ func IdsNone(config bugs.Config) {
 	fmt.Printf("No ids assigned:\n")
 	for idx, issue := range issues {
 		//fmt.Printf("%v\n", issue)
-		for k, _ := range idMap {
+		for k := range idMap {
 			if issue.Name() == k {
 				//fmt.Printf("1in: %v\n2tm: %v\n", issue.Name(), k)
 				var dir bugs.Directory = fitdir + dops + bugs.Directory(issue.Name())

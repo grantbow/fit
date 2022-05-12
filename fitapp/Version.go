@@ -7,11 +7,12 @@ import (
 	"time"
 )
 
+// ProgramVersion returns the base version string
 func ProgramVersion() string {
 	return "0.7"
 }
 
-// Version is a subcommand to output the command name and golang runtime.Version().
+// PrintVersion describes fit and golang.
 func PrintVersion() {
 	ex, _ := os.Executable()
 	fi, _ := os.Stat(ex)

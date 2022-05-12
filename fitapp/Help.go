@@ -378,5 +378,5 @@ aliases for help: --help -h
 
 `)
 	}
-    // see issues/Config.go for comments when adding commands or configs
+	// see issues/Config.go for comments when adding commands or configs
 }

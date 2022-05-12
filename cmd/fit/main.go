@@ -18,7 +18,7 @@ func main() {
 	config.FitDirName = "fit"
 	rootPresent := false
 	skip := fitapp.SkipRootCheck(&os.Args) // too few args or help or env
-                   // see fitapp/utils.go
+	// see fitapp/utils.go
 
 	// detect scm first to determine backup location for .fit.yml
 	scmoptions := make(map[string]bool)

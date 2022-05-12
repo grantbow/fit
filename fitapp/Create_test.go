@@ -94,21 +94,21 @@ func TestCreateNoEditor(t *testing.T) {
 	// TODO: finish making tests on Windows pass then redo this test
 	//       first issue was ok.
 	//       second issue had trouble with setting and using DefaultDescriptionFile
-/*
-=== RUN   TestCreateNoEditor
---- FAIL: TestCreateNoEditor (0.01s)
-    Create_test.go:167: Unexpected output on STDOUT for Test2-bug: open \ddf: The system cannot find th
-e file specified.
-        Created issue: Test2 bug
+	/*
+	   === RUN   TestCreateNoEditor
+	   --- FAIL: TestCreateNoEditor (0.01s)
+	       Create_test.go:167: Unexpected output on STDOUT for Test2-bug: open \ddf: The system cannot find th
+	   e file specified.
+	           Created issue: Test2 bug
 
-    Create_test.go:180: Unexpected number of files found in Test2-bug dir.
-            Expected 2, got 1
+	       Create_test.go:180: Unexpected number of files found in Test2-bug dir.
+	               Expected 2, got 1
 
-    Create_test.go:189: Could not load description file for Test2 bugopen C:\cygwin64\tmp\createtest740
-771043\fit\Test2-bug\ddf: The system cannot find the file specified.
-    Create_test.go:192: Unexpected empty file for Test2 bug
+	       Create_test.go:189: Could not load description file for Test2 bugopen C:\cygwin64\tmp\createtest740
+	   771043\fit\Test2-bug\ddf: The system cannot find the file specified.
+	       Create_test.go:192: Unexpected empty file for Test2 bug
 
-*/
+	*/
 	config := bugs.Config{}
 	config.DescriptionFileName = "Description"
 	config.FitDirName = "fit"

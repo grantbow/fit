@@ -108,7 +108,7 @@ notes:
 		//      Default Field as given
 */
 
-// ErrNoConfig
+// ErrNoConfig is the new error when .fit.yml is not found
 var ErrNoConfig = errors.New("No .fit.yml provided")
 
 // ConfigRead assigns values to the Config type from .fit.yml.
@@ -234,7 +234,7 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 		//      Default false, deletes
 		if temp.ClosePreventDelete || c.CloseMove {
 			c.ClosePreventDelete = true
-			if ! (c.CloseStatusTag || c.CloseMove) {
+			if !(c.CloseStatusTag || c.CloseMove) {
 				c.CloseStatusTag = true
 			}
 		} else {
@@ -255,11 +255,11 @@ func ConfigRead(bugYmls string, c *Config, progVersion string) (err error) {
 			c.IdAutomatic = false
 		}
 		return nil // success
-	} else {
-		return ErrNoConfig
 	}
+    return ErrNoConfig
 }
 
+// ConfigWrite writes a default .fit.yml file
 func ConfigWrite(bugYmls string) (err error) {
 
 	if fileinfo, err := os.Stat(bugYmls); err != nil && fileinfo.Mode().IsRegular() {
@@ -286,7 +286,10 @@ IdAbbreviate: false
 IdAutomatic: true
 `), 0644)
 		// check error
+	    if err != nil {
+            return err
+        }
 		return nil
 	}
-	return nil
+	return err
 }

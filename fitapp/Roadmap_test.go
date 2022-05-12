@@ -78,12 +78,12 @@ func TestRoadmapLess(t *testing.T) {
 	matched := re.MatchString(stdout)
 	if stderr != "" || !matched {
 		t.Error("Unexpected out/error of roadmap")
-        if !matched {
-            fmt.Printf("Expected stdout:\n%s\nGot:\n%s\n", expected, stdout)
-        }
-        if stderr != "" {
-            fmt.Printf("Expected stderr:\n%s\nGot:\n%s\n", "", stderr)
-        }
+		if !matched {
+			fmt.Printf("Expected stdout:\n%s\nGot:\n%s\n", expected, stdout)
+		}
+		if stderr != "" {
+			fmt.Printf("Expected stderr:\n%s\nGot:\n%s\n", "", stderr)
+		}
 	}
 	os.Chdir(pwd)
 }

@@ -10,6 +10,7 @@ import (
 //var dops = bugs.Directory(os.PathSeparator)
 //var sops = string(os.PathSeparator)
 
+// SCMNotFound type returned by Error
 type SCMNotFound struct {
 	s string
 }
@@ -18,6 +19,7 @@ func (e *SCMNotFound) Error() string {
 	return e.s
 }
 
+// SCMDirty type returned by Error
 type SCMDirty struct {
 	s string
 }

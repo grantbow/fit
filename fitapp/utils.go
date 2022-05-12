@@ -1,7 +1,7 @@
 package fitapp
 
 import (
-	_ "flag"
+	_ "flag" // used in commented code
 	"fmt"
 	bugs "github.com/grantbow/fit/issues"
 	"io/ioutil"

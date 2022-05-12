@@ -18,7 +18,7 @@ import (
 //var dops = Directory(os.PathSeparator)
 //var sops = string(os.PathSeparator)
 
-// An issue
+// An Issue
 type Issue struct {
 	Dir                 Directory
 	modtime             int
@@ -57,6 +57,7 @@ var ErrNoDescription = errors.New("No description provided")
 // ErrNotFound defines a new error.
 var ErrNotFound = errors.New("Could not find issue")
 
+// TitleToDirString converts string from title to directory
 func TitleToDirString(title string) string {
 	// replace non-matching valid characters with _
 	// for user entered strings
@@ -102,9 +103,8 @@ func TitleToDir(title string) Directory {
 func ShortTitleToDir(title string) Directory {
 	if len(title) > 25 {
 		return TitleToDir(title[:25]) // TODO: remove leading or trailing _ or -
-	} else {
-		return TitleToDir(title)
-	}
+    }
+    return TitleToDir(title)
 }
 
 // Direr returns the directory of an issue.
@@ -376,34 +376,33 @@ func (b Issue) tager(abspath string) (string, string, bool, bool, error) {
 	//   aka abspath
 	key := ""
 	value := ""
-	tag_name := false
-	tag_contents := false
+	tagName := false
+	tagContents := false
 	//var presentLines []string
 	segments := strings.Split(abspath, string(os.PathSeparator)) // path separator
 	// no glob - won't find tag_key_value
 	parts := strings.Split(segments[len(segments)-1], "_")
 	if len(parts) <= 1 {
-		return key, value, tag_name, tag_contents, errors.New("tag has no key or value")
+		return key, value, tagName, tagContents, errors.New("tag has no key or value")
 	} else if len(parts) == 2 {
 		key = parts[1]
 		field, err := ioutil.ReadFile(string(dir) + sops + "tag_")
 		if err == nil {
 			value = ([]string(strings.Split(string(field), "\n")))[0] // tag_Status file contents overrides "Status" file contents
 			// assumes value is ok, not false
-			tag_contents = true
+			tagContents = true
 		}
 	} else if len(parts) >= 3 {
 		key = parts[1] // tag_Status_ file overrides "Status" file contents
 		//presentLines = append(presentLines, strings.Join(parts[2:], "_")) // tag_Status_ file overrides "Status" file contents
 		value = strings.Join(parts[2:], "_") // tag_Status_ file overrides "Status" file contents
 		// assumes value is ok, not false
-		tag_name = true
+		tagName = true
 	}
 	if value == "false" {
 		return "", "", false, false, errors.New("tag has no key or value")
-	} else {
-		return strings.ToLower(key), strings.ToLower(value), tag_name, tag_contents, nil // key, value, tag_name, tag_contents, err
-	}
+    }
+    return strings.ToLower(key), strings.ToLower(value), tagName, tagContents, nil // key, value, tagName, tagContents, err
 }
 
 // Tags returns an issue's array of tags.
@@ -470,25 +469,26 @@ func (b Issue) Tags() []TagBoolTrue {
 //     and the (byIssue) {Len, Swap, Less} functions
 // see also List.go for type byDir
 
-func (t Issue) Len() int {
-	return t.modtime // time.Format(time.UnixNano(t.modtime).UnixNano())
+// Len allows sort.Sort(byIssue(issues))
+func (b Issue) Len() int {
+	return b.modtime // time.Format(time.UnixNano(t.modtime).UnixNano())
 }
 
 type byIssue []Issue
 
-func (t byIssue) Len() int {
-	return len(t) // time.Format(time.UnixNano(t.modtime).UnixNano())
+func (b byIssue) Len() int {
+	return len(b) // time.Format(time.UnixNano(t.modtime).UnixNano())
 }
-func (t byIssue) Swap(i, j int) {
-	t[i], t[j] = t[j], t[i]
+func (b byIssue) Swap(i, j int) {
+	b[i], b[j] = b[j], b[i]
 }
-func (t byIssue) Less(i, j int) bool {
-	return (t[i]).Len() < (t[j]).Len()
+func (b byIssue) Less(i, j int) bool {
+	return (b[i]).Len() < (b[j]).Len()
 }
 
 // findArrayString returns a bool if looking is an element of arr.
 func findArrayString(arr []string, looking string) bool {
-	for loop, _ := range arr {
+	for loop := range arr {
 		if arr[loop] == looking {
 			return true
 		}
@@ -502,9 +502,8 @@ func (b Issue) fielder(fieldName string) string {
 	//fmt.Printf("debug fielder lines %v\n", lines)
 	if len(lines) > 0 {
 		return strings.TrimSpace(lines[0])
-	} else {
-		return ""
 	}
+    return ""
 }
 
 // created b.liners for similar needs of {issues/Issue.go:fielder, issues/Issue.go:SetField}
@@ -545,17 +544,17 @@ func (b Issue) liners(fieldName string) []string {
 
 // SetField writes the string value to the file of an issue.
 // NewFieldAsTag and NewFieldLowerCase are respected
-func (b Issue) SetField(fieldName string, value string, config Config) error { // TODO: complete func for config tag files : paused with tag_name, tag_contents, file_contents
+func (b Issue) SetField(fieldName string, value string, config Config) error { // TODO: complete func for config tag files : paused with tagName, tagContents, fileContents
 	// using Status for fielName string example in comments
 	dir := b.Direr()
 	//possible locations
-	tag_name := false
-	tag_contents := false
-	file_contents := false
+	tagName := false
+	tagContents := false
+	fileContents := false
 	// try "Status" file
 	presentLines := b.liners(fieldName) // var presentLines []string
 	if len(presentLines) > 0 {
-		file_contents = true
+		fileContents = true
 	}
 	// try tag_Status* files
 	withtagfile, errtagfile := filepath.Glob(string(dir) + sops + "tag_" + fieldName + "*") // returns []string
@@ -564,7 +563,7 @@ func (b Issue) SetField(fieldName string, value string, config Config) error { /
 	if errtagfile == nil {
 		for _, withtagfilefile := range withtagfile {
 			presentvalue := ""
-			_, presentvalue, tag_name, tag_contents, errfind = b.tager(withtagfilefile)
+			_, presentvalue, tagName, tagContents, errfind = b.tager(withtagfilefile)
 			if errfind == nil {
 				presentLines = []string{presentvalue}
 			}
@@ -574,17 +573,17 @@ func (b Issue) SetField(fieldName string, value string, config Config) error { /
 			//	field, errpresent = ioutil.ReadFile(string(dir) + "/tag_" + fieldName)
 			//	if errpresent == nil {
 			//		presentLines = strings.Split(string(field), "\n") // tag_ file contents overrides "Status" file contents
-			//		tag_contents = true
+			//		tagContents = true
 			//	}
 			//} else if len(parts) >= 3 {
 			//	presentLines = append(presentLines, strings.Join(parts[2:], "_")) // tag_ file overrides "Status" file contents
-			//	tag_name = true
+			//	tagName = true
 			//}
 		}
 	}
-	_ = tag_name
-	_ = tag_contents
-	_ = file_contents
+	_ = tagName
+	_ = tagContents
+	_ = fileContents
 
 	newValue := ""
 	if len(presentLines) >= 1 {
@@ -607,9 +606,8 @@ func (b Issue) SetField(fieldName string, value string, config Config) error { /
 	}
 	if err != nil {
 		return err
-	} else {
-		return nil
 	}
+    return nil
 }
 
 // Status returns the string from the Status file of an issue.
@@ -659,9 +657,8 @@ func (b Issue) Identifier() string {
 func (b Issue) SetIdentifier(newValue string, config Config) error {
 	if config.IdAbbreviate {
 		return b.SetField("Id", newValue, config)
-	} else {
-		return b.SetField("Identifier", newValue, config)
 	}
+    return b.SetField("Identifier", newValue, config)
 }
 
 // New prepares an issue directory.
