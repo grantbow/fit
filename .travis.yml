@@ -1,5 +1,5 @@
 language: go
-dist: focal
+dist: jammy
 os:
     - linux
     - osx
@@ -8,11 +8,8 @@ env:
     global:
       - GO111MODULE=on
 go:
-    - 1.13
-    - 1.14
-    - 1.15
-    - 1.16
     - 1.17
+    - 1.18
 git:
     depth: 3
 addons:
