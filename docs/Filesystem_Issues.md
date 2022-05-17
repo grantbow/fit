@@ -1,7 +1,8 @@
-#     Filesystem Issue Tracker - FIT
+# Filesystem Issue Tracker - FIT
 
 Filesystem Issue Tracker (FIT) conventions/format are a set of suggestions for
-storing issues, one directory/folder per issue with plain text file details.
+storing issues, one directory/folder per issue with details stores in plain
+text files and metadata in supporting filenames.
 
 Use your choice of editors, devices and shared file storage.
 
@@ -16,9 +17,10 @@ MacFarlane (driusan). Filesystem Issue Tracker (FIT) is the new name for the
 Poor Man's Issue Tracker (PMIT) storage system also developed by driusan.
 
 # Minimum Requirements
+# What Is An Issue?
+# Issues
 # Jobs
 # Assumptions
-# Issues
 # Evolution
 ## Good - One File (List) For All Issues
 ## Better - One File Per Issue
@@ -38,27 +40,22 @@ Any desktop, laptop, remote, mobile, handheld computer or phone with an editor
 and access to a shared file storage can be used.
 
 Version control using git is highly recommended to provide detailed change
-history, ownership and date/times.
+history, ownership and date/times as well as distributed development and
+a way to merge work quickly.
 
 Other tools are not required. To speed up working with issues tools like fit
 will evolve to meet existing and new needs. People should even be able to adapt
 their existing tool back ends to read and write to FIT with no lost data.
 
-# Jobs `Jobs` are the reason you use your tracker. While generally beyond the
-scope of the tools used to save the issues these are what drive the assumptions
-used and when building your system. How well the assumptions address your jobs
-will determine how well your system is working.
+# What is an Issue?
 
-# Assumptions
+Much has been written on this topic. Depending on your project, different names
+can be used to describe an issue. [Software
+bug](https://en.wikipedia.org/wiki/Software_bug) is a common one.
 
-`Assumptions` are what we call all of the other decisions used when building
-your system that are not otherwise specified. FIT conventions together with
-your assumptions are intended to help naturally build systems that precisely
-meet your needs. [User
-Innovation](https://en.wikipedia.org/wiki/User_innovation) describes how
-products and services developed and refined by end users result in better
-products and services. How you system evolves is critical to the success of
-it's use and of it's end users.
+A good reference is [How to Report Bugs Effectively](https://www.chiark.greenend.org.uk/~sgtatham/bugs.html).
+
+A more technical reference is [How To Ask Questions The Smart Way](http://www.catb.org/~esr/faqs/smart-questions.html).
 
 # Issues
 
@@ -80,11 +77,27 @@ naming for clarity. Teams have used different terms to name their issues:
 We use the term `title` for the short human readable text identifier. People
 may sometimes confuse the terms of `issue` and `title`. Other terms include:
 
-    Subject    Name    Summary    Description
+    Subject       Name       Summary
 
-Records of completed issues can be very valuable. Using tag_Status_closed is
+Records of completed issues can be very valuable. Using tag_status_closed is
 recommended but other assumptions such as moving issues to another directory
-or deleting them may have other advantages or limitations.
+or deleting them may have advantages and/or other limitations.
+
+# Jobs
+
+`Jobs` are the reason you use your tracker, what needs to be done to fix an
+issue. Jobs are are why you build an issue or bug system. How well the
+assumptions address working with your jobs will determine how well your system
+functions.
+
+# Assumptions
+
+`Assumptions` are what we call all of the other decisions made when building
+your system that are not otherwise specified. FIT conventions together with
+assumptions help meet project needs. [User
+Innovation](https://en.wikipedia.org/wiki/User_innovation) describes how
+products and services are refined by users. This result in better products and
+services. How your system evolves is critical to it's success for end users.
 
 # Evolution
 

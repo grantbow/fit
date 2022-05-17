@@ -143,7 +143,7 @@ func (s *severity) Set(value string) error {
 	if v, ok := severityByName(value); ok {
 		threshold = v
 	} else {
-		v, err := strconv.Atoi(value)
+		v, err := strconv.ParseInt(value, 10, 32)
 		if err != nil {
 			return err
 		}
@@ -228,7 +228,7 @@ func (l *Level) Get() interface{} {
 
 // Set is part of the flag.Value interface.
 func (l *Level) Set(value string) error {
-	v, err := strconv.Atoi(value)
+	v, err := strconv.ParseInt(value, 10, 32)
 	if err != nil {
 		return err
 	}
@@ -296,7 +296,7 @@ func (m *moduleSpec) Set(value string) error {
 			return errVmoduleSyntax
 		}
 		pattern := patLev[0]
-		v, err := strconv.Atoi(patLev[1])
+		v, err := strconv.ParseInt(patLev[1], 10, 32)
 		if err != nil {
 			return errors.New("syntax error: expect comma-separated list of filename=N")
 		}
@@ -377,7 +377,7 @@ func (t *traceLocation) Set(value string) error {
 	if !strings.Contains(file, ".") {
 		return errTraceSyntax
 	}
-	v, err := strconv.Atoi(line)
+	v, err := strconv.ParseInt(line, 10, 32)
 	if err != nil {
 		return errTraceSyntax
 	}
@@ -386,7 +386,7 @@ func (t *traceLocation) Set(value string) error {
 	}
 	logging.mu.Lock()
 	defer logging.mu.Unlock()
-	t.line = v
+	t.line = int(v)
 	t.file = file
 	return nil
 }
@@ -936,7 +936,7 @@ type logBridge severity
 func (lb logBridge) Write(b []byte) (n int, err error) {
 	var (
 		file = "???"
-		line = 1
+		line = int64(1)
 		text string
 	)
 	// Split "d.go:23: message" into "d.go", "23", and "message".
@@ -945,7 +945,7 @@ func (lb logBridge) Write(b []byte) (n int, err error) {
 	} else {
 		file = string(parts[0])
 		text = string(parts[2][1:]) // skip leading space
-		line, err = strconv.Atoi(string(parts[1]))
+		line, err = strconv.ParseInt(string(parts[1]), 10, 8)
 		if err != nil {
 			text = fmt.Sprintf("bad line number: %s", b)
 			line = 1
@@ -953,7 +953,7 @@ func (lb logBridge) Write(b []byte) (n int, err error) {
 	}
 	// printWithFileLine with alsoToStderr=true, so standard log messages
 	// always appear on standard error.
-	logging.printWithFileLine(severity(lb), file, line, true, text)
+	logging.printWithFileLine(severity(lb), file, int(line), true, text)
 	return len(b), nil
 }
 
