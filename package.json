@@ -14,9 +14,8 @@
     "bin": {"fit": "./cmd/fit/main"},
     "repository": {"github:grantbow/fit"},
     "dependencies":
-        { "ghodss/yaml": "v1.0.0"
+        { "grantbow/yaml": "v1.0.0"
         , "google/go-querystring": "v1.0.0"
-        , "gopkg.in/yaml.v2": "v2.2.7"
 	    , "blang/semver": "v3.5.1+incompatible"
 	    , "google/go-github": "v17.0.0+incompatible"
     }

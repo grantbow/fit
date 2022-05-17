@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/ghodss/yaml"
+	"github.com/grantbow/yaml"
 )
 
 type person struct {

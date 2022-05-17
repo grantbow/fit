@@ -3,7 +3,7 @@ package issues
 import (
 	"errors"
 	//"fmt"
-	"github.com/ghodss/yaml"
+	"github.com/grantbow/yaml"
 	"io/ioutil"
 	"os"
 )
