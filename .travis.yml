@@ -8,8 +8,8 @@ env:
     global:
       - GO111MODULE=on
 go:
-    - 1.17
     - 1.18
+    - 1.19
 git:
     depth: 3
 addons:
