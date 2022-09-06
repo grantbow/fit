@@ -1,5 +1,5 @@
 # fit
-filesystem issue tracker: manages plain text issues with git or mercurial
+filesystem issue tracker: manages plain text issues with git or hg
 
 **TOC:**
 
@@ -14,7 +14,7 @@ filesystem issue tracker: manages plain text issues with git or mercurial
 
 git or hg (mercurial)
 
-golang 1.13 or higher
+golang
 
 linux, mac or windows OS.
 
@@ -43,11 +43,10 @@ If that does not work in one command then:
 This will create the binary `$GOPATH/src/github.com/grantbow/fit/cmd/fit/fit(.exe)`
 and move it to `$GOPATH/bin/fit(.exe)`
 
-The environment variable set using `export GO111MODULE=on` changes how old
+The environment variable set using `export GO111MODULE=on` changed how old
 golang versions work by enabling golang 1.11+ module support required by fit.
 The defaults in golang 1.13 and 1.14 and 1.15 were still "auto".
-The defaults in golang 1.16 and 1.17 are "on" so this setup is no longer
-required any more.
+The defaults in golang 1.16 and above are "on" so this setup is no longer required.
 
 You can use fit directly or use fit as a git subcommand like `git fit`.
 You can quickly add the alias to your .gitconfig:
