@@ -1,5 +1,5 @@
 # fit
-filesystem issue tracker: manages plain text issues with git or mercurial
+filesystem issue tracker: manages plain text issues with git or hg 
 
 [![GoDoc](https://godoc.org/github.com/grantbow/fit?status.svg)](https://godoc.org/github.com/grantbow/fit) [![Build Status](https://travis-ci.com/grantbow/fit.svg?branch=master)](https://app.travis-ci.com/github/grantbow/fit) [![Test Coverage](https://codecov.io/gh/grantbow/fit/branch/master/graphs/badge.svg)](https://codecov.io/gh/grantbow/fit) [![GoReportCard](https://goreportcard.com/badge/github.com/grantbow/fit)](https://goreportcard.com/report/github.com/grantbow/fit) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2820/badge)](https://bestpractices.coreinfrastructure.org/projects/2820) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/fit-issue/community)
 
@@ -7,13 +7,6 @@ filesystem issue tracker: manages plain text issues with git or mercurial
 
 <!-- toc -->
 
-<!--
-# fit init, fit open, fit close, fit archive, fit list
-# what's an issue
-# fit codecov, 3 x scan issues, go1.18
-# fit summary
-# characteristics
--->
 - [Prerequisites](#prerequisites)
 - [Goal](#goal)
 - [Getting Started](#getting-started)
@@ -28,6 +21,13 @@ filesystem issue tracker: manages plain text issues with git or mercurial
 - [Next Steps](#next-steps)
 
 <!-- tocstop -->
+<!-- older topics
+# fit init, fit open, fit close, fit archive, fit list
+# what's an issue
+# fit codecov, 3 x scan issues,
+# fit summary
+# characteristics
+-->
 
 ## Prerequisites
 
@@ -36,8 +36,7 @@ directories and a text editor.
 
 To list and manage the issues with the fit tool you need:
 - git or hg (mercurial)
-- go1.17 or higher. The software was developed with go1.13 but versions 1.16
-  and below are [end of life](https://go.dev/doc/devel/release#policy).
+- go1.19
 - any operating system [supported by go](https://go.dev/doc/install/source) and
   [supported by
   git](https://git.wiki.kernel.org/index.php/Interfaces,_frontends,_and_tools)
@@ -45,10 +44,9 @@ To list and manage the issues with the fit tool you need:
 
 ## Goal
 
-Capture code related issues fast.
+Capture issues fast.
 
-It can be a primary bug system if nothing else is available or a secondary
-system for code related issues.
+fit can be a project's primary issue system or a secondary system for code related issues.
 
 Standard coding practices improve project outcomes. Using fit minimizes
 switching between coding and issue tracking systems which increases
@@ -121,13 +119,13 @@ fit uses subcommands like git. For a list of commands use `fit help`
 
 ### Installation
 
-Briefly, you need [go installed](https://golang.org/doc/install).
+Briefly, you need git and [go installed](https://golang.org/doc/install).
 
 `go install github.com/grantbow/fit@latest`
 
 You can run fit as it's own command or as a git subcommand.
 
-For details see ([INSTALL.md](INSTALL.md)).
+For details see ([INSTALL.md](INSTALL.md)). The software was developed with go1.13 but only the current and one previous version are supported before being declared [end of life](https://go.dev/doc/devel/release#policy).
 
 ### Configuration
 
