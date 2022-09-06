@@ -119,6 +119,7 @@ func TestTag(t *testing.T) {
 	runtag(argumentList{"--rm", "1", "bar"}, "", t) // no cmd as argument
 	os.Chdir(pwd)
 }
+
 func TestTagsAssigned(t *testing.T) {
 	runtagsassigned(argumentList{""}, "<none assigned yet>", t)
 }

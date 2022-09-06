@@ -132,13 +132,20 @@ For details see ([INSTALL.md](INSTALL.md)). The software was developed with go1.
 The environment variable EDITOR is used to execute your preferred editor
 when needed.
 
+Settings are read from .fit.yml next to the fit directory.
+
+```
+ClosePreventDelete: true
+NewFieldAsTag: true
+NewFieldLowerCase: true
+IdAbbreviate: true
+```
+
 An important choice is what to do with closed issues. They can be deleted
 (the historical default), moved to a subdirectory "closed" or
-add a tag\_status\_closed.
+add a tag\_status\_closed which is recommended.
 
-Settings can be read from .fit.yml next to the fit directory.  Defaults are
-backwards compatible with the original bug program so far. Current options
-include:
+Current options include:
 
     * DescriptionFileName: string
           Default is "Description".

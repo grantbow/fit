@@ -5,7 +5,7 @@ import (
 	"fmt"
 	fitapp "github.com/grantbow/fit/fitapp"
 	issues "github.com/grantbow/fit/issues"
-	"github.com/grantbow/fit/scm"
+	scm "github.com/grantbow/fit/scm"
 	"os"
 	"strings"
 )

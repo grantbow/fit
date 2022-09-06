@@ -22,13 +22,13 @@ should have similar code and description to
 cmd/fit/main.go
 fitapp/Twilio.go also used similar code
 
-also need to use the config dir name
-not hard coded issues - this is done 
-
 this is a good opportunity to refactor the code
 that was implemented in the easiest manner possible:
     1. check for any files first of both untracked and unstaged
     2. if there are any, check for just the unstaged
 
 So a data structure will be needed instead of using the output directly.
+
+
+closed by simply giving the scm commands instead of wrangling the data
 

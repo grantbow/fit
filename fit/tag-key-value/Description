@@ -8,8 +8,8 @@ create file fit/issue_one/tag_status_closed
 
 
 #### What did you see instead?
-The fit tag command now adds true values as originally implemented.
-Fit tag command creattes empty files by default in the tags directory.
+The fit tag command was designed to add boolean values only.
+Fit tag command creates empty files by default in the tags directory.
 
     $ls fit/issue_one/tags/
     Status  closed
@@ -21,6 +21,10 @@ and with --rm removes boolean tags.
 
 
 #### notes:
-the original implementation will require
-renaming the existing tag command
+the original implementation
+makes renaming or removing the existing tag command required
+
+When removing the Tag function other parts of the test suite
+broke. As this convention is long standing more work is required
+to bring it current.
 

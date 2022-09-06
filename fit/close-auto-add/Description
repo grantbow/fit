@@ -1,6 +1,10 @@
 #### What did you do?
 $ fit close 58
 
+when testing, use .fit.yml contents at least:
+ClosePreventDelete: true
+NewFieldAsTag: true
+
 #### What did you see?
 tag_status_close file was created
 but it was not staged with $ git add

@@ -6,3 +6,6 @@ doesn't seem right unless I publish an API key.
 
 I release 0.5 https://github.com/grantbow/bug/releases/ but didn't append binary files.
 
+binary files may be convenient in some circumstances but
+this can not be cleanly handled.
+
