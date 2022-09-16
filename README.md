@@ -246,13 +246,13 @@ $ mkdir foo && cd foo
 $ git init
 $ mkdir fit
 $ fit help
-cmd: help
-Usage: help <command>
+usage: fit help <command>
 
+fit manages plain text issues with git or hg.
 Use "fit help <command>" or "fit <command> help" for
-more information about any command below.
-fit version 0.7 built using go1.17.2 GOOS linux
-executable: -rwxrwxr-x 7931914 Sun Oct 31 23:43:08 PDT 2021 /home/grantbow/go/bin/fit
+    more information about any command below.
+fit version 0.7 built using go1.19 GOOS windows
+executable: -rw-rw-rw- 8411136 Tue Sep  6 04:44:31 PDT 2022 fit.exe
 
 Commands for status/reading:
     list       List issues
