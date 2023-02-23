@@ -10,7 +10,7 @@ require (
 require (
 	github.com/golang/protobuf v1.2.0 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
-	golang.org/x/net v0.0.0-20190108225652-1e06a53dbb7e // indirect
+	golang.org/x/net v0.7.0 // indirect
 	google.golang.org/appengine v1.4.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
